@@ -13,5 +13,8 @@ export const fetchProfile = (): Promise<Profile> => unwrap(api.GET('/api/v1/user
 export const updateFullName = (fullName: string): Promise<Profile> =>
   unwrap(api.PATCH('/api/v1/users/me', { body: { fullName } }));
 
-export const updateNotificationChannels = (notificationChannels: NotificationChannel[]): Promise<Profile> =>
-  unwrap(api.PATCH('/api/v1/users/me', { body: { preferences: { notificationChannels } } }));
+export type NotificationPreferences = Profile['preferences'];
+
+/** Sends the whole preferences object, so fields this screen does not edit keep their value. */
+export const updateNotificationPreferences = (preferences: NotificationPreferences): Promise<Profile> =>
+  unwrap(api.PATCH('/api/v1/users/me', { body: { preferences } }));

@@ -38,7 +38,10 @@ describe('useLogin', () => {
     await act(() => result.current.submit());
 
     await waitFor(() =>
-      expect(onSuccess).toHaveBeenCalledWith(expect.objectContaining({ emailVerified: false })),
+      expect(onSuccess).toHaveBeenCalledWith(
+        expect.objectContaining({ emailVerified: false }),
+        'ana@example.com',
+      ),
     );
     expect(api.callsTo('POST', '/api/v1/auth/login')[0]!.body).toEqual({
       email: 'ana@example.com',

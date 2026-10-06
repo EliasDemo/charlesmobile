@@ -13,8 +13,8 @@ maestro test -e SEED_PASSWORD=<valor de SEED_USER_PASSWORD> e2e/auth-login-logou
 
 ## Código de verificación en desarrollo
 
-El backend no envía correos: los guarda en Redis. Desde la carpeta del backend:
+El backend no envía correos: los guarda en Redis. Para leer el código de verificación o de recuperación de un correo, desde la carpeta del backend (`..\charles`):
 
 ```
-docker compose exec redis redis-cli LRANGE fake-mailer:inbox 0 4
+pnpm --filter api dev:mail <correo>
 ```

@@ -50,7 +50,12 @@
     "TOO_MANY_REQUESTS": "Demasiadas solicitudes. Espera un momento.",
     "INTERNAL_ERROR": "Ocurrió un error en el servidor. Inténtalo de nuevo.",
     "SERVICE_UNAVAILABLE": "El servicio no está disponible por un momento. Inténtalo en unos segundos.",
-    "PAYMENT_PROVIDER_ERROR": "La pasarela de pago no respondió. Inténtalo de nuevo."
+    "PAYMENT_PROVIDER_ERROR": "La pasarela de pago no respondió. Inténtalo de nuevo.",
+    "REVIEW_NOT_ALLOWED": "Esta reserva ya no se puede valorar.",
+    "REVIEW_ALREADY_EXISTS": "Ya valoraste esta reserva.",
+    "REVIEW_EDIT_NOT_ALLOWED": "Esta valoración ya no se puede editar.",
+    "ALREADY_REPORTED": "Ya lo reportaste.",
+    "TICKET_CLOSED": "Esta consulta está cerrada. Puedes abrir una nueva."
   },
   "fields": {
     "required": "Este campo es obligatorio.",

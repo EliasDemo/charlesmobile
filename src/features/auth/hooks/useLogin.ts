@@ -9,8 +9,8 @@ import { login } from '../api/authApi';
 import { loginSchema, type LoginForm } from '../schemas/authSchemas';
 
 export interface UseLoginOptions {
-  /** Called with the signed-in user; the route decides where to go next. */
-  onSuccess: (user: SessionUser) => void;
+  /** Called with the signed-in user and the email typed; the route decides where to go next. */
+  onSuccess: (user: SessionUser, email: string) => void;
 }
 
 export function useLogin({ onSuccess }: UseLoginOptions) {
@@ -26,9 +26,9 @@ export function useLogin({ onSuccess }: UseLoginOptions) {
   const mutation = useMutation({
     mutationFn: (values: LoginForm) =>
       login({ email: values.email, password: values.password, deviceName: deviceModelName() }),
-    onSuccess: async (tokens) => {
+    onSuccess: async (tokens, values) => {
       await startSession(tokens);
-      onSuccess(tokens.user);
+      onSuccess(tokens.user, values.email);
     },
     onError: (error) => {
       if (isApiError(error) && error.code === 'ACCOUNT_LOCKED') {

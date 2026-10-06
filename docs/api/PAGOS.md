@@ -27,29 +27,17 @@ Para quien construye la app. Estado al cierre de la Fase 9: el sistema de pagos 
 
 - `clientAction` es `{ type: "FAKE", data: { paymentId } }`.
 - No hay pantalla de pago real.
-- **Hoy no hay forma de confirmar un pago fuera de las pruebas automáticas.** El `FakeGateway` firma sus avisos con un secreto aleatorio que existe solo dentro del proceso del servidor, y el antiguo endpoint de pruebas se eliminó en la Fase 8A. Desde la app, una reserva queda en `PENDING_PAYMENT` y vence a los 10 minutos.
+- Para confirmar o rechazar el pago de una reserva `PENDING_PAYMENT`, en el computador del backend:
 
-### Propuesta (no implementada): confirmar pagos solo en desarrollo
+  ```bash
+  pnpm --filter api dev:pay <bookingId>            # pago confirmado → CONFIRMED
+  pnpm --filter api dev:pay <bookingId> --reject   # pago rechazado → CANCELLED, turno liberado
+  ```
 
-**Recomendada: un comando de consola en el computador del backend:**
-
-```bash
-pnpm --filter api dev:pay <bookingId> [--reject]
-```
-
-- Arranca la aplicación sin servidor HTTP y aplica el resultado por el mismo camino que el aviso de la pasarela: `applyPaymentResult` (estado, historial, eventos y reembolso si correspondiera).
-- **No expone nada en la red:** solo quien tiene acceso al computador del backend puede usarlo.
-- **No arranca en producción** (con `NODE_ENV=production` falla de inmediato) ni si `payments.provider` no es `FAKE`.
-- Queda en `audit_log` como acción de desarrollo.
-
-**Alternativa, si se necesita desde la app:** un endpoint `POST /api/v1/dev/payments/{bookingId}/simulate`.
-
-- Se registraría solo con `NODE_ENV=development` **y** una variable explícita `DEV_TOOLS_ENABLED=true`.
-- Con `NODE_ENV=production` la app no arrancaría si esa variable está activa.
-- Respondería 404 en cualquier otro entorno.
-- Es más cómodo, pero expone una superficie de red; por eso recomiendo el comando.
-
-Pídeselo a la conversación del backend si lo necesitas: hoy no existe.
+  - Aplica el resultado **por el mismo camino que el aviso real**: un webhook firmado por la pasarela simulada que procesa `WebhooksService` (firma, eventos, máquina de estados, reembolso de pagos huérfanos).
+  - No es un endpoint: no expone nada en la red.
+  - Falla con `NODE_ENV=production` y si `payments.provider` no es `FAKE`.
+  - Queda en `audit_log` (`dev.payment_simulated`).
 
 ## Con Izipay (Fase 8B, plataforma micuentaweb)
 

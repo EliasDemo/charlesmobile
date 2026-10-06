@@ -54,7 +54,8 @@ describe('LoginScreen', () => {
     await fireEvent.changeText(screen.getByLabelText(auth.fields.email), 'ana@example.com');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'buena-clave');
     await fireEvent.press(screen.getByRole('button', { name: auth.login.submit }));
-    await waitFor(() => expect(props.onSuccess).toHaveBeenCalled());
+    // The email typed goes on to "Verifica tu correo" (the session does not carry it).
+    await waitFor(() => expect(props.onSuccess).toHaveBeenCalledWith(expect.anything(), 'ana@example.com'));
   });
 
   it('shows the notice from the previous step and the links', async () => {
@@ -139,6 +140,13 @@ describe('VerifyEmailScreen', () => {
     );
     expect(screen.getByText(/ana@example.com/)).toBeTruthy();
     expect(screen.getByText(auth.verify.resend)).toBeTruthy();
+  });
+
+  it('never shows an empty email when it is not known', async () => {
+    signIn({ emailVerified: false });
+    await renderWithProviders(<VerifyEmailScreen onVerified={jest.fn()} onLater={jest.fn()} />);
+    expect(screen.getByText(auth.verify.subtitleNoEmail)).toBeTruthy();
+    expect(screen.queryByText(' a .', { exact: false })).toBeNull();
   });
 
   it('validates the code format', async () => {

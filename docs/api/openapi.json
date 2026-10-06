@@ -249,6 +249,67 @@
         "tags": ["auth"]
       }
     },
+    "/api/v1/auth/support-access": {
+      "post": {
+        "description": "Con correo y contraseña de una cuenta DISABLED devuelve un token de acceso restringido: solo sirve para crear y seguir sus tickets de soporte. Sin token de renovación. Una cuenta activa recibe 409 y usa /auth/login.",
+        "operationId": "AuthController_supportAccess_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupportAccessDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Fase 12: acceso limitado a soporte para una cuenta deshabilitada",
+        "tags": ["auth"]
+      }
+    },
     "/api/v1/auth/refresh": {
       "post": {
         "operationId": "AuthController_refresh_v1",
@@ -1125,6 +1186,41 @@
         ],
         "summary": "Quitar un responsable o retirarse (nunca el último OWNER)",
         "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/me/barber": {
+      "get": {
+        "operationId": "BarbersController_myProfiles_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyBarberProfilesDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis perfiles de barbero, con su barbería (para bloqueos propios y agenda)",
+        "tags": ["barbers"]
       }
     },
     "/api/v1/barbershops/{id}/barbers": {
@@ -3853,6 +3949,3368 @@
         "summary": "RF-RES-004/008: reservas de mi barbería (OWNER o MANAGER)",
         "tags": ["bookings"]
       }
+    },
+    "/api/v1/bookings/{id}/review": {
+      "post": {
+        "description": "Plazo: reviews.window_days (14) desde que la reserva quedó ATTENDED.",
+        "operationId": "ReviewsController_create_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyReviewDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-VAL-001: valorar una reserva atendida (propia, una vez, dentro del plazo)",
+        "tags": ["reviews"]
+      }
+    },
+    "/api/v1/reviews/{id}": {
+      "patch": {
+        "operationId": "ReviewsController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReviewDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyReviewDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-VAL-001: editar la valoración propia (una vez, dentro del plazo)",
+        "tags": ["reviews"]
+      },
+      "delete": {
+        "operationId": "ReviewsController_retire_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-VAL-001: retirar la valoración propia",
+        "tags": ["reviews"]
+      }
+    },
+    "/api/v1/me/reviews": {
+      "get": {
+        "operationId": "ReviewsController_listMine_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyReviewPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-VAL-001: mis valoraciones (las más recientes primero)",
+        "tags": ["reviews"]
+      }
+    },
+    "/api/v1/barbershops/{id}/reviews": {
+      "get": {
+        "description": "Autor como \"Ana R.\". Nunca datos de contacto.",
+        "operationId": "ReviewsController_listPublic_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": false,
+            "in": "query",
+            "description": "Solo las de este barbero.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "rating",
+            "required": false,
+            "in": "query",
+            "description": "Solo esta puntuación.",
+            "schema": {
+              "minimum": 1,
+              "maximum": 5,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicReviewPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-VAL-002: valoraciones públicas de una barbería (las más recientes primero)",
+        "tags": ["reviews"]
+      }
+    },
+    "/api/v1/reviews/{id}/response": {
+      "put": {
+        "operationId": "ReviewsController_respond_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewResponseInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicReviewDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-VAL-002: responder (o editar la respuesta) como barbería (OWNER o MANAGER)",
+        "tags": ["reviews"]
+      }
+    },
+    "/api/v1/reviews/{id}/reports": {
+      "post": {
+        "description": "Una vez por usuario y objetivo. Con reviews.report_threshold (3) reportes pasa a revisión de soporte y sigue visible.",
+        "operationId": "ReviewsController_report_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-VAL-002: reportar una valoración o la respuesta de la barbería",
+        "tags": ["reviews"]
+      }
+    },
+    "/api/v1/me/favorites/{barbershopId}": {
+      "put": {
+        "operationId": "FavoritesController_add_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-FAV-001: marcar una barbería como favorita (idempotente)",
+        "tags": ["favorites"]
+      },
+      "delete": {
+        "operationId": "FavoritesController_remove_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-FAV-002: quitar de favoritos (idempotente)",
+        "tags": ["favorites"]
+      }
+    },
+    "/api/v1/me/favorites": {
+      "get": {
+        "operationId": "FavoritesController_list_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoritePageDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-FAV-003: mis barberías favoritas (las más recientes primero)",
+        "tags": ["favorites"]
+      }
+    },
+    "/api/v1/support/tickets": {
+      "post": {
+        "description": "Relación opcional con una reserva, un pago o una barbería propios. Máximo support.max_open_tickets_per_user (5) abiertos a la vez.",
+        "operationId": "SupportController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTicketDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-001: abrir un ticket de soporte",
+        "tags": ["support"]
+      }
+    },
+    "/api/v1/me/support/tickets": {
+      "get": {
+        "operationId": "SupportController_list_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-001: mis tickets (los más recientes primero)",
+        "tags": ["support"]
+      }
+    },
+    "/api/v1/me/support/tickets/{id}": {
+      "get": {
+        "operationId": "SupportController_get_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketDetailDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-001: un ticket propio con sus mensajes (sin notas internas)",
+        "tags": ["support"]
+      }
+    },
+    "/api/v1/me/support/tickets/{id}/messages": {
+      "post": {
+        "description": "Un ticket RESOLVED se reabre si se responde dentro de support.ticket_reopen_days (7). Cerrado o fuera de plazo: 409 TICKET_CLOSED.",
+        "operationId": "SupportController_reply_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketMessageInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketDetailDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-001: responder en un ticket propio",
+        "tags": ["support"]
+      }
+    },
+    "/api/v1/barbershops/{id}/reports": {
+      "post": {
+        "description": "Sus miembros no la reportan (403). Comparte el límite de valoraciones y reportes.",
+        "operationId": "BarbershopReportsController_report_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBarbershopReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 12: reportar una barbería (una vez por cuenta)",
+        "tags": ["support"]
+      }
+    },
+    "/api/v1/admin/tickets": {
+      "get": {
+        "operationId": "AdminTicketsController_queue_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Por defecto, los abiertos (OPEN e IN_PROGRESS).",
+            "schema": {
+              "type": "string",
+              "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
+            }
+          },
+          {
+            "name": "assigned",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "any",
+              "type": "string",
+              "enum": ["me", "unassigned", "any"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffTicketPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-002: cola de tickets (los más antiguos primero)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/tickets/{id}": {
+      "get": {
+        "operationId": "AdminTicketsController_get_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffTicketDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-002: ticket con todos sus mensajes (incluidas notas internas)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/tickets/{id}/assign": {
+      "post": {
+        "operationId": "AdminTicketsController_assign_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignTicketDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffTicketDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-002: tomar o reasignar un ticket",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/tickets/{id}/messages": {
+      "post": {
+        "operationId": "AdminTicketsController_reply_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaffTicketMessageInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffTicketDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-003: responder al usuario o dejar una nota interna",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/tickets/{id}/status": {
+      "patch": {
+        "operationId": "AdminTicketsController_setStatus_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTicketStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffTicketDetailDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SOP-003: cambiar el estado (resolver, reabrir, cerrar)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/users": {
+      "get": {
+        "operationId": "AdminUsersController_find_v1",
+        "parameters": [
+          {
+            "name": "email",
+            "required": true,
+            "in": "query",
+            "description": "Correo exacto.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-001: buscar una cuenta por correo exacto (datos mínimos)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/users/{id}": {
+      "get": {
+        "operationId": "AdminUsersController_get_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-001: datos mínimos (nombre, estado y roles)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/users/{id}/contact": {
+      "post": {
+        "operationId": "AdminUsersController_contact_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactAccessDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-001: ver el contacto (correo y teléfono), con motivo; cada acceso se audita",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/users/{id}/disable": {
+      "post": {
+        "description": "Sus reservas se mantienen; las barberías donde era el único OWNER quedan marcadas para revisión. Soporte no deshabilita cuentas de soporte ni ADMIN.",
+        "operationId": "AdminUsersController_disable_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-001: deshabilitar la cuenta (revoca sus sesiones al instante)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/users/{id}/enable": {
+      "post": {
+        "operationId": "AdminUsersController_enable_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-001: reactivar la cuenta (con motivo)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/users/{id}/roles/{role}": {
+      "post": {
+        "operationId": "AdminUsersController_grant_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "enum": ["support", "admin"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: asignar el rol SUPPORT o ADMIN",
+        "tags": ["admin"]
+      },
+      "delete": {
+        "description": "Nadie se lo quita a sí mismo; nunca al último ADMIN activo (409 LAST_ADMIN).",
+        "operationId": "AdminUsersController_revoke_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "enum": ["support", "admin"],
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: quitar el rol SUPPORT o ADMIN",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/barbershops": {
+      "get": {
+        "operationId": "AdminBarbershopsController_list_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Sin estado: las que necesitan atención (reportes, marcas, pendientes).",
+            "schema": {
+              "type": "string",
+              "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminBarbershopPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-002: barberías que necesitan atención (reportes, marcas, pendientes)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/barbershops/{id}": {
+      "get": {
+        "operationId": "AdminBarbershopsController_get_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminBarbershopDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-002: barbería con sus reportes abiertos",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/barbershops/{id}/approve": {
+      "post": {
+        "operationId": "AdminBarbershopsController_approve_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminBarbershopDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-002: aprobar una barbería PENDING_REVIEW",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/barbershops/{id}/suspend": {
+      "post": {
+        "description": "Por defecto se mantienen las de las próximas 48 h y se cancelan las demás con devolución total; las pendientes de pago se cancelan siempre.",
+        "operationId": "AdminBarbershopsController_suspend_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuspendBarbershopDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuspensionResultDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-002: suspender, decidiendo qué pasa con las reservas futuras",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/barbershops/{id}/reactivate": {
+      "post": {
+        "operationId": "AdminBarbershopsController_reactivate_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminBarbershopDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-002: reactivar una barbería suspendida",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/barbershops/{id}/reports/resolve": {
+      "post": {
+        "operationId": "AdminBarbershopsController_resolveReports_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveReportsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminBarbershopDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-002: resolver los reportes abiertos y quitar la marca",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/bookings/{id}": {
+      "get": {
+        "operationId": "AdminOperationsController_booking_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminBookingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-003: reserva con historial y pagos (datos mínimos)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/bookings/{id}/attendance-correction": {
+      "post": {
+        "operationId": "AdminOperationsController_correct_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupportAttendanceCorrectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminBookingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-003: corregir ATTENDED ↔ NO_SHOW fuera del plazo de 48 h",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/payments/{id}/refunds": {
+      "post": {
+        "description": "409 REFUND_EXCEEDS_PAID si supera lo cobrado y aún no devuelto.",
+        "operationId": "AdminOperationsController_refund_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualRefundDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefundRequestedDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: reembolso manual, con motivo y hasta lo cobrado",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/refunds/failed": {
+      "get": {
+        "operationId": "AdminOperationsController_failedRefunds_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminFailedRefundPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 10: reembolsos fallidos en la pasarela, para resolver",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/cancellation-reviews": {
+      "get": {
+        "operationId": "AdminOperationsController_cancellationReviews_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["PENDING_REVIEW", "JUSTIFIED", "UNJUSTIFIED"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCancellationReviewPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-003: cancelaciones de barberías por calificar",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/cancellation-reviews/{id}/verdict": {
+      "post": {
+        "description": "Con 3 injustificadas en 30 días la barbería queda suspendida.",
+        "operationId": "AdminOperationsController_verdict_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancellationVerdictDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerdictResultDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-003: calificar una cancelación de la barbería (justificada o no)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/reviews/reported": {
+      "get": {
+        "operationId": "AdminOperationsController_reportedReviews_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReviewPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-003: valoraciones o respuestas en revisión por reportes",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/reviews/{id}/moderation": {
+      "post": {
+        "operationId": "AdminOperationsController_moderate_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewModerationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModerationResultDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-OPE-003: mantener, ocultar o restaurar una valoración o su respuesta",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/settings": {
+      "get": {
+        "operationId": "AdminConfigController_listSettings_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminSettingDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: ajustes con su esquema y si son editables",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/settings/{key}": {
+      "get": {
+        "operationId": "AdminConfigController_getSetting_v1",
+        "parameters": [
+          {
+            "name": "key",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSettingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: un ajuste",
+        "tags": ["admin"]
+      },
+      "put": {
+        "description": "Fuera de rango: 400. Claves de seguridad, pagos sensibles o decisiones pendientes: 403 SETTING_READ_ONLY. Queda el valor anterior y el nuevo en audit_log.",
+        "operationId": "AdminConfigController_updateSetting_v1",
+        "parameters": [
+          {
+            "name": "key",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSettingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSettingDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: cambiar un ajuste (validado por su esquema y rango)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/service-categories": {
+      "get": {
+        "operationId": "AdminConfigController_listCategories_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminCategoryDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: categorías de servicio, incluidas las inactivas",
+        "tags": ["admin"]
+      },
+      "post": {
+        "operationId": "AdminConfigController_createCategory_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCategoryDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: crear una categoría de servicio",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/service-categories/{id}": {
+      "patch": {
+        "operationId": "AdminConfigController_updateCategory_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCategoryDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: editar o desactivar (nunca borrar) una categoría",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/me/devices": {
+      "put": {
+        "description": "El token de Expo va en el cuerpo (nunca en la URL). Idempotente por token. Queda ligado a la sesión: al cerrarla se borra. Máximo 10 por cuenta (se borran los menos usados).",
+        "operationId": "NotificationsController_registerDevice_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDeviceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-NOT-001: registrar o actualizar el dispositivo para recibir push",
+        "tags": ["notifications"]
+      },
+      "get": {
+        "operationId": "NotificationsController_listDevices_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceListDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-NOT-001: mis dispositivos con push (sin el token)",
+        "tags": ["notifications"]
+      }
+    },
+    "/api/v1/me/devices/{id}": {
+      "delete": {
+        "operationId": "NotificationsController_removeDevice_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-NOT-001: dejar de recibir push en un dispositivo (por su ID)",
+        "tags": ["notifications"]
+      }
+    },
+    "/api/v1/me/notifications": {
+      "get": {
+        "operationId": "NotificationsController_inbox_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "unreadOnly",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationPageDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-NOT-004: bandeja de avisos (los más recientes primero; se conservan 90 días)",
+        "tags": ["notifications"]
+      }
+    },
+    "/api/v1/me/notifications/unread-count": {
+      "get": {
+        "operationId": "NotificationsController_unread_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnreadCountDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-NOT-004: avisos sin leer",
+        "tags": ["notifications"]
+      }
+    },
+    "/api/v1/me/notifications/{id}/read": {
+      "post": {
+        "operationId": "NotificationsController_markRead_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-NOT-004: marcar un aviso como leído",
+        "tags": ["notifications"]
+      }
+    },
+    "/api/v1/me/notifications/read-all": {
+      "post": {
+        "operationId": "NotificationsController_markAllRead_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkedReadDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-NOT-004: marcar todos como leídos",
+        "tags": ["notifications"]
+      }
     }
   },
   "info": {
@@ -3938,7 +7396,7 @@
       },
       "Role": {
         "type": "string",
-        "enum": ["CLIENT", "BARBER", "OWNER", "SUPPORT"]
+        "enum": ["CLIENT", "BARBER", "OWNER", "SUPPORT", "ADMIN"]
       },
       "NotificationChannel": {
         "type": "string",
@@ -3952,6 +7410,11 @@
             "items": {
               "$ref": "#/components/schemas/NotificationChannel"
             }
+          },
+          "reminders": {
+            "type": "boolean",
+            "default": true,
+            "description": "Fase 10: recordatorios de citas (24 y 2 h antes). Por defecto activos."
           }
         },
         "required": ["notificationChannels"]
@@ -4154,6 +7617,28 @@
           "refreshTokenExpiresAt",
           "user"
         ]
+      },
+      "SupportAccessDto": {
+        "type": "object",
+        "properties": {
+          "tokenType": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "accessToken": {
+            "type": "string",
+            "description": "Solo vale para /support/tickets y /me/support/tickets."
+          },
+          "accessTokenExpiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "restricted": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": ["tokenType", "accessToken", "accessTokenExpiresAt", "restricted"]
       },
       "RefreshDto": {
         "type": "object",
@@ -4954,6 +8439,70 @@
         },
         "required": ["role"]
       },
+      "MyBarberShopDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopStatus"
+              }
+            ]
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          }
+        },
+        "required": ["id", "name", "status", "timezone"]
+      },
+      "MyBarberProfileDto": {
+        "type": "object",
+        "properties": {
+          "barberId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Solo un perfil activo a la vez (MVP)."
+          },
+          "serviceIds": {
+            "description": "Servicios que realiza.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/MyBarberShopDto"
+          }
+        },
+        "required": ["barberId", "displayName", "isActive", "serviceIds", "barbershop"]
+      },
+      "MyBarberProfilesDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "Vacío si la cuenta no está vinculada a ningún perfil de barbero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyBarberProfileDto"
+            }
+          }
+        },
+        "required": ["items"]
+      },
       "BarberPublicDto": {
         "type": "object",
         "properties": {
@@ -4977,9 +8526,17 @@
             "items": {
               "type": "string"
             }
+          },
+          "rating": {
+            "description": "Valoraciones visibles del barbero (Fase 11).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatingDto"
+              }
+            ]
           }
         },
-        "required": ["id", "displayName", "bio", "photoUrl", "serviceIds"]
+        "required": ["id", "displayName", "bio", "photoUrl", "serviceIds", "rating"]
       },
       "BarberPublicPageDto": {
         "type": "object",
@@ -5034,6 +8591,14 @@
               "type": "string"
             }
           },
+          "rating": {
+            "description": "Valoraciones visibles del barbero (Fase 11).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RatingDto"
+              }
+            ]
+          },
           "phone": {
             "type": "string",
             "nullable": true
@@ -5057,6 +8622,7 @@
           "bio",
           "photoUrl",
           "serviceIds",
+          "rating",
           "phone",
           "isActive",
           "linkedUser"
@@ -6008,7 +9574,13 @@
       },
       "RefundReason": {
         "type": "string",
-        "enum": ["CLIENT_CANCELLATION", "BARBERSHOP_CANCELLATION", "ORPHANED_PAYMENT", "MANUAL"]
+        "enum": [
+          "CLIENT_CANCELLATION",
+          "BARBERSHOP_CANCELLATION",
+          "ORPHANED_PAYMENT",
+          "MANUAL",
+          "SUPPORT_CANCELLATION"
+        ]
       },
       "RefundViewDto": {
         "type": "object",
@@ -6237,7 +9809,7 @@
         "properties": {
           "byRole": {
             "type": "string",
-            "enum": ["CLIENT", "BARBERSHOP", "SYSTEM"]
+            "enum": ["CLIENT", "BARBERSHOP", "SYSTEM", "SUPPORT"]
           },
           "reason": {
             "type": "string",
@@ -6456,6 +10028,7 @@
             "enum": [
               "NO_PAYMENT",
               "BARBERSHOP_CANCELLATION",
+              "SUPPORT_CANCELLATION",
               "CLIENT_FULL",
               "CLIENT_PARTIAL",
               "CLIENT_NONE"
@@ -6785,6 +10358,1821 @@
           }
         },
         "required": ["items", "nextCursor"]
+      },
+      "CreateReviewDto": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "Puntuación entera de 1 a 5."
+          },
+          "comment": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500,
+            "nullable": true,
+            "description": "Texto plano: se recortan los espacios y no se interpreta HTML."
+          }
+        },
+        "required": ["rating"]
+      },
+      "ReviewBarberDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "displayName"]
+      },
+      "ReviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "respondedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["text", "respondedAt"]
+      },
+      "ReviewBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "MyReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorName": {
+            "type": "string",
+            "example": "Ana R.",
+            "description": "Nombre e inicial del apellido."
+          },
+          "serviceName": {
+            "type": "string",
+            "description": "Servicio tal como se reservó."
+          },
+          "barber": {
+            "$ref": "#/components/schemas/ReviewBarberDto"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "editedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "response": {
+            "nullable": true,
+            "description": "Respuesta de la barbería (null si no hay o la ocultó soporte).",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReviewResponseDto"
+              }
+            ]
+          },
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/ReviewBarbershopDto"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"],
+            "description": "HIDDEN: no se muestra en público (soporte o asistencia corregida)."
+          },
+          "canEdit": {
+            "type": "boolean",
+            "description": "Aún se puede editar (una sola vez, dentro del plazo)."
+          }
+        },
+        "required": [
+          "id",
+          "rating",
+          "comment",
+          "authorName",
+          "serviceName",
+          "barber",
+          "createdAt",
+          "editedAt",
+          "response",
+          "bookingId",
+          "barbershop",
+          "status",
+          "canEdit"
+        ]
+      },
+      "UpdateReviewDto": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500,
+            "nullable": true,
+            "description": "null quita el comentario."
+          }
+        }
+      },
+      "MyReviewPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyReviewDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "PublicReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorName": {
+            "type": "string",
+            "example": "Ana R.",
+            "description": "Nombre e inicial del apellido."
+          },
+          "serviceName": {
+            "type": "string",
+            "description": "Servicio tal como se reservó."
+          },
+          "barber": {
+            "$ref": "#/components/schemas/ReviewBarberDto"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "editedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "response": {
+            "nullable": true,
+            "description": "Respuesta de la barbería (null si no hay o la ocultó soporte).",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReviewResponseDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "rating",
+          "comment",
+          "authorName",
+          "serviceName",
+          "barber",
+          "createdAt",
+          "editedAt",
+          "response"
+        ]
+      },
+      "PublicReviewPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicReviewDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ReviewResponseInputDto": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Texto plano."
+          }
+        },
+        "required": ["text"]
+      },
+      "CreateReviewReportDto": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "enum": ["REVIEW", "RESPONSE"],
+            "default": "REVIEW",
+            "description": "REVIEW: la valoración. RESPONSE: la respuesta de la barbería."
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["OFFENSIVE", "PERSONAL_DATA", "FAKE", "SPAM", "OTHER"]
+          },
+          "details": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": ["reason"]
+      },
+      "FavoriteDto": {
+        "type": "object",
+        "properties": {
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["BARBERSHOP", "INDEPENDENT"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "TEMPORARILY_CLOSED"]
+          },
+          "rating": {
+            "$ref": "#/components/schemas/RatingDto"
+          },
+          "favoritedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["barbershopId", "name", "address", "type", "status", "rating", "favoritedAt"]
+      },
+      "FavoritePageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FavoriteDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "CreateTicketDto": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 120
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "description": "Primer mensaje."
+          },
+          "relatedType": {
+            "type": "string",
+            "enum": ["booking", "payment", "barbershop"],
+            "description": "Relación opcional con una reserva, un pago o una barbería propios."
+          },
+          "relatedId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Obligatorio con relatedType."
+          }
+        },
+        "required": ["category", "subject", "message"]
+      },
+      "TicketRelatedDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["booking", "payment", "barbershop"]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["type", "id"]
+      },
+      "TicketMessageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "body": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string",
+            "enum": ["USER", "SUPPORT"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "body", "from", "createdAt"]
+      },
+      "TicketDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
+          },
+          "subject": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
+          },
+          "related": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TicketRelatedDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "resolvedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "closedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TicketMessageDto"
+            }
+          },
+          "canReply": {
+            "type": "boolean",
+            "description": "Si puede responder (abierto, o resuelto dentro del plazo)."
+          }
+        },
+        "required": [
+          "id",
+          "category",
+          "subject",
+          "status",
+          "related",
+          "createdAt",
+          "updatedAt",
+          "resolvedAt",
+          "closedAt",
+          "messages",
+          "canReply"
+        ]
+      },
+      "TicketSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
+          },
+          "subject": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
+          },
+          "related": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TicketRelatedDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "resolvedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "closedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "category",
+          "subject",
+          "status",
+          "related",
+          "createdAt",
+          "updatedAt",
+          "resolvedAt",
+          "closedAt"
+        ]
+      },
+      "TicketPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TicketSummaryDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "TicketMessageInputDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          }
+        },
+        "required": ["body"]
+      },
+      "CreateBarbershopReportDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": [
+              "FRAUD",
+              "MISLEADING_INFO",
+              "INAPPROPRIATE",
+              "NOT_OPERATING",
+              "SAFETY",
+              "OTHER"
+            ]
+          },
+          "details": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": ["reason"]
+      },
+      "StaffPersonDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "fullName"]
+      },
+      "StaffTicketDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
+          },
+          "subject": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
+          },
+          "related": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TicketRelatedDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "resolvedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "closedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "requester": {
+            "$ref": "#/components/schemas/StaffPersonDto"
+          },
+          "assignedTo": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StaffPersonDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "category",
+          "subject",
+          "status",
+          "related",
+          "createdAt",
+          "updatedAt",
+          "resolvedAt",
+          "closedAt",
+          "requester",
+          "assignedTo"
+        ]
+      },
+      "StaffTicketPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StaffTicketDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "StaffTicketMessageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "body": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string",
+            "enum": ["USER", "SUPPORT"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isInternal": {
+            "type": "boolean"
+          },
+          "author": {
+            "$ref": "#/components/schemas/StaffPersonDto"
+          }
+        },
+        "required": ["id", "body", "from", "createdAt", "isInternal", "author"]
+      },
+      "StaffTicketDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
+          },
+          "subject": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
+          },
+          "related": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TicketRelatedDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "resolvedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "closedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "requester": {
+            "$ref": "#/components/schemas/StaffPersonDto"
+          },
+          "assignedTo": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/StaffPersonDto"
+              }
+            ]
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StaffTicketMessageDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "category",
+          "subject",
+          "status",
+          "related",
+          "createdAt",
+          "updatedAt",
+          "resolvedAt",
+          "closedAt",
+          "requester",
+          "assignedTo",
+          "messages"
+        ]
+      },
+      "AssignTicketDto": {
+        "type": "object",
+        "properties": {
+          "assigneeId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Cuenta de soporte o ADMIN; por defecto, quien hace la petición."
+          }
+        }
+      },
+      "StaffTicketMessageInputDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "isInternal": {
+            "type": "boolean",
+            "default": false,
+            "description": "Nota interna: nunca la ve el usuario y no cambia el estado."
+          }
+        },
+        "required": ["body"]
+      },
+      "UpdateTicketStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["IN_PROGRESS", "RESOLVED", "CLOSED"]
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Obligatorio al cerrar un ticket que no está resuelto."
+          }
+        },
+        "required": ["status"]
+      },
+      "StaffUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "DISABLED"]
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["CLIENT", "BARBER", "OWNER", "SUPPORT", "ADMIN"]
+            }
+          },
+          "emailVerified": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
+          }
+        },
+        "required": ["id", "fullName", "status", "roles", "emailVerified", "createdAt", "deleted"]
+      },
+      "ContactAccessDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+          },
+          "ticketId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Ticket de esa cuenta que lo justifica."
+          }
+        },
+        "required": ["reason"]
+      },
+      "ContactDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["email", "phone"]
+      },
+      "ReasonDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+          }
+        },
+        "required": ["reason"]
+      },
+      "AdminBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["BARBERSHOP", "INDEPENDENT"]
+          },
+          "flaggedReason": {
+            "type": "string",
+            "nullable": true,
+            "description": "Marca del sistema, p. ej. owner_disabled."
+          },
+          "flaggedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "openReports": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "type",
+          "flaggedReason",
+          "flaggedAt",
+          "openReports",
+          "createdAt"
+        ]
+      },
+      "AdminBarbershopPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminBarbershopDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "BarbershopReportDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "FRAUD",
+              "MISLEADING_INFO",
+              "INAPPROPRIATE",
+              "NOT_OPERATING",
+              "SAFETY",
+              "OTHER"
+            ]
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "reason", "details", "createdAt"]
+      },
+      "AdminBarbershopDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["BARBERSHOP", "INDEPENDENT"]
+          },
+          "flaggedReason": {
+            "type": "string",
+            "nullable": true,
+            "description": "Marca del sistema, p. ej. owner_disabled."
+          },
+          "flaggedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "openReports": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reports": {
+            "description": "Reportes abiertos.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BarbershopReportDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "status",
+          "type",
+          "flaggedReason",
+          "flaggedAt",
+          "openReports",
+          "createdAt",
+          "reports"
+        ]
+      },
+      "SuspendBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+          },
+          "bookings": {
+            "type": "string",
+            "enum": ["KEEP_UPCOMING", "CANCEL_ALL", "KEEP_ALL"],
+            "default": "KEEP_UPCOMING",
+            "description": "Reservas futuras: KEEP_UPCOMING mantiene las de las próximas support.suspension_keep_hours (48) y cancela el resto con devolución total. Las pendientes de pago se cancelan siempre."
+          }
+        },
+        "required": ["reason"]
+      },
+      "SuspensionResultDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["SUSPENDED"]
+          },
+          "mode": {
+            "type": "string",
+            "enum": ["KEEP_UPCOMING", "CANCEL_ALL", "KEEP_ALL"]
+          },
+          "cancelledBookings": {
+            "type": "number"
+          },
+          "keptBookings": {
+            "type": "number",
+            "description": "Reservas confirmadas futuras que se mantienen."
+          }
+        },
+        "required": ["status", "mode", "cancelledBookings", "keptBookings"]
+      },
+      "ResolveReportsDto": {
+        "type": "object",
+        "properties": {
+          "resolution": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500,
+            "description": "Resolución (queda en los reportes)."
+          }
+        },
+        "required": ["resolution"]
+      },
+      "RefNameDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "RefBarberDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "displayName"]
+      },
+      "RefPersonDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "fullName"]
+      },
+      "AdminHistoryDto": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "nullable": true
+          },
+          "to": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["from", "to", "reason", "at"]
+      },
+      "AdminRefundDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "reasonType": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "amount", "status", "reasonType", "createdAt"]
+      },
+      "AdminPaymentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "refundable": {
+            "type": "number",
+            "description": "Cobrado y aún no devuelto."
+          },
+          "refunds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminRefundDto"
+            }
+          }
+        },
+        "required": ["id", "status", "amount", "currency", "provider", "refundable", "refunds"]
+      },
+      "AdminBookingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING_PAYMENT", "CONFIRMED", "ATTENDED", "CANCELLED", "NO_SHOW", "EXPIRED"]
+          },
+          "startAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "serviceName": {
+            "type": "string"
+          },
+          "totalAmount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/RefNameDto"
+          },
+          "barber": {
+            "$ref": "#/components/schemas/RefBarberDto"
+          },
+          "client": {
+            "$ref": "#/components/schemas/RefPersonDto"
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminHistoryDto"
+            }
+          },
+          "payments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminPaymentDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "startAt",
+          "endAt",
+          "serviceName",
+          "totalAmount",
+          "currency",
+          "barbershop",
+          "barber",
+          "client",
+          "history",
+          "payments"
+        ]
+      },
+      "SupportAttendanceCorrectionDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ATTENDED", "NO_SHOW"]
+          }
+        },
+        "required": ["reason", "status"]
+      },
+      "ManualRefundDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 1,
+            "description": "Céntimos; hasta lo cobrado y aún no devuelto."
+          }
+        },
+        "required": ["reason", "amount"]
+      },
+      "RefundRequestedDto": {
+        "type": "object",
+        "properties": {
+          "refundId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["refundId"]
+      },
+      "AdminFailedRefundDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "reasonType": {
+            "type": "string"
+          },
+          "paymentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "amount",
+          "currency",
+          "reasonType",
+          "paymentId",
+          "bookingId",
+          "createdAt"
+        ]
+      },
+      "AdminFailedRefundPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminFailedRefundDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "AdminCancellationReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/RefNameDto"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "cancelledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING_REVIEW", "JUSTIFIED", "UNJUSTIFIED"]
+          }
+        },
+        "required": ["id", "bookingId", "barbershop", "reason", "cancelledAt", "status"]
+      },
+      "AdminCancellationReviewPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminCancellationReviewDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "CancellationVerdictDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+          },
+          "verdict": {
+            "type": "string",
+            "enum": ["JUSTIFIED", "UNJUSTIFIED"]
+          }
+        },
+        "required": ["reason", "verdict"]
+      },
+      "VerdictResultDto": {
+        "type": "object",
+        "properties": {
+          "verdict": {
+            "type": "string",
+            "enum": ["JUSTIFIED", "UNJUSTIFIED"]
+          },
+          "barbershopSuspended": {
+            "type": "boolean",
+            "description": "Si este veredicto suspendió la barbería."
+          }
+        },
+        "required": ["verdict", "barbershopSuspended"]
+      },
+      "ReportCountDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": ["reason", "count"]
+      },
+      "AdminReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "number"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"]
+          },
+          "responseText": {
+            "type": "string",
+            "nullable": true
+          },
+          "responseStatus": {
+            "type": "string",
+            "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"],
+            "nullable": true
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/RefNameDto"
+          },
+          "reviewReports": {
+            "description": "Reportes abiertos de la valoración.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportCountDto"
+            }
+          },
+          "responseReports": {
+            "description": "Reportes abiertos de la respuesta.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportCountDto"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "rating",
+          "comment",
+          "status",
+          "responseText",
+          "responseStatus",
+          "barbershop",
+          "reviewReports",
+          "responseReports",
+          "createdAt"
+        ]
+      },
+      "AdminReviewPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminReviewDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ReviewModerationDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+          },
+          "target": {
+            "type": "string",
+            "enum": ["REVIEW", "RESPONSE"],
+            "default": "REVIEW"
+          },
+          "decision": {
+            "type": "string",
+            "enum": ["KEEP", "HIDE", "RESTORE"],
+            "description": "KEEP: vuelve a visible. HIDE: oculta. RESTORE: muestra lo que ocultó soporte."
+          }
+        },
+        "required": ["reason", "decision"]
+      },
+      "ModerationResultDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"]
+          },
+          "resolvedReports": {
+            "type": "number"
+          }
+        },
+        "required": ["status", "resolvedReports"]
+      },
+      "AdminSettingDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {
+            "type": "object",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "editable": {
+            "type": "boolean"
+          },
+          "readOnlyReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "schema": {
+            "type": "object",
+            "nullable": true,
+            "description": "type y rango (min, max, multipleOf) o longitud."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": [
+          "key",
+          "value",
+          "description",
+          "editable",
+          "readOnlyReason",
+          "schema",
+          "updatedAt"
+        ]
+      },
+      "UpdateSettingDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 500
+          },
+          "value": {
+            "type": "object",
+            "description": "Nuevo valor, según el esquema del ajuste."
+          }
+        },
+        "required": ["reason", "value"]
+      },
+      "AdminCategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "servicesCount": {
+            "type": "number",
+            "description": "Servicios que la usan."
+          }
+        },
+        "required": ["id", "key", "name", "sortOrder", "isActive", "servicesCount"]
+      },
+      "CreateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "beard",
+            "description": "Clave estable en minúsculas."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60
+          },
+          "sortOrder": {
+            "type": "number",
+            "default": 0
+          }
+        },
+        "required": ["key", "name"]
+      },
+      "UpdateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "false la desactiva (nunca se borra)."
+          }
+        }
+      },
+      "RegisterDeviceDto": {
+        "type": "object",
+        "properties": {
+          "pushToken": {
+            "type": "string",
+            "example": "ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]"
+          },
+          "platform": {
+            "type": "string",
+            "enum": ["IOS", "ANDROID"]
+          },
+          "appVersion": {
+            "type": "string",
+            "example": "1.4.0",
+            "maxLength": 40
+          }
+        },
+        "required": ["pushToken", "platform"]
+      },
+      "DeviceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID propio del dispositivo (para borrarlo)."
+          },
+          "platform": {
+            "type": "string",
+            "enum": ["IOS", "ANDROID", "WEB"]
+          },
+          "appVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastSeenAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "platform", "appVersion", "lastSeenAt"]
+      },
+      "DeviceListDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeviceDto"
+            }
+          }
+        },
+        "required": ["items"]
+      },
+      "NotificationResourceDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["booking", "review", "ticket", "barbershop", "account"],
+            "description": "Pantalla que abre la app al tocar el aviso."
+          },
+          "id": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["type", "id"]
+      },
+      "NotificationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "example": "BOOKING_CONFIRMED"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/NotificationResourceDto"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "readAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": ["id", "type", "title", "body", "resource", "createdAt", "readAt"]
+      },
+      "NotificationPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "UnreadCountDto": {
+        "type": "object",
+        "properties": {
+          "unread": {
+            "type": "number"
+          }
+        },
+        "required": ["unread"]
+      },
+      "MarkedReadDto": {
+        "type": "object",
+        "properties": {
+          "updated": {
+            "type": "number"
+          }
+        },
+        "required": ["updated"]
       }
     }
   }

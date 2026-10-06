@@ -8,12 +8,12 @@ Datos ficticios que carga `pnpm --filter api prisma db seed` en la base de desar
 
 ## Usuarios
 
-| Usuario          | Correo                         | ID                                     | Roles                                               |
-| ---------------- | ------------------------------ | -------------------------------------- | --------------------------------------------------- |
-| Cliente Demo     | `cliente.demo@example.com`     | `01990000-0000-7000-8000-000000000001` | CLIENT                                              |
-| Responsable Demo | `responsable.demo@example.com` | `01990000-0000-7000-8000-000000000002` | OWNER, BARBER                                       |
-| Barbero Demo     | `barbero.demo@example.com`     | `01990000-0000-7000-8000-000000000003` | BARBER                                              |
-| Soporte Demo     | `soporte.demo@example.com`     | `01990000-0000-7000-8000-000000000004` | SUPPORT (sin pantallas de soporte hasta la Fase 12) |
+| Usuario          | Correo                         | ID                                     | Roles                                                                                  |
+| ---------------- | ------------------------------ | -------------------------------------- | -------------------------------------------------------------------------------------- |
+| Cliente Demo     | `cliente.demo@example.com`     | `01990000-0000-7000-8000-000000000001` | CLIENT                                                                                 |
+| Responsable Demo | `responsable.demo@example.com` | `01990000-0000-7000-8000-000000000002` | OWNER, BARBER                                                                          |
+| Barbero Demo     | `barbero.demo@example.com`     | `01990000-0000-7000-8000-000000000003` | BARBER                                                                                 |
+| Soporte Demo     | `soporte.demo@example.com`     | `01990000-0000-7000-8000-000000000004` | SUPPORT y ADMIN (`/api/v1/admin`; ADMIN asignado con `admin:grant` solo en desarrollo) |
 
 ## Barberías
 

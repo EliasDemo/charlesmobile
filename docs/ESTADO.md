@@ -2,9 +2,9 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M2 (cuenta), con el código terminado. **Falta la confirmación del usuario en su teléfono** (lista de comprobación manual). No exige compilación nueva.
+**Fase actual:** M2 cerrada el 2026-10-06. Siguiente: **M3 (Explorar)**, pendiente de aprobar el plan.
 
-**Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` al cierre de la Fase 9 del backend.
+**Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
 ## M1 — Cerrada
 
@@ -50,7 +50,9 @@ Probada por el usuario en un Android físico: la app carga, conecta con el backe
   - Jest: 187 pruebas, todas por encima del 80 % de cobertura en `shared/api` y `shared/payments`.
   - `pnpm verify`.
 
-## M2 — Código terminado
+## M2 — Cerrada
+
+Probada por el usuario en su Android: registro, inicio de sesión y verificación de correo funcionan. Correcciones tras la prueba: "Verifica tu correo" ahora muestra el correo escrito al iniciar sesión (o un texto sin correo si no se conoce), y las preferencias reenvían `reminders` sin cambiarlo (campo nuevo de la Fase 10).
 
 - **Navegación:** pestañas Explorar · Reservas · Perfil (`app/(tabs)`). Explorar muestra el estado del servidor hasta M3; Reservas, sin sesión, invita a entrar.
 - **`features/auth`:**
@@ -73,7 +75,7 @@ Probada por el usuario en un Android físico: la app carga, conecta con el backe
 
 ### Esperando al backend (pedido por el usuario)
 
-- `UpdateProfileDto.phone` está declarado como `object` en el contrato. Hasta que sea `string | null` y se ejecute `pnpm sync:api`, la app no permite cambiar el teléfono (está listo para activarse).
+- `UpdateProfileDto.phone` **sigue** declarado como `object` en el contrato tras la sincronización de las fases 10 a 12. Hasta que sea `string | null` y se ejecute `pnpm sync:api`, la app no permite cambiar el teléfono (está listo para activarse).
 - `GET /auth/terms` debería devolver los enlaces de términos y privacidad.
 
 ## Pantallas actuales
@@ -91,7 +93,6 @@ Probada por el usuario en un Android físico: la app carga, conecta con el backe
 ## Pendiente
 
 - Revisión rápida, con la compilación instalada, de las correcciones de tema y contraste de M1.
-- Confirmación del usuario de la lista de comprobación de M2.
 - Eliminar la cuenta: no hay endpoint (pendientes de publicación #10).
 - **Backend:** `dev:pay` (ya pedido; hace falta desde M4), `GET /me/barber` (antes de los bloqueos del barbero) y el resto de `docs/api/AJUSTES-BACKEND.md`.
 - Pendientes de publicación: `docs/pendientes-publicacion.md`.

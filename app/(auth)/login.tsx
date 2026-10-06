@@ -12,10 +12,10 @@ export default function LoginRoute() {
   return (
     <LoginScreen
       notice={NOTICES.includes(notice as Notice) ? (notice as Notice) : undefined}
-      onSuccess={(user) => {
+      onSuccess={(user, email) => {
         // Unverified accounts are offered the verification first (needed to book).
         if (!user.emailVerified) {
-          router.replace({ pathname: '/verify-email', params: { returnTo } });
+          router.replace({ pathname: '/verify-email', params: { returnTo, email } });
           return;
         }
         router.dismissTo(returnTo as never);

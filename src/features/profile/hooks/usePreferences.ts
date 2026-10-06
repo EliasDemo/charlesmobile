@@ -3,8 +3,9 @@ import { translateError } from '@/shared/api';
 import { useThemePreference } from '@/shared/theme';
 import {
   profileKeys,
-  updateNotificationChannels,
+  updateNotificationPreferences,
   type NotificationChannel,
+  type NotificationPreferences,
   type Profile,
 } from '../api/profileApi';
 import { useProfile } from './useProfile';
@@ -19,29 +20,34 @@ export function usePreferences() {
 
   // Optimistic: the switch moves at once and goes back if the server rejects the change.
   const mutation = useMutation({
-    mutationFn: updateNotificationChannels,
-    onMutate: async (channels) => {
+    mutationFn: updateNotificationPreferences,
+    onMutate: async (preferences) => {
       await queryClient.cancelQueries({ queryKey: profileKeys.me });
       const previous = queryClient.getQueryData<Profile>(profileKeys.me);
       if (previous) {
         queryClient.setQueryData<Profile>(profileKeys.me, {
           ...previous,
-          preferences: { ...previous.preferences, notificationChannels: channels },
+          preferences,
         });
       }
       return { previous };
     },
-    onError: (_error, _channels, context) => {
+    onError: (_error, _preferences, context) => {
       if (context?.previous) queryClient.setQueryData(profileKeys.me, context.previous);
     },
     onSuccess: (profile) => queryClient.setQueryData(profileKeys.me, profile),
   });
 
-  const channels = query.data?.preferences.notificationChannels ?? [];
+  const preferences: NotificationPreferences | undefined = query.data?.preferences;
+  const channels = preferences?.notificationChannels ?? [];
   const toggleChannel = (channel: NotificationChannel, enabled: boolean) => {
     const next = enabled ? [...new Set([...channels, channel])] : channels.filter((c) => c !== channel);
     // Keep the order the backend uses.
-    mutation.mutate(NOTIFICATION_CHANNELS.filter((c) => next.includes(c)));
+    if (!preferences) return;
+    mutation.mutate({
+      ...preferences,
+      notificationChannels: NOTIFICATION_CHANNELS.filter((c) => next.includes(c)),
+    });
   };
 
   return {

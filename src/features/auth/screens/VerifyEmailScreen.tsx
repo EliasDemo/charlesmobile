@@ -37,7 +37,9 @@ export function VerifyEmailScreen({ email, onVerified, onLater }: VerifyEmailScr
   return (
     <Screen>
       <Text variant="title">{t('verify.title')}</Text>
-      <Text color="textSecondary">{t('verify.subtitle', { email: email ?? '' })}</Text>
+      <Text color="textSecondary">
+        {email ? t('verify.subtitle', { email }) : t('verify.subtitleNoEmail')}
+      </Text>
       {resent ? <Notice tone="success" message={t('verify.resent')} /> : null}
       {generalError ? <Notice tone="danger" message={generalError} /> : null}
       <Controller

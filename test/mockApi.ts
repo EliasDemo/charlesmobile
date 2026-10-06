@@ -83,7 +83,7 @@ export const profile = (overrides: Partial<components['schemas']['ProfileDto']> 
     emailVerified: true,
     phone: '+51 987 654 321',
     roles: ['CLIENT'],
-    preferences: { notificationChannels: ['EMAIL', 'IN_APP'] },
+    preferences: { notificationChannels: ['EMAIL', 'IN_APP'], reminders: false },
     createdAt: '2026-01-01T00:00:00.000Z',
     ...overrides,
   }) satisfies components['schemas']['ProfileDto'];

@@ -47,11 +47,13 @@ pnpm --filter api start:dev
    - **iOS:** necesita una excepción de ATS para la IP local, también solo en desarrollo.
 7. **Alternativa:** un túnel HTTPS (por ejemplo `cloudflared` o `ngrok`). En ese caso, configura `TRUST_PROXY` con la IP del túnel local (`loopback` suele bastar).
 
-**Correos en desarrollo.** No se envían correos reales: el backend usa `FakeMailer`, que guarda los últimos 200 mensajes en Redis durante una hora. Para leer el código de verificación o de recuperación:
+**Correos en desarrollo.** No se envían correos reales: el backend usa `FakeMailer`, que guarda los últimos 200 mensajes en Redis durante una hora. Para leer el código de verificación o de recuperación de un destinatario:
 
 ```bash
-docker compose exec redis redis-cli LRANGE fake-mailer:inbox 0 4
+pnpm --filter api dev:mail <correo>
 ```
+
+Solo funciona fuera de producción y con el correo simulado; cada lectura queda auditada (sin el correo).
 
 ---
 
@@ -78,7 +80,8 @@ Cabecera en cada petición autenticada: `Authorization: Bearer <accessToken>`.
    - Pedir otro código: `POST /auth/email-verification/request`.
    - **Hace falta para reservar** (403 `EMAIL_NOT_VERIFIED`).
 5. **Renovación:** `POST /auth/refresh` con `{ refreshToken }` devuelve un par **nuevo**. El token usado queda inválido (rotación).
-   - **Nunca hagas dos renovaciones a la vez con el mismo token.** Si llega un token ya usado, el servidor lo trata como robo y **cierra esa sesión en todos lados** (`INVALID_REFRESH_TOKEN`).
+   - **Gracia de 10 s** (`REFRESH_TOKEN_GRACE_SECONDS`): si el mismo token se reenvía dentro de esa ventana (reintento tras perder la respuesta, o dos renovaciones a la vez), el servidor devuelve **el mismo** par nuevo, nunca uno distinto. Deja de valer en cuanto el sucesor se usa.
+   - Fuera de la ventana, un token ya usado se trata como robo y **cierra esa sesión en todos lados** (`INVALID_REFRESH_TOKEN`). La gracia es una red de seguridad, no un sustituto del _single-flight_.
    - Implementa la renovación como una sola operación compartida (_single-flight_): las peticiones que reciben 401 esperan esa renovación y luego se reintentan.
 6. **Cierre de sesión:** `POST /auth/logout` con `{ allDevices?: boolean }`, autenticado. Borra los tokens del dispositivo aunque la petición falle.
 7. **Recuperar la contraseña:**
@@ -116,55 +119,61 @@ Todos los errores tienen la misma forma:
 - **`details`:** información adicional. En `VALIDATION_ERROR` es `[{ field, constraints: [...] }]`.
 - **`requestId`:** también llega en la cabecera `X-Request-Id`. Inclúyelo en los reportes de error.
 
-| Código                                 | HTTP      | Significado                                                                               | Qué hace la app                                                               |
-| -------------------------------------- | --------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `BAD_REQUEST`                          | 400       | Solicitud inválida                                                                        | Mostrar `message`.                                                            |
-| `VALIDATION_ERROR`                     | 400       | Datos inválidos                                                                           | Marcar los campos de `details[].field`.                                       |
-| `MALFORMED_JSON`                       | 400       | Cuerpo no es JSON                                                                         | Error de la app: registrar.                                                   |
-| `UNAUTHORIZED`                         | 401       | Falta o venció el token de acceso                                                         | Renovar y reintentar (ver §2).                                                |
-| `INVALID_CREDENTIALS`                  | 401       | Correo o contraseña incorrectos                                                           | "Correo o contraseña incorrectos."                                            |
-| `INVALID_REFRESH_TOKEN`                | 401       | Sesión terminada                                                                          | Ir al inicio de sesión.                                                       |
-| `INVALID_SIGNATURE`                    | 401       | Firma del resultado de pago inválida                                                      | Error de integración: reintentar la verificación o mostrar un error genérico. |
-| `FORBIDDEN`                            | 403       | Sin permiso para esa acción                                                               | Mostrar `message`; ocultar la acción en la interfaz.                          |
-| `EMAIL_NOT_VERIFIED`                   | 403       | Hay que verificar el correo para reservar                                                 | Llevar a verificar el correo.                                                 |
-| `ACCOUNT_DISABLED`                     | 403       | Cuenta deshabilitada                                                                      | Mostrar `message` y el contacto de soporte.                                   |
-| `HTTPS_REQUIRED`                       | 403       | Petición HTTP en producción                                                               | Error de configuración: usar HTTPS.                                           |
-| `NOT_FOUND`                            | 404       | No existe o no tienes acceso (por privacidad, ambos casos responden igual)                | Mostrar "No encontrado" y volver atrás.                                       |
-| `METHOD_NOT_ALLOWED`                   | 405       | Método no permitido                                                                       | Error de la app.                                                              |
-| `CONFLICT`                             | 409       | Conflicto genérico                                                                        | Mostrar `message`.                                                            |
-| `ALREADY_MEMBER`                       | 409       | Ya es responsable de esa barbería                                                         | Mostrar `message`.                                                            |
-| `LAST_OWNER`                           | 409       | No se puede quitar o degradar al último OWNER                                             | Mostrar `message`.                                                            |
-| `STATUS_CHANGE_NOT_ALLOWED`            | 409       | Barbería en revisión o suspendida                                                         | Mostrar `message`.                                                            |
-| `HAS_FUTURE_BOOKINGS`                  | 409       | Hay reservas futuras activas                                                              | Mostrar `message` (gestionar esas reservas antes).                            |
-| `BARBER_ALREADY_ACTIVE_ELSEWHERE`      | 409       | La cuenta ya es barbero activo en otra barbería                                           | Mostrar `message`.                                                            |
-| `BARBER_ALREADY_LINKED`                | 409       | El perfil de barbero ya tiene una cuenta                                                  | Mostrar `message`.                                                            |
-| `INVITATION_NO_LONGER_VALID`           | 409       | Invitación vencida o usada                                                                | Pedir una invitación nueva.                                                   |
-| `INDEPENDENT_SINGLE_BARBER`            | 409       | Un barbero independiente tiene un solo barbero activo                                     | Mostrar `message`.                                                            |
-| `BLOCK_OVERLAPS_BOOKINGS`              | 409       | El bloqueo choca con reservas activas (`details` trae cuántas)                            | Mostrar `message`.                                                            |
-| `SLOT_NOT_AVAILABLE`                   | 409       | El turno ya no está libre (o no es un turno válido)                                       | Recargar los turnos y pedir otro.                                             |
-| `TOO_MANY_PENDING_BOOKINGS`            | 409       | Ya tiene 2 reservas sin pagar                                                             | "Paga o cancela alguna antes de reservar otra."                               |
-| `IDEMPOTENCY_KEY_REUSED`               | 409       | Misma `Idempotency-Key` con otros datos                                                   | Error de la app: generar otra clave por intento.                              |
-| `CANCELLATION_NOT_ALLOWED`             | 409       | Ya empezó o no se puede cancelar                                                          | Mostrar `message`.                                                            |
-| `ALREADY_CANCELLED`                    | 409       | Ya estaba cancelada                                                                       | Refrescar la reserva.                                                         |
-| `PAYMENT_NOT_AVAILABLE`                | 409       | La reserva ya no está pendiente de pago o venció                                          | Refrescar; si venció, ofrecer reservar de nuevo.                              |
-| `INVALID_STATE_TRANSITION`             | 409       | La reserva no admite ese cambio ahora                                                     | Refrescar la reserva.                                                         |
-| `NO_SHOW_NOT_ALLOWED`                  | 409       | Fuera de la ventana de inasistencia (15 min a 24 h tras el inicio)                        | Mostrar `message`.                                                            |
-| `ATTENDANCE_NOT_ALLOWED`               | 409       | Fuera de la ventana para marcar atendida                                                  | Mostrar `message`.                                                            |
-| `ATTENDANCE_CORRECTION_NOT_ALLOWED`    | 409       | Fuera del plazo de corrección (48 h)                                                      | "Contacta a soporte."                                                         |
-| `ALREADY_REVIEWED`                     | 409       | Ya calificada (soporte)                                                                   | —                                                                             |
-| `WEBHOOK_MISMATCH` / `WEBHOOK_TOO_OLD` | 409 / 400 | Solo para la pasarela                                                                     | No aplica a la app.                                                           |
-| `INVALID_CODE`                         | 400       | Código incorrecto, vencido o usado                                                        | "Código inválido o vencido." Ofrecer reenviar.                                |
-| `TERMS_VERSION_OUTDATED`               | 400       | Cambió la versión de los términos                                                         | Volver a pedir `GET /auth/terms` y aceptar de nuevo.                          |
-| `DATE_OUT_OF_RANGE`                    | 400       | Fecha pasada o fuera del horizonte (30 días); `details` trae `today` y `lastBookableDate` | Limitar el calendario a ese rango.                                            |
-| `INVALID_CURSOR`                       | 400       | Cursor inválido o de otro orden                                                           | Recargar desde la primera página.                                             |
-| `IDEMPOTENCY_KEY_REQUIRED`             | 400       | Falta la cabecera `Idempotency-Key` (UUID)                                                | Error de la app.                                                              |
-| `PAYLOAD_TOO_LARGE`                    | 413       | Cuerpo demasiado grande                                                                   | Error de la app.                                                              |
-| `UNSUPPORTED_MEDIA_TYPE`               | 415       | Tipo de contenido no soportado                                                            | Error de la app (usar JSON).                                                  |
-| `ACCOUNT_LOCKED`                       | 429       | Demasiados intentos fallidos de acceso                                                    | "Espera unos minutos." `details[0].retryAfterSeconds` indica cuánto.          |
-| `TOO_MANY_REQUESTS`                    | 429       | Límite de peticiones                                                                      | Esperar y reintentar con espera creciente.                                    |
-| `INTERNAL_ERROR`                       | 500       | Error inesperado                                                                          | Mensaje genérico; reportar con `requestId`.                                   |
-| `SERVICE_UNAVAILABLE`                  | 503       | No disponible por un momento; en reservas, con `details: [{ retryable: true }]`           | Reintentar en unos segundos con **la misma** `Idempotency-Key`.               |
-| `PAYMENT_PROVIDER_ERROR`               | 502       | La pasarela no respondió                                                                  | Reintentar `POST /bookings/{id}/payment`.                                     |
+| Código                                  | HTTP      | Significado                                                                               | Qué hace la app                                                               |
+| --------------------------------------- | --------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `BAD_REQUEST`                           | 400       | Solicitud inválida                                                                        | Mostrar `message`.                                                            |
+| `VALIDATION_ERROR`                      | 400       | Datos inválidos                                                                           | Marcar los campos de `details[].field`.                                       |
+| `MALFORMED_JSON`                        | 400       | Cuerpo no es JSON                                                                         | Error de la app: registrar.                                                   |
+| `UNAUTHORIZED`                          | 401       | Falta o venció el token de acceso                                                         | Renovar y reintentar (ver §2).                                                |
+| `INVALID_CREDENTIALS`                   | 401       | Correo o contraseña incorrectos                                                           | "Correo o contraseña incorrectos."                                            |
+| `INVALID_REFRESH_TOKEN`                 | 401       | Sesión terminada                                                                          | Ir al inicio de sesión.                                                       |
+| `INVALID_SIGNATURE`                     | 401       | Firma del resultado de pago inválida                                                      | Error de integración: reintentar la verificación o mostrar un error genérico. |
+| `FORBIDDEN`                             | 403       | Sin permiso para esa acción                                                               | Mostrar `message`; ocultar la acción en la interfaz.                          |
+| `EMAIL_NOT_VERIFIED`                    | 403       | Hay que verificar el correo para reservar                                                 | Llevar a verificar el correo.                                                 |
+| `ACCOUNT_DISABLED`                      | 403       | Cuenta deshabilitada                                                                      | Mostrar `message` y el contacto de soporte.                                   |
+| `HTTPS_REQUIRED`                        | 403       | Petición HTTP en producción                                                               | Error de configuración: usar HTTPS.                                           |
+| `NOT_FOUND`                             | 404       | No existe o no tienes acceso (por privacidad, ambos casos responden igual)                | Mostrar "No encontrado" y volver atrás.                                       |
+| `METHOD_NOT_ALLOWED`                    | 405       | Método no permitido                                                                       | Error de la app.                                                              |
+| `CONFLICT`                              | 409       | Conflicto genérico                                                                        | Mostrar `message`.                                                            |
+| `ALREADY_MEMBER`                        | 409       | Ya es responsable de esa barbería                                                         | Mostrar `message`.                                                            |
+| `LAST_OWNER`                            | 409       | No se puede quitar o degradar al último OWNER                                             | Mostrar `message`.                                                            |
+| `STATUS_CHANGE_NOT_ALLOWED`             | 409       | Barbería en revisión o suspendida                                                         | Mostrar `message`.                                                            |
+| `HAS_FUTURE_BOOKINGS`                   | 409       | Hay reservas futuras activas                                                              | Mostrar `message` (gestionar esas reservas antes).                            |
+| `BARBER_ALREADY_ACTIVE_ELSEWHERE`       | 409       | La cuenta ya es barbero activo en otra barbería                                           | Mostrar `message`.                                                            |
+| `BARBER_ALREADY_LINKED`                 | 409       | El perfil de barbero ya tiene una cuenta                                                  | Mostrar `message`.                                                            |
+| `INVITATION_NO_LONGER_VALID`            | 409       | Invitación vencida o usada                                                                | Pedir una invitación nueva.                                                   |
+| `INDEPENDENT_SINGLE_BARBER`             | 409       | Un barbero independiente tiene un solo barbero activo                                     | Mostrar `message`.                                                            |
+| `BLOCK_OVERLAPS_BOOKINGS`               | 409       | El bloqueo choca con reservas activas (`details` trae cuántas)                            | Mostrar `message`.                                                            |
+| `SLOT_NOT_AVAILABLE`                    | 409       | El turno ya no está libre (o no es un turno válido)                                       | Recargar los turnos y pedir otro.                                             |
+| `TOO_MANY_PENDING_BOOKINGS`             | 409       | Ya tiene 2 reservas sin pagar                                                             | "Paga o cancela alguna antes de reservar otra."                               |
+| `IDEMPOTENCY_KEY_REUSED`                | 409       | Misma `Idempotency-Key` con otros datos                                                   | Error de la app: generar otra clave por intento.                              |
+| `CANCELLATION_NOT_ALLOWED`              | 409       | Ya empezó o no se puede cancelar                                                          | Mostrar `message`.                                                            |
+| `ALREADY_CANCELLED`                     | 409       | Ya estaba cancelada                                                                       | Refrescar la reserva.                                                         |
+| `PAYMENT_NOT_AVAILABLE`                 | 409       | La reserva ya no está pendiente de pago o venció                                          | Refrescar; si venció, ofrecer reservar de nuevo.                              |
+| `INVALID_STATE_TRANSITION`              | 409       | La reserva no admite ese cambio ahora                                                     | Refrescar la reserva.                                                         |
+| `NO_SHOW_NOT_ALLOWED`                   | 409       | Fuera de la ventana de inasistencia (15 min a 24 h tras el inicio)                        | Mostrar `message`.                                                            |
+| `ATTENDANCE_NOT_ALLOWED`                | 409       | Fuera de la ventana para marcar atendida                                                  | Mostrar `message`.                                                            |
+| `ATTENDANCE_CORRECTION_NOT_ALLOWED`     | 409       | Fuera del plazo de corrección (48 h)                                                      | "Contacta a soporte."                                                         |
+| `ALREADY_REVIEWED`                      | 409       | Ya calificada (soporte)                                                                   | —                                                                             |
+| `REVIEW_NOT_ALLOWED`                    | 409       | La reserva no está atendida o pasó el plazo de 14 días                                    | Ocultar "Valorar".                                                            |
+| `REVIEW_ALREADY_EXISTS`                 | 409       | Ya valoraste esta reserva                                                                 | Ir a la valoración existente.                                                 |
+| `REVIEW_EDIT_NOT_ALLOWED`               | 409       | Ya se editó una vez o pasó el plazo                                                       | Ocultar "Editar" (`canEdit`).                                                 |
+| `ALREADY_REPORTED`                      | 409       | Ya reportaste ese contenido                                                               | "Ya lo reportaste."                                                           |
+| `TICKET_CLOSED`                         | 409       | El ticket está cerrado o pasó el plazo para reabrirlo                                     | Ofrecer abrir uno nuevo.                                                      |
+| `ACCOUNT_DISABLED` (sesión restringida) | 403       | La sesión de soporte de una cuenta deshabilitada solo sirve para tickets                  | Volver a la pantalla de ayuda.                                                |
+| `WEBHOOK_MISMATCH` / `WEBHOOK_TOO_OLD`  | 409 / 400 | Solo para la pasarela                                                                     | No aplica a la app.                                                           |
+| `INVALID_CODE`                          | 400       | Código incorrecto, vencido o usado                                                        | "Código inválido o vencido." Ofrecer reenviar.                                |
+| `TERMS_VERSION_OUTDATED`                | 400       | Cambió la versión de los términos                                                         | Volver a pedir `GET /auth/terms` y aceptar de nuevo.                          |
+| `DATE_OUT_OF_RANGE`                     | 400       | Fecha pasada o fuera del horizonte (30 días); `details` trae `today` y `lastBookableDate` | Limitar el calendario a ese rango.                                            |
+| `INVALID_CURSOR`                        | 400       | Cursor inválido o de otro orden                                                           | Recargar desde la primera página.                                             |
+| `IDEMPOTENCY_KEY_REQUIRED`              | 400       | Falta la cabecera `Idempotency-Key` (UUID)                                                | Error de la app.                                                              |
+| `PAYLOAD_TOO_LARGE`                     | 413       | Cuerpo demasiado grande                                                                   | Error de la app.                                                              |
+| `UNSUPPORTED_MEDIA_TYPE`                | 415       | Tipo de contenido no soportado                                                            | Error de la app (usar JSON).                                                  |
+| `ACCOUNT_LOCKED`                        | 429       | Demasiados intentos fallidos de acceso                                                    | "Espera unos minutos." `details[0].retryAfterSeconds` indica cuánto.          |
+| `TOO_MANY_REQUESTS`                     | 429       | Límite de peticiones                                                                      | Esperar y reintentar con espera creciente.                                    |
+| `INTERNAL_ERROR`                        | 500       | Error inesperado                                                                          | Mensaje genérico; reportar con `requestId`.                                   |
+| `SERVICE_UNAVAILABLE`                   | 503       | No disponible por un momento; en reservas, con `details: [{ retryable: true }]`           | Reintentar en unos segundos con **la misma** `Idempotency-Key`.               |
+| `PAYMENT_PROVIDER_ERROR`                | 502       | La pasarela no respondió                                                                  | Reintentar `POST /bookings/{id}/payment`.                                     |
 
 ---
 
@@ -232,6 +241,16 @@ Las rutas son relativas a `/api/v1`. "Sesión" significa la cabecera `Authorizat
 
    Política: con 5 h o más de anticipación se devuelve todo; con 2 h o más, el 50 %; con menos, nada. Una reserva sin pagar se puede cancelar siempre.
 
+9. **Favoritos:**
+   - marcar y quitar: `PUT` y `DELETE /me/favorites/{barbershopId}` (204, idempotentes; marcar una barbería no pública da 404);
+   - listar: `GET /me/favorites` (las más recientes primero). Una barbería suspendida desaparece de la lista y vuelve si se reactiva.
+10. **Valorar:** `POST /bookings/{id}/review` con `{ rating: 1..5, comment? }` (comentario de 3 a 500 caracteres, texto plano).
+    - Solo reservas propias `ATTENDED`, una vez, dentro de 14 días desde que quedaron atendidas. Si no: 409 `REVIEW_NOT_ALLOWED` o `REVIEW_ALREADY_EXISTS`.
+    - Editar **una sola vez** dentro del plazo: `PATCH /reviews/{id}` (si no, 409 `REVIEW_EDIT_NOT_ALLOWED`). Retirar: `DELETE /reviews/{id}`.
+    - `GET /me/reviews` trae `status` y `canEdit` (úsalo para mostrar u ocultar "Editar").
+11. **Opiniones de una barbería:** `GET /barbershops/{id}/reviews?barberId=&rating=` sin sesión. El autor llega como "Ana R."; `response` es la respuesta de la barbería o `null`. El promedio está en `rating` de la barbería y de cada barbero.
+12. **Reportar:** `POST /reviews/{id}/reports` con `{ target: "REVIEW" | "RESPONSE", reason, details? }` (motivos: `OFFENSIVE`, `PERSONAL_DATA`, `FAKE`, `SPAM`, `OTHER`). 204; una vez por contenido (409 `ALREADY_REPORTED`); el propio contenido no se reporta (403).
+
 ### Responsable (OWNER o MANAGER)
 
 1. **Crear la barbería:**
@@ -276,6 +295,21 @@ Las rutas son relativas a `/api/v1`. "Sesión" significa la cabecera `Authorizat
 10. **Reservas:**
     - listar: `GET /barbershops/{id}/bookings?scope=`;
     - cancelar con motivo obligatorio: `POST /bookings/{id}/cancel` con `{ reason }`. Se devuelve todo y la cancelación queda registrada para revisión.
+11. **Responder valoraciones:** `PUT /reviews/{id}/response` con `{ text }` (hasta 500 caracteres). Una respuesta por valoración, editable con la misma llamada. El barbero no responde.
+
+### Notificaciones (todos)
+
+Ver [`PUSH.md`](PUSH.md): registrar el dispositivo (`PUT /me/devices`, token en el cuerpo), tipos de aviso y navegación, horario silencioso, preferencias y bandeja (`GET /me/notifications`).
+
+### Ayuda y reportes (todos)
+
+1. **Tickets de soporte:** `POST /support/tickets` con `{ category, subject, message, relatedType?, relatedId? }` (relación opcional con una reserva, un pago o una barbería propios). Máximo 5 abiertos (429).
+   - `GET /me/support/tickets` y `GET /me/support/tickets/{id}` (mensajes con `from: USER | SUPPORT`; nunca notas internas). Usa `canReply`.
+   - Responder: `POST /me/support/tickets/{id}/messages` con `{ body }`. Un ticket `RESOLVED` se reabre si respondes dentro de 7 días; si no, 409 `TICKET_CLOSED` (abrir otro).
+2. **Cuenta deshabilitada:** el login da 403 `ACCOUNT_DISABLED`. Con el mismo correo y contraseña, `POST /auth/support-access` devuelve un `accessToken` **restringido** (sin `refreshToken`, 15 min) que solo sirve para los endpoints de tickets; cualquier otro responde 403 `ACCOUNT_DISABLED`. Muestra solo la pantalla de ayuda.
+3. **Reportar una barbería:** `POST /barbershops/{id}/reports` con `{ reason, details? }` (`FRAUD`, `MISLEADING_INFO`, `INAPPROPRIATE`, `NOT_OPERATING`, `SAFETY`, `OTHER`). 204; una vez por cuenta (409 `ALREADY_REPORTED`); sus miembros no la reportan (403).
+
+El panel de soporte (`/api/v1/admin`) no es para la app móvil.
 
 ### Barbero
 
@@ -285,16 +319,17 @@ Las rutas son relativas a `/api/v1`. "Sesión" significa la cabecera `Authorizat
 
    Después, renueva la sesión para tener el rol BARBER.
 
-2. **Agenda del día:** `GET /me/barber/agenda?date=`. El barbero no puede corregir.
-3. **Reservas que atiende:** `GET /me/barber/bookings?scope=`.
-4. **Bloqueos propios:**
+2. **Perfil propio:** `GET /me/barber` devuelve `{ items: [{ barberId, displayName, isActive, serviceIds, barbershop: { id, name, status, timezone } }] }` (activos primero; lista vacía si no es barbero). De aquí sale el `barberId` para bloqueos y agenda.
+3. **Agenda del día:** `GET /me/barber/agenda?date=`. El barbero no puede corregir.
+4. **Reservas que atiende:** `GET /me/barber/bookings?scope=`.
+5. **Bloqueos propios:**
    - `POST /barbershops/{shopId}/time-blocks` con `barberId` igual a su perfil;
    - `GET` y `DELETE` sobre sus bloqueos.
 
    Los `id` de la barbería vienen en la agenda (`barbershop.id`). Hoy no hay un endpoint directo para conocer el propio `barberId` (ver `AJUSTES-BACKEND.md`).
 
-5. **Horario:** puede consultarlo (`GET /barbershops/{id}/barbers/{barberId}/schedule`), pero no cambiarlo.
-6. **Asistencia:**
+6. **Horario:** puede consultarlo (`GET /barbershops/{id}/barbers/{barberId}/schedule`), pero no cambiarlo.
+7. **Asistencia:**
    - `POST /bookings/{id}/attended`, desde la hora de inicio y hasta 24 h después;
    - `POST /bookings/{id}/no-show`, desde 15 minutos y hasta 24 h después.
 
@@ -328,15 +363,12 @@ Reembolso: `PENDING` (enviado o por enviar a la pasarela), `SUCCEEDED` o `FAILED
 
 ## 7. Qué está disponible hoy y qué no
 
-| Fase       | Estado                                                                                                                                                          | Qué deja preparado la app                                                                   |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| 1–7, 8A, 9 | **Disponible**: cuentas, barberías, servicios, barberos, horarios, disponibilidad, búsqueda, reservas, pagos con `FakeGateway`, reembolsos, asistencia y agenda | —                                                                                           |
-| 8B         | **Falta**: pago real con Izipay (SDK, `formToken`)                                                                                                              | Pantalla de pago detrás de un módulo intercambiable; ver `PAGOS.md`                         |
-| 10         | **Falta**: notificaciones push y correo real; registro de `device_tokens`                                                                                       | Pedir el permiso de notificaciones y obtener el token del dispositivo, sin enviarlo todavía |
-| 11         | **Falta**: favoritos y valoraciones                                                                                                                             | Espacios en el detalle de la barbería (estrellas, opiniones) y botón de favorito            |
-| 12         | **Falta**: tickets de soporte y panel de operación                                                                                                              | Entrada "Ayuda / reportar un problema"                                                      |
-| 13         | **Falta**: promociones, cupones, auspiciadores y destacados                                                                                                     | Hoy `featured` siempre es `false`; espacio para banners                                     |
-| 14         | **Falta**: galería e imágenes (logo, portada, fotos de barberos y trabajos)                                                                                     | Hoy no hay imágenes: usar marcadores                                                        |
-| 15–16      | **Falta**: planes de suscripción y membresías                                                                                                                   | —                                                                                           |
+| Fase            | Estado                                                                                                                                                                                                                                                     | Qué deja preparado la app                                           |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 1–12 (salvo 8B) | **Disponible**: cuentas, barberías, servicios, barberos, horarios, disponibilidad, búsqueda, reservas, pagos con `FakeGateway`, reembolsos, asistencia, agenda, favoritos, valoraciones, tickets de soporte y notificaciones (push simulado en desarrollo) | —                                                                   |
+| 8B              | **Falta**: pago real con Izipay (SDK, `formToken`)                                                                                                                                                                                                         | Pantalla de pago detrás de un módulo intercambiable; ver `PAGOS.md` |
+| 13              | **Falta**: promociones, cupones, auspiciadores y destacados                                                                                                                                                                                                | Hoy `featured` siempre es `false`; espacio para banners             |
+| 14              | **Falta**: galería e imágenes (logo, portada, fotos de barberos y trabajos)                                                                                                                                                                                | Hoy no hay imágenes: usar marcadores                                |
+| 15–16           | **Falta**: planes de suscripción y membresías                                                                                                                                                                                                              | —                                                                   |
 
 Estado detallado del proyecto: `docs/ESTADO.md`.

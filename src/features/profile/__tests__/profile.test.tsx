@@ -158,12 +158,14 @@ describe('preferences', () => {
     expect(screen.getByLabelText(texts.preferences.channels.EMAIL).props.value).toBe(true);
   });
 
-  it('saves a channel change in the backend order', async () => {
+  it('saves a channel change in the backend order and keeps the reminders setting', async () => {
     signIn();
     const api = mockApi({
       'GET /api/v1/users/me': { body: profile() },
       'PATCH /api/v1/users/me': {
-        body: profile({ preferences: { notificationChannels: ['PUSH', 'EMAIL', 'IN_APP'] } }),
+        body: profile({
+          preferences: { notificationChannels: ['PUSH', 'EMAIL', 'IN_APP'], reminders: false },
+        }),
       },
     });
     const { result } = await renderHookWithProviders(() => usePreferences());
@@ -171,7 +173,8 @@ describe('preferences', () => {
     await act(async () => result.current.toggleChannel('PUSH', true));
     await waitFor(() => expect(api.callsTo('PATCH', '/api/v1/users/me')).toHaveLength(1));
     expect(api.callsTo('PATCH', '/api/v1/users/me')[0]!.body).toEqual({
-      preferences: { notificationChannels: ['PUSH', 'EMAIL', 'IN_APP'] },
+      // reminders is not edited here: it is sent back unchanged.
+      preferences: { notificationChannels: ['PUSH', 'EMAIL', 'IN_APP'], reminders: false },
     });
     await waitFor(() => expect(result.current.channels).toEqual(['PUSH', 'EMAIL', 'IN_APP']));
   });
