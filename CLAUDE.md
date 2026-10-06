@@ -23,6 +23,7 @@ Este archivo es la fuente de verdad de la app. El contrato de la API está en **
 9. Sin secretos en el repositorio ni dentro de la app. Todo lo que va en la app es público por definición.
 10. Al terminar una fase: resume qué se hizo, qué pantallas quedaron, qué falta, y actualiza `docs/ESTADO.md`. En una conversación nueva, lee primero ese archivo.
 11. Claude Code no puede ver la app en un teléfono. Al cerrar cada fase entrega una **lista de comprobación manual** para que el usuario la pruebe en su dispositivo, y corrige según lo que reporte.
+12. **Nada que exija recompilar sin aprobación.** Antes de agregar un módulo nativo, o de cambiar `app.config.ts`, `eas.json`, `plugins/` o cualquier otra cosa que requiera una compilación nueva, avisa y espera la aprobación del usuario: la cola gratuita de EAS puede tardar horas. Los cambios nativos aprobados se acumulan en `docs/ESTADO.md` ("Cambios nativos pendientes de compilar") para hacer una sola compilación. El código debe funcionar sin errores en la compilación instalada hasta entonces: si depende de un módulo nativo nuevo, lo carga solo si existe (`requireOptionalNativeModule`).
 
 ---
 

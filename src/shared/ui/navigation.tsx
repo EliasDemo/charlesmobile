@@ -4,7 +4,7 @@ import {
   ThemeProvider as NavigationThemeProvider,
   type Theme as NavigationTheme,
 } from 'expo-router';
-import * as NavigationBar from 'expo-navigation-bar';
+import { requireOptionalNativeModule } from 'expo';
 import { StatusBar } from 'expo-status-bar';
 import * as SystemUI from 'expo-system-ui';
 import { useEffect, useMemo, type ReactNode } from 'react';
@@ -44,6 +44,20 @@ export function useStackScreenOptions() {
   );
 }
 
+type NavigationBarModule = typeof import('expo-navigation-bar');
+
+/**
+ * expo-navigation-bar is optional: builds made before it was added do not contain its native
+ * module, and importing the library there would crash. Only load it when the native side exists;
+ * otherwise the system keeps its default navigation bar and nothing else changes.
+ */
+export function loadNavigationBar(): NavigationBarModule | null {
+  if (Platform.OS !== 'android' || !requireOptionalNativeModule('ExpoNavigationBar')) return null;
+  // Conditional require on purpose: a static import would crash builds without the module.
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('expo-navigation-bar') as NavigationBarModule;
+}
+
 /**
  * Status bar, Android navigation bar and root background follow the theme tokens.
  * With edge-to-edge the bars are transparent: only their icon color has to change.
@@ -53,7 +67,7 @@ export function SystemBars() {
   const iconStyle = theme.scheme === 'dark' ? 'light' : 'dark';
   useEffect(() => {
     void SystemUI.setBackgroundColorAsync(theme.colors.background);
-    if (Platform.OS === 'android') NavigationBar.setStyle(theme.scheme === 'dark' ? 'dark' : 'light');
+    loadNavigationBar()?.setStyle(theme.scheme === 'dark' ? 'dark' : 'light');
   }, [theme]);
   return <StatusBar style={iconStyle} />;
 }

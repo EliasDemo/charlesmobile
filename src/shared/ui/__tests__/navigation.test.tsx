@@ -6,6 +6,20 @@ import { buildTheme, colors } from '@/shared/theme';
 import { SystemBars, buildNavigationTheme } from '..';
 
 jest.mock('expo-navigation-bar', () => ({ setStyle: jest.fn() }));
+// Only the navigation bar module is faked; anything expo-router asks for at import time is real.
+const mockNative = { navigationBar: true };
+jest.mock('expo', () => {
+  const actual = jest.requireActual('expo');
+  return {
+    ...actual,
+    requireOptionalNativeModule: (name: string) =>
+      name === 'ExpoNavigationBar'
+        ? mockNative.navigationBar
+          ? {}
+          : null
+        : actual.requireOptionalNativeModule(name),
+  };
+});
 jest.mock('expo-system-ui', () => ({ setBackgroundColorAsync: jest.fn(async () => undefined) }));
 
 describe('navigation theme', () => {
@@ -22,7 +36,10 @@ describe('navigation theme', () => {
 });
 
 describe('SystemBars', () => {
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockNative.navigationBar = true;
+  });
 
   it('paints the root background and the Android navigation bar with the theme', async () => {
     jest.replaceProperty(Platform, 'OS', 'android');
@@ -36,5 +53,13 @@ describe('SystemBars', () => {
     jest.replaceProperty(Platform, 'OS', 'ios');
     await render(<SystemBars />);
     expect(NavigationBar.setStyle).not.toHaveBeenCalled();
+  });
+
+  it('works without errors in builds that lack the navigation bar module', async () => {
+    jest.replaceProperty(Platform, 'OS', 'android');
+    mockNative.navigationBar = false;
+    await render(<SystemBars />);
+    expect(NavigationBar.setStyle).not.toHaveBeenCalled();
+    expect(SystemUI.setBackgroundColorAsync).toHaveBeenCalledWith(colors.dark.background);
   });
 });

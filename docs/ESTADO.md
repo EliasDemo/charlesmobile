@@ -8,7 +8,7 @@ Léelo primero al empezar una conversación nueva.
 
 ## M1 — Cerrada
 
-Probada por el usuario en un Android físico: la app carga, conecta con el backend y el sistema de diseño se ve bien. Las correcciones de esa prueba (abajo) requieren una nueva compilación de desarrollo y una segunda revisión rápida.
+Probada por el usuario en un Android físico: la app carga, conecta con el backend y el sistema de diseño se ve bien. Las correcciones de esa prueba (encabezados, barra de estado y contraste) son solo de JavaScript: se prueban con la compilación instalada. El color de la barra inferior de Android queda para la próxima compilación (ver más abajo).
 
 - Proyecto Expo SDK 57 / React Native 0.86 con nueva arquitectura y compilación de desarrollo. Versiones en `docs/adr/0001-base-tecnica.md`.
 - **Configuración:**
@@ -62,10 +62,21 @@ Probada por el usuario en un Android físico: la app carga, conecta con el backe
 
 ## Pendiente
 
-- Revisión rápida, tras recompilar, de las correcciones de tema y contraste de M1.
+- Revisión rápida, con la compilación instalada, de las correcciones de tema y contraste de M1.
 - **M2:** inicio de sesión, registro, verificación, recuperación, perfil, preferencias y selector de tema (con persistencia).
 - **Backend:** `dev:pay` (ya pedido; hace falta desde M4), `GET /me/barber` (antes de los bloqueos del barbero) y el resto de `docs/api/AJUSTES-BACKEND.md`.
 - Pendientes de publicación: `docs/pendientes-publicacion.md`.
+
+## Compilación instalada y cambios nativos pendientes de compilar
+
+**Compilación de desarrollo instalada en el teléfono del usuario:** la de M1 (commit `cbce85b`).
+
+Cambios nativos aprobados que todavía **no están** en esa compilación. Se aplicarán en la próxima, que el usuario decide cuándo lanzar:
+
+| Cambio | Efecto cuando se compile | Sin compilar |
+|---|---|---|
+| `expo-navigation-bar` y su plugin (`enforceContrast: false`) | El color de los iconos de la barra inferior de Android sigue el tema | El código lo detecta y no lo usa: la barra queda como la deja el sistema, sin errores |
+| `backgroundColor` en `app.config.ts` | Fondo oscuro antes de que cargue la app (sin destello blanco) | Ya se aplica en tiempo de ejecución con `expo-system-ui` |
 
 ## Cuándo hace falta una compilación nueva (EAS)
 
