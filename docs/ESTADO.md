@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M4 (Reservar), con el código terminado. Falta la confirmación del usuario en su teléfono.
+**Fase actual:** M4 cerrada el 2026-10-06. En curso: **M4.5 (diseño)**, parte 1; la parte 2 (fotos) espera las imágenes del usuario.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -114,9 +114,16 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 - ~~`isFavorite`~~ y ~~`timezone` en las alternativas~~: recibidos y en uso.
 - `barbershop.timezone` en `BookingDto` (pedido por el usuario). Mientras tanto, M4 lee el detalle de cada barbería para su zona.
 
-## M4 — Código terminado
+## M4 — Cerrada
 
-**Falta:** la confirmación del usuario en su teléfono. No exige compilación nueva.
+**Verificado por el usuario en su Android:** reservar "Corte clásico" en Barbería Demo Miraflores crea la reserva; "Tu reserva" muestra "Pendiente de pago" con cuenta regresiva, "Pagar" deshabilitado y el ID de desarrollo; aparece en Reservas > Próximas con la hora correcta; `dev:pay` con ese ID la deja en `CONFIRMED`.
+
+**Pendientes de verificación del usuario** (avisará si encuentra fallos):
+- Pago rechazado (`pnpm --filter api dev:pay <ID> --reject`) → "Cancelada".
+- Vencimiento a los 10 minutos → "Vencida" con "Reservar de nuevo".
+- Límite de 2 reservas pendientes (`TOO_MANY_PENDING_BOOKINGS`).
+- Turno ocupado (`SLOT_NOT_AVAILABLE`) → vuelve a los turnos conservando el resto.
+- Cancelación con vista previa de la devolución y actualización de las listas.
 
 - **`features/booking`:**
   - **Reservar** (`/book/[barbershopId]`): servicio, barbero ("Cualquiera disponible" o los que hacen ese servicio según `serviceIds`), día (chips dentro del horizonte; `DATE_OUT_OF_RANGE` lo acota a `lastBookableDate`) y turno, agrupado por la mañana, la tarde y la noche, en la zona de la barbería. Sin turnos ese día, muestra las alternativas de esa fecha.
