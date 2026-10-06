@@ -6,7 +6,7 @@ const isDevelopment = variant === 'development';
 
 const BASE_ID = 'pe.charlesapp.mobile';
 // EAS project of the charlesapp-pe organization. Filled after `eas init` (the ID is not a secret).
-const EAS_PROJECT_ID: string = '';
+const EAS_PROJECT_ID: string = '1d025d83-2f2c-43d5-9790-a672d8b63389';
 // Google Maps key for Android, injected at build time from an EAS environment variable (never committed).
 const GOOGLE_MAPS_ANDROID_API_KEY = process.env.GOOGLE_MAPS_ANDROID_API_KEY;
 
