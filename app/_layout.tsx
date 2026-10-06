@@ -8,25 +8,35 @@ import {
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack, router, usePathname, type ErrorBoundaryProps } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { bootstrapSession, onSessionEnded, queryClient, startQueryListeners } from '@/shared/api';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
-import { ThemeProvider, useTheme } from '@/shared/theme';
-import { ErrorFallback, OfflineBanner } from '@/shared/ui';
+import { ThemeProvider } from '@/shared/theme';
+import {
+  ErrorFallback,
+  NavigationThemeRoot,
+  OfflineBanner,
+  SystemBars,
+  useStackScreenOptions,
+} from '@/shared/ui';
 
 void SplashScreen.preventAutoHideAsync();
 startQueryListeners();
 
 /** Global error boundary: a crashing screen shows a retry screen instead of a blank or closed app. */
 export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
-  return <ErrorFallback onRetry={() => void retry()} />;
+  return (
+    <ThemeProvider>
+      <SystemBars />
+      <ErrorFallback onRetry={() => void retry()} />
+    </ThemeProvider>
+  );
 }
 
 function AppStack() {
-  const theme = useTheme();
+  const screenOptions = useStackScreenOptions();
   const { t } = useTranslation();
   const pathname = usePathname();
   const pathnameRef = useRef(pathname);
@@ -46,17 +56,9 @@ function AppStack() {
 
   return (
     <>
-      <StatusBar style={theme.scheme === 'dark' ? 'light' : 'dark'} />
+      <SystemBars />
       <OfflineBanner />
-      <Stack
-        screenOptions={{
-          headerStyle: { backgroundColor: theme.colors.surface },
-          headerTintColor: theme.colors.textPrimary,
-          headerTitleStyle: theme.typography.subtitle,
-          contentStyle: { backgroundColor: theme.colors.background },
-          headerBackButtonDisplayMode: 'minimal',
-        }}
-      >
+      <Stack screenOptions={screenOptions}>
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(client)" options={{ headerShown: false }} />
@@ -90,6 +92,7 @@ export default function RootLayout() {
   if (env.configError) {
     return (
       <ThemeProvider>
+        <SystemBars />
         <ErrorFallback title={t('config.title')} message={t(`config.${env.configError}`)} />
       </ThemeProvider>
     );
@@ -99,9 +102,11 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <AppStack />
-        </QueryClientProvider>
+        <NavigationThemeRoot>
+          <QueryClientProvider client={queryClient}>
+            <AppStack />
+          </QueryClientProvider>
+        </NavigationThemeRoot>
       </ThemeProvider>
     </SafeAreaProvider>
   );

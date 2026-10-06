@@ -10,7 +10,7 @@ export interface ScreenProps {
   edges?: Edge[];
 }
 
-export function Screen({ children, scroll = true, edges = ['left', 'right'] }: ScreenProps) {
+export function Screen({ children, scroll = true, edges = ['left', 'right', 'bottom'] }: ScreenProps) {
   const theme = useTheme();
   const content = <View style={styles.content}>{children}</View>;
   return (

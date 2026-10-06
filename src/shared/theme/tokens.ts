@@ -7,19 +7,22 @@ const palette = {
   copper400: '#C98A4E',
   copper500: '#B07236',
   copper600: '#8E5A28',
+  copper700: '#744920',
   neutral0: '#FFFFFF',
   neutral50: '#F7F5F2',
   neutral100: '#EEEBE6',
   neutral200: '#DEDAD3',
   neutral400: '#A39D94',
-  neutral500: '#7A746C',
+  neutral500: '#6E685F',
   neutral600: '#5C5750',
   neutral700: '#3A3631',
   neutral800: '#26231F',
   neutral850: '#1D1B18',
   neutral900: '#141210',
+  red300: '#F5A49A',
   red400: '#F07B6E',
   red600: '#B3261E',
+  red700: '#8C1D18',
   green400: '#6FCF8E',
   green600: '#1E7A3E',
   amber400: '#F2C14E',
@@ -41,6 +44,10 @@ export interface ThemeColors {
   onPrimary: string;
   primarySoft: string;
   danger: string;
+  dangerPressed: string;
+  /** Disabled controls keep readable text (no opacity tricks). */
+  disabledBackground: string;
+  onDisabled: string;
   success: string;
   warning: string;
   onStatus: string;
@@ -57,10 +64,13 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     textSecondary: palette.neutral600,
     textMuted: palette.neutral500,
     primary: palette.copper600,
-    primaryPressed: palette.copper500,
+    primaryPressed: palette.copper700,
     onPrimary: palette.neutral0,
     primarySoft: palette.copper50,
     danger: palette.red600,
+    dangerPressed: palette.red700,
+    disabledBackground: palette.neutral100,
+    onDisabled: palette.neutral600,
     success: palette.green600,
     warning: palette.amber700,
     onStatus: palette.neutral0,
@@ -79,6 +89,9 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     onPrimary: palette.neutral900,
     primarySoft: palette.neutral800,
     danger: palette.red400,
+    dangerPressed: palette.red300,
+    disabledBackground: palette.neutral700,
+    onDisabled: palette.neutral200,
     success: palette.green400,
     warning: palette.amber400,
     onStatus: palette.neutral900,

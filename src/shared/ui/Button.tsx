@@ -7,18 +7,32 @@ export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 export interface ButtonProps extends Omit<PressableProps, 'children' | 'style'> {
   label: string;
   variant?: ButtonVariant;
-  /** Shows a spinner and blocks presses (e.g. while a form is submitting). */
+  /** Shows a spinner and blocks presses (e.g. while a form is submitting). Keeps full contrast. */
   loading?: boolean;
   fullWidth?: boolean;
 }
 
-interface ButtonColors {
+type ButtonState = 'normal' | 'pressed' | 'disabled';
+
+export interface ButtonColors {
   background: string;
   border: string;
-  text: NonNullable<TextProps['color']>;
+  text: NonNullable<TextProps['color']> | 'onDisabled';
 }
 
-function colorsFor({ colors }: Theme, variant: ButtonVariant, pressed: boolean): ButtonColors {
+/**
+ * Colors per variant and state, all from theme tokens (contrast is tested in shared/theme).
+ * Loading uses the normal colors: the label and spinner must stay readable while submitting.
+ */
+export function buttonColors({ colors }: Theme, variant: ButtonVariant, state: ButtonState): ButtonColors {
+  if (state === 'disabled') {
+    return {
+      background: variant === 'ghost' ? 'transparent' : colors.disabledBackground,
+      border: variant === 'secondary' ? colors.onDisabled : 'transparent',
+      text: 'onDisabled',
+    };
+  }
+  const pressed = state === 'pressed';
   switch (variant) {
     case 'primary':
       return {
@@ -27,7 +41,11 @@ function colorsFor({ colors }: Theme, variant: ButtonVariant, pressed: boolean):
         text: 'onPrimary',
       };
     case 'danger':
-      return { background: colors.danger, border: 'transparent', text: 'onStatus' };
+      return {
+        background: pressed ? colors.dangerPressed : colors.danger,
+        border: 'transparent',
+        text: 'onStatus',
+      };
     case 'secondary':
       return {
         background: pressed ? colors.primarySoft : 'transparent',
@@ -52,34 +70,32 @@ export function Button({
   ...props
 }: ButtonProps) {
   const theme = useTheme();
-  const isDisabled = Boolean(disabled) || loading;
+  const isDisabled = Boolean(disabled) && !loading;
+  const stateFor = (pressed: boolean): ButtonState =>
+    isDisabled ? 'disabled' : pressed && !loading ? 'pressed' : 'normal';
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
-      accessibilityState={{ disabled: isDisabled, busy: loading }}
-      disabled={isDisabled}
+      accessibilityState={{ disabled: isDisabled || loading, busy: loading }}
+      disabled={isDisabled || loading}
       style={({ pressed }) => {
-        const colors = colorsFor(theme, variant, pressed);
+        const colors = buttonColors(theme, variant, stateFor(pressed));
         return [
           styles.base,
-          {
-            backgroundColor: colors.background,
-            borderColor: colors.border,
-            borderRadius: theme.radius.md,
-            opacity: isDisabled ? 0.5 : 1,
-          },
+          { backgroundColor: colors.background, borderColor: colors.border, borderRadius: theme.radius.md },
           fullWidth && styles.fullWidth,
         ];
       }}
       {...props}
     >
       {({ pressed }) => {
-        const colors = colorsFor(theme, variant, pressed);
+        const colors = buttonColors(theme, variant, stateFor(pressed));
+        const textColor = theme.colors[colors.text];
         return (
           <View style={styles.content}>
-            {loading ? <ActivityIndicator color={theme.colors[colors.text]} /> : null}
-            <Text variant="bodyStrong" color={colors.text}>
+            {loading ? <ActivityIndicator color={textColor} testID="button-spinner" /> : null}
+            <Text variant="bodyStrong" style={{ color: textColor }}>
               {label}
             </Text>
           </View>

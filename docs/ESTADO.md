@@ -2,18 +2,20 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M1 (base), con el código terminado. **Falta la confirmación del usuario en su teléfono** (lista de comprobación manual).
+**Fase actual:** M1 cerrada el 2026-10-06. Siguiente: **M2 (cuenta)**, pendiente de aprobar el plan.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` al cierre de la Fase 9 del backend.
 
-## M1 — Hecho
+## M1 — Cerrada
+
+Probada por el usuario en un Android físico: la app carga, conecta con el backend y el sistema de diseño se ve bien. Las correcciones de esa prueba (abajo) requieren una nueva compilación de desarrollo y una segunda revisión rápida.
 
 - Proyecto Expo SDK 57 / React Native 0.86 con nueva arquitectura y compilación de desarrollo. Versiones en `docs/adr/0001-base-tecnica.md`.
 - **Configuración:**
   - `app.config.ts` con variantes `development` / `preview` / `production`. En desarrollo: identificador `pe.charlesapp.mobile.dev`, nombre "Charles (dev)" y HTTP permitido solo ahí.
   - `eas.json` con perfiles `development` (APK con dev client), `preview` y `production`.
   - Organización de Expo: `charlesapp-pe`.
-- **Módulos nativos ya incluidos en la compilación:** secure-store, location, maps, notifications, device, crypto, netinfo, localization, el SDK de Izipay (con plugin para iOS) y expo-build-properties.
+- **Módulos nativos ya incluidos en la compilación:** secure-store, location, maps, notifications, device, crypto, netinfo, localization, el SDK de Izipay (con plugin para iOS) y expo-build-properties y expo-navigation-bar.
 - **Contrato de la API:**
   - `pnpm sync:api` copia `..\charles\docs\mobile\` completa a `docs/api/` y genera `src/shared/api/generated/schema.ts`.
   - `pnpm check:api`, dentro de `verify`, falla si los tipos no coinciden.
@@ -28,6 +30,8 @@ Léelo primero al empezar una conversación nueva.
 - **i18n** con `i18next` en español: `src/shared/i18n/locales/es/{common,errors}.json`.
 - **Sistema de diseño:**
   - Tokens en `src/shared/theme/tokens.ts`: paleta neutra con acento cobre, temas claro y oscuro, fuente Inter.
+  - Encabezados, barra de estado, barra de navegación de Android y fondo raíz siguen los tokens en los dos temas (`NavigationThemeRoot`, `useStackScreenOptions`, `SystemBars` en `src/shared/ui/navigation.tsx`).
+  - Contraste WCAG AA comprobado por pruebas (`src/shared/theme/contrast.ts`): todo texto sobre su fondo ≥ 4,5:1, y todos los estados de los botones (normal, presionado, enviando y deshabilitado) en ambos temas. Los botones deshabilitados usan tokens propios, sin transparencia.
   - Componentes base en `src/shared/ui`: `Text`, `Button`, `TextField`, `Card`, `Screen`, `LoadingState`, `EmptyState`, `ErrorState`, `QueryView` (los cuatro estados), `OfflineBanner`, `ErrorFallback` y `PlaceholderScreen`.
 - **Límite de errores global** (`ErrorBoundary` en `app/_layout.tsx`).
 - **Navegación con Expo Router:**
@@ -36,10 +40,14 @@ Léelo primero al empezar una conversación nueva.
   - `(client)/bookings`: exige sesión.
   - `(staff)/agenda`: exige sesión y el rol OWNER o BARBER.
   - `+not-found`.
+- **Comprobación de red en desarrollo:**
+  - `pnpm start` ejecuta primero `scripts/dev-network/check.js`. El script compara la IPv4 del wifi (ignora adaptadores virtuales, VPN y los que no tienen puerta de enlace) con la de `.env`, ofrece actualizar `.env` y comprueba `GET /api/v1/health`.
+  - Nunca impide arrancar. Para saltarlo existe `pnpm start:skip-check`.
+  - En la app, solo con `__DEV__` y la variante de desarrollo, un error de red muestra la URL configurada y el consejo del wifi. Sus textos están en `locales/es/dev.json` y se cargan solo en desarrollo. Se comprobó que el paquete de producción no los contiene.
 - **Calidad:**
   - ESLint con límites de capas y funcionalidades.
   - Prettier.
-  - Jest: 79 pruebas, todas por encima del 80 % de cobertura en `shared/api` y `shared/payments`.
+  - Jest: 187 pruebas, todas por encima del 80 % de cobertura en `shared/api` y `shared/payments`.
   - `pnpm verify`.
 
 ## Pantallas actuales
@@ -54,8 +62,7 @@ Léelo primero al empezar una conversación nueva.
 
 ## Pendiente
 
-- Confirmación del usuario de la lista de comprobación manual de M1.
-- `EAS_PROJECT_ID` en `app.config.ts`, después de `eas init`.
+- Revisión rápida, tras recompilar, de las correcciones de tema y contraste de M1.
 - **M2:** inicio de sesión, registro, verificación, recuperación, perfil, preferencias y selector de tema (con persistencia).
 - **Backend:** `dev:pay` (ya pedido; hace falta desde M4), `GET /me/barber` (antes de los bloqueos del barbero) y el resto de `docs/api/AJUSTES-BACKEND.md`.
 - Pendientes de publicación: `docs/pendientes-publicacion.md`.

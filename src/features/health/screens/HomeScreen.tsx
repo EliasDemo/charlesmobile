@@ -13,7 +13,7 @@ export function HomeScreen({ apiUrl, onOpenDesignSystem }: HomeScreenProps) {
   const { t } = useTranslation();
   const { query, isHealthy, checks } = useServerStatus();
   return (
-    <Screen>
+    <Screen edges={['top', 'left', 'right', 'bottom']}>
       <Text variant="display">{t('home.title')}</Text>
       <Text color="textSecondary">{t('home.subtitle')}</Text>
       <Card>

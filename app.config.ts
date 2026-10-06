@@ -20,6 +20,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: 'portrait',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
+  // Root background before React draws (avoids a white flash); matches the dark background token.
+  backgroundColor: '#141210',
   ios: {
     supportsTablet: false,
     bundleIdentifier: isDevelopment ? `${BASE_ID}.dev` : BASE_ID,
@@ -67,6 +69,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     'expo-notifications',
+    // Transparent edge-to-edge navigation bar whose button color follows the app theme.
+    ['expo-navigation-bar', { enforceContrast: false }],
     [
       'react-native-maps',
       GOOGLE_MAPS_ANDROID_API_KEY ? { androidGoogleMapsApiKey: GOOGLE_MAPS_ANDROID_API_KEY } : {},

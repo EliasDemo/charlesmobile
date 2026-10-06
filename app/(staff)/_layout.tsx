@@ -1,12 +1,14 @@
 import { Redirect, Stack, usePathname } from 'expo-router';
 import { useSession, type SessionUser } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
+import { useStackScreenOptions } from '@/shared/ui';
 
 const STAFF_ROLES: SessionUser['roles'] = ['OWNER', 'BARBER'];
 
 /** Barbershop area: requires a session with a staff role. The backend still has the final word (403/404). */
 export default function StaffLayout() {
   const { t } = useTranslation();
+  const screenOptions = useStackScreenOptions();
   const { status, user } = useSession();
   const pathname = usePathname();
   if (status !== 'authenticated') {
@@ -14,7 +16,7 @@ export default function StaffLayout() {
   }
   if (!user?.roles.some((role) => STAFF_ROLES.includes(role))) return <Redirect href="/" />;
   return (
-    <Stack>
+    <Stack screenOptions={screenOptions}>
       <Stack.Screen name="agenda" options={{ title: t('nav.agenda') }} />
     </Stack>
   );

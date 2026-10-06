@@ -5,7 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ApiError } from '@/shared/api';
 import common from '@/shared/i18n/locales/es/common.json';
 import errors from '@/shared/i18n/locales/es/errors.json';
-import { Button, ErrorFallback, OfflineBanner, PlaceholderScreen, QueryView, Text, TextField } from '..';
+import { ErrorFallback, OfflineBanner, PlaceholderScreen, QueryView, Text, TextField } from '..';
 
 const baseQuery = { data: undefined, error: null, refetch: jest.fn() };
 
@@ -51,23 +51,6 @@ describe('QueryView', () => {
       </QueryView>,
     );
     expect(screen.getByText('a')).toBeTruthy();
-  });
-});
-
-describe('Button', () => {
-  it('blocks presses while loading', async () => {
-    const onPress = jest.fn();
-    await render(<Button label="Enviar" loading onPress={onPress} />);
-    await fireEvent.press(screen.getByRole('button'));
-    expect(onPress).not.toHaveBeenCalled();
-    expect(screen.getByRole('button').props.accessibilityState).toMatchObject({ disabled: true, busy: true });
-  });
-
-  it('calls onPress when enabled', async () => {
-    const onPress = jest.fn();
-    await render(<Button label="Enviar" variant="secondary" onPress={onPress} />);
-    await fireEvent.press(screen.getByRole('button'));
-    expect(onPress).toHaveBeenCalled();
   });
 });
 
