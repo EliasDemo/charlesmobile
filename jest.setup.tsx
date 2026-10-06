@@ -24,3 +24,10 @@ jest.mock('expo-secure-store', () => {
 
 // TanStack Query notifies observers on a timer; run it synchronously so updates stay inside act().
 require('@tanstack/react-query').notifyManager.setScheduler((callback: () => void) => callback());
+
+// react-native-maps needs its native module at import time; tests render a plain view instead.
+jest.mock('react-native-maps', () => {
+  const { View } = jest.requireActual('react-native');
+  const MapView = (props: object) => <View testID="results-map" {...props} />;
+  return { __esModule: true, default: MapView, Marker: () => null };
+});

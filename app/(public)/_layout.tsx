@@ -8,6 +8,10 @@ export default function PublicLayout() {
   return (
     <Stack screenOptions={screenOptions}>
       <Stack.Screen name="design-system" options={{ title: t('designSystem.title') }} />
+      <Stack.Screen name="search-filters" options={{ title: t('nav.filters'), presentation: 'modal' }} />
+      <Stack.Screen name="barbershop/[id]/index" options={{ title: t('nav.barbershop') }} />
+      <Stack.Screen name="barbershop/[id]/service/[serviceId]" options={{ title: t('nav.service') }} />
+      <Stack.Screen name="barbershop/[id]/reviews" options={{ title: t('nav.reviews') }} />
     </Stack>
   );
 }

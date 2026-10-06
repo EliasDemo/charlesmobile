@@ -1,0 +1,17 @@
+# Explorar sin sesión → buscar por texto → abrir el detalle → ver un servicio.
+# Usa las barberías del seed (docs/api/DATOS-PRUEBA.md).
+# Ejecutar: maestro test e2e/search-detail.yaml
+appId: pe.charlesapp.mobile.dev
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Explorar'
+- tapOn: 'Buscar barberías'
+- inputText: 'Miraflores'
+- assertVisible: 'Barbería Demo Miraflores'
+- tapOn: 'Barbería Demo Miraflores'
+- assertVisible: 'Disponible pronto'
+- scrollUntilVisible:
+    element: 'Corte clásico.*'
+- tapOn: 'Corte clásico.*'
+- assertVisible: 'Próximo turno'

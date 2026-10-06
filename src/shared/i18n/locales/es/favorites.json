@@ -1,0 +1,8 @@
+{
+  "title": "Mis favoritas",
+  "empty": {
+    "title": "Aún no tienes favoritas",
+    "message": "Toca el corazón en una barbería para guardarla aquí."
+  },
+  "remove": "Quitar {{name}} de favoritas"
+}

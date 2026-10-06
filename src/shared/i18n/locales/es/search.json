@@ -1,0 +1,79 @@
+{
+  "title": "Explorar",
+  "placeholder": "Barbería o servicio",
+  "fieldLabel": "Buscar barberías",
+  "minChars": "Escribe al menos 2 letras para buscar.",
+  "nearMe": "Cerca de mí",
+  "nearMeActive": "Cerca de ti",
+  "nearMeOff": "Quitar ubicación",
+  "allCategories": "Todas",
+  "filters": "Filtros",
+  "filtersActive_one": "Filtros ({{count}})",
+  "filtersActive_other": "Filtros ({{count}})",
+  "filtersHint_one": "{{count}} filtro activo",
+  "filtersHint_other": "{{count}} filtros activos",
+  "viewList": "Lista",
+  "viewMap": "Mapa",
+  "topRated": "Mejor valoradas",
+  "empty": {
+    "title": "No encontramos barberías",
+    "message": "Prueba con otras palabras o quita algunos filtros."
+  },
+  "card": {
+    "independent": "Independiente",
+    "openNow": "Abierta ahora",
+    "closed": "Cerrada",
+    "temporarilyClosed": "Cerrada temporalmente",
+    "availableNow": "Turno disponible ahora",
+    "priceFrom": "Desde {{price}}",
+    "distance": "a {{distance}}"
+  },
+  "sort": {
+    "label": "Ordenar por",
+    "distance": "Distancia",
+    "rating": "Valoración",
+    "price": "Precio"
+  },
+  "filtersScreen": {
+    "category": "Categoría",
+    "price": "Precio",
+    "rating": "Valoración mínima",
+    "ratingAtLeast": "{{rating}} o más",
+    "type": "Tipo",
+    "typeAll": "Todas",
+    "typeBarbershop": "Barberías",
+    "typeIndependent": "Independientes",
+    "availability": "Disponibilidad",
+    "openNow": "Abierta ahora",
+    "availableNow": "Con turno disponible ahora",
+    "date": "Con turno disponible el día",
+    "radius": "Distancia máxima",
+    "radiusKm": "{{km}} km",
+    "radiusNeedsLocation": "Activa \"Cerca de mí\" para elegir la distancia y ordenar por cercanía.",
+    "apply": "Ver resultados",
+    "clear": "Limpiar filtros"
+  },
+  "pricePresets": {
+    "upTo": "Hasta {{max}}",
+    "between": "{{min}}–{{max}}",
+    "over": "Más de {{min}}"
+  },
+  "location": {
+    "explainTitle": "Barberías cerca de ti",
+    "explainMessage": "Usaremos tu ubicación solo para mostrarte barberías cercanas y la distancia a cada una. No la guardamos.",
+    "explainContinue": "Continuar",
+    "denied": "Sin permiso de ubicación. Puedes seguir buscando por nombre o servicio.",
+    "blocked": "La ubicación está desactivada para Charles. Puedes activarla en los ajustes del teléfono.",
+    "openSettings": "Abrir ajustes",
+    "unavailable": "No pudimos obtener tu ubicación. Inténtalo de nuevo o busca por nombre.",
+    "outsidePeru": "Por ahora solo buscamos en Perú. Te mostramos los resultados sin ubicación."
+  },
+  "map": {
+    "unavailableTitle": "El mapa llegará con la próxima actualización",
+    "unavailableMessage": "Mientras tanto, usa la lista. En cada barbería tienes \"Cómo llegar\".",
+    "backToList": "Ver la lista",
+    "searchHere": "Buscar en esta zona",
+    "empty": "No hay barberías en esta zona con estos filtros.",
+    "openDetail": "Ver barbería"
+  }
+}

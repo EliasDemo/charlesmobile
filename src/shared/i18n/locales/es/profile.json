@@ -32,5 +32,7 @@
       "EMAIL": "Correo electrónico",
       "IN_APP": "Dentro de la aplicación"
     }
-  }
+  },
+  "favorites": "Mis favoritas",
+  "devTools": "Sistema de diseño (desarrollo)"
 }

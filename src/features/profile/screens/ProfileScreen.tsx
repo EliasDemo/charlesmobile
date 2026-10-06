@@ -11,6 +11,9 @@ export interface ProfileScreenProps {
   onVerifyEmail: (email: string) => void;
   onEditProfile: () => void;
   onPreferences: () => void;
+  onFavorites: () => void;
+  /** Development builds only. */
+  onDesignSystem?: () => void;
   onLoggedOut: () => void;
 }
 
@@ -53,7 +56,9 @@ export function ProfileScreen(props: ProfileScreenProps) {
               <Text variant="label" color="textSecondary">
                 {t('sections.settings')}
               </Text>
+              <ListRow title={t('favorites')} onPress={props.onFavorites} />
               <ListRow title={t('preferences.title')} onPress={props.onPreferences} />
+              {props.onDesignSystem ? <ListRow title={t('devTools')} onPress={props.onDesignSystem} /> : null}
             </View>
           </View>
         )}

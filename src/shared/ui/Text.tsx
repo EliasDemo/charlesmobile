@@ -20,7 +20,7 @@ export interface TextProps extends RNTextProps {
   align?: 'left' | 'center' | 'right';
 }
 
-const HEADINGS: TypographyVariant[] = ['display', 'title', 'subtitle'];
+const HEADINGS: TypographyVariant[] = ['hero', 'display', 'title', 'subtitle'];
 
 /** All text goes through here: theme typography and system font scaling (never disabled). */
 export function Text({ variant = 'body', color = 'textPrimary', align, style, ...props }: TextProps) {

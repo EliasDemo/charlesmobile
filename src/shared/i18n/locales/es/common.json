@@ -36,7 +36,12 @@
     "forgotPassword": "Recuperar contraseña",
     "resetPassword": "Nueva contraseña",
     "editProfile": "Editar perfil",
-    "preferences": "Preferencias"
+    "preferences": "Preferencias",
+    "filters": "Filtros",
+    "barbershop": "Barbería",
+    "service": "Servicio",
+    "reviews": "Valoraciones",
+    "favorites": "Mis favoritas"
   },
   "placeholder": {
     "comingSoon": "Disponible en una próxima versión."
@@ -93,5 +98,22 @@
     "hidePassword": "Ocultar contraseña",
     "optional": "(opcional)",
     "saved": "Cambios guardados."
+  },
+  "search": {
+    "clear": "Borrar búsqueda"
+  },
+  "rating": {
+    "none": "Sin valoraciones",
+    "a11y": "{{average}} de 5 estrellas, {{count}} valoraciones"
+  },
+  "list": {
+    "searchMore": "Buscar más resultados",
+    "searchMoreHint": "Todavía no encontramos coincidencias, pero puede haber más."
+  },
+  "days": ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+  "daysShort": ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
+  "date": {
+    "today": "Hoy",
+    "tomorrow": "Mañana"
   }
 }

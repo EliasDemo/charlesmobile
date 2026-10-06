@@ -46,11 +46,13 @@ module.exports = defineConfig([
       'no-restricted-globals': ['error', { name: 'fetch', message: DIRECT_FETCH_MESSAGE }],
     },
   },
-  // View layer: screens and components talk to hooks, never to the API layer.
+  // View layer: screens and components talk to hooks, never to the API layer. Types from api/ are
+  // the model and may be imported (`import type`); calls may not.
   {
     files: ['src/features/*/screens/**/*.{ts,tsx}', 'src/features/*/components/**/*.{ts,tsx}'],
     rules: {
-      'no-restricted-imports': [
+      'no-restricted-imports': 'off',
+      '@typescript-eslint/no-restricted-imports': [
         'error',
         {
           paths: [
@@ -62,6 +64,7 @@ module.exports = defineConfig([
             {
               group: ['../api', '../api/*'],
               message: 'La vista no llama a la API: usa un hook (pantalla → hook → API).',
+              allowTypeImports: true,
             },
             { group: ['@/shared/api/*'], message: 'Usa solo el índice @/shared/api.' },
           ],
@@ -141,7 +144,7 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['scripts/**/*.{js,mjs}', 'plugins/**/*.js', '*.config.js', 'jest.setup.ts'],
+    files: ['scripts/**/*.{js,mjs}', 'plugins/**/*.js', '*.config.js', 'jest.setup.tsx'],
     languageOptions: {
       globals: { __dirname: 'readonly', require: 'readonly', module: 'writable', process: 'readonly' },
     },
@@ -149,7 +152,7 @@ module.exports = defineConfig([
   },
   // jest.mock factories must use require() and run before the imports they affect.
   {
-    files: ['jest.setup.ts', '**/__tests__/**/*.{ts,tsx}'],
+    files: ['jest.setup.tsx', '**/__tests__/**/*.{ts,tsx}'],
     rules: { '@typescript-eslint/no-require-imports': 'off', 'import/first': 'off' },
   },
   {

@@ -1,0 +1,70 @@
+{
+  "notFound": {
+    "title": "No encontramos esta barbería",
+    "message": "Puede que ya no esté disponible.",
+    "action": "Volver"
+  },
+  "independent": "Barbero independiente",
+  "barbershop": "Barbería",
+  "temporarilyClosed": "Cerrada temporalmente",
+  "reopensAt": "Reabre el {{date}}.",
+  "directions": "Cómo llegar",
+  "call": "Llamar",
+  "links": {
+    "website": "Sitio web",
+    "instagram": "Instagram",
+    "facebook": "Facebook"
+  },
+  "book": "Reservar",
+  "bookSoon": "Disponible pronto",
+  "sections": {
+    "about": "Información",
+    "hours": "Horario",
+    "services": "Servicios",
+    "barbers": "Barberos",
+    "reviews": "Valoraciones"
+  },
+  "hours": {
+    "openNow": "Abierta ahora",
+    "closedNow": "Cerrada ahora",
+    "closedDay": "Cerrado",
+    "today": "Hoy",
+    "window": "{{start}}–{{end}}",
+    "timezone": "Horario de la barbería ({{timezone}})"
+  },
+  "services": {
+    "empty": "Esta barbería aún no publicó servicios.",
+    "duration": "{{duration}}",
+    "a11y": "{{name}}, {{price}}, {{duration}}"
+  },
+  "barbers": {
+    "empty": "Esta barbería aún no tiene barberos visibles."
+  },
+  "reviews": {
+    "empty": "Todavía no tiene valoraciones.",
+    "seeAll": "Ver todas las valoraciones",
+    "title": "Valoraciones",
+    "allStars": "Todas",
+    "stars_one": "{{count}} estrella",
+    "stars_other": "{{count}} estrellas",
+    "allBarbers": "Todos los barberos",
+    "filterEmpty": "No hay valoraciones con estos filtros.",
+    "service": "{{service}} con {{barber}}",
+    "edited": "Editada",
+    "response": "Respuesta de la barbería"
+  },
+  "service": {
+    "nextSlot": "Próximo turno",
+    "nextSlotAt": "{{date}} a las {{time}}",
+    "noSlot": "No hay turnos disponibles por ahora.",
+    "alternativesTitle": "Otras barberías con turnos",
+    "alternativesEmpty": "Tampoco encontramos turnos cercanos en otras barberías.",
+    "alternativeSlot": "{{service}} · {{price}} · {{time}}",
+    "loadingSlot": "Buscando el próximo turno…"
+  },
+  "favorite": {
+    "add": "Agregar a favoritas",
+    "remove": "Quitar de favoritas",
+    "error": "No pudimos guardar el cambio. Inténtalo de nuevo."
+  }
+}

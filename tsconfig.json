@@ -6,6 +6,6 @@
     "types": ["jest"],
     "paths": { "@/*": ["./src/*"], "@test/*": ["./test/*"] }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
+  "include": ["**/*.ts", "**/*.tsx", "expo-env.d.ts"],
   "exclude": ["node_modules", "coverage"]
 }

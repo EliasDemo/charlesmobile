@@ -30,3 +30,37 @@ export function toLocalDate(iso: string, timeZone: string): string {
   const get = (type: string) => parts.find((part) => part.type === type)?.value ?? '';
   return `${get('year')}-${get('month')}-${get('day')}`;
 }
+
+/**
+ * The next `count` calendar days in a time zone, starting today there. Pure calendar arithmetic on
+ * dates (not instants), so it never drifts with the phone's zone.
+ */
+export function upcomingDays(
+  timeZone: string,
+  count: number,
+  now: Date = new Date(),
+): { date: string; dayOfWeek: number; dayOfMonth: number }[] {
+  const [year, month, day] = toLocalDate(now.toISOString(), timeZone).split('-').map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  return Array.from({ length: count }, (_, i) => {
+    const date = new Date(Date.UTC(year, month - 1, day + i));
+    return {
+      date: date.toISOString().slice(0, 10),
+      dayOfWeek: date.getUTCDay(),
+      dayOfMonth: date.getUTCDate(),
+    };
+  });
+}
+
+/** Day of week (0 = Sunday) of an instant in a time zone, to highlight "today" in business hours. */
+export function dayOfWeekIn(timeZone: string, now: Date = new Date()): number {
+  const [year, month, day] = toLocalDate(now.toISOString(), timeZone).split('-').map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  return new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+}

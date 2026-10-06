@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M2 cerrada el 2026-10-06. Siguiente: **M3 (Explorar)**, pendiente de aprobar el plan.
+**Fase actual:** M3 (Explorar), con el código terminado. Falta la confirmación del usuario en su teléfono y la compilación final con la clave de Maps (la lanza el usuario).
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -78,15 +78,53 @@ Probada por el usuario en su Android: registro, inicio de sesión y verificació
 - `UpdateProfileDto.phone` **sigue** declarado como `object` en el contrato tras la sincronización de las fases 10 a 12. Hasta que sea `string | null` y se ejecute `pnpm sync:api`, la app no permite cambiar el teléfono (está listo para activarse).
 - `GET /auth/terms` debería devolver los enlaces de términos y privacidad.
 
+## M3 — Código terminado
+
+**Falta:** la confirmación del usuario en su teléfono (lista de comprobación) y la compilación final con la clave de Maps (opción A). Hasta esa compilación la app funciona completa con la lista; la vista de mapa muestra un aviso.
+
+- **`features/search` (Explorar):**
+  - Por defecto, lo mejor valorado (sin ubicación). Búsqueda por texto, que espera 400 ms tras dejar de escribir y empieza desde 2 caracteres.
+  - Chips de categoría, filtros y orden. Los tramos de precio se definen solo en `src/features/search/config/pricePresets.ts`.
+  - Lista infinita y mapa.
+  - "Cerca de mí": explicación previa, permiso del sistema, denegado o bloqueado (con "Abrir ajustes"). Las coordenadas viven solo en memoria y los resultados con ubicación se descartan de la caché a los 5 minutos. Fuera de Perú, se busca sin ubicación.
+  - Las tarjetas ocultan lo que no viene: distancia, "desde" y valoración.
+- **Mapa:**
+  - `react-native-maps` (iOS: Apple Maps). En Android solo se muestra si `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true`; si no, aparece un aviso con "Ver la lista".
+  - "Buscar en esta zona" busca alrededor del centro del mapa sin pedir permiso.
+- **`features/barbershop`:**
+  - Detalle con portada provisional (iniciales), favorito, "Reservar" deshabilitado con "Disponible pronto", información (lo que no viene se oculta), "Cómo llegar" (app de mapas del sistema), "Llamar", enlaces (solo se abren URL reales), cierre temporal con fecha de reapertura, horario semanal en la zona de la barbería, servicios por categoría, barberos y valoraciones. Cada sección carga y falla por separado. Un 404 muestra "No encontramos esta barbería".
+  - **Servicio:** próximo turno y, si no hay, las alternativas.
+  - **Valoraciones:** lista infinita con filtros por estrellas y por barbero, y la respuesta de la barbería.
+- **`features/favorites`:**
+  - Corazón con cambio inmediato y reversión si falla. Sin sesión, lleva al inicio de sesión y vuelve.
+  - "Mis favoritas" en Perfil, con lista infinita y quitar.
+  - El estado sale de la lista paginada (100 por página) hasta que el backend agregue `isFavorite`.
+- **`shared/ui` nuevo:** `Chip`, `SearchField`, `Badge`, `RatingLabel`, `Monogram`, `InfiniteList`, `DayPicker`, y el caso 404 en `QueryView`.
+- **`shared/lib` nuevo:** formateadores de distancia, duración y valoración; `upcomingDays`; ubicación; enlaces externos; `useDebouncedValue`; dinero sin decimales y sin símbolo.
+- **Calidad:**
+  - ESLint permite `import type` desde `api/` en las vistas, nunca llamadas.
+  - `tsconfig` ya no incluye `.expo/types`: el servidor de desarrollo lo regenera mal mientras corre, con un fallo de expo-router que agrega archivos de `src/` como rutas.
+  - 310 pruebas. Flujo de Maestro `e2e/search-detail.yaml`.
+- **Se eliminó `features/health`.** El inicio provisional lo reemplaza Explorar; el sistema de diseño se abre desde Perfil (solo en desarrollo).
+
+### Pedidos al backend (M3)
+
+- `isFavorite` en `GET /barbershops/{id}` y en los resultados de búsqueda cuando hay sesión. El usuario lo pidió; al llegar con `pnpm sync:api`, reemplaza la lectura de toda la lista.
+- `timezone` en `AlternativeDto.barbershop`. Hoy el turno de una alternativa se muestra en la zona de la barbería original (son cercanas).
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
 |---|---|---|
-| `/` (pestaña Explorar) | Estado del servidor | Provisional hasta M3 |
+| `/` (pestaña Explorar) | Búsqueda: lista y mapa | M3 |
+| `/search-filters` | Filtros (modal) | M3 |
+| `/barbershop/[id]` | Detalle de barbería | M3 |
+| `/barbershop/[id]/service/[serviceId]` | Servicio: próximo turno y alternativas | M3 |
+| `/barbershop/[id]/reviews` | Todas las valoraciones | M3 |
 | `/bookings` (pestaña Reservas) | Invitación a entrar / relleno | M4 |
 | `/profile` (pestaña Perfil) | Perfil o invitación a entrar | M2 |
 | `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Cuenta | M2 |
-| `/profile/edit`, `/profile/preferences` | Perfil (protegidas) | M2 |
+| `/profile/edit`, `/profile/preferences`, `/profile/favorites` | Perfil (protegidas) | M2 / M3 |
 | `/design-system` | Catálogo del sistema de diseño | Solo desarrollo |
 | `/agenda` | Relleno (protegida, personal) | M7 |
 
@@ -107,6 +145,8 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 |---|---|---|
 | `expo-navigation-bar` y su plugin (`enforceContrast: false`) | El color de los iconos de la barra inferior de Android sigue el tema | El código lo detecta y no lo usa: la barra queda como la deja el sistema, sin errores |
 | `backgroundColor` en `app.config.ts` | Fondo oscuro antes de que cargue la app (sin destello blanco) | Ya se aplica en tiempo de ejecución con `expo-system-ui` |
+| Clave de Google Maps (variable de EAS `GOOGLE_MAPS_ANDROID_API_KEY`, leída por el plugin de `react-native-maps` en `app.config.ts`) | Mapa en Android. Después de instalar, poner `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true` en `.env` | La vista de mapa muestra un aviso; la lista funciona completa |
+| `environment` por perfil en `eas.json` (`development`, `preview`, `production`) | EAS entrega a cada compilación las variables de su entorno (la clave de Maps) | Sin efecto |
 
 ## Cuándo hace falta una compilación nueva (EAS)
 

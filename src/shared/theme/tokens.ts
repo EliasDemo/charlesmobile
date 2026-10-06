@@ -115,6 +115,7 @@ export const fontFamily = {
 } as const;
 
 export const typography = {
+  hero: { fontFamily: fontFamily.bold, fontSize: 40, lineHeight: 48 },
   display: { fontFamily: fontFamily.bold, fontSize: 30, lineHeight: 36 },
   title: { fontFamily: fontFamily.semibold, fontSize: 22, lineHeight: 28 },
   subtitle: { fontFamily: fontFamily.semibold, fontSize: 17, lineHeight: 24 },
@@ -129,4 +130,13 @@ export type TypographyVariant = keyof typeof typography;
 /** Minimum touch target in points (accessibility). */
 export const touchTarget = 44;
 
-export const sizes = { icon: 20, iconLarge: 40, maxContentWidth: 560, borderWidth: 1 } as const;
+export const sizes = {
+  icon: 20,
+  iconLarge: 40,
+  maxContentWidth: 560,
+  borderWidth: 1,
+  avatar: 56,
+  avatarSmall: 40,
+  cover: 160,
+  mapPreview: 320,
+} as const;

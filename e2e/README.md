@@ -9,6 +9,7 @@ Se ejecutan contra el backend local y la compilación de desarrollo instalada en
 ```
 maestro test e2e/auth-register.yaml
 maestro test -e SEED_PASSWORD=<valor de SEED_USER_PASSWORD> e2e/auth-login-logout.yaml
+maestro test e2e/search-detail.yaml
 ```
 
 ## Código de verificación en desarrollo
