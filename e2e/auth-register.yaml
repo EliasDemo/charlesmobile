@@ -1,0 +1,41 @@
+# Registro con un correo nuevo → inicio de sesión → pantalla de verificación.
+# El código llega a Redis (FakeMailer); verificarlo se prueba a mano (ver e2e/README.md).
+# Ejecutar: maestro test e2e/auth-register.yaml
+appId: pe.charlesapp.mobile.dev
+env:
+  PASSWORD: una-clave-de-prueba-larga
+---
+- launchApp:
+    clearState: true
+- evalScript: ${output.email = 'maestro.' + Date.now() + '@example.com'}
+- tapOn: 'Perfil'
+- tapOn: 'Crear cuenta'
+- assertVisible: 'Crea tu cuenta'
+- tapOn: 'Nombre completo'
+- inputText: 'Prueba Maestro'
+- tapOn: 'Correo electrónico'
+- inputText: ${output.email}
+- tapOn: 'Contraseña'
+- inputText: ${PASSWORD}
+- assertVisible: '.*Entre 10 y 128 caracteres.*'
+- hideKeyboard
+- scrollUntilVisible:
+    element: 'Declaro que tengo 18 años o más.'
+- tapOn: 'Declaro que tengo 18 años o más.'
+- tapOn: 'Acepto los términos.*'
+- scrollUntilVisible:
+    element:
+      text: 'Crear cuenta'
+      index: 1
+- tapOn:
+    text: 'Crear cuenta'
+    index: 1
+- assertVisible: 'Si el correo es nuevo.*'
+- tapOn: 'Correo electrónico'
+- inputText: ${output.email}
+- tapOn: 'Contraseña'
+- inputText: ${PASSWORD}
+- tapOn:
+    text: 'Iniciar sesión'
+    index: 1
+- assertVisible: 'Verifica tu correo'

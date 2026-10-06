@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M1 cerrada el 2026-10-06. Siguiente: **M2 (cuenta)**, pendiente de aprobar el plan.
+**Fase actual:** M2 (cuenta), con el código terminado. **Falta la confirmación del usuario en su teléfono** (lista de comprobación manual). No exige compilación nueva.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` al cierre de la Fase 9 del backend.
 
@@ -15,7 +15,7 @@ Probada por el usuario en un Android físico: la app carga, conecta con el backe
   - `app.config.ts` con variantes `development` / `preview` / `production`. En desarrollo: identificador `pe.charlesapp.mobile.dev`, nombre "Charles (dev)" y HTTP permitido solo ahí.
   - `eas.json` con perfiles `development` (APK con dev client), `preview` y `production`.
   - Organización de Expo: `charlesapp-pe`.
-- **Módulos nativos ya incluidos en la compilación:** secure-store, location, maps, notifications, device, crypto, netinfo, localization, el SDK de Izipay (con plugin para iOS) y expo-build-properties y expo-navigation-bar.
+- **Módulos nativos ya incluidos en la compilación:** secure-store, location, maps, notifications, device, crypto, netinfo, localization, el SDK de Izipay (con plugin para iOS) y expo-build-properties. `expo-navigation-bar` está aprobado pero pendiente de compilar (ver abajo).
 - **Contrato de la API:**
   - `pnpm sync:api` copia `..\charles\docs\mobile\` completa a `docs/api/` y genera `src/shared/api/generated/schema.ts`.
   - `pnpm check:api`, dentro de `verify`, falla si los tipos no coinciden.
@@ -50,20 +50,49 @@ Probada por el usuario en un Android físico: la app carga, conecta con el backe
   - Jest: 187 pruebas, todas por encima del 80 % de cobertura en `shared/api` y `shared/payments`.
   - `pnpm verify`.
 
+## M2 — Código terminado
+
+- **Navegación:** pestañas Explorar · Reservas · Perfil (`app/(tabs)`). Explorar muestra el estado del servidor hasta M3; Reservas, sin sesión, invita a entrar.
+- **`features/auth`:**
+  - Registro con los requisitos de la contraseña en vivo (10 a 128 caracteres y aviso de contraseñas comunes), teléfono opcional solo de Perú (se envía como `+51 9XX XXX XXX`), mayoría de edad y versión de los términos de `GET /auth/terms`. Si la versión cambió, pide aceptar de nuevo.
+  - Inicio de sesión con `returnTo` y `deviceName` = fabricante y modelo (nunca el nombre del dispositivo). `ACCOUNT_LOCKED` muestra una cuenta regresiva y el cliente ya no lo reintenta solo.
+  - Verificación de correo con reenvío (espera de 60 s). Se ofrece después de entrar si `emailVerified` es `false`.
+  - Recuperación de contraseña en 2 pasos. Al terminar se olvida la sesión local, porque el backend cierra todas.
+  - Cierre de sesión normal y en todos los dispositivos, con confirmación. Siempre borra tokens y caché, aunque falle la red.
+  - `useSessionEndedRedirect`: un 401 que no se puede renovar lleva a `/login?returnTo=…`.
+- **`features/profile`:**
+  - Perfil en sus cuatro estados, con aviso si el correo no está verificado.
+  - Editar nombre. El teléfono y el correo se muestran sin poder editarse.
+  - Preferencias: tema Sistema · Claro · Oscuro, guardado con SecureStore, y canales de notificación (PUSH, EMAIL, IN_APP) con la nota "se activarán pronto" y actualización optimista.
+- **`shared/ui` nuevo:** `PasswordField`, `Checkbox`, `ListRow`, `SwitchRow`, `SegmentedControl`, `ConfirmDialog`, `Notice`, `Icon` (`@expo/vector-icons`, solo JavaScript), `applyServerErrors` y `useFieldErrorText`.
+- **Enlaces provisionales** a términos y privacidad: `EXPO_PUBLIC_TERMS_URL` y `EXPO_PUBLIC_PRIVACY_URL` (dominio de ejemplo `charlesapp.pe`, a reemplazar).
+- **Pruebas:**
+  - 263 en total. Hooks de `auth` al 98 % y de `profile` al 100 %.
+  - Pruebas de sesión: el cierre de sesión limpia todo y un 401 redirige.
+  - Flujos de Maestro en `e2e/` (sin ejecutar todavía: falta instalar Maestro).
+
+### Esperando al backend (pedido por el usuario)
+
+- `UpdateProfileDto.phone` está declarado como `object` en el contrato. Hasta que sea `string | null` y se ejecute `pnpm sync:api`, la app no permite cambiar el teléfono (está listo para activarse).
+- `GET /auth/terms` debería devolver los enlaces de términos y privacidad.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
 |---|---|---|
-| `/` | Inicio (estado del servidor) | Provisional hasta M3 (Explorar) |
+| `/` (pestaña Explorar) | Estado del servidor | Provisional hasta M3 |
+| `/bookings` (pestaña Reservas) | Invitación a entrar / relleno | M4 |
+| `/profile` (pestaña Perfil) | Perfil o invitación a entrar | M2 |
+| `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Cuenta | M2 |
+| `/profile/edit`, `/profile/preferences` | Perfil (protegidas) | M2 |
 | `/design-system` | Catálogo del sistema de diseño | Solo desarrollo |
-| `/login` | Relleno | M2 |
-| `/bookings` | Relleno (protegida) | M4 |
 | `/agenda` | Relleno (protegida, personal) | M7 |
 
 ## Pendiente
 
 - Revisión rápida, con la compilación instalada, de las correcciones de tema y contraste de M1.
-- **M2:** inicio de sesión, registro, verificación, recuperación, perfil, preferencias y selector de tema (con persistencia).
+- Confirmación del usuario de la lista de comprobación de M2.
+- Eliminar la cuenta: no hay endpoint (pendientes de publicación #10).
 - **Backend:** `dev:pay` (ya pedido; hace falta desde M4), `GET /me/barber` (antes de los bloqueos del barbero) y el resto de `docs/api/AJUSTES-BACKEND.md`.
 - Pendientes de publicación: `docs/pendientes-publicacion.md`.
 

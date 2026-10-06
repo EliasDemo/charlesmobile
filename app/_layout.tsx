@@ -8,12 +8,13 @@ import {
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack, router, usePathname, type ErrorBoundaryProps } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { bootstrapSession, onSessionEnded, queryClient, startQueryListeners } from '@/shared/api';
+import { useSessionEndedRedirect } from '@/features/auth';
+import { bootstrapSession, queryClient, startQueryListeners } from '@/shared/api';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
-import { ThemeProvider } from '@/shared/theme';
+import { ThemeProvider, loadThemePreference } from '@/shared/theme';
 import {
   ErrorFallback,
   NavigationThemeRoot,
@@ -35,30 +36,21 @@ export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
   );
 }
 
+const goToLogin = (returnTo: string) => router.replace({ pathname: '/login', params: { returnTo } });
+
 function AppStack() {
   const screenOptions = useStackScreenOptions();
   const { t } = useTranslation();
   const pathname = usePathname();
-  const pathnameRef = useRef(pathname);
-  useEffect(() => {
-    pathnameRef.current = pathname;
-  }, [pathname]);
-
-  // Renewal failed: clear cached data and go to login, keeping the destination screen.
-  useEffect(
-    () =>
-      onSessionEnded(() => {
-        queryClient.clear();
-        router.replace({ pathname: '/login', params: { returnTo: pathnameRef.current } });
-      }),
-    [],
-  );
+  // Renewal failed: go to login, keeping the destination screen.
+  useSessionEndedRedirect(pathname, goToLogin);
 
   return (
     <>
       <SystemBars />
       <OfflineBanner />
       <Stack screenOptions={screenOptions}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(client)" options={{ headerShown: false }} />
@@ -80,7 +72,7 @@ export default function RootLayout() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    void bootstrapSession().finally(() => setSessionReady(true));
+    void Promise.all([bootstrapSession(), loadThemePreference()]).finally(() => setSessionReady(true));
   }, []);
 
   // Without the fonts the app still works with the system font.

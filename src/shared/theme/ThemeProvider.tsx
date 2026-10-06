@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 import { Appearance, useColorScheme } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import { create } from 'zustand';
 import { colors, radius, spacing, typography, type ColorScheme, type ThemeColors } from './tokens';
 
@@ -10,11 +11,31 @@ interface ThemePreferenceState {
   setPreference: (preference: ThemePreference) => void;
 }
 
-/** UI preference only. Persistence and the manual selector arrive in M2. */
+// Saved on the device with SecureStore (already in the build: no new native module).
+// Not sensitive; it only needs to survive restarts.
+const PREFERENCE_KEY = 'charles.themePreference';
+const PREFERENCES: readonly ThemePreference[] = ['system', 'light', 'dark'];
+
+/** UI preference only (CLAUDE.md §2): never server data. */
 export const useThemePreference = create<ThemePreferenceState>((set) => ({
   preference: 'system',
-  setPreference: (preference) => set({ preference }),
+  setPreference: (preference) => {
+    set({ preference });
+    void SecureStore.setItemAsync(PREFERENCE_KEY, preference).catch(() => undefined);
+  },
 }));
+
+/** Restores the saved preference at startup. Failures keep following the system. */
+export async function loadThemePreference(): Promise<void> {
+  try {
+    const saved = await SecureStore.getItemAsync(PREFERENCE_KEY);
+    if (saved && (PREFERENCES as readonly string[]).includes(saved)) {
+      useThemePreference.setState({ preference: saved as ThemePreference });
+    }
+  } catch {
+    // Keep the default.
+  }
+}
 
 export interface Theme {
   scheme: ColorScheme;

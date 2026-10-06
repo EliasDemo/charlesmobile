@@ -1,5 +1,7 @@
 // Tests never hit a real backend: every response is mocked from the generated types.
 process.env.EXPO_PUBLIC_API_URL = 'http://api.test';
+process.env.EXPO_PUBLIC_TERMS_URL = 'https://example.com/terminos';
+process.env.EXPO_PUBLIC_PRIVACY_URL = 'https://example.com/privacidad';
 
 jest.mock('@react-native-community/netinfo', () =>
   require('@react-native-community/netinfo/jest/netinfo-mock.js'),
@@ -19,3 +21,6 @@ jest.mock('expo-secure-store', () => {
     __store: store,
   };
 });
+
+// TanStack Query notifies observers on a timer; run it synchronously so updates stay inside act().
+require('@tanstack/react-query').notifyManager.setScheduler((callback: () => void) => callback());

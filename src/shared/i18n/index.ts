@@ -1,11 +1,13 @@
 import { createInstance } from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
+import auth from './locales/es/auth.json';
 import common from './locales/es/common.json';
 import errors from './locales/es/errors.json';
+import profile from './locales/es/profile.json';
 import type devTexts from './locales/es/dev.json';
 
 export const defaultNS = 'common';
-export const resources = { es: { common, errors } } as const;
+export const resources = { es: { common, errors, auth, profile } } as const;
 
 // Development-only texts: required inside a __DEV__ branch so release bundles do not contain them.
 const devResources: { dev?: typeof devTexts } = __DEV__ ? { dev: require('./locales/es/dev.json') } : {};
@@ -23,7 +25,7 @@ void i18next.use(initReactI18next).init({
   lng: 'es',
   fallbackLng: 'es',
   defaultNS,
-  ns: ['common', 'errors', ...Object.keys(devResources)],
+  ns: [...Object.keys(resources.es), ...Object.keys(devResources)],
   resources: { es: { ...resources.es, ...devResources } },
   interpolation: { escapeValue: false },
   returnNull: false,

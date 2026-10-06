@@ -52,6 +52,8 @@ export interface ThemeColors {
   warning: string;
   onStatus: string;
   focus: string;
+  /** Dimmed layer behind dialogs. */
+  backdrop: string;
 }
 
 export const colors: Record<ColorScheme, ThemeColors> = {
@@ -75,6 +77,7 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     warning: palette.amber700,
     onStatus: palette.neutral0,
     focus: palette.copper500,
+    backdrop: 'rgba(20, 18, 16, 0.5)',
   },
   dark: {
     background: palette.neutral900,
@@ -96,6 +99,7 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     warning: palette.amber400,
     onStatus: palette.neutral900,
     focus: palette.copper200,
+    backdrop: 'rgba(0, 0, 0, 0.6)',
   },
 };
 

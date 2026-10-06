@@ -1,4 +1,4 @@
-import { env, parseApiUrl } from '../env';
+import { env, parseApiUrl, parseOptionalUrl } from '../env';
 
 describe('parseApiUrl', () => {
   it('accepts an HTTP origin in development', () => {
@@ -39,5 +39,13 @@ describe('env', () => {
   it('is loaded from EXPO_PUBLIC_API_URL', () => {
     expect(env.apiUrl).toBe('http://api.test');
     expect(env.configError).toBeNull();
+  });
+});
+
+describe('parseOptionalUrl', () => {
+  it('keeps valid links and hides missing or invalid ones', () => {
+    expect(parseOptionalUrl('https://charlesapp.pe/terminos')).toBe('https://charlesapp.pe/terminos');
+    expect(parseOptionalUrl(undefined)).toBeNull();
+    expect(parseOptionalUrl('javascript:alert(1)')).toBeNull();
   });
 });

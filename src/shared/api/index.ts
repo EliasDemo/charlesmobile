@@ -9,7 +9,9 @@ export {
   onSessionEnded,
   refreshSession,
   startSession,
+  updateSessionUser,
   useSession,
+  type AuthTokens,
   type SessionStatus,
   type SessionUser,
 } from './session';

@@ -1,8 +1,27 @@
-import { useTranslation } from '@/shared/i18n';
-import { PlaceholderScreen } from '@/shared/ui';
+import { router, useLocalSearchParams } from 'expo-router';
+import { LoginScreen } from '@/features/auth';
+import { paramString, safeReturnTo } from '@/shared/lib';
 
-// Real login arrives in M2. Receives `returnTo` to go back to the protected screen afterwards.
+const NOTICES = ['registered', 'passwordChanged'] as const;
+type Notice = (typeof NOTICES)[number];
+
 export default function LoginRoute() {
-  const { t } = useTranslation();
-  return <PlaceholderScreen title={t('nav.login')} />;
+  const params = useLocalSearchParams<{ returnTo?: string; notice?: string }>();
+  const returnTo = safeReturnTo(params.returnTo);
+  const notice = paramString(params.notice);
+  return (
+    <LoginScreen
+      notice={NOTICES.includes(notice as Notice) ? (notice as Notice) : undefined}
+      onSuccess={(user) => {
+        // Unverified accounts are offered the verification first (needed to book).
+        if (!user.emailVerified) {
+          router.replace({ pathname: '/verify-email', params: { returnTo } });
+          return;
+        }
+        router.dismissTo(returnTo as never);
+      }}
+      onForgotPassword={() => router.push('/forgot-password')}
+      onRegister={() => router.push({ pathname: '/register', params: { returnTo } })}
+    />
+  );
 }

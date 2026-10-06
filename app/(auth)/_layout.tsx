@@ -8,6 +8,10 @@ export default function AuthLayout() {
   return (
     <Stack screenOptions={screenOptions}>
       <Stack.Screen name="login" options={{ title: t('nav.login') }} />
+      <Stack.Screen name="register" options={{ title: t('nav.register') }} />
+      <Stack.Screen name="verify-email" options={{ title: t('nav.verifyEmail') }} />
+      <Stack.Screen name="forgot-password" options={{ title: t('nav.forgotPassword') }} />
+      <Stack.Screen name="reset-password" options={{ title: t('nav.resetPassword') }} />
     </Stack>
   );
 }

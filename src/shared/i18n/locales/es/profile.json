@@ -1,0 +1,36 @@
+{
+  "title": "Perfil",
+  "email": "Correo",
+  "phone": "Teléfono",
+  "noPhone": "Sin teléfono",
+  "unverified": {
+    "title": "Tu correo no está verificado",
+    "message": "Verifícalo para poder reservar.",
+    "action": "Verificar ahora"
+  },
+  "sections": {
+    "account": "Cuenta",
+    "settings": "Ajustes",
+    "session": "Sesión"
+  },
+  "edit": {
+    "title": "Editar perfil",
+    "submit": "Guardar cambios",
+    "emailLocked": "El correo no se puede cambiar por ahora.",
+    "phoneLocked": "Pronto podrás cambiar tu teléfono desde aquí."
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "theme": "Tema",
+    "themeSystem": "Sistema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "notifications": "Notificaciones",
+    "notificationsSoon": "Las notificaciones se activarán pronto. Puedes dejar elegido cómo quieres recibirlas.",
+    "channels": {
+      "PUSH": "Notificaciones en el teléfono",
+      "EMAIL": "Correo electrónico",
+      "IN_APP": "Dentro de la aplicación"
+    }
+  }
+}

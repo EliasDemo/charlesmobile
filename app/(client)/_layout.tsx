@@ -14,7 +14,8 @@ export default function ClientLayout() {
   }
   return (
     <Stack screenOptions={screenOptions}>
-      <Stack.Screen name="bookings" options={{ title: t('nav.bookings') }} />
+      <Stack.Screen name="profile/edit" options={{ title: t('nav.editProfile') }} />
+      <Stack.Screen name="profile/preferences" options={{ title: t('nav.preferences') }} />
     </Stack>
   );
 }

@@ -7,7 +7,6 @@ export default function PublicLayout() {
   const screenOptions = useStackScreenOptions();
   return (
     <Stack screenOptions={screenOptions}>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="design-system" options={{ title: t('designSystem.title') }} />
     </Stack>
   );

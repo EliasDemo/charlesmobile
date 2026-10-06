@@ -31,6 +31,12 @@ export async function startSession(tokens: AuthTokens): Promise<void> {
   useSession.setState({ status: 'authenticated', accessToken: tokens.accessToken, user: tokens.user });
 }
 
+/** Applies a change the backend confirmed (e.g. a verified email) to the in-memory user. */
+export function updateSessionUser(changes: Partial<SessionUser>): void {
+  const { user } = useSession.getState();
+  if (user) useSession.setState({ user: { ...user, ...changes } });
+}
+
 export async function clearSession(): Promise<void> {
   useSession.setState({ status: 'anonymous', accessToken: null, user: null });
   await tokenStorage.clear();

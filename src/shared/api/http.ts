@@ -58,8 +58,10 @@ export function createApiFetch(deps: ApiFetchDeps) {
       }
 
       if (canRetry && response.status === 429) {
-        const wait = retryAfterSeconds(await apiErrorFromResponse(response), response);
-        if (wait === null || wait <= MAX_RETRY_AFTER_SECONDS) {
+        const error = await apiErrorFromResponse(response);
+        const wait = retryAfterSeconds(error, response);
+        // ACCOUNT_LOCKED is not a transient limit: repeating a failed login must be the user's choice.
+        if (error.code !== 'ACCOUNT_LOCKED' && (wait === null || wait <= MAX_RETRY_AFTER_SECONDS)) {
           await deps.sleep(wait === null ? backoffDelay(attempt, random) : wait * 1000);
           continue;
         }

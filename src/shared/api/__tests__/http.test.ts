@@ -105,9 +105,16 @@ describe('createApiFetch', () => {
     expect(deps.fetchImpl).toHaveBeenCalledTimes(1);
   });
 
-  it('waits the time indicated by a 429 before retrying', async () => {
+  it('never retries ACCOUNT_LOCKED: the user decides when to try again', async () => {
+    const { apiFetch, deps } = setup([apiError(429, 'ACCOUNT_LOCKED', [{ retryAfterSeconds: 3 }])]);
+    const response = await apiFetch(post('/api/v1/auth/login'));
+    expect(response.status).toBe(429);
+    expect(deps.fetchImpl).toHaveBeenCalledTimes(1);
+  });
+
+  it('waits the time indicated in details before retrying a rate limit', async () => {
     const { apiFetch, deps } = setup([
-      apiError(429, 'ACCOUNT_LOCKED', [{ retryAfterSeconds: 3 }]),
+      apiError(429, 'TOO_MANY_REQUESTS', [{ retryAfterSeconds: 3 }]),
       json(200, {}),
     ]);
     await apiFetch(get());
@@ -128,7 +135,7 @@ describe('createApiFetch', () => {
   });
 
   it('returns a 429 whose wait is too long instead of blocking', async () => {
-    const { apiFetch, deps } = setup([apiError(429, 'ACCOUNT_LOCKED', [{ retryAfterSeconds: 600 }])]);
+    const { apiFetch, deps } = setup([apiError(429, 'TOO_MANY_REQUESTS', [{ retryAfterSeconds: 600 }])]);
     const response = await apiFetch(get());
     expect(response.status).toBe(429);
     expect(deps.sleep).not.toHaveBeenCalled();

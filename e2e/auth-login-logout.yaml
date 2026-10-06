@@ -1,0 +1,21 @@
+# Inicio de sesión con el cliente del seed → perfil → cerrar sesión.
+# Ejecutar: maestro test -e SEED_PASSWORD=<valor de SEED_USER_PASSWORD> e2e/auth-login-logout.yaml
+appId: pe.charlesapp.mobile.dev
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Perfil'
+- tapOn: 'Iniciar sesión'
+- tapOn: 'Correo electrónico'
+- inputText: 'cliente.demo@example.com'
+- tapOn: 'Contraseña'
+- inputText: ${SEED_PASSWORD}
+- tapOn:
+    text: 'Iniciar sesión'
+    index: 1
+- assertVisible: 'Cliente Demo'
+- assertVisible: 'cliente.demo@example.com'
+- scrollUntilVisible:
+    element: 'Cerrar sesión'
+- tapOn: 'Cerrar sesión'
+- assertVisible: 'Entra o crea tu cuenta.*'

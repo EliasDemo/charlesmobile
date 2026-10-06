@@ -1,4 +1,4 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useState, type ReactNode } from 'react';
 import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import { Text } from './Text';
@@ -8,10 +8,14 @@ export interface TextFieldProps extends TextInputProps {
   hint?: string;
   /** Shown under the field and announced to screen readers. */
   error?: string;
+  /** Control inside the field, on the right (e.g. show password). */
+  accessory?: ReactNode;
+  /** Extra content under the field (e.g. live password requirements). */
+  footer?: ReactNode;
 }
 
 export const TextField = forwardRef<TextInput, TextFieldProps>(function TextField(
-  { label, hint, error, onFocus, onBlur, editable = true, style, ...props },
+  { label, hint, error, accessory, footer, onFocus, onBlur, editable = true, style, ...props },
   ref,
 ) {
   const theme = useTheme();
@@ -22,36 +26,43 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
       <Text variant="label" color="textSecondary">
         {label}
       </Text>
-      <TextInput
-        ref={ref}
-        accessibilityLabel={label}
-        accessibilityHint={error ?? hint}
-        editable={editable}
-        placeholderTextColor={theme.colors.textMuted}
-        selectionColor={theme.colors.primary}
-        maxFontSizeMultiplier={2}
-        onFocus={(event) => {
-          setFocused(true);
-          onFocus?.(event);
-        }}
-        onBlur={(event) => {
-          setFocused(false);
-          onBlur?.(event);
-        }}
+      <View
         style={[
-          theme.typography.body,
-          styles.input,
+          styles.box,
           {
-            color: theme.colors.textPrimary,
-            backgroundColor: theme.colors.surface,
+            backgroundColor: editable ? theme.colors.surface : theme.colors.disabledBackground,
             borderColor,
             borderRadius: theme.radius.md,
-            opacity: editable ? 1 : 0.6,
           },
-          style,
         ]}
-        {...props}
-      />
+      >
+        <TextInput
+          ref={ref}
+          accessibilityLabel={label}
+          accessibilityHint={error ?? hint}
+          accessibilityState={{ disabled: !editable }}
+          editable={editable}
+          placeholderTextColor={theme.colors.textMuted}
+          selectionColor={theme.colors.primary}
+          maxFontSizeMultiplier={2}
+          onFocus={(event) => {
+            setFocused(true);
+            onFocus?.(event);
+          }}
+          onBlur={(event) => {
+            setFocused(false);
+            onBlur?.(event);
+          }}
+          style={[
+            theme.typography.body,
+            styles.input,
+            { color: editable ? theme.colors.textPrimary : theme.colors.onDisabled },
+            style,
+          ]}
+          {...props}
+        />
+        {accessory}
+      </View>
       {error ? (
         <Text variant="caption" color="danger" accessibilityLiveRegion="polite">
           {error}
@@ -61,11 +72,18 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
           {hint}
         </Text>
       ) : null}
+      {footer}
     </View>
   );
 });
 
 const styles = StyleSheet.create({
   container: { gap: spacing.xs },
-  input: { minHeight: touchTarget, paddingHorizontal: spacing.md, borderWidth: sizes.borderWidth },
+  box: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: touchTarget,
+    borderWidth: sizes.borderWidth,
+  },
+  input: { flex: 1, minHeight: touchTarget, paddingHorizontal: spacing.md },
 });

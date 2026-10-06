@@ -3,7 +3,10 @@
   "actions": {
     "retry": "Reintentar",
     "back": "Volver",
-    "goHome": "Ir al inicio"
+    "goHome": "Ir al inicio",
+    "cancel": "Cancelar",
+    "continue": "Continuar",
+    "save": "Guardar"
   },
   "states": {
     "loading": "Cargando…",
@@ -27,7 +30,13 @@
     "profile": "Perfil",
     "agenda": "Agenda",
     "shop": "Barbería",
-    "login": "Iniciar sesión"
+    "login": "Iniciar sesión",
+    "register": "Crear cuenta",
+    "verifyEmail": "Verificar correo",
+    "forgotPassword": "Recuperar contraseña",
+    "resetPassword": "Nueva contraseña",
+    "editProfile": "Editar perfil",
+    "preferences": "Preferencias"
   },
   "placeholder": {
     "comingSoon": "Disponible en una próxima versión."
@@ -76,5 +85,13 @@
     "invalidUrl": "EXPO_PUBLIC_API_URL falta o no es una URL válida.",
     "originOnly": "EXPO_PUBLIC_API_URL debe ser solo el origen, sin /api/v1 (por ejemplo http://192.168.1.50:3000).",
     "httpsRequired": "EXPO_PUBLIC_API_URL debe usar HTTPS fuera de desarrollo."
+  },
+  "form": {
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "optional": "(opcional)",
+    "saved": "Cambios guardados."
   }
 }

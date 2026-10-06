@@ -21,6 +21,12 @@ export function parseApiUrl(raw: string | undefined, appVariant: AppVariant): Ap
   return { ok: true, apiUrl: parsed.data.replace(/\/$/, '') };
 }
 
+/** Optional public link (e.g. terms). Invalid or missing values become null and the link is hidden. */
+export function parseOptionalUrl(raw: string | undefined): string | null {
+  const parsed = z.url({ protocol: /^https?$/ }).safeParse(raw);
+  return parsed.success ? parsed.data : null;
+}
+
 const appVariant = appVariantSchema.catch('development').parse(Constants.expoConfig?.extra?.appVariant);
 // Must be read literally so Expo inlines it at build time.
 const apiUrlResult = parseApiUrl(process.env.EXPO_PUBLIC_API_URL, appVariant);
@@ -34,6 +40,9 @@ export const env = {
   isDevelopment: appVariant === 'development',
   apiUrl: apiUrlResult.ok ? apiUrlResult.apiUrl : '',
   configError: apiUrlResult.ok ? null : apiUrlResult.reason,
+  // Provisional links until GET /auth/terms returns them (docs/pendientes-publicacion.md #9).
+  termsUrl: parseOptionalUrl(process.env.EXPO_PUBLIC_TERMS_URL),
+  privacyUrl: parseOptionalUrl(process.env.EXPO_PUBLIC_PRIVACY_URL),
   appVersion: Constants.expoConfig?.version ?? '0.0.0',
   platform: Platform.OS,
 } as const;
