@@ -12,6 +12,8 @@ export default function PublicLayout() {
       <Stack.Screen name="barbershop/[id]/index" options={{ title: t('nav.barbershop') }} />
       <Stack.Screen name="barbershop/[id]/service/[serviceId]" options={{ title: t('nav.service') }} />
       <Stack.Screen name="barbershop/[id]/reviews" options={{ title: t('nav.reviews') }} />
+      <Stack.Screen name="book/[barbershopId]" options={{ title: t('nav.book') }} />
+      <Stack.Screen name="book/summary" options={{ title: t('nav.summary') }} />
     </Stack>
   );
 }

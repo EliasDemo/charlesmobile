@@ -1,0 +1,110 @@
+{
+  "book": {
+    "title": "Reservar",
+    "service": "Servicio",
+    "chooseService": "Elige un servicio",
+    "barber": "Barbero",
+    "anyBarber": "Cualquiera disponible",
+    "day": "Día",
+    "slots": "Horarios disponibles",
+    "slotsTimezone": "Horas de la barbería ({{timezone}})",
+    "noSlots": "No hay turnos este día. Prueba otro día u otro barbero.",
+    "alternativesTitle": "Otras barberías con turnos ese día",
+    "slotTaken": "Ese horario se acaba de ocupar. Elige otro: mantuvimos tu servicio, barbero y día.",
+    "continue": "Continuar",
+    "parts": {
+      "morning": "Por la mañana",
+      "afternoon": "Por la tarde",
+      "evening": "Por la noche"
+    }
+  },
+  "summary": {
+    "title": "Revisa tu reserva",
+    "barbershop": "Barbería",
+    "service": "Servicio",
+    "barber": "Barbero",
+    "firstAvailable": "El primero disponible",
+    "when": "Fecha y hora",
+    "duration": "Duración",
+    "servicePrice": "Precio del servicio",
+    "priceNote": "Es el precio del servicio. El total definitivo, con el detalle que calcula la barbería, aparece al confirmar.",
+    "confirm": "Confirmar reserva",
+    "loginNote": "Te pediremos iniciar sesión o crear tu cuenta para confirmar. No perderás lo que elegiste.",
+    "incomplete": "Falta elegir el horario.",
+    "back": "Elegir otro horario",
+    "seeBookings": "Ver mis reservas"
+  },
+  "status": {
+    "PENDING_PAYMENT": "Pendiente de pago",
+    "CONFIRMED": "Confirmada",
+    "ATTENDED": "Atendida",
+    "CANCELLED": "Cancelada",
+    "NO_SHOW": "No asististe",
+    "EXPIRED": "Vencida"
+  },
+  "detail": {
+    "title": "Tu reserva",
+    "pendingTitle": "Paga para confirmar tu turno",
+    "pendingCountdown": "Tienes {{time}} para pagar.",
+    "pendingExplain": "Si no se paga a tiempo, la reserva vence y el turno se libera para otra persona.",
+    "checkingExpiry": "Comprobando el estado de tu reserva…",
+    "pay": "Pagar",
+    "paySoon": "Disponible pronto",
+    "expiredTitle": "La reserva venció",
+    "expiredMessage": "No se pagó a tiempo y el turno se liberó. Puedes reservar de nuevo.",
+    "bookAgain": "Reservar de nuevo",
+    "confirmedTitle": "¡Reserva confirmada!",
+    "price": "Detalle del precio",
+    "total": "Total",
+    "cancelledBy": {
+      "CLIENT": "Cancelaste esta reserva.",
+      "BARBERSHOP": "La barbería canceló esta reserva.",
+      "SYSTEM": "Esta reserva se canceló automáticamente.",
+      "SUPPORT": "Soporte canceló esta reserva."
+    },
+    "cancelReason": "Motivo: {{reason}}",
+    "refunds": "Devoluciones",
+    "refundLine": "{{amount}} · {{status}}",
+    "refundStatus": {
+      "PENDING": "en proceso",
+      "SUCCEEDED": "devuelto",
+      "FAILED": "con problemas: escríbenos a soporte"
+    },
+    "barber": "con {{barber}}",
+    "timezoneUnavailable": "No pudimos cargar la zona horaria de la barbería para mostrar la hora.",
+    "openBarbershop": "Ver barbería"
+  },
+  "cancel": {
+    "action": "Cancelar reserva",
+    "title": "¿Cancelar la reserva?",
+    "refund": "Se te devolverá {{amount}} ({{percent}} %).",
+    "rules": {
+      "NO_PAYMENT": "Aún no pagaste, así que no hay nada que devolver.",
+      "CLIENT_FULL": "Cancelas con 5 horas o más de anticipación: devolución completa.",
+      "CLIENT_PARTIAL": "Cancelas con menos de 5 horas de anticipación: devolución parcial.",
+      "CLIENT_NONE": "Cancelas con muy poca anticipación: no hay devolución.",
+      "BARBERSHOP_CANCELLATION": "Devolución completa.",
+      "SUPPORT_CANCELLATION": "Devolución completa."
+    },
+    "notAllowed": {
+      "ALREADY_CANCELLED": "Esta reserva ya estaba cancelada.",
+      "NOT_CANCELLABLE": "Esta reserva ya no se puede cancelar.",
+      "ALREADY_STARTED": "El turno ya empezó: ya no se puede cancelar."
+    },
+    "confirm": "Sí, cancelar",
+    "done": "Reserva cancelada.",
+    "doneRefund": "Reserva cancelada. Se te devolverá {{amount}}."
+  },
+  "list": {
+    "upcoming": "Próximas",
+    "history": "Historial",
+    "emptyUpcoming": {
+      "title": "No tienes reservas próximas",
+      "message": "Busca una barbería y reserva tu turno."
+    },
+    "emptyHistory": {
+      "title": "Aún no hay reservas pasadas"
+    },
+    "explore": "Explorar barberías"
+  }
+}

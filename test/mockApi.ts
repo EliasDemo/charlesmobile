@@ -213,3 +213,65 @@ export const categories = (): Schemas['ServiceCategoryListDto'] => ({
     { key: 'beard', name: 'Barba' },
   ],
 });
+
+export const booking = (overrides: Partial<Schemas['BookingDto']> = {}): Schemas['BookingDto'] => ({
+  id: 'bk-1',
+  status: 'PENDING_PAYMENT',
+  barbershop: { id: SHOP_ID, name: 'Barbería Demo Miraflores' },
+  service: { id: '01990000-0000-7000-8000-00000000012d', name: 'Corte clásico' },
+  barber: { id: '01990000-0000-7000-8000-0000000000ca', name: 'Barbero Demo' },
+  barberChosenByClient: false,
+  client: null,
+  startAt: '2030-01-07T14:00:00.000Z',
+  endAt: '2030-01-07T14:30:00.000Z',
+  durationMinutes: 30,
+  price: {
+    subtotal: { amount: 2500, currency: 'PEN' },
+    discountTotal: { amount: 0, currency: 'PEN' },
+    feeTotal: { amount: 0, currency: 'PEN' },
+    total: { amount: 2500, currency: 'PEN' },
+    lines: [{ type: 'SERVICE', description: 'Corte clásico', amount: { amount: 2500, currency: 'PEN' } }],
+  },
+  expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+  cancellation: null,
+  createdAt: '2030-01-01T00:00:00.000Z',
+  ...overrides,
+});
+
+export const createdBooking = (
+  overrides: Partial<Schemas['BookingDto']> = {},
+): Schemas['CreatedBookingDto'] => ({
+  ...booking(overrides),
+  payment: {
+    paymentId: 'pay-1',
+    provider: 'FAKE',
+    status: 'PENDING',
+    amount: { amount: 2500, currency: 'PEN' },
+    clientAction: { type: 'FAKE', data: { paymentId: 'pay-1' } },
+  },
+});
+
+export const cancellationPreview = (
+  overrides: Partial<Schemas['CancellationPreviewDto']> = {},
+): Schemas['CancellationPreviewDto'] => ({
+  allowed: true,
+  reason: null,
+  reasonRequired: false,
+  refund: {
+    amount: { amount: 2500, currency: 'PEN' },
+    percent: 100,
+    rule: 'CLIENT_FULL',
+    paid: { amount: 2500, currency: 'PEN' },
+  },
+  ...overrides,
+});
+
+export const daySlots = (date = '2030-01-07', startAts: string[] = []): Schemas['DayAvailabilityDto'] => ({
+  date,
+  timezone: 'America/Lima',
+  slots: startAts.map((startAt) => ({
+    startAt,
+    endAt: new Date(Date.parse(startAt) + 30 * 60 * 1000).toISOString(),
+    barberIds: ['01990000-0000-7000-8000-0000000000ca'],
+  })),
+});

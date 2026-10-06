@@ -8,6 +8,9 @@ export default function ServiceRoute() {
       barbershopId={id}
       serviceId={serviceId}
       onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+      onBook={() =>
+        router.push({ pathname: '/book/[barbershopId]', params: { barbershopId: id, serviceId } })
+      }
       onOpenBarbershop={(other) => router.push({ pathname: '/barbershop/[id]', params: { id: other } })}
     />
   );

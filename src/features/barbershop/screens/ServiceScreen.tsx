@@ -11,9 +11,16 @@ export interface ServiceScreenProps {
   serviceId: string;
   onBack: () => void;
   onOpenBarbershop: (id: string) => void;
+  onBook: () => void;
 }
 
-export function ServiceScreen({ barbershopId, serviceId, onBack, onOpenBarbershop }: ServiceScreenProps) {
+export function ServiceScreen({
+  barbershopId,
+  serviceId,
+  onBack,
+  onOpenBarbershop,
+  onBook,
+}: ServiceScreenProps) {
   const { t } = useTranslation('barbershop');
   const data = useServiceAvailability(barbershopId, serviceId);
   const notFound = {
@@ -45,12 +52,7 @@ export function ServiceScreen({ barbershopId, serviceId, onBack, onOpenBarbersho
                     <Text variant="bodyStrong">{formatMoney(data.service.price)}</Text>
                     <Text color="textSecondary">{formatMinutes(data.service.durationMinutes)}</Text>
                   </View>
-                  <View>
-                    <Button label={t('book')} disabled fullWidth />
-                    <Text variant="caption" color="textSecondary" align="center">
-                      {t('bookSoon')}
-                    </Text>
-                  </View>
+                  <Button label={t('book')} onPress={onBook} fullWidth />
                   <Card>
                     <Text variant="subtitle">{t('service.nextSlot')}</Text>
                     <QueryView query={data.nextSlot}>

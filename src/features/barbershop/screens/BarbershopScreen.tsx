@@ -14,10 +14,12 @@ export interface BarbershopScreenProps {
   onOpenService: (serviceId: string) => void;
   onOpenReviews: () => void;
   onRequireLogin: () => void;
+  onBook: () => void;
 }
 
 export function BarbershopScreen({
   id,
+  onBook,
   onBack,
   onOpenService,
   onOpenReviews,
@@ -39,12 +41,7 @@ export function BarbershopScreen({
           <View style={styles.content}>
             <Monogram name={shop.name} shape="cover" size={sizes.cover} />
             <Header shop={shop} onRequireLogin={onRequireLogin} onFavoriteChanged={detail.shop.refetch} />
-            <View>
-              <Button label={t('book')} disabled fullWidth />
-              <Text variant="caption" color="textSecondary" align="center">
-                {t('bookSoon')}
-              </Text>
-            </View>
+            <Button label={t('book')} onPress={onBook} fullWidth />
             <About shop={shop} />
             <Section title={t('sections.hours')} query={detail.hours}>
               {(hours) => <HoursList hours={hours} today={detail.todayDayOfWeek} />}

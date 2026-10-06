@@ -41,7 +41,10 @@
     "barbershop": "Barbería",
     "service": "Servicio",
     "reviews": "Valoraciones",
-    "favorites": "Mis favoritas"
+    "favorites": "Mis favoritas",
+    "book": "Reservar",
+    "summary": "Resumen",
+    "booking": "Tu reserva"
   },
   "placeholder": {
     "comingSoon": "Disponible en una próxima versión."

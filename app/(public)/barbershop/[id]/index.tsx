@@ -11,6 +11,7 @@ export default function BarbershopRoute() {
         router.push({ pathname: '/barbershop/[id]/service/[serviceId]', params: { id, serviceId } })
       }
       onOpenReviews={() => router.push({ pathname: '/barbershop/[id]/reviews', params: { id } })}
+      onBook={() => router.push({ pathname: '/book/[barbershopId]', params: { barbershopId: id } })}
       onRequireLogin={() => router.push({ pathname: '/login', params: { returnTo: `/barbershop/${id}` } })}
     />
   );

@@ -43,6 +43,7 @@ const detailProps = () => ({
   onOpenService: jest.fn(),
   onOpenReviews: jest.fn(),
   onRequireLogin: jest.fn(),
+  onBook: jest.fn(),
 });
 
 describe('BarbershopScreen', () => {
@@ -83,9 +84,8 @@ describe('BarbershopScreen', () => {
     expect(screen.queryByText(texts.call)).toBeNull();
     expect(screen.queryByText(texts.links.website)).toBeNull();
     expect(screen.getByText(texts.directions)).toBeTruthy();
-    // booking arrives in M4
-    expect(screen.getByRole('button', { name: texts.book })).toBeDisabled();
-    expect(screen.getAllByText(texts.bookSoon).length).toBeGreaterThan(0);
+    await fireEvent.press(screen.getByRole('button', { name: texts.book }));
+    expect(props.onBook).toHaveBeenCalled();
 
     await fireEvent.press(screen.getByLabelText(/Corte clásico, S\/\s?25[.,]00, 30 min/));
     expect(props.onOpenService).toHaveBeenCalledWith(SERVICE_ID);
@@ -202,6 +202,7 @@ describe('ServiceScreen', () => {
     ...overrides,
   });
   const props = () => ({
+    onBook: jest.fn(),
     barbershopId: ID,
     serviceId: SERVICE_ID,
     onBack: jest.fn(),

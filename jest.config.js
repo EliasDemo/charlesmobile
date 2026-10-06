@@ -9,5 +9,6 @@ module.exports = {
     './src/shared/api/': { statements: 80, branches: 80, functions: 80, lines: 80 },
     './src/shared/payments/': { statements: 80, branches: 80, functions: 80, lines: 80 },
     './src/features/auth/hooks/': { statements: 80, branches: 80, functions: 80, lines: 80 },
+    './src/features/booking/hooks/': { statements: 80, branches: 80, functions: 80, lines: 80 },
   },
 };

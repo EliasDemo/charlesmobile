@@ -1,0 +1,16 @@
+import { router, useLocalSearchParams } from 'expo-router';
+import { BookingScreen } from '@/features/booking';
+
+export default function BookingRoute() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  return (
+    <BookingScreen
+      id={id}
+      onBack={() => (router.canGoBack() ? router.back() : router.replace('/bookings'))}
+      onBookAgain={(barbershopId) =>
+        router.push({ pathname: '/book/[barbershopId]', params: { barbershopId } })
+      }
+      onOpenBarbershop={(id) => router.push({ pathname: '/barbershop/[id]', params: { id } })}
+    />
+  );
+}

@@ -1,0 +1,39 @@
+# Cliente del seed: buscar → reservar el primer turno → reserva pendiente → cancelar.
+# Pasar a CONFIRMED se prueba a mano con dev:pay (ver la lista de comprobación de M4).
+# Ejecutar: maestro test -e SEED_PASSWORD=<valor de SEED_USER_PASSWORD> e2e/book-cancel.yaml
+appId: pe.charlesapp.mobile.dev
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Buscar barberías'
+- inputText: 'Miraflores'
+- tapOn: 'Barbería Demo Miraflores'
+- tapOn: 'Reservar'
+- tapOn: 'Corte clásico.*'
+- scrollUntilVisible:
+    element: '\d\d:\d\d'
+- tapOn:
+    text: '\d\d:\d\d'
+    index: 0
+- scrollUntilVisible:
+    element: 'Continuar'
+- tapOn: 'Continuar'
+- assertVisible: 'Revisa tu reserva'
+- tapOn: 'Confirmar reserva'
+# Sin sesión: se pide la cuenta y se vuelve al resumen.
+- tapOn: 'Correo electrónico'
+- inputText: 'cliente.demo@example.com'
+- tapOn: 'Contraseña'
+- inputText: ${SEED_PASSWORD}
+- tapOn:
+    text: 'Iniciar sesión'
+    index: 1
+- assertVisible: 'Revisa tu reserva'
+- tapOn: 'Confirmar reserva'
+- assertVisible: 'Pendiente de pago'
+- assertVisible: 'Tienes .* para pagar.'
+- scrollUntilVisible:
+    element: 'Cancelar reserva'
+- tapOn: 'Cancelar reserva'
+- tapOn: 'Sí, cancelar'
+- assertVisible: 'Reserva cancelada.*'

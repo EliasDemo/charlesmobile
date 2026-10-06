@@ -2,6 +2,7 @@ import { createInstance } from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 import auth from './locales/es/auth.json';
 import barbershop from './locales/es/barbershop.json';
+import booking from './locales/es/booking.json';
 import common from './locales/es/common.json';
 import errors from './locales/es/errors.json';
 import favorites from './locales/es/favorites.json';
@@ -11,7 +12,7 @@ import type devTexts from './locales/es/dev.json';
 
 export const defaultNS = 'common';
 export const resources = {
-  es: { common, errors, auth, profile, search, barbershop, favorites },
+  es: { common, errors, auth, profile, search, barbershop, favorites, booking },
 } as const;
 
 // Development-only texts: required inside a __DEV__ branch so release bundles do not contain them.

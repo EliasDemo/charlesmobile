@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M3 cerrada el 2026-10-06. En curso: **M4 (Reservar)**, plan aprobado.
+**Fase actual:** M4 (Reservar), con el código terminado. Falta la confirmación del usuario en su teléfono.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -114,6 +114,34 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 - ~~`isFavorite`~~ y ~~`timezone` en las alternativas~~: recibidos y en uso.
 - `barbershop.timezone` en `BookingDto` (pedido por el usuario). Mientras tanto, M4 lee el detalle de cada barbería para su zona.
 
+## M4 — Código terminado
+
+**Falta:** la confirmación del usuario en su teléfono. No exige compilación nueva.
+
+- **`features/booking`:**
+  - **Reservar** (`/book/[barbershopId]`): servicio, barbero ("Cualquiera disponible" o los que hacen ese servicio según `serviceIds`), día (chips dentro del horizonte; `DATE_OUT_OF_RANGE` lo acota a `lastBookableDate`) y turno, agrupado por la mañana, la tarde y la noche, en la zona de la barbería. Sin turnos ese día, muestra las alternativas de esa fecha.
+  - **Resumen** (`/book/summary`, público): muestra el precio del servicio y aclara que el total definitivo aparece al confirmar.
+    - La cuenta se pide al tocar "Confirmar" (inicio de sesión o verificación de correo con `returnTo`), y la selección vive en memoria (`bookingDraft`).
+    - El botón se bloquea mientras se envía.
+  - **`Idempotency-Key`:**
+    - Una por intento, creada al confirmar.
+    - Se reutiliza tras un error de red, un 5xx o un 429.
+    - Se descarta si cambia la selección o tras un error definitivo.
+  - **Errores:** `SLOT_NOT_AVAILABLE` vuelve a los turnos con un aviso, conservando servicio, barbero y día; `TOO_MANY_PENDING_BOOKINGS` ofrece "Ver mis reservas"; `EMAIL_NOT_VERIFIED` lleva a verificar.
+  - **Reserva** (`/bookings/[id]`):
+    - Estado real de la API. Si está pendiente, la consulta se repite cada 10 s solo mientras la pantalla está visible, al volver a primer plano y al vencer `expiresAt`, y se detiene en cuanto deja de estar pendiente.
+    - Cuenta regresiva, "Pagar" deshabilitado ("Disponible pronto") y desglose de precio de la API.
+    - Vencida: "Reservar de nuevo". Cancelada: quién la canceló, el motivo y las devoluciones (`GET /payment`).
+  - **ID en desarrollo:** solo con `__DEV__` y la variante de desarrollo, el ID de la reserva con "Compartir o copiar el ID" (`Share` de React Native: no hay módulo de portapapeles en la compilación). Se comprobó que el paquete de producción no lo contiene.
+  - **Cancelar:**
+    - El botón aparece solo si `cancellation-preview` dice `allowed`.
+    - El diálogo muestra la devolución (monto, % y regla en español).
+    - Al confirmar se actualizan el detalle, las listas, la vista previa y los turnos, sin recargar a mano.
+  - **Mis reservas** (pestaña Reservas): Próximas e Historial con lista infinita. La hora se muestra en la zona de cada barbería.
+- **`features/barbershop`:** "Reservar" habilitado en el detalle y en el servicio. Se exponen `useBarbershopQuery`, `useServicesQuery`, `useBarbersQuery` y `useAlternativesQuery`, para que las reservas compartan caché.
+- **Rutas tipadas:** `pnpm typecheck` genera los tipos en `types/generated/` (ignorada por git), no en `.expo/types`, para que el servidor de desarrollo no los pise mientras corre.
+- **Pruebas:** 336 en total; hooks de `booking` con 94 % de cobertura. Flujo de Maestro `e2e/book-cancel.yaml`.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
@@ -123,7 +151,10 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 | `/barbershop/[id]` | Detalle de barbería | M3 |
 | `/barbershop/[id]/service/[serviceId]` | Servicio: próximo turno y alternativas | M3 |
 | `/barbershop/[id]/reviews` | Todas las valoraciones | M3 |
-| `/bookings` (pestaña Reservas) | Invitación a entrar / relleno | M4 |
+| `/book/[barbershopId]` | Reservar: servicio, barbero, día y turno | M4 |
+| `/book/summary` | Resumen y confirmar | M4 |
+| `/bookings` (pestaña Reservas) | Mis reservas: próximas e historial | M4 |
+| `/bookings/[id]` | Reserva: pendiente, confirmada, vencida o cancelada | M4 |
 | `/profile` (pestaña Perfil) | Perfil o invitación a entrar | M2 |
 | `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Cuenta | M2 |
 | `/profile/edit`, `/profile/preferences`, `/profile/favorites` | Perfil (protegidas) | M2 / M3 |
@@ -134,7 +165,7 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 
 - Revisión rápida, con la compilación instalada, de las correcciones de tema y contraste de M1.
 - Eliminar la cuenta: no hay endpoint (pendientes de publicación #10).
-- **Backend:** `dev:pay` (ya pedido; hace falta desde M4), `GET /me/barber` (antes de los bloqueos del barbero) y el resto de `docs/api/AJUSTES-BACKEND.md`.
+- **Backend:** `GET /me/barber` (ya en el contrato; se usará en M7) (antes de los bloqueos del barbero) y el resto de `docs/api/AJUSTES-BACKEND.md`.
 - Pendientes de publicación: `docs/pendientes-publicacion.md`.
 
 ## Compilación instalada y cambios nativos pendientes de compilar

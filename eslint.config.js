@@ -17,7 +17,14 @@ module.exports = defineConfig([
   expoConfig,
   prettierConfig,
   {
-    ignores: ['dist/*', 'coverage/*', '.expo/*', 'src/shared/api/generated/*', 'docs/api/*'],
+    ignores: [
+      'dist/*',
+      'coverage/*',
+      '.expo/*',
+      'src/shared/api/generated/*',
+      'docs/api/*',
+      'types/generated/*',
+    ],
   },
   {
     rules: {

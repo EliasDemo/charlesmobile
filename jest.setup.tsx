@@ -31,3 +31,6 @@ jest.mock('react-native-maps', () => {
   const MapView = (props: object) => <View testID="results-map" {...props} />;
   return { __esModule: true, default: MapView, Marker: () => null };
 });
+
+// expo-crypto's native randomUUID is not available in Jest: use Node's.
+jest.mock('expo-crypto', () => ({ randomUUID: () => require('node:crypto').randomUUID() }));

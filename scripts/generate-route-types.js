@@ -1,4 +1,4 @@
-// Generates .expo/types/router.d.ts from app/ (Expo Router typed routes) without starting Metro,
+// Generates types/generated/router.d.ts from app/ (Expo Router typed routes) without starting Metro,
 // so `pnpm typecheck` always checks hrefs against the real routes, even on a fresh clone.
 const fs = require('node:fs');
 const path = require('node:path');
@@ -18,6 +18,7 @@ if (!file) {
   process.exit(1);
 }
 
-const outDir = path.join(root, '.expo', 'types');
+// Own folder (not .expo/types): a running dev server rewrites that one on its own schedule.
+const outDir = path.join(root, 'types', 'generated');
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(path.join(outDir, 'router.d.ts'), file);

@@ -27,7 +27,8 @@ export const barbershopKeys = {
   latestReviews: (id: string) => ['barbershop', id, 'reviews', 'latest'] as const,
   reviews: (id: string, filters: ReviewFilters) => ['barbershop', id, 'reviews', filters] as const,
   nextSlot: (id: string, serviceId: string) => ['barbershop', id, 'next-slot', serviceId] as const,
-  alternatives: (id: string, serviceId: string) => ['barbershop', id, 'alternatives', serviceId] as const,
+  alternatives: (id: string, serviceId: string, date?: string) =>
+    ['barbershop', id, 'alternatives', serviceId, date ?? null] as const,
 };
 
 const path = (id: string) => ({ params: { path: { id } } });
@@ -82,7 +83,9 @@ export const fetchNextSlot = (id: string, serviceId: string): Promise<NextAvaila
   );
 
 /** Other shops with a slot for a service of the same category (up to 5, closest first). */
-export const fetchAlternatives = (id: string, serviceId: string): Promise<Alternatives> =>
+export const fetchAlternatives = (id: string, serviceId: string, date?: string): Promise<Alternatives> =>
   unwrap(
-    api.GET('/api/v1/barbershops/{id}/alternatives', { params: { path: { id }, query: { serviceId } } }),
+    api.GET('/api/v1/barbershops/{id}/alternatives', {
+      params: { path: { id }, query: { serviceId, ...(date ? { date } : {}) } },
+    }),
   );
