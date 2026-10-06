@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
@@ -49,9 +50,11 @@ export interface ErrorStateProps {
   message: string;
   onRetry?: () => void;
   retrying?: boolean;
+  /** Extra content under the message (e.g. development diagnostics). */
+  children?: ReactNode;
 }
 
-export function ErrorState({ title, message, onRetry, retrying }: ErrorStateProps) {
+export function ErrorState({ title, message, onRetry, retrying, children }: ErrorStateProps) {
   const { t } = useTranslation();
   return (
     <View style={styles.center} accessibilityLiveRegion="polite" testID="error-state">
@@ -61,6 +64,7 @@ export function ErrorState({ title, message, onRetry, retrying }: ErrorStateProp
       <Text color="textSecondary" align="center" selectable>
         {message}
       </Text>
+      {children}
       {onRetry ? <Button label={t('actions.retry')} onPress={onRetry} loading={retrying} /> : null}
     </View>
   );

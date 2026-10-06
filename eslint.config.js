@@ -141,12 +141,28 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ['scripts/**/*.mjs', 'plugins/**/*.js', '*.config.js', 'jest.setup.ts'],
+    files: ['scripts/**/*.{js,mjs}', 'plugins/**/*.js', '*.config.js', 'jest.setup.ts'],
+    languageOptions: {
+      globals: { __dirname: 'readonly', require: 'readonly', module: 'writable', process: 'readonly' },
+    },
     rules: { 'no-console': 'off' },
   },
   // jest.mock factories must use require() and run before the imports they affect.
   {
     files: ['jest.setup.ts', '**/__tests__/**/*.{ts,tsx}'],
     rules: { '@typescript-eslint/no-require-imports': 'off', 'import/first': 'off' },
+  },
+  {
+    files: ['**/__tests__/**/*.js'],
+    languageOptions: {
+      globals: {
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        jest: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+      },
+    },
   },
 ]);

@@ -8,7 +8,7 @@
     "node": ">=24 <25"
   },
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "node scripts/dev-network/check.js && expo start --dev-client",
     "sync:api": "node scripts/sync-api.mjs",
     "generate:api": "node scripts/generate-api-types.mjs",
     "check:api": "node scripts/check-api-types.mjs",
@@ -19,7 +19,8 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "verify": "pnpm check:api && pnpm lint && pnpm typecheck && pnpm format:check && pnpm test:coverage --ci",
-    "build:dev:android": "eas build --profile development --platform android"
+    "build:dev:android": "eas build --profile development --platform android",
+    "start:skip-check": "expo start --dev-client"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "0.4.2",

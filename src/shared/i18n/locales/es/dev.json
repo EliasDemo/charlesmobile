@@ -1,0 +1,7 @@
+{
+  "connection": {
+    "title": "Desarrollo: no se pudo conectar",
+    "url": "Servidor configurado: {{url}}",
+    "hint": "Revisa que el teléfono y la computadora estén en el mismo wifi, que el backend esté encendido y que la IP de .env sea la actual (pnpm start lo comprueba)."
+  }
+}

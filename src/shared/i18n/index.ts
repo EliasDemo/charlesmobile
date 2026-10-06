@@ -2,14 +2,18 @@ import { createInstance } from 'i18next';
 import { initReactI18next, useTranslation } from 'react-i18next';
 import common from './locales/es/common.json';
 import errors from './locales/es/errors.json';
+import type devTexts from './locales/es/dev.json';
 
 export const defaultNS = 'common';
 export const resources = { es: { common, errors } } as const;
 
+// Development-only texts: required inside a __DEV__ branch so release bundles do not contain them.
+const devResources: { dev?: typeof devTexts } = __DEV__ ? { dev: require('./locales/es/dev.json') } : {};
+
 declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: typeof defaultNS;
-    resources: (typeof resources)['es'];
+    resources: (typeof resources)['es'] & { dev: typeof devTexts };
   }
 }
 
@@ -19,8 +23,8 @@ void i18next.use(initReactI18next).init({
   lng: 'es',
   fallbackLng: 'es',
   defaultNS,
-  ns: ['common', 'errors'],
-  resources,
+  ns: ['common', 'errors', ...Object.keys(devResources)],
+  resources: { es: { ...resources.es, ...devResources } },
   interpolation: { escapeValue: false },
   returnNull: false,
   initAsync: false,

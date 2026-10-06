@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { translateError } from '@/shared/api';
+import { isNetworkError, translateError } from '@/shared/api';
+import { DevConnectionHint, showDevConnectionHint } from './DevConnectionHint';
 import { EmptyState, ErrorState, LoadingState } from './StateViews';
 
 export interface QueryLike<T> {
@@ -31,7 +32,9 @@ export function QueryView<T>({ query, isEmpty, empty, children }: QueryViewProps
         message={translateError(query.error).message}
         onRetry={() => void query.refetch()}
         retrying={query.isRefetching}
-      />
+      >
+        {showDevConnectionHint && isNetworkError(query.error) ? <DevConnectionHint /> : null}
+      </ErrorState>
     );
   }
   return <LoadingState />;
