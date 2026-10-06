@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { formatDistance, formatMoney } from '@/shared/lib';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Badge, Monogram, RatingLabel, Text } from '@/shared/ui';
+import { Badge, Icon, Monogram, RatingLabel, Text } from '@/shared/ui';
 import type { SearchResult } from '../api/searchApi';
 
 /** One search result. Shows only what the API returns: missing values are hidden, never computed. */
@@ -31,7 +31,16 @@ export function ResultCard({ item, onPress }: { item: SearchResult; onPress: (id
     >
       <Monogram name={item.name} size={sizes.avatar} />
       <View style={styles.body}>
-        <Text variant="bodyStrong">{item.name}</Text>
+        <View style={styles.titleRow}>
+          <Text variant="bodyStrong" style={styles.flex}>
+            {item.name}
+          </Text>
+          {item.isFavorite ? (
+            <View accessible accessibilityLabel={t('card.favorite')}>
+              <Icon name="heart" color={theme.colors.danger} />
+            </View>
+          ) : null}
+        </View>
         <Text variant="caption" color="textSecondary" numberOfLines={1}>
           {item.address}
         </Text>
@@ -61,5 +70,7 @@ export function ResultCard({ item, onPress }: { item: SearchResult; onPress: (id
 const styles = StyleSheet.create({
   card: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderWidth: sizes.borderWidth },
   body: { flex: 1, gap: spacing.xs },
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  flex: { flex: 1 },
   row: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.sm },
 });

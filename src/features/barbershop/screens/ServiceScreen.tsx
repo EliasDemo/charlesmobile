@@ -84,8 +84,8 @@ export function ServiceScreen({ barbershopId, serviceId, onBack, onOpenBarbersho
                                 {t('service.alternativeSlot', {
                                   service: alternative.service.name,
                                   price: formatMoney(alternative.service.price),
-                                  // The DTO has no zone: alternatives are nearby shops, shown in this shop's zone.
-                                  time: `${formatShortDate(alternative.firstSlot.startAt, shop.timezone)} ${formatTime(alternative.firstSlot.startAt, shop.timezone)}`,
+                                  // Each alternative in its own barbershop's zone.
+                                  time: `${formatShortDate(alternative.firstSlot.startAt, alternative.barbershop.timezone)} ${formatTime(alternative.firstSlot.startAt, alternative.barbershop.timezone)}`,
                                 })}
                               </Text>
                             </View>

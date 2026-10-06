@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M3 (Explorar), con el código terminado. Falta la confirmación del usuario en su teléfono y la compilación final con la clave de Maps (la lanza el usuario).
+**Fase actual:** M3 cerrada el 2026-10-06. En curso: **M4 (Reservar)**, plan aprobado.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -78,9 +78,11 @@ Probada por el usuario en su Android: registro, inicio de sesión y verificació
 - `UpdateProfileDto.phone` **sigue** declarado como `object` en el contrato tras la sincronización de las fases 10 a 12. Hasta que sea `string | null` y se ejecute `pnpm sync:api`, la app no permite cambiar el teléfono (está listo para activarse).
 - `GET /auth/terms` debería devolver los enlaces de términos y privacidad.
 
-## M3 — Código terminado
+## M3 — Cerrada
 
-**Falta:** la confirmación del usuario en su teléfono (lista de comprobación) y la compilación final con la clave de Maps (opción A). Hasta esa compilación la app funciona completa con la lista; la vista de mapa muestra un aviso.
+Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido por el usuario:** una pasada de diseño para mejorar el aspecto visual (se planificará como tarea aparte). Sigue pendiente la compilación final con la clave de Maps (opción A): hasta entonces la vista de mapa de Android muestra un aviso.
+
+**Tras la sincronización de la API:** `isFavorite` llega en el detalle y en la búsqueda (con sesión opcional). El corazón lo usa y ya no lee la lista completa de favoritas; los resultados muestran un corazón si es favorita, y al iniciar sesión se invalidan los datos leídos como visitante. Las alternativas muestran su turno en la zona de **su** barbería (`timezone` en `SearchResultDto`).
 
 - **`features/search` (Explorar):**
   - Por defecto, lo mejor valorado (sin ubicación). Búsqueda por texto, que espera 400 ms tras dejar de escribir y empieza desde 2 caracteres.
@@ -109,8 +111,8 @@ Probada por el usuario en su Android: registro, inicio de sesión y verificació
 
 ### Pedidos al backend (M3)
 
-- `isFavorite` en `GET /barbershops/{id}` y en los resultados de búsqueda cuando hay sesión. El usuario lo pidió; al llegar con `pnpm sync:api`, reemplaza la lectura de toda la lista.
-- `timezone` en `AlternativeDto.barbershop`. Hoy el turno de una alternativa se muestra en la zona de la barbería original (son cercanas).
+- ~~`isFavorite`~~ y ~~`timezone` en las alternativas~~: recibidos y en uso.
+- `barbershop.timezone` en `BookingDto` (pedido por el usuario). Mientras tanto, M4 lee el detalle de cada barbería para su zona.
 
 ## Pantallas actuales
 

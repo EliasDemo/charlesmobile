@@ -38,7 +38,7 @@ export function BarbershopScreen({
         {(shop) => (
           <View style={styles.content}>
             <Monogram name={shop.name} shape="cover" size={sizes.cover} />
-            <Header shop={shop} onRequireLogin={onRequireLogin} />
+            <Header shop={shop} onRequireLogin={onRequireLogin} onFavoriteChanged={detail.shop.refetch} />
             <View>
               <Button label={t('book')} disabled fullWidth />
               <Text variant="caption" color="textSecondary" align="center">
@@ -103,7 +103,15 @@ export function BarbershopScreen({
   );
 }
 
-function Header({ shop, onRequireLogin }: { shop: Barbershop; onRequireLogin: () => void }) {
+function Header({
+  shop,
+  onRequireLogin,
+  onFavoriteChanged,
+}: {
+  shop: Barbershop;
+  onRequireLogin: () => void;
+  onFavoriteChanged: () => Promise<unknown>;
+}) {
   const { t } = useTranslation('barbershop');
   return (
     <View style={styles.header}>
@@ -114,7 +122,12 @@ function Header({ shop, onRequireLogin }: { shop: Barbershop; onRequireLogin: ()
             {shop.type === 'INDEPENDENT' ? t('independent') : t('barbershop')}
           </Text>
         </View>
-        <FavoriteButton barbershopId={shop.id} onRequireLogin={onRequireLogin} />
+        <FavoriteButton
+          barbershopId={shop.id}
+          isFavorite={shop.isFavorite}
+          onChanged={onFavoriteChanged}
+          onRequireLogin={onRequireLogin}
+        />
       </View>
       <RatingLabel average={shop.rating.average} count={shop.rating.count} />
       {shop.status === 'TEMPORARILY_CLOSED' ? (

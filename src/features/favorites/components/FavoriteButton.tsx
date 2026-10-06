@@ -2,18 +2,18 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, touchTarget, useTheme } from '@/shared/theme';
 import { Icon, Text } from '@/shared/ui';
-import { useFavoriteToggle } from '../hooks/useFavorites';
+import { useFavoriteToggle, type UseFavoriteToggleOptions } from '../hooks/useFavorites';
 
-export interface FavoriteButtonProps {
+export interface FavoriteButtonProps extends UseFavoriteToggleOptions {
   barbershopId: string;
   /** Without a session: the route sends the user to login and back. */
   onRequireLogin: () => void;
 }
 
-export function FavoriteButton({ barbershopId, onRequireLogin }: FavoriteButtonProps) {
+export function FavoriteButton({ barbershopId, isFavorite, onChanged, onRequireLogin }: FavoriteButtonProps) {
   const theme = useTheme();
   const { t } = useTranslation('barbershop');
-  const favorite = useFavoriteToggle(barbershopId);
+  const favorite = useFavoriteToggle(barbershopId, { isFavorite, onChanged });
   const label = favorite.isFavorite ? t('favorite.remove') : t('favorite.add');
   return (
     <View style={styles.container}>
@@ -22,10 +22,8 @@ export function FavoriteButton({ barbershopId, onRequireLogin }: FavoriteButtonP
         accessibilityLabel={label}
         accessibilityState={{
           selected: favorite.isFavorite,
-          disabled: !favorite.ready,
           busy: favorite.isSaving,
         }}
-        disabled={!favorite.ready}
         onPress={favorite.authenticated ? favorite.toggle : onRequireLogin}
         style={[styles.button, { borderColor: theme.colors.border, borderRadius: touchTarget / 2 }]}
         testID="favorite-button"

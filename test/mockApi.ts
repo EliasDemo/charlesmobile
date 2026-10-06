@@ -118,6 +118,8 @@ export const searchResult = (
   isOpenNow: true,
   availableNow: false,
   featured: false,
+  timezone: 'America/Lima',
+  isFavorite: false,
   ...overrides,
 });
 
@@ -143,6 +145,7 @@ export const barbershop = (
   closure: null,
   links: { website: null, instagram: null, facebook: null },
   rating: { average: 4.5, count: 12 },
+  isFavorite: false,
   ...overrides,
 });
 

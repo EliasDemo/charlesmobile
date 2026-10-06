@@ -215,16 +215,17 @@ Las rutas son relativas a `/api/v1`. "Sesión" significa la cabecera `Authorizat
 2. **Buscar:** `GET /search/barbershops?lat=&lng=&radiusKm=&q=&category=&minPrice=&maxPrice=&minRating=&type=&openNow=&availableNow=&date=&sort=&limit=&cursor=`.
    - Sin sesión.
    - `lat`/`lng` dentro de Perú; el radio es de 5 km por defecto y como máximo 25.
-   - Cada resultado trae distancia, "precio desde", `isOpenNow`, `availableNow` y `featured`.
+   - Cada resultado trae distancia, "precio desde", `isOpenNow`, `availableNow`, `featured`, `isFavorite` y `timezone` (zona de esa barbería).
+   - **Sesión opcional:** es un endpoint público, pero si envías el token, `isFavorite` dice si la barbería es favorita de la cuenta (sin sesión, siempre `false`). Un token vencido o inválido no da error aquí: responde como anónimo. Estas respuestas llevan `Cache-Control: private, no-store` (con sesión) o `no-cache` (sin ella) y `Vary: Authorization`: no las guardes en una caché compartida entre cuentas.
 3. **Ver la barbería:**
-   - `GET /barbershops/{id}`
+   - `GET /barbershops/{id}` (con el token, también trae `isFavorite`)
    - `GET /barbershops/{id}/business-hours`
    - `GET /barbershops/{id}/services`
    - `GET /barbershops/{id}/barbers`
 4. **Ver turnos:**
    - `GET /barbershops/{id}/availability?serviceId=&date=YYYY-MM-DD[&barberId=]`, sin barbero = cualquier barbero;
    - también `/availability/now?serviceId=` y `/availability/next?serviceId=`;
-   - si no hay turnos: `GET /barbershops/{id}/alternatives?serviceId=&date=`.
+   - si no hay turnos: `GET /barbershops/{id}/alternatives?serviceId=&date=`. Cada alternativa trae `barbershop.timezone`: muestra su `firstSlot` en **esa** zona, no en la de la barbería original.
 5. **Reservar:** `POST /bookings` con `{ barbershopId, serviceId, startAt, barberId? }`, sesión, correo verificado e `Idempotency-Key`.
    - `startAt` debe ser **exactamente** el `startAt` de un turno devuelto en el paso 4.
    - Responde 201 con la reserva `PENDING_PAYMENT`, `expiresAt` (10 min para pagar) y `payment`.

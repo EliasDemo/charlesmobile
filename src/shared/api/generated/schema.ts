@@ -2207,6 +2207,8 @@ export type components = {
             description: string | null;
             /** Format: uuid */
             id: string;
+            /** @description Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false. */
+            isFavorite: boolean;
             latitude: number;
             links: components["schemas"]["LinksDto"];
             longitude: number;
@@ -2230,6 +2232,8 @@ export type components = {
             description: string | null;
             /** Format: uuid */
             id: string;
+            /** @description Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false. */
+            isFavorite: boolean;
             latitude: number;
             links: components["schemas"]["LinksDto"];
             longitude: number;
@@ -2474,6 +2478,8 @@ export type components = {
             description: string | null;
             /** Format: uuid */
             id: string;
+            /** @description Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false. */
+            isFavorite: boolean;
             latitude: number;
             links: components["schemas"]["LinksDto"];
             longitude: number;
@@ -2534,6 +2540,8 @@ export type components = {
             description: string | null;
             /** Format: uuid */
             id: string;
+            /** @description Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false. */
+            isFavorite: boolean;
             latitude: number;
             links: components["schemas"]["LinksDto"];
             longitude: number;
@@ -3180,6 +3188,8 @@ export type components = {
             featured: boolean;
             /** Format: uuid */
             id: string;
+            /** @description Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false. */
+            isFavorite: boolean;
             isOpenNow: boolean;
             latitude: number;
             longitude: number;
@@ -3188,6 +3198,11 @@ export type components = {
             priceFrom: components["schemas"]["MoneyDto"] | null;
             rating: components["schemas"]["SearchRatingDto"];
             status: components["schemas"]["BarbershopStatus"];
+            /**
+             * @description Zona IANA de la barbería: sus horas (turnos, horario) se muestran en esta zona.
+             * @example America/Lima
+             */
+            timezone: string;
             type: components["schemas"]["BarbershopType"];
         };
         ServiceCategoryDto: {

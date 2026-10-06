@@ -49,11 +49,4 @@ describe('FavoritesScreen', () => {
     await waitFor(() => expect(api.calls.some((c) => c.method === 'DELETE')).toBe(true));
     expect(await screen.findByText(texts.empty.title)).toBeTruthy();
   });
-
-  it('asks for the largest pages when it only needs the ids', async () => {
-    const { fetchFavoriteIdsPage } = jest.requireActual('../api/favoritesApi');
-    const api = mockApi({ 'GET /api/v1/me/favorites': { body: page([favorite()]) } });
-    await fetchFavoriteIdsPage();
-    expect(new URL(api.fetchMock.mock.calls[0]![0].url).searchParams.get('limit')).toBe('100');
-  });
 });

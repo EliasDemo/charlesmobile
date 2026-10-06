@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { isApiError, startSession, type SessionUser } from '@/shared/api';
+import { isApiError, queryClient, startSession, type SessionUser } from '@/shared/api';
 import { deviceModelName, useCountdown } from '@/shared/lib';
 import { applyServerErrors } from '@/shared/ui';
 import { login } from '../api/authApi';
@@ -28,6 +28,8 @@ export function useLogin({ onSuccess }: UseLoginOptions) {
       login({ email: values.email, password: values.password, deviceName: deviceModelName() }),
     onSuccess: async (tokens, values) => {
       await startSession(tokens);
+      // Public data read as a visitor (e.g. isFavorite) is now per account: read it again.
+      void queryClient.invalidateQueries();
       onSuccess(tokens.user, values.email);
     },
     onError: (error) => {

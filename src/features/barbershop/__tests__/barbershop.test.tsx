@@ -4,7 +4,6 @@ import {
   barber,
   barbershop,
   businessHours,
-  favorite,
   mockApi,
   review,
   searchResult,
@@ -148,28 +147,42 @@ describe('favorite button', () => {
     expect(props.onRequireLogin).toHaveBeenCalled();
   });
 
-  it('marks and unmarks a favorite at once', async () => {
+  it('marks and unmarks at once, then trusts isFavorite from the API', async () => {
     signIn();
-    shopApi({
-      ...detailRoutes(),
-      'GET /api/v1/me/favorites': { body: page([]) },
-      'PUT /api/v1/me/favorites/{barbershopId}': { status: 204 },
-      'DELETE /api/v1/me/favorites/{barbershopId}': { status: 204 },
-    });
+    let favorite = false;
+    const api = shopApi(
+      detailRoutes({
+        'GET /api/v1/barbershops/{id}': () => ({ body: barbershop({ isFavorite: favorite }) }),
+        'PUT /api/v1/me/favorites/{barbershopId}': () => {
+          favorite = true;
+          return { status: 204 };
+        },
+        'DELETE /api/v1/me/favorites/{barbershopId}': () => {
+          favorite = false;
+          return { status: 204 };
+        },
+      }),
+    );
     await renderWithProviders(<BarbershopScreen {...detailProps()} />);
     await fireEvent.press(await screen.findByLabelText(texts.favorite.add));
     expect(await screen.findByLabelText(texts.favorite.remove)).toBeTruthy();
+    await waitFor(() =>
+      expect(api.calls.filter((c) => c.path === `/api/v1/barbershops/${ID}`)).toHaveLength(2),
+    );
     await fireEvent.press(screen.getByLabelText(texts.favorite.remove));
     expect(await screen.findByLabelText(texts.favorite.add)).toBeTruthy();
+    // The heart no longer needs the whole favorites list.
+    expect(api.calls.some((c) => c.path === '/api/v1/me/favorites')).toBe(false);
   });
 
-  it('reads the favorite state from the list and goes back if saving fails', async () => {
+  it('goes back if saving fails', async () => {
     signIn();
-    shopApi({
-      ...detailRoutes(),
-      'GET /api/v1/me/favorites': { body: page([favorite()]) },
-      'DELETE /api/v1/me/favorites/{barbershopId}': apiError(500, 'INTERNAL_ERROR'),
-    });
+    shopApi(
+      detailRoutes({
+        'GET /api/v1/barbershops/{id}': { body: barbershop({ isFavorite: true }) },
+        'DELETE /api/v1/me/favorites/{barbershopId}': apiError(500, 'INTERNAL_ERROR'),
+      }),
+    );
     await renderWithProviders(<BarbershopScreen {...detailProps()} />);
     await fireEvent.press(await screen.findByLabelText(texts.favorite.remove));
     expect(await screen.findByText(texts.favorite.error)).toBeTruthy();
@@ -213,7 +226,7 @@ describe('ServiceScreen', () => {
             categoryKey: 'haircut',
             items: [
               {
-                barbershop: searchResult({ id: 'other', name: 'Barbería Demo San Isidro' }),
+                barbershop: searchResult({ id: 'other', name: 'Barbería Demo San Isidro', timezone: 'UTC' }),
                 service: {
                   id: 'x',
                   name: 'Corte',
@@ -231,7 +244,8 @@ describe('ServiceScreen', () => {
     await renderWithProviders(<ServiceScreen {...p} />);
     expect(await screen.findByText(texts.service.noSlot)).toBeTruthy();
     expect(await screen.findByText('Barbería Demo San Isidro')).toBeTruthy();
-    expect(screen.getByText(/Corte · S\/\s?30[.,]00 · .*10:00/)).toBeTruthy();
+    // Shown in the alternative's own zone (UTC here), not in the original barbershop's.
+    expect(screen.getByText(/Corte · S\/\s?30[.,]00 · .*15:00/)).toBeTruthy();
     await fireEvent.press(screen.getByTestId('result-other'));
     expect(p.onOpenBarbershop).toHaveBeenCalledWith('other');
   });

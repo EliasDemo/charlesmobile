@@ -1,58 +1,48 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchAllPages, nextPageParam, translateError, useSession } from '@/shared/api';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { nextPageParam, translateError, useSession } from '@/shared/api';
 import {
   addFavorite,
   favoritesKeys,
-  fetchFavoriteIdsPage,
   fetchFavoritesPage,
   removeFavorite,
   type FavoritePage,
 } from '../api/favoritesApi';
 
-/**
- * Ids of the user's favorites. The API has no "is this a favorite?" field yet (requested to the
- * backend as `isFavorite`), so the whole list is read once and kept in cache.
- */
-export function useFavoriteIds() {
-  const authenticated = useSession((s) => s.status === 'authenticated');
-  return useQuery({
-    queryKey: favoritesKeys.ids,
-    queryFn: async () => new Set((await fetchAllPages(fetchFavoriteIdsPage)).map((f) => f.barbershopId)),
-    enabled: authenticated,
-    staleTime: 5 * 60 * 1000,
-  });
+export interface UseFavoriteToggleOptions {
+  /** `isFavorite` as the API returned it with the barbershop (false without a session). */
+  isFavorite: boolean;
+  /** Refreshes the barbershop data that owns `isFavorite`; the optimistic value waits for it. */
+  onChanged?: () => Promise<unknown>;
 }
 
-export function useFavoriteToggle(barbershopId: string) {
+/**
+ * Heart of a barbershop. The state comes from the API (`isFavorite`); a tap shows the new state
+ * at once and goes back if the request fails.
+ */
+export function useFavoriteToggle(barbershopId: string, { isFavorite, onChanged }: UseFavoriteToggleOptions) {
   const queryClient = useQueryClient();
   const authenticated = useSession((s) => s.status === 'authenticated');
-  const ids = useFavoriteIds();
-  const isFavorite = ids.data?.has(barbershopId) ?? false;
+  const [optimistic, setOptimistic] = useState<boolean | null>(null);
 
-  // Optimistic: the heart changes at once and goes back if the request fails.
   const mutation = useMutation({
     mutationFn: (favorite: boolean) => (favorite ? addFavorite(barbershopId) : removeFavorite(barbershopId)),
-    onMutate: async (favorite) => {
-      await queryClient.cancelQueries({ queryKey: favoritesKeys.ids });
-      const previous = queryClient.getQueryData<Set<string>>(favoritesKeys.ids);
-      const next = new Set(previous);
-      if (favorite) next.add(barbershopId);
-      else next.delete(barbershopId);
-      queryClient.setQueryData(favoritesKeys.ids, next);
-      return { previous };
+    onMutate: (favorite) => setOptimistic(favorite),
+    onSuccess: async () => {
+      await onChanged?.();
     },
-    onError: (_error, _favorite, context) => {
-      if (context?.previous) queryClient.setQueryData(favoritesKeys.ids, context.previous);
+    onSettled: () => {
+      setOptimistic(null);
+      void queryClient.invalidateQueries({ queryKey: favoritesKeys.list });
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: favoritesKeys.list }),
   });
+
+  const current = optimistic ?? isFavorite;
 
   return {
     authenticated,
-    /** Unknown while the list loads: the button waits instead of guessing. */
-    ready: !authenticated || ids.data !== undefined,
-    isFavorite,
-    toggle: () => mutation.mutate(!isFavorite),
+    isFavorite: authenticated && current,
+    toggle: () => mutation.mutate(!current),
     isSaving: mutation.isPending,
     error: mutation.error ? translateError(mutation.error).message : null,
   };
