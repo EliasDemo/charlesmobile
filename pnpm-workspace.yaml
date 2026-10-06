@@ -1,1 +1,3 @@
 nodeLinker: hoisted
+patchedDependencies:
+  '@expo/router-server@57.0.12': patches/@expo__router-server@57.0.12.patch

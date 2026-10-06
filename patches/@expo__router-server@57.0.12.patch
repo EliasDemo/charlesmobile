@@ -1,0 +1,16 @@
+diff --git a/build/typed-routes/index.js b/build/typed-routes/index.js
+index 52289a13ee7ba16b36d73463857753928ed81c62..b001e19748a1b22c44f7266085d07d2d244fdb0c 100644
+--- a/build/typed-routes/index.js
++++ b/build/typed-routes/index.js
+@@ -29,7 +29,10 @@ function getWatchHandler(outputDir, { ctx = defaultCtx, regenerateFn = exports.r
+             return;
+         let shouldRegenerate = false;
+         let relativePath = node_path_1.default.relative(process.env.EXPO_ROUTER_APP_ROOT, filePath);
+-        const isInsideAppRoot = !relativePath.startsWith('../');
++        // Patched (charlesmobile): on Windows path.relative uses backslashes, so files outside the app
++        // root (e.g. src/) were taken as routes. Compare with forward slashes on every platform.
++        relativePath = relativePath.split(node_path_1.default.sep).join('/');
++        const isInsideAppRoot = !relativePath.startsWith('../') && !node_path_1.default.isAbsolute(relativePath);
+         const basename = node_path_1.default.basename(relativePath);
+         if (!isInsideAppRoot)
+             return;

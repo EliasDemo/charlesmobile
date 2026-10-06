@@ -103,7 +103,7 @@ Probada por el usuario en su Android: registro, inicio de sesión y verificació
 - **`shared/lib` nuevo:** formateadores de distancia, duración y valoración; `upcomingDays`; ubicación; enlaces externos; `useDebouncedValue`; dinero sin decimales y sin símbolo.
 - **Calidad:**
   - ESLint permite `import type` desde `api/` en las vistas, nunca llamadas.
-  - `tsconfig` ya no incluye `.expo/types`: el servidor de desarrollo lo regenera mal mientras corre, con un fallo de expo-router que agrega archivos de `src/` como rutas.
+  - Rutas tipadas: `pnpm typecheck` genera `.expo/types/router.d.ts` desde `app/` (`scripts/generate-route-types.js`) antes de `tsc`, así que un `href` inexistente falla `verify` incluso en una copia nueva. El fallo de expo-router en Windows (tomaba archivos de `src/` como rutas porque compara `..` con `../`) se corrige con `patches/@expo__router-server@57.0.12.patch` (`pnpm patch`). Al actualizar Expo, revisar si el parche sigue haciendo falta.
   - 310 pruebas. Flujo de Maestro `e2e/search-detail.yaml`.
 - **Se eliminó `features/health`.** El inicio provisional lo reemplaza Explorar; el sistema de diseño se abre desde Perfil (solo en desarrollo).
 
