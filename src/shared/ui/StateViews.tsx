@@ -1,0 +1,77 @@
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { useTranslation } from '@/shared/i18n';
+import { spacing, useTheme } from '@/shared/theme';
+import { Button } from './Button';
+import { Text } from './Text';
+
+export function LoadingState({ label }: { label?: string }) {
+  const theme = useTheme();
+  const { t } = useTranslation();
+  const text = label ?? t('states.loading');
+  return (
+    <View
+      style={styles.center}
+      accessibilityRole="progressbar"
+      accessibilityLabel={text}
+      testID="loading-state"
+    >
+      <ActivityIndicator size="large" color={theme.colors.primary} />
+      <Text color="textSecondary">{text}</Text>
+    </View>
+  );
+}
+
+export interface EmptyStateProps {
+  title?: string;
+  message?: string;
+  action?: { label: string; onPress: () => void };
+}
+
+export function EmptyState({ title, message, action }: EmptyStateProps) {
+  const { t } = useTranslation();
+  return (
+    <View style={styles.center} testID="empty-state">
+      <Text variant="subtitle" align="center">
+        {title ?? t('states.emptyTitle')}
+      </Text>
+      {message ? (
+        <Text color="textSecondary" align="center">
+          {message}
+        </Text>
+      ) : null}
+      {action ? <Button label={action.label} variant="secondary" onPress={action.onPress} /> : null}
+    </View>
+  );
+}
+
+export interface ErrorStateProps {
+  title?: string;
+  message: string;
+  onRetry?: () => void;
+  retrying?: boolean;
+}
+
+export function ErrorState({ title, message, onRetry, retrying }: ErrorStateProps) {
+  const { t } = useTranslation();
+  return (
+    <View style={styles.center} accessibilityLiveRegion="polite" testID="error-state">
+      <Text variant="subtitle" align="center">
+        {title ?? t('states.errorTitle')}
+      </Text>
+      <Text color="textSecondary" align="center" selectable>
+        {message}
+      </Text>
+      {onRetry ? <Button label={t('actions.retry')} onPress={onRetry} loading={retrying} /> : null}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  center: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.md,
+    padding: spacing.xl,
+  },
+});

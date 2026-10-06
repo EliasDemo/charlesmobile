@@ -1,0 +1,6791 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_check_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Estado del servicio y sus dependencias",
+        "tags": ["health"]
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "operationId": "UsersController_me_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-CLI-001: consultar mi perfil",
+        "tags": ["users"]
+      },
+      "patch": {
+        "operationId": "UsersController_update_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-CLI-002: actualizar nombre, teléfono o preferencias",
+        "tags": ["users"]
+      }
+    },
+    "/api/v1/auth/terms": {
+      "get": {
+        "operationId": "AuthController_terms_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TermsDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Versión vigente de los términos y condiciones",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptedResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-AUT-001: registro (respuesta idéntica exista o no el correo, ADR 0003)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokensDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Cuenta deshabilitada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-AUT-002: inicio de sesión con correo y contraseña",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokensDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Renovar la sesión (rota el token de renovación)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-AUT-003: cerrar sesión (este dispositivo o todos)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/password-reset/request": {
+      "post": {
+        "operationId": "AuthController_requestPasswordReset_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordResetRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptedResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-AUT-004: solicitar código (respuesta idéntica exista o no)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/password-reset/confirm": {
+      "post": {
+        "operationId": "AuthController_confirmPasswordReset_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordResetConfirmDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-AUT-004: nueva contraseña con el código (cierra todas las sesiones)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/email-verification/request": {
+      "post": {
+        "operationId": "AuthController_requestEmailVerification_v1",
+        "parameters": [],
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptedResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Enviar un código nuevo de verificación de correo",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/email-verification/confirm": {
+      "post": {
+        "operationId": "AuthController_confirmEmailVerification_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailVerificationConfirmDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Verificar el correo con el código recibido",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/barbershops": {
+      "post": {
+        "operationId": "BarbershopsController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBarbershopDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedBarbershopDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BAR-001: registrar una barbería (quien la registra queda como OWNER)",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/barbershops/independent": {
+      "post": {
+        "operationId": "BarbershopsController_createIndependent_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateIndependentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedIndependentDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Barbero independiente: crea su negocio (INDEPENDENT), queda como OWNER y como su único barbero",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/barbershops/{id}": {
+      "get": {
+        "operationId": "BarbershopsController_findPublic_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopPublicDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-BAR-002: información pública de una barbería",
+        "tags": ["barbershops"]
+      },
+      "patch": {
+        "operationId": "BarbershopsController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBarbershopDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BAR-003: actualizar la información (OWNER o MANAGER)",
+        "tags": ["barbershops"]
+      },
+      "delete": {
+        "operationId": "BarbershopsController_remove_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Eliminar (borrado lógico; solo OWNER, sin reservas futuras)",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/barbershops/{id}/status": {
+      "patch": {
+        "operationId": "BarbershopsController_updateStatus_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBarbershopStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BAR-004: atendiendo o cerrada temporalmente (solo OWNER)",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/me/barbershops": {
+      "get": {
+        "operationId": "BarbershopsController_listMine_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyBarbershopPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Barberías que administro",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/me/barbershops/{id}": {
+      "get": {
+        "operationId": "BarbershopsController_findManaged_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Detalle de gestión de una barbería que administro",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/barbershops/{id}/members": {
+      "get": {
+        "operationId": "BarbershopsController_listMembers_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Responsables de la barbería",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/barbershops/{id}/members/{userId}": {
+      "patch": {
+        "operationId": "BarbershopsController_changeRole_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeMemberRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cambiar el rol de un responsable (solo OWNER; nunca sin OWNER)",
+        "tags": ["barbershops"]
+      },
+      "delete": {
+        "operationId": "BarbershopsController_removeMember_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar un responsable o retirarse (nunca el último OWNER)",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers": {
+      "get": {
+        "operationId": "BarbersController_listPublic_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberPublicPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Barberos activos de una barbería (solo datos públicos)",
+        "tags": ["barbers"]
+      },
+      "post": {
+        "operationId": "BarbersController_create_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBarberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BRB-001: registrar un barbero (perfil sin cuenta vinculada)",
+        "tags": ["barbers"]
+      }
+    },
+    "/api/v1/me/barbershops/{id}/barbers": {
+      "get": {
+        "operationId": "BarbersController_listManaged_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberManagePageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Barberos de una barbería que administro (incluye inactivos)",
+        "tags": ["barbers"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers/me": {
+      "post": {
+        "operationId": "BarbersController_linkSelf_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkSelfAsBarberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BRB-001: el responsable se registra como barbero (sin invitación)",
+        "tags": ["barbers"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers/{barberId}": {
+      "patch": {
+        "operationId": "BarbersController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBarberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BRB-002: actualizar un barbero (o desactivarlo)",
+        "tags": ["barbers"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers/{barberId}/services": {
+      "put": {
+        "operationId": "BarbersController_setServices_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetBarberServicesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BRB-002: servicios que realiza el barbero",
+        "tags": ["barbers"]
+      }
+    },
+    "/api/v1/service-categories": {
+      "get": {
+        "operationId": "ServicesController_listCategories_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCategoryListDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Categorías de servicio activas (para filtros y formularios)",
+        "tags": ["services"]
+      }
+    },
+    "/api/v1/barbershops/{id}/services": {
+      "get": {
+        "operationId": "ServicesController_listPublic_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServicePublicPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-SER-003: servicios disponibles con precio y duración",
+        "tags": ["services"]
+      },
+      "post": {
+        "operationId": "ServicesController_create_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SER-001: registrar un servicio (precio > 0, 5–480 min en múltiplos de 5)",
+        "tags": ["services"]
+      }
+    },
+    "/api/v1/me/barbershops/{id}/services": {
+      "get": {
+        "operationId": "ServicesController_listManaged_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceManagePageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Servicios de una barbería que administro (incluye no disponibles)",
+        "tags": ["services"]
+      }
+    },
+    "/api/v1/barbershops/{id}/services/{serviceId}": {
+      "patch": {
+        "operationId": "ServicesController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceManageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-SER-002: actualizar un servicio",
+        "tags": ["services"]
+      },
+      "delete": {
+        "operationId": "ServicesController_remove_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Eliminar un servicio (borrado lógico)",
+        "tags": ["services"]
+      }
+    },
+    "/api/v1/barbershops/{id}/members/invitations": {
+      "post": {
+        "operationId": "InvitationsController_inviteMember_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteMemberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptedResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Invitar a una cuenta existente como responsable (solo OWNER; respuesta idéntica)",
+        "tags": ["invitations"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers/{barberId}/invitations": {
+      "post": {
+        "operationId": "InvitationsController_inviteBarber_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteBarberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AcceptedResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BRB-001: invitar a una cuenta a vincularse con un barbero",
+        "tags": ["invitations"]
+      }
+    },
+    "/api/v1/me/barbershop-invitations": {
+      "get": {
+        "operationId": "InvitationsController_listMine_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitationPageDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis invitaciones pendientes",
+        "tags": ["invitations"]
+      }
+    },
+    "/api/v1/me/barbershop-invitations/{invitationId}/accept": {
+      "post": {
+        "operationId": "InvitationsController_accept_v1",
+        "parameters": [
+          {
+            "name": "invitationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptInvitationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Aceptar una invitación con su código",
+        "tags": ["invitations"]
+      }
+    },
+    "/api/v1/barbershops/{id}/business-hours": {
+      "get": {
+        "operationId": "AvailabilityController_businessHours_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessHoursDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-DIS-001 / RF-BAR-002: horario semanal e indicador \"abierta ahora\"",
+        "tags": ["availability"]
+      },
+      "put": {
+        "operationId": "AvailabilityController_putBusinessHours_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeeklyScheduleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessHoursUpdateDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-DIS-001: configurar el horario semanal (OWNER o MANAGER)",
+        "tags": ["availability"]
+      }
+    },
+    "/api/v1/barbershops/{id}/availability": {
+      "get": {
+        "operationId": "AvailabilityController_forDate_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": false,
+            "in": "query",
+            "description": "Sin barbero = cualquier barbero disponible.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": true,
+            "in": "query",
+            "description": "Fecha local de la barbería (YYYY-MM-DD).",
+            "schema": {
+              "example": "2030-01-07",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DayAvailabilityDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-DIS-003: turnos de una fecha (local de la barbería) para un servicio",
+        "tags": ["availability"]
+      }
+    },
+    "/api/v1/barbershops/{id}/availability/now": {
+      "get": {
+        "operationId": "AvailabilityController_now_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": false,
+            "in": "query",
+            "description": "Sin barbero = cualquier barbero disponible.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AvailableNowDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-DIS-002: ¿puede atender ahora? (turno dentro de la ventana \"ahora\")",
+        "tags": ["availability"]
+      }
+    },
+    "/api/v1/barbershops/{id}/availability/next": {
+      "get": {
+        "operationId": "AvailabilityController_next_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": false,
+            "in": "query",
+            "description": "Sin barbero = cualquier barbero disponible.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NextAvailabilityDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-DIS-004: siguiente turno disponible (hasta el horizonte de reservas)",
+        "tags": ["availability"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers/{barberId}/schedule": {
+      "get": {
+        "operationId": "AvailabilityController_getBarberSchedule_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberScheduleDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BRB-003: horario del barbero (responsables y el propio barbero)",
+        "tags": ["availability"]
+      },
+      "put": {
+        "operationId": "AvailabilityController_putBarberSchedule_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WeeklyScheduleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberScheduleUpdateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-BRB-003: horario semanal del barbero (solo responsables; vacío = hereda)",
+        "tags": ["availability"]
+      }
+    },
+    "/api/v1/barbershops/{id}/time-blocks": {
+      "get": {
+        "operationId": "AvailabilityController_listBlocks_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "description": "Desde (ISO). Por defecto, ahora.",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "description": "Hasta (ISO). Por defecto, el horizonte de reservas.",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TimeBlockDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Bloqueos (responsables: todos; barbero: los suyos)",
+        "tags": ["availability"]
+      },
+      "post": {
+        "operationId": "AvailabilityController_createBlock_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTimeBlockDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeBlockDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Choca con reservas activas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-DIS-001 / RF-BRB-003: bloquear (descanso, ausencia, feriado, manual)",
+        "tags": ["availability"]
+      }
+    },
+    "/api/v1/barbershops/{id}/time-blocks/{blockId}": {
+      "delete": {
+        "operationId": "AvailabilityController_deleteBlock_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "blockId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Eliminar un bloqueo",
+        "tags": ["availability"]
+      }
+    },
+    "/api/v1/search/barbershops": {
+      "get": {
+        "description": "Solo barberías visibles. La ubicación enviada se usa solo para esta consulta: no se guarda ni se registra.",
+        "operationId": "SearchController_barbershops_v1",
+        "parameters": [
+          {
+            "name": "lat",
+            "required": false,
+            "in": "query",
+            "description": "Latitud del punto de búsqueda (con lng). No se guarda ni se registra.",
+            "schema": {
+              "example": -12.12,
+              "type": "number"
+            }
+          },
+          {
+            "name": "lng",
+            "required": false,
+            "in": "query",
+            "description": "Longitud del punto (con lat).",
+            "schema": {
+              "example": -77.03,
+              "type": "number"
+            }
+          },
+          {
+            "name": "radiusKm",
+            "required": false,
+            "in": "query",
+            "description": "Radio en km (requiere ubicación). Por defecto 5; se recorta al máximo (25).",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Texto (2–80): nombre de la barbería o de un servicio. Sin tildes ni mayúsculas.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Clave de categoría de servicio.",
+            "schema": {
+              "example": "haircut",
+              "type": "string"
+            }
+          },
+          {
+            "name": "minPrice",
+            "required": false,
+            "in": "query",
+            "description": "Precio mínimo en céntimos (algún servicio en el rango).",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "required": false,
+            "in": "query",
+            "description": "Precio máximo en céntimos.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "minRating",
+            "required": false,
+            "in": "query",
+            "description": "Valoración mínima. Excluye las barberías sin valoraciones.",
+            "schema": {
+              "minimum": 1,
+              "maximum": 5,
+              "type": "number"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/BarbershopType"
+            }
+          },
+          {
+            "name": "openNow",
+            "required": false,
+            "in": "query",
+            "description": "Solo barberías abiertas en este momento.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "availableNow",
+            "required": false,
+            "in": "query",
+            "description": "Solo barberías con un turno que empieza dentro de la ventana \"ahora\".",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "date",
+            "required": false,
+            "in": "query",
+            "description": "Solo barberías con algún turno en esa fecha local (dentro del horizonte).",
+            "schema": {
+              "example": "2030-01-07",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "Por defecto: distance con ubicación; rating sin ella.",
+            "schema": {
+              "type": "string",
+              "enum": ["distance", "rating", "price"]
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Por defecto 20; tope 50.",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior (opaco).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchPageDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-BUS-001…003: buscar barberías (cercanía, texto, categoría, precio, valoración…)",
+        "tags": ["search"]
+      }
+    },
+    "/api/v1/barbershops/{id}/alternatives": {
+      "get": {
+        "operationId": "SearchController_alternatives_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "query",
+            "description": "Servicio consultado (define la categoría).",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": false,
+            "in": "query",
+            "description": "Fecha local. Por defecto, hoy en la zona de la barbería consultada.",
+            "schema": {
+              "example": "2030-01-07",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlternativesDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-BUS-004: barberías cercanas con la misma categoría de servicio y turnos reales",
+        "tags": ["search"]
+      }
+    },
+    "/api/v1/bookings/{id}/payment": {
+      "post": {
+        "operationId": "PaymentsController_start_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentStartDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-PAG-001: iniciar o reintentar el pago de una reserva pendiente (idempotente)",
+        "tags": ["payments"]
+      },
+      "get": {
+        "operationId": "PaymentsController_status_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentStatusDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-PAG-002: estado del pago y de sus reembolsos (cliente)",
+        "tags": ["payments"]
+      }
+    },
+    "/api/v1/bookings/{id}/payment/verify": {
+      "post": {
+        "description": "Verifica la firma del resultado que devuelve el SDK y, si es auténtico, consulta el estado del pago al proveedor. La respuesta de la app nunca confirma la reserva por sí sola.",
+        "operationId": "PaymentsController_verify_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentVerificationDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-PAG-002: la app reenvía el resultado firmado; el servidor consulta a la pasarela",
+        "tags": ["payments"]
+      }
+    },
+    "/api/v1/payments/webhooks/{provider}": {
+      "post": {
+        "operationId": "PaymentsController_webhook_v1",
+        "parameters": [
+          {
+            "name": "provider",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookReceiptDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "RF-PAG-002: aviso firmado de la pasarela (IPN). Idempotente por evento.",
+        "tags": ["payments"]
+      }
+    },
+    "/api/v1/bookings": {
+      "post": {
+        "description": "Idempotente por la cabecera Idempotency-Key: repetir la misma petición devuelve la misma reserva (200). Requiere correo verificado.",
+        "operationId": "BookingsController_create_v1",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "UUID único por intento.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Repetición con la misma clave.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedBookingDto"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatedBookingDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-RES-001/002: crear una reserva (pendiente de pago) en un turno disponible",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/bookings/{id}": {
+      "get": {
+        "operationId": "BookingsController_findOne_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-RES-004: detalle (cliente, responsables o barbero asignado)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/bookings/{id}/cancellation-preview": {
+      "get": {
+        "operationId": "BookingsController_cancellationPreview_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancellationPreviewDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-RES-005: si se puede cancelar ahora y cuánto se devolvería (antes de confirmar)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/bookings/{id}/attended": {
+      "post": {
+        "operationId": "BookingsController_markAttended_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-ATE-002: marcar como atendida (barbero asignado o barbería; desde el inicio y hasta 24 h)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/bookings/{id}/attendance-correction": {
+      "post": {
+        "operationId": "BookingsController_correctAttendance_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttendanceCorrectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Corregir ATTENDED ↔ NO_SHOW (solo OWNER o MANAGER, con motivo, hasta 48 h)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/me/barber/agenda": {
+      "get": {
+        "operationId": "BookingsController_barberAgenda_v1",
+        "parameters": [
+          {
+            "name": "date",
+            "required": false,
+            "in": "query",
+            "description": "Día local de la barbería (YYYY-MM-DD). Por defecto, hoy.",
+            "schema": {
+              "example": "2030-01-07",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendaDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-ATE-001: mi agenda del día como barbero (pendientes de atención)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/barbershops/{id}/agenda": {
+      "get": {
+        "operationId": "BookingsController_barbershopAgenda_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": false,
+            "in": "query",
+            "description": "Día local de la barbería (YYYY-MM-DD). Por defecto, hoy.",
+            "schema": {
+              "example": "2030-01-07",
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": false,
+            "in": "query",
+            "description": "Solo la agenda de este barbero.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgendaDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-ATE-001: agenda del día de la barbería (OWNER o MANAGER)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/bookings/{id}/no-show": {
+      "post": {
+        "operationId": "BookingsController_markNoShow_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Marcar inasistencia (barbero asignado o barbería; de 15 min a 24 h tras el inicio)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/bookings/{id}/cancel": {
+      "post": {
+        "operationId": "BookingsController_cancel_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelledBookingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-RES-005: cancelar (cliente, o OWNER/MANAGER con motivo; el barbero no)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/me/bookings": {
+      "get": {
+        "operationId": "BookingsController_listMine_v1",
+        "parameters": [
+          {
+            "name": "scope",
+            "required": false,
+            "in": "query",
+            "description": "upcoming: activas que aún no empiezan. history: el resto (estado final o pasadas).",
+            "schema": {
+              "default": "upcoming",
+              "type": "string",
+              "enum": ["upcoming", "history"]
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-RES-004/008: mis reservas (próximas o historial)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/me/barber/bookings": {
+      "get": {
+        "operationId": "BookingsController_listForBarber_v1",
+        "parameters": [
+          {
+            "name": "scope",
+            "required": false,
+            "in": "query",
+            "description": "upcoming: activas que aún no empiezan. history: el resto (estado final o pasadas).",
+            "schema": {
+              "default": "upcoming",
+              "type": "string",
+              "enum": ["upcoming", "history"]
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-RES-004/008: reservas que debo atender como barbero",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/barbershops/{id}/bookings": {
+      "get": {
+        "operationId": "BookingsController_listForBarbershop_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scope",
+            "required": false,
+            "in": "query",
+            "description": "upcoming: activas que aún no empiezan. history: el resto (estado final o pasadas).",
+            "schema": {
+              "default": "upcoming",
+              "type": "string",
+              "enum": ["upcoming", "history"]
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "RF-RES-004/008: reservas de mi barbería (OWNER o MANAGER)",
+        "tags": ["bookings"]
+      }
+    }
+  },
+  "info": {
+    "title": "Charles API",
+    "description": "API de reservas para barberías. Todos los endpoints están bajo /api/v1.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "ComponentStatus": {
+        "type": "string",
+        "enum": ["up", "down"]
+      },
+      "HealthChecksDto": {
+        "type": "object",
+        "properties": {
+          "database": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ComponentStatus"
+              }
+            ]
+          },
+          "redis": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ComponentStatus"
+              }
+            ]
+          }
+        },
+        "required": ["database", "redis"]
+      },
+      "HealthResponseDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok"
+          },
+          "checks": {
+            "$ref": "#/components/schemas/HealthChecksDto"
+          }
+        },
+        "required": ["status", "checks"]
+      },
+      "ErrorResponseDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "VALIDATION_ERROR",
+            "description": "Código estable, en inglés."
+          },
+          "message": {
+            "type": "string",
+            "example": "Los datos enviados no son válidos.",
+            "description": "Mensaje en español."
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "example": []
+          },
+          "requestId": {
+            "type": "string",
+            "example": "0f8fad5b-d9cb-469f-a165-70867728950e"
+          }
+        },
+        "required": ["code", "message", "details", "requestId"]
+      },
+      "Role": {
+        "type": "string",
+        "enum": ["CLIENT", "BARBER", "OWNER", "SUPPORT"]
+      },
+      "NotificationChannel": {
+        "type": "string",
+        "enum": ["PUSH", "EMAIL", "IN_APP"]
+      },
+      "NotificationPreferencesDto": {
+        "type": "object",
+        "properties": {
+          "notificationChannels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NotificationChannel"
+            }
+          }
+        },
+        "required": ["notificationChannels"]
+      },
+      "ProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "emailVerified": {
+            "type": "boolean"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            }
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/NotificationPreferencesDto"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "email",
+          "emailVerified",
+          "phone",
+          "roles",
+          "preferences",
+          "createdAt"
+        ]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Ana Pérez"
+          },
+          "phone": {
+            "type": "object",
+            "example": "+51 987 654 321",
+            "nullable": true,
+            "description": "null lo elimina"
+          },
+          "preferences": {
+            "$ref": "#/components/schemas/NotificationPreferencesDto"
+          }
+        }
+      },
+      "TermsDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "example": "2026-10"
+          }
+        },
+        "required": ["version"]
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Ana Pérez"
+          },
+          "email": {
+            "type": "string",
+            "example": "ana@example.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 128
+          },
+          "phone": {
+            "type": "string",
+            "example": "+51 987 654 321"
+          },
+          "acceptTerms": {
+            "type": "boolean",
+            "description": "Debe ser true: acepta los términos y condiciones."
+          },
+          "declaresAdult": {
+            "type": "boolean",
+            "description": "Debe ser true: declara tener 18 años o más (ADR 0003)."
+          },
+          "termsVersion": {
+            "type": "string",
+            "description": "Versión de los términos que el usuario aceptó (GET /auth/terms)."
+          }
+        },
+        "required": [
+          "fullName",
+          "email",
+          "password",
+          "acceptTerms",
+          "declaresAdult",
+          "termsVersion"
+        ]
+      },
+      "AcceptedResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": ["message"]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ana@example.com"
+          },
+          "password": {
+            "type": "string"
+          },
+          "deviceName": {
+            "type": "string",
+            "example": "iPhone de Ana",
+            "description": "Nombre del dispositivo."
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "SessionUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Role"
+            }
+          },
+          "emailVerified": {
+            "type": "boolean"
+          }
+        },
+        "required": ["id", "fullName", "roles", "emailVerified"]
+      },
+      "AuthTokensDto": {
+        "type": "object",
+        "properties": {
+          "tokenType": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "accessToken": {
+            "type": "string"
+          },
+          "accessTokenExpiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
+          "refreshTokenExpiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/SessionUserDto"
+          }
+        },
+        "required": [
+          "tokenType",
+          "accessToken",
+          "accessTokenExpiresAt",
+          "refreshToken",
+          "refreshTokenExpiresAt",
+          "user"
+        ]
+      },
+      "RefreshDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        },
+        "required": ["refreshToken"]
+      },
+      "LogoutDto": {
+        "type": "object",
+        "properties": {
+          "allDevices": {
+            "type": "boolean",
+            "description": "true cierra la sesión en todos los dispositivos."
+          }
+        }
+      },
+      "PasswordResetRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ana@example.com"
+          }
+        },
+        "required": ["email"]
+      },
+      "PasswordResetConfirmDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "ana@example.com"
+          },
+          "code": {
+            "type": "string",
+            "example": "123456"
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 128
+          }
+        },
+        "required": ["email", "code", "newPassword"]
+      },
+      "EmailVerificationConfirmDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "123456"
+          }
+        },
+        "required": ["code"]
+      },
+      "CreateBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Barbería Central"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "example": "Av. Larco 123, Miraflores, Lima"
+          },
+          "latitude": {
+            "type": "number",
+            "example": -12.1211,
+            "description": "Dentro de Perú (MVP)."
+          },
+          "longitude": {
+            "type": "number",
+            "example": -77.0297,
+            "description": "Dentro de Perú (MVP)."
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona horaria IANA."
+          },
+          "phone": {
+            "type": "string",
+            "example": "+51 1 234 5678"
+          },
+          "ruc": {
+            "type": "string",
+            "example": "20123456789",
+            "nullable": true
+          },
+          "websiteUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "instagramUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "facebookUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["name", "address", "latitude", "longitude", "phone"]
+      },
+      "BarbershopType": {
+        "type": "string",
+        "enum": ["BARBERSHOP", "INDEPENDENT"],
+        "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero)."
+      },
+      "BarbershopStatus": {
+        "type": "string",
+        "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
+      },
+      "ClosureDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "expectedReopenAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["reason", "expectedReopenAt"]
+      },
+      "LinksDto": {
+        "type": "object",
+        "properties": {
+          "website": {
+            "type": "string",
+            "nullable": true
+          },
+          "instagram": {
+            "type": "string",
+            "nullable": true
+          },
+          "facebook": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["website", "instagram", "facebook"]
+      },
+      "RatingDto": {
+        "type": "object",
+        "properties": {
+          "average": {
+            "type": "number",
+            "example": 4.5
+          },
+          "count": {
+            "type": "number",
+            "example": 12
+          }
+        },
+        "required": ["average", "count"]
+      },
+      "BarbershopMemberRole": {
+        "type": "string",
+        "enum": ["OWNER", "MANAGER"]
+      },
+      "CreatedBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          },
+          "type": {
+            "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopType"
+              }
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Teléfono del negocio."
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopStatus"
+              }
+            ]
+          },
+          "closure": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClosureDto"
+              }
+            ]
+          },
+          "links": {
+            "$ref": "#/components/schemas/LinksDto"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/RatingDto"
+          },
+          "ruc": {
+            "type": "string",
+            "nullable": true
+          },
+          "myRole": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopMemberRole"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "ownerRoleGranted": {
+            "type": "boolean",
+            "description": "true si se agregó el rol OWNER a la cuenta: renueva el token para verlo reflejado en él."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "address",
+          "latitude",
+          "longitude",
+          "timezone",
+          "type",
+          "phone",
+          "status",
+          "closure",
+          "links",
+          "rating",
+          "ruc",
+          "myRole",
+          "createdAt",
+          "ownerRoleGranted"
+        ]
+      },
+      "CreateIndependentDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Barbería Central"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "example": "Av. Larco 123, Miraflores, Lima"
+          },
+          "latitude": {
+            "type": "number",
+            "example": -12.1211,
+            "description": "Dentro de Perú (MVP)."
+          },
+          "longitude": {
+            "type": "number",
+            "example": -77.0297,
+            "description": "Dentro de Perú (MVP)."
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona horaria IANA."
+          },
+          "phone": {
+            "type": "string",
+            "example": "+51 1 234 5678"
+          },
+          "ruc": {
+            "type": "string",
+            "example": "20123456789",
+            "nullable": true
+          },
+          "websiteUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "instagramUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "facebookUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Nombre visible como barbero. Por defecto, el de la cuenta."
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["name", "address", "latitude", "longitude", "phone"]
+      },
+      "CreatedIndependentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          },
+          "type": {
+            "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopType"
+              }
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Teléfono del negocio."
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopStatus"
+              }
+            ]
+          },
+          "closure": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClosureDto"
+              }
+            ]
+          },
+          "links": {
+            "$ref": "#/components/schemas/LinksDto"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/RatingDto"
+          },
+          "ruc": {
+            "type": "string",
+            "nullable": true
+          },
+          "myRole": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopMemberRole"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "ownerRoleGranted": {
+            "type": "boolean",
+            "description": "true si se agregó el rol OWNER a la cuenta: renueva el token para verlo reflejado en él."
+          },
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Perfil de barbero creado y vinculado a la cuenta."
+          },
+          "barberRoleGranted": {
+            "type": "boolean",
+            "description": "true si se agregó el rol BARBER a la cuenta: renueva el token para verlo."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "address",
+          "latitude",
+          "longitude",
+          "timezone",
+          "type",
+          "phone",
+          "status",
+          "closure",
+          "links",
+          "rating",
+          "ruc",
+          "myRole",
+          "createdAt",
+          "ownerRoleGranted",
+          "barberId",
+          "barberRoleGranted"
+        ]
+      },
+      "BarbershopPublicDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          },
+          "type": {
+            "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopType"
+              }
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Teléfono del negocio."
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopStatus"
+              }
+            ]
+          },
+          "closure": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClosureDto"
+              }
+            ]
+          },
+          "links": {
+            "$ref": "#/components/schemas/LinksDto"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/RatingDto"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "address",
+          "latitude",
+          "longitude",
+          "timezone",
+          "type",
+          "phone",
+          "status",
+          "closure",
+          "links",
+          "rating"
+        ]
+      },
+      "UpdateBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Barbería Central"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "example": "Av. Larco 123, Miraflores, Lima"
+          },
+          "latitude": {
+            "type": "number",
+            "example": -12.1211,
+            "description": "Dentro de Perú (MVP)."
+          },
+          "longitude": {
+            "type": "number",
+            "example": -77.0297,
+            "description": "Dentro de Perú (MVP)."
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona horaria IANA."
+          },
+          "phone": {
+            "type": "string",
+            "example": "+51 1 234 5678"
+          },
+          "ruc": {
+            "type": "string",
+            "example": "20123456789",
+            "nullable": true
+          },
+          "websiteUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "instagramUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "facebookUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "BarbershopManageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          },
+          "type": {
+            "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopType"
+              }
+            ]
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Teléfono del negocio."
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopStatus"
+              }
+            ]
+          },
+          "closure": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClosureDto"
+              }
+            ]
+          },
+          "links": {
+            "$ref": "#/components/schemas/LinksDto"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/RatingDto"
+          },
+          "ruc": {
+            "type": "string",
+            "nullable": true
+          },
+          "myRole": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopMemberRole"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "address",
+          "latitude",
+          "longitude",
+          "timezone",
+          "type",
+          "phone",
+          "status",
+          "closure",
+          "links",
+          "rating",
+          "ruc",
+          "myRole",
+          "createdAt"
+        ]
+      },
+      "UpdateBarbershopStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "TEMPORARILY_CLOSED"]
+          },
+          "reason": {
+            "type": "string",
+            "description": "Solo con TEMPORARILY_CLOSED."
+          },
+          "expectedReopenAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Fecha estimada de reapertura (futura). Solo con TEMPORARILY_CLOSED."
+          }
+        },
+        "required": ["status"]
+      },
+      "MyBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopType"
+              }
+            ]
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopStatus"
+              }
+            ]
+          },
+          "myRole": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopMemberRole"
+              }
+            ]
+          }
+        },
+        "required": ["id", "name", "type", "status", "myRole"]
+      },
+      "MyBarbershopPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyBarbershopDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "MemberDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopMemberRole"
+              }
+            ]
+          },
+          "since": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["userId", "fullName", "role", "since"]
+      },
+      "MemberPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MemberDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ChangeMemberRoleDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopMemberRole"
+              }
+            ]
+          }
+        },
+        "required": ["role"]
+      },
+      "BarberPublicDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "displayName", "bio", "photoUrl", "serviceIds"]
+      },
+      "BarberPublicPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BarberPublicDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "LinkedUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "fullName"]
+      },
+      "BarberManageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "linkedUser": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LinkedUserDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "bio",
+          "photoUrl",
+          "serviceIds",
+          "phone",
+          "isActive",
+          "linkedUser"
+        ]
+      },
+      "BarberManagePageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BarberManageDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "CreateBarberDto": {
+        "type": "object",
+        "properties": {
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Dato personal: se guarda cifrado y nunca es público."
+          },
+          "serviceIds": {
+            "description": "Servicios de la barbería que realiza.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "displayName": {
+            "type": "string",
+            "example": "Carlos"
+          }
+        },
+        "required": ["displayName"]
+      },
+      "LinkSelfAsBarberDto": {
+        "type": "object",
+        "properties": {
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true,
+            "description": "Dato personal: se guarda cifrado y nunca es público."
+          },
+          "serviceIds": {
+            "description": "Servicios de la barbería que realiza.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Por defecto, el nombre de la cuenta."
+          }
+        }
+      },
+      "UpdateBarberDto": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "false lo desactiva (rechazado si tiene reservas futuras)."
+          }
+        }
+      },
+      "SetBarberServicesDto": {
+        "type": "object",
+        "properties": {
+          "serviceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["serviceIds"]
+      },
+      "ServiceCategoryDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "haircut"
+          },
+          "name": {
+            "type": "string",
+            "example": "Corte de cabello"
+          }
+        },
+        "required": ["key", "name"]
+      },
+      "ServiceCategoryListDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "Categorías activas, en orden.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceCategoryDto"
+            }
+          }
+        },
+        "required": ["items"]
+      },
+      "MoneyDto": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": 2500,
+            "description": "Céntimos."
+          },
+          "currency": {
+            "type": "string",
+            "example": "PEN"
+          }
+        },
+        "required": ["amount", "currency"]
+      },
+      "ServicePublicDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "durationMinutes": {
+            "type": "number"
+          },
+          "category": {
+            "$ref": "#/components/schemas/ServiceCategoryDto"
+          }
+        },
+        "required": ["id", "name", "description", "price", "durationMinutes", "category"]
+      },
+      "ServicePublicPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServicePublicDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ServiceManageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "price": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "durationMinutes": {
+            "type": "number"
+          },
+          "category": {
+            "$ref": "#/components/schemas/ServiceCategoryDto"
+          },
+          "isAvailable": {
+            "type": "boolean"
+          },
+          "barberIds": {
+            "description": "Barberos que realizan el servicio.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "price",
+          "durationMinutes",
+          "category",
+          "isAvailable",
+          "barberIds"
+        ]
+      },
+      "ServiceManagePageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceManageDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "CreateServiceDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Corte clásico"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceAmount": {
+            "type": "number",
+            "example": 2500,
+            "description": "Precio en céntimos de PEN (mayor que 0)."
+          },
+          "durationMinutes": {
+            "type": "number",
+            "example": 30,
+            "description": "De 5 a 480 minutos, en múltiplos de 5."
+          },
+          "categoryKey": {
+            "type": "string",
+            "example": "haircut",
+            "description": "Clave de una categoría activa (GET /service-categories)."
+          },
+          "isAvailable": {
+            "type": "boolean",
+            "default": true
+          }
+        },
+        "required": ["name", "priceAmount", "durationMinutes", "categoryKey"]
+      },
+      "UpdateServiceDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Corte clásico"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceAmount": {
+            "type": "number",
+            "example": 2500,
+            "description": "Precio en céntimos de PEN (mayor que 0)."
+          },
+          "durationMinutes": {
+            "type": "number",
+            "example": 30,
+            "description": "De 5 a 480 minutos, en múltiplos de 5."
+          },
+          "categoryKey": {
+            "type": "string",
+            "example": "haircut",
+            "description": "Clave de una categoría activa (GET /service-categories)."
+          },
+          "isAvailable": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "InviteMemberDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "socia@example.com",
+            "description": "Correo de una cuenta existente."
+          },
+          "role": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopMemberRole"
+              }
+            ]
+          }
+        },
+        "required": ["email", "role"]
+      },
+      "InviteBarberDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "barbero@example.com",
+            "description": "Correo de una cuenta existente."
+          }
+        },
+        "required": ["email"]
+      },
+      "InvitationKind": {
+        "type": "string",
+        "enum": ["MEMBER", "BARBER"]
+      },
+      "InvitationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/InvitationKind"
+              }
+            ]
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "memberRole": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopMemberRole"
+              }
+            ]
+          },
+          "barberDisplayName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Perfil de barbero a vincular."
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "barbershopId",
+          "barbershopName",
+          "memberRole",
+          "barberDisplayName",
+          "expiresAt"
+        ]
+      },
+      "InvitationPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvitationDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "AcceptInvitationDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "123456"
+          }
+        },
+        "required": ["code"]
+      },
+      "WindowDto": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string",
+            "example": "09:00",
+            "description": "Hora local, múltiplo de 5 minutos."
+          },
+          "end": {
+            "type": "string",
+            "example": "13:00",
+            "description": "Hora local, posterior al inicio (sin cruzar la medianoche)."
+          }
+        },
+        "required": ["start", "end"]
+      },
+      "DayScheduleDto": {
+        "type": "object",
+        "properties": {
+          "dayOfWeek": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 6,
+            "description": "0 = domingo … 6 = sábado."
+          },
+          "windows": {
+            "description": "Varias ventanas por día permiten descansos.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WindowDto"
+            }
+          }
+        },
+        "required": ["dayOfWeek", "windows"]
+      },
+      "BusinessHoursDto": {
+        "type": "object",
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          },
+          "isOpenNow": {
+            "type": "boolean",
+            "description": "Abierta ahora: estado OPEN, dentro del horario y sin bloqueo general."
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayScheduleDto"
+            }
+          }
+        },
+        "required": ["timezone", "isOpenNow", "days"]
+      },
+      "SlotDto": {
+        "type": "object",
+        "properties": {
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "barberIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["startAt", "endAt", "barberIds"]
+      },
+      "DayAvailabilityDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2030-01-07"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SlotDto"
+            }
+          }
+        },
+        "required": ["date", "timezone", "slots"]
+      },
+      "AvailableNowDto": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "slot": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SlotDto"
+              }
+            ]
+          }
+        },
+        "required": ["available", "slot"]
+      },
+      "NextAvailabilityDto": {
+        "type": "object",
+        "properties": {
+          "slot": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SlotDto"
+              }
+            ]
+          }
+        },
+        "required": ["slot"]
+      },
+      "WeeklyScheduleDto": {
+        "type": "object",
+        "properties": {
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayScheduleDto"
+            }
+          }
+        },
+        "required": ["days"]
+      },
+      "BusinessHoursUpdateDto": {
+        "type": "object",
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          },
+          "isOpenNow": {
+            "type": "boolean",
+            "description": "Abierta ahora: estado OPEN, dentro del horario y sin bloqueo general."
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayScheduleDto"
+            }
+          },
+          "bookingsOutsideSchedule": {
+            "type": "number",
+            "description": "Reservas futuras activas que quedan fuera del horario nuevo (se mantienen)."
+          }
+        },
+        "required": ["timezone", "isOpenNow", "days", "bookingsOutsideSchedule"]
+      },
+      "BarberScheduleDto": {
+        "type": "object",
+        "properties": {
+          "barberId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inheritsBusinessHours": {
+            "type": "boolean",
+            "description": "true: no tiene horario propio y usa el de la barbería."
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayScheduleDto"
+            }
+          }
+        },
+        "required": ["barberId", "inheritsBusinessHours", "days"]
+      },
+      "BarberScheduleUpdateDto": {
+        "type": "object",
+        "properties": {
+          "barberId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "inheritsBusinessHours": {
+            "type": "boolean",
+            "description": "true: no tiene horario propio y usa el de la barbería."
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayScheduleDto"
+            }
+          },
+          "bookingsOutsideSchedule": {
+            "type": "number"
+          }
+        },
+        "required": ["barberId", "inheritsBusinessHours", "days", "bookingsOutsideSchedule"]
+      },
+      "TimeBlockType": {
+        "type": "string",
+        "enum": ["BREAK", "ABSENCE", "HOLIDAY", "MANUAL"]
+      },
+      "TimeBlockDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TimeBlockType"
+              }
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["id", "barberId", "startAt", "endAt", "type", "reason"]
+      },
+      "CreateTimeBlockDto": {
+        "type": "object",
+        "properties": {
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Vacío = bloqueo de toda la barbería."
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Instante ISO 8601 (múltiplo de 5 minutos)."
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Instante ISO 8601, posterior al inicio."
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TimeBlockType"
+              }
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "description": "Solo lo ven los responsables y el propio barbero."
+          }
+        },
+        "required": ["startAt", "endAt", "type"]
+      },
+      "SearchRatingDto": {
+        "type": "object",
+        "properties": {
+          "average": {
+            "type": "number",
+            "nullable": true,
+            "description": "null si no tiene valoraciones."
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": ["average", "count"]
+      },
+      "SearchResultDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopType"
+              }
+            ]
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopStatus"
+              }
+            ]
+          },
+          "address": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/SearchRatingDto"
+          },
+          "distanceMeters": {
+            "type": "number",
+            "nullable": true,
+            "description": "Distancia al punto de búsqueda, en metros redondeados (null sin ubicación)."
+          },
+          "priceFrom": {
+            "nullable": true,
+            "description": "Precio más bajo entre los servicios que cumplen los filtros.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MoneyDto"
+              }
+            ]
+          },
+          "isOpenNow": {
+            "type": "boolean"
+          },
+          "availableNow": {
+            "type": "boolean",
+            "description": "Hay un turno que empieza dentro de la ventana \"ahora\"."
+          },
+          "featured": {
+            "type": "boolean",
+            "description": "Resultado destacado (pagado). Hoy siempre false (Fase 13)."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "status",
+          "address",
+          "latitude",
+          "longitude",
+          "rating",
+          "distanceMeters",
+          "priceFrom",
+          "isOpenNow",
+          "availableNow",
+          "featured"
+        ]
+      },
+      "SearchPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchResultDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          },
+          "evaluationLimitReached": {
+            "type": "boolean",
+            "description": "true si se alcanzó el tope de barberías evaluadas por petición antes de llenar la página (filtros de disponibilidad). Puede haber más resultados con nextCursor."
+          }
+        },
+        "required": ["items", "nextCursor", "evaluationLimitReached"]
+      },
+      "AlternativeServiceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "durationMinutes": {
+            "type": "number"
+          }
+        },
+        "required": ["id", "name", "price", "durationMinutes"]
+      },
+      "AlternativeSlotDto": {
+        "type": "object",
+        "properties": {
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["startAt", "endAt"]
+      },
+      "AlternativeDto": {
+        "type": "object",
+        "properties": {
+          "barbershop": {
+            "$ref": "#/components/schemas/SearchResultDto"
+          },
+          "service": {
+            "description": "Servicio de la misma categoría.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AlternativeServiceDto"
+              }
+            ]
+          },
+          "firstSlot": {
+            "description": "Primer turno disponible en la fecha.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AlternativeSlotDto"
+              }
+            ]
+          }
+        },
+        "required": ["barbershop", "service", "firstSlot"]
+      },
+      "AlternativesDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2030-01-07"
+          },
+          "categoryKey": {
+            "type": "string",
+            "example": "haircut"
+          },
+          "items": {
+            "description": "Hasta 5, más cercanas primero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlternativeDto"
+            }
+          }
+        },
+        "required": ["date", "categoryKey", "items"]
+      },
+      "PaymentStatus": {
+        "type": "string",
+        "enum": ["PENDING", "SUCCEEDED", "REJECTED", "CANCELLED", "REFUNDED", "PARTIALLY_REFUNDED"]
+      },
+      "ClientPaymentActionDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["FAKE", "IZIPAY_SDK"]
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["type", "data"]
+      },
+      "PaymentStartDto": {
+        "type": "object",
+        "properties": {
+          "paymentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "provider": {
+            "type": "string",
+            "example": "FAKE"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PaymentStatus"
+              }
+            ]
+          },
+          "amount": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "clientAction": {
+            "nullable": true,
+            "description": "null si la pasarela no respondió: reintentar con POST /bookings/{id}/payment.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClientPaymentActionDto"
+              }
+            ]
+          }
+        },
+        "required": ["paymentId", "provider", "status", "amount", "clientAction"]
+      },
+      "RefundStatus": {
+        "type": "string",
+        "enum": ["PENDING", "SUCCEEDED", "FAILED"]
+      },
+      "RefundReason": {
+        "type": "string",
+        "enum": ["CLIENT_CANCELLATION", "BARBERSHOP_CANCELLATION", "ORPHANED_PAYMENT", "MANUAL"]
+      },
+      "RefundViewDto": {
+        "type": "object",
+        "properties": {
+          "refundId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RefundStatus"
+              }
+            ]
+          },
+          "reasonType": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RefundReason"
+              }
+            ]
+          },
+          "amount": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "processedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["refundId", "status", "reasonType", "amount", "createdAt", "processedAt"]
+      },
+      "PaymentViewDto": {
+        "type": "object",
+        "properties": {
+          "paymentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PaymentStatus"
+              }
+            ]
+          },
+          "amount": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "startedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "Cuándo la pasarela aceptó el pago."
+          },
+          "confirmedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "refunds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RefundViewDto"
+            }
+          }
+        },
+        "required": [
+          "paymentId",
+          "provider",
+          "status",
+          "amount",
+          "startedAt",
+          "confirmedAt",
+          "refunds"
+        ]
+      },
+      "PaymentStatusDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentViewDto"
+            }
+          }
+        },
+        "required": ["items"]
+      },
+      "PaymentVerificationDto": {
+        "type": "object",
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": ["CONFIRMED", "REVIEW", "UNCHANGED", "UNAVAILABLE"],
+            "description": "Resultado de consultar a la pasarela. La respuesta de la app nunca confirma por sí sola."
+          },
+          "paymentStatus": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PaymentStatus"
+              }
+            ]
+          }
+        },
+        "required": ["outcome", "paymentStatus"]
+      },
+      "WebhookReceiptDto": {
+        "type": "object",
+        "properties": {
+          "received": {
+            "type": "boolean"
+          },
+          "duplicate": {
+            "type": "boolean",
+            "description": "true si el evento ya se había recibido (no se aplica de nuevo)."
+          }
+        },
+        "required": ["received", "duplicate"]
+      },
+      "CreateBookingDto": {
+        "type": "object",
+        "properties": {
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "serviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Inicio exacto de un turno ofrecido por la disponibilidad (ISO 8601).",
+            "example": "2030-01-07T14:00:00.000Z"
+          },
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Sin barbero: se asigna el libre con menos reservas activas ese día."
+          }
+        },
+        "required": ["barbershopId", "serviceId", "startAt"]
+      },
+      "BookingStatus": {
+        "type": "string",
+        "enum": ["PENDING_PAYMENT", "CONFIRMED", "ATTENDED", "CANCELLED", "NO_SHOW", "EXPIRED"]
+      },
+      "NamedRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "PriceLineType": {
+        "type": "string",
+        "enum": ["SERVICE", "DISCOUNT", "FEE", "TAX"]
+      },
+      "PriceLineDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PriceLineType"
+              }
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/MoneyDto"
+          }
+        },
+        "required": ["type", "description", "amount"]
+      },
+      "BookingPriceDto": {
+        "type": "object",
+        "properties": {
+          "subtotal": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "discountTotal": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "feeTotal": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "total": {
+            "description": "Incluye impuestos (ADR 0002).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MoneyDto"
+              }
+            ]
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PriceLineDto"
+            }
+          }
+        },
+        "required": ["subtotal", "discountTotal", "feeTotal", "total", "lines"]
+      },
+      "CancellationDto": {
+        "type": "object",
+        "properties": {
+          "byRole": {
+            "type": "string",
+            "enum": ["CLIENT", "BARBERSHOP", "SYSTEM"]
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["byRole", "reason"]
+      },
+      "CreatedBookingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingStatus"
+              }
+            ]
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "service": {
+            "description": "Nombre del servicio al reservar (copia).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "barber": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "barberChosenByClient": {
+            "type": "boolean"
+          },
+          "client": {
+            "nullable": true,
+            "description": "Solo para la barbería y el barbero: nombre del cliente (sin contacto).",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": "number",
+            "description": "Duración copiada del servicio al reservar."
+          },
+          "price": {
+            "$ref": "#/components/schemas/BookingPriceDto"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "Límite para pagar (PENDING_PAYMENT)."
+          },
+          "cancellation": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CancellationDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/PaymentStartDto"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "barbershop",
+          "service",
+          "barber",
+          "barberChosenByClient",
+          "client",
+          "startAt",
+          "endAt",
+          "durationMinutes",
+          "price",
+          "expiresAt",
+          "cancellation",
+          "createdAt",
+          "payment"
+        ]
+      },
+      "BookingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingStatus"
+              }
+            ]
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "service": {
+            "description": "Nombre del servicio al reservar (copia).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "barber": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "barberChosenByClient": {
+            "type": "boolean"
+          },
+          "client": {
+            "nullable": true,
+            "description": "Solo para la barbería y el barbero: nombre del cliente (sin contacto).",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": "number",
+            "description": "Duración copiada del servicio al reservar."
+          },
+          "price": {
+            "$ref": "#/components/schemas/BookingPriceDto"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "Límite para pagar (PENDING_PAYMENT)."
+          },
+          "cancellation": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CancellationDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "barbershop",
+          "service",
+          "barber",
+          "barberChosenByClient",
+          "client",
+          "startAt",
+          "endAt",
+          "durationMinutes",
+          "price",
+          "expiresAt",
+          "cancellation",
+          "createdAt"
+        ]
+      },
+      "RefundQuoteDto": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "description": "Lo que se devolverá (redondeado hacia abajo).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MoneyDto"
+              }
+            ]
+          },
+          "percent": {
+            "type": "number",
+            "example": 50
+          },
+          "rule": {
+            "type": "string",
+            "enum": [
+              "NO_PAYMENT",
+              "BARBERSHOP_CANCELLATION",
+              "CLIENT_FULL",
+              "CLIENT_PARTIAL",
+              "CLIENT_NONE"
+            ]
+          },
+          "paid": {
+            "description": "Cobrado y aún no devuelto (base del cálculo).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MoneyDto"
+              }
+            ]
+          }
+        },
+        "required": ["amount", "percent", "rule", "paid"]
+      },
+      "CancellationPreviewDto": {
+        "type": "object",
+        "properties": {
+          "allowed": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["ALREADY_CANCELLED", "NOT_CANCELLABLE", "ALREADY_STARTED"]
+          },
+          "refund": {
+            "$ref": "#/components/schemas/RefundQuoteDto"
+          },
+          "reasonRequired": {
+            "type": "boolean",
+            "description": "true si cancela la barbería: el motivo es obligatorio."
+          }
+        },
+        "required": ["allowed", "reason", "refund", "reasonRequired"]
+      },
+      "AttendanceCorrectionDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ATTENDED", "NO_SHOW"],
+            "description": "Estado correcto."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Motivo de la corrección (queda en el historial y la auditoría)."
+          }
+        },
+        "required": ["status", "reason"]
+      },
+      "AgendaActionsDto": {
+        "type": "object",
+        "properties": {
+          "canMarkAttended": {
+            "type": "boolean"
+          },
+          "canMarkNoShow": {
+            "type": "boolean"
+          },
+          "canCorrect": {
+            "type": "boolean",
+            "description": "Solo OWNER o MANAGER, dentro del plazo de corrección."
+          }
+        },
+        "required": ["canMarkAttended", "canMarkNoShow", "canCorrect"]
+      },
+      "AgendaItemDto": {
+        "type": "object",
+        "properties": {
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingStatus"
+              }
+            ]
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "service": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "barber": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "client": {
+            "description": "Solo el nombre (sin teléfono, correo ni documento).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "awaitingPayment": {
+            "type": "boolean",
+            "description": "PENDING_PAYMENT vigente: por confirmar."
+          },
+          "pendingAttention": {
+            "type": "boolean",
+            "description": "CONFIRMED que ya empezó y sigue sin marcar (RF-ATE-001)."
+          },
+          "actions": {
+            "description": "Lo que quien consulta puede hacer ahora.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AgendaActionsDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "bookingId",
+          "status",
+          "startAt",
+          "endAt",
+          "service",
+          "barber",
+          "client",
+          "awaitingPayment",
+          "pendingAttention",
+          "actions"
+        ]
+      },
+      "AgendaBlockDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "null = toda la barbería."
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TimeBlockType"
+              }
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["id", "barberId", "startAt", "endAt", "type", "reason"]
+      },
+      "AgendaDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2030-01-07"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima"
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "items": {
+            "description": "Por hora de inicio.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgendaItemDto"
+            }
+          },
+          "blocks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgendaBlockDto"
+            }
+          },
+          "pendingAttention": {
+            "type": "number",
+            "description": "Reservas confirmadas que ya empezaron y siguen sin marcar."
+          }
+        },
+        "required": ["date", "timezone", "barbershop", "items", "blocks", "pendingAttention"]
+      },
+      "CancelBookingDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Obligatorio si cancela la barbería (OWNER o MANAGER)."
+          }
+        }
+      },
+      "CancelledBookingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingStatus"
+              }
+            ]
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "service": {
+            "description": "Nombre del servicio al reservar (copia).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "barber": {
+            "$ref": "#/components/schemas/NamedRefDto"
+          },
+          "barberChosenByClient": {
+            "type": "boolean"
+          },
+          "client": {
+            "nullable": true,
+            "description": "Solo para la barbería y el barbero: nombre del cliente (sin contacto).",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NamedRefDto"
+              }
+            ]
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": "number",
+            "description": "Duración copiada del servicio al reservar."
+          },
+          "price": {
+            "$ref": "#/components/schemas/BookingPriceDto"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "Límite para pagar (PENDING_PAYMENT)."
+          },
+          "cancellation": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CancellationDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "refund": {
+            "description": "Devolución aplicada.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RefundQuoteDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "barbershop",
+          "service",
+          "barber",
+          "barberChosenByClient",
+          "client",
+          "startAt",
+          "endAt",
+          "durationMinutes",
+          "price",
+          "expiresAt",
+          "cancellation",
+          "createdAt",
+          "refund"
+        ]
+      },
+      "BookingPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookingDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      }
+    }
+  }
+}

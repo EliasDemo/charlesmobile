@@ -1,0 +1,80 @@
+{
+  "appName": "Charles",
+  "actions": {
+    "retry": "Reintentar",
+    "back": "Volver",
+    "goHome": "Ir al inicio"
+  },
+  "states": {
+    "loading": "Cargando…",
+    "emptyTitle": "Aquí no hay nada todavía",
+    "errorTitle": "Algo salió mal"
+  },
+  "offline": {
+    "banner": "Sin conexión. Mostramos lo último que cargamos.",
+    "retry": "Reintentar conexión"
+  },
+  "crash": {
+    "title": "Esta pantalla tuvo un problema",
+    "message": "No perdiste nada. Puedes intentarlo de nuevo."
+  },
+  "notFound": {
+    "title": "Esta pantalla no existe"
+  },
+  "nav": {
+    "explore": "Explorar",
+    "bookings": "Reservas",
+    "profile": "Perfil",
+    "agenda": "Agenda",
+    "shop": "Barbería",
+    "login": "Iniciar sesión"
+  },
+  "placeholder": {
+    "comingSoon": "Disponible en una próxima versión."
+  },
+  "home": {
+    "title": "Charles",
+    "subtitle": "Reserva en tu barbería en minutos.",
+    "serverTitle": "Estado del servidor",
+    "serverOk": "Conectado",
+    "serverDegraded": "El servidor responde con problemas.",
+    "serverChecks": "Base de datos: {{database}} · Caché: {{cache}}",
+    "designSystem": "Ver sistema de diseño (desarrollo)",
+    "component": {
+      "up": "en línea",
+      "down": "caída"
+    },
+    "apiUrl": "Servidor: {{url}}",
+    "sections": {
+      "client": "Modo cliente",
+      "staff": "Modo barbería",
+      "auth": "Cuenta"
+    }
+  },
+  "designSystem": {
+    "title": "Sistema de diseño",
+    "typography": "Tipografía",
+    "buttons": "Botones",
+    "fields": "Campos",
+    "states": "Estados",
+    "money": "Dinero y fechas",
+    "primary": "Principal",
+    "secondary": "Secundario",
+    "ghost": "Discreto",
+    "danger": "Peligro",
+    "loading": "Enviando",
+    "disabled": "Deshabilitado",
+    "fieldLabel": "Correo electrónico",
+    "fieldPlaceholder": "ana@ejemplo.com",
+    "fieldHint": "Te enviaremos un código.",
+    "fieldError": "Ingresa un correo válido.",
+    "emptyMessage": "Cuando reserves, tus citas aparecerán aquí.",
+    "sampleText": "El veloz murciélago hindú comía feliz cardillo y kiwi."
+  },
+  "config": {
+    "title": "La aplicación no está bien configurada",
+    "invalidUrl": "EXPO_PUBLIC_API_URL falta o no es una URL válida.",
+    "originOnly": "EXPO_PUBLIC_API_URL debe ser solo el origen, sin /api/v1 (por ejemplo http://192.168.1.50:3000).",
+    "httpsRequired": "EXPO_PUBLIC_API_URL debe usar HTTPS fuera de desarrollo."
+  }
+}

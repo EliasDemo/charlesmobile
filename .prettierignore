@@ -1,0 +1,6 @@
+docs/api/
+src/shared/api/generated/
+coverage/
+pnpm-lock.yaml
+.expo/
+*.md
