@@ -64,3 +64,33 @@ export function dayOfWeekIn(timeZone: string, now: Date = new Date()): number {
   ];
   return new Date(Date.UTC(year, month - 1, day)).getUTCDay();
 }
+
+/** Offset (minutes) of a time zone at an instant: local wall time minus UTC. */
+function zoneOffsetMinutes(instant: Date, timeZone: string): number {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).formatToParts(instant);
+  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value);
+  const asUtc = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour'), get('minute'));
+  return Math.round((asUtc - instant.getTime()) / 60000);
+}
+
+/**
+ * ISO instant of a calendar day and wall time ("HH:MM") in a barbershop's zone, as the API
+ * expects for time blocks. Time arithmetic only; no business rule.
+ */
+export function zonedTimeToIso(date: string, time: string, timeZone: string): string {
+  const [year, month, day] = date.split('-').map(Number) as [number, number, number];
+  const [hour, minute] = time.split(':').map(Number) as [number, number];
+  const guess = Date.UTC(year, month - 1, day, hour, minute);
+  // Two passes handle zones whose offset changes around that moment.
+  let instant = guess - zoneOffsetMinutes(new Date(guess), timeZone) * 60000;
+  instant = guess - zoneOffsetMinutes(new Date(instant), timeZone) * 60000;
+  return new Date(instant).toISOString();
+}

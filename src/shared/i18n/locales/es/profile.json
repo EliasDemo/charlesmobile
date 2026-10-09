@@ -11,7 +11,8 @@
   "sections": {
     "account": "Cuenta",
     "settings": "Ajustes",
-    "session": "Sesión"
+    "session": "Sesión",
+    "shop": "Barbería"
   },
   "edit": {
     "title": "Editar perfil",

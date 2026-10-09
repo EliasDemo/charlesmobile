@@ -29,7 +29,7 @@
     "bookings": "Reservas",
     "profile": "Perfil",
     "agenda": "Agenda",
-    "shop": "Barbería",
+    "shop": "Mi barbería",
     "login": "Iniciar sesión",
     "register": "Crear cuenta",
     "verifyEmail": "Verificar correo",
@@ -120,5 +120,13 @@
     "today": "Hoy",
     "tomorrow": "Mañana"
   },
-  "illustrative": "Imagen ilustrativa"
+  "illustrative": "Imagen ilustrativa",
+  "time": {
+    "earlier": "{{label}}: {{step}} minutos antes",
+    "later": "{{label}}: {{step}} minutos después"
+  },
+  "stepper": {
+    "less": "Menos {{label}}",
+    "more": "Más {{label}}"
+  }
 }

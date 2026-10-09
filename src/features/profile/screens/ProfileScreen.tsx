@@ -14,6 +14,11 @@ export interface ProfileScreenProps {
   onFavorites: () => void;
   onWelcome: () => void;
   onDeleteAccount: () => void;
+  /** Mode the account would switch to; absent when it has no barbershop role. */
+  switchModeTo?: 'client' | 'shop';
+  onSwitchMode: () => void;
+  onCreateShop: () => void;
+  onInvitations: () => void;
   /** Development builds only. */
   onDesignSystem?: () => void;
   onLoggedOut: () => void;
@@ -53,6 +58,19 @@ export function ProfileScreen(props: ProfileScreenProps) {
               </Text>
               <ListRow title={t('phone')} value={profile.phone ?? t('noPhone')} />
               <ListRow title={t('edit.title')} onPress={props.onEditProfile} />
+            </View>
+            <View>
+              <Text variant="label" color="textSecondary">
+                {t('sections.shop')}
+              </Text>
+              {props.switchModeTo ? (
+                <ListRow
+                  title={t(props.switchModeTo === 'shop' ? 'mode.toShop' : 'mode.toClient', { ns: 'shop' })}
+                  onPress={props.onSwitchMode}
+                />
+              ) : null}
+              <ListRow title={t('mode.create', { ns: 'shop' })} onPress={props.onCreateShop} />
+              <ListRow title={t('mode.invitations', { ns: 'shop' })} onPress={props.onInvitations} />
             </View>
             <View>
               <Text variant="label" color="textSecondary">

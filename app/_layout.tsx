@@ -11,6 +11,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSessionEndedRedirect } from '@/features/auth';
+import { loadAppMode } from '@/features/shop-management';
 import { loadWelcomeSeen, useWelcomeStore } from '@/features/onboarding';
 import { bootstrapSession, queryClient, startQueryListeners } from '@/shared/api';
 import { env } from '@/shared/config';
@@ -80,8 +81,8 @@ export default function RootLayout() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    void Promise.all([bootstrapSession(), loadThemePreference(), loadWelcomeSeen()]).finally(() =>
-      setSessionReady(true),
+    void Promise.all([bootstrapSession(), loadThemePreference(), loadWelcomeSeen(), loadAppMode()]).finally(
+      () => setSessionReady(true),
     );
   }, []);
 

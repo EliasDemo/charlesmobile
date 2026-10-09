@@ -1,0 +1,38 @@
+# Responsable del seed → modo barbería → servicios → nuevo servicio → volver a modo cliente.
+# Ejecutar: maestro test -e SEED_PASSWORD=<valor de SEED_USER_PASSWORD> e2e/shop-management.yaml
+appId: pe.charlesapp.mobile.dev
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Perfil'
+- tapOn: 'Iniciar sesión'
+- tapOn: 'Correo electrónico'
+- inputText: 'responsable.demo@example.com'
+- tapOn: 'Contraseña'
+- inputText: ${SEED_PASSWORD}
+- tapOn:
+    text: 'Iniciar sesión'
+    index: 1
+- scrollUntilVisible:
+    element: 'Cambiar a modo barbería'
+- tapOn: 'Cambiar a modo barbería'
+- assertVisible: 'Mi barbería'
+- assertVisible: 'Agenda'
+- assertNotVisible: 'Explorar'
+- tapOn: 'Servicios'
+- tapOn: 'Nuevo servicio'
+- tapOn: 'Nombre del servicio'
+- inputText: 'Servicio Maestro'
+- tapOn: 'Precio en soles'
+- inputText: '30'
+- hideKeyboard
+- scrollUntilVisible:
+    element: 'Guardar servicio'
+- tapOn: 'Guardar servicio'
+- assertVisible: 'Servicio Maestro'
+- back
+- tapOn: 'Perfil'
+- scrollUntilVisible:
+    element: 'Cambiar a modo cliente'
+- tapOn: 'Cambiar a modo cliente'
+- assertVisible: 'Explorar'

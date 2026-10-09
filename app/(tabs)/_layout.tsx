@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import type { ColorValue } from 'react-native';
+import { useEffectiveMode } from '@/features/shop-management';
 import { useTranslation } from '@/shared/i18n';
 import { fontFamily, useTheme } from '@/shared/theme';
 import { Icon, useTabAnimation, type IconName } from '@/shared/ui';
@@ -14,6 +15,10 @@ export default function TabsLayout() {
   const { t } = useTranslation();
   const theme = useTheme();
   const animation = useTabAnimation();
+  // Barbershop mode has its own tab set; the hidden tabs stay as routes (href: null).
+  const shopMode = useEffectiveMode() === 'shop';
+  const client = shopMode ? null : undefined;
+  const shop = shopMode ? undefined : null;
   return (
     <Tabs
       screenOptions={{
@@ -25,8 +30,22 @@ export default function TabsLayout() {
         tabBarLabelStyle: { fontFamily: fontFamily.medium },
       }}
     >
-      <Tabs.Screen name="index" options={{ title: t('nav.explore'), tabBarIcon: tabIcon('search') }} />
-      <Tabs.Screen name="bookings" options={{ title: t('nav.bookings'), tabBarIcon: tabIcon('calendar') }} />
+      <Tabs.Screen
+        name="index"
+        options={{ href: client, title: t('nav.explore'), tabBarIcon: tabIcon('search') }}
+      />
+      <Tabs.Screen
+        name="shop"
+        options={{ href: shop, title: t('nav.shop'), tabBarIcon: tabIcon('storefront') }}
+      />
+      <Tabs.Screen
+        name="agenda"
+        options={{ href: shop, title: t('nav.agenda'), tabBarIcon: tabIcon('today') }}
+      />
+      <Tabs.Screen
+        name="bookings"
+        options={{ href: client, title: t('nav.bookings'), tabBarIcon: tabIcon('calendar') }}
+      />
       <Tabs.Screen name="profile" options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person') }} />
     </Tabs>
   );

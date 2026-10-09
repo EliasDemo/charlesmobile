@@ -222,6 +222,20 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
   - El cliente HTTP respeta un `Authorization` explícito y nunca intenta renovar la sesión por un token limitado.
 - **Pruebas:** 379 en total.
 
+## M6 — Gestión de barbería (código terminado; falta la prueba del usuario en su teléfono)
+
+- **Modo barbería:** en Perfil, "Cambiar a modo barbería/cliente" (solo con rol OWNER o BARBER del token). Se guarda en el dispositivo. En modo barbería las pestañas son Mi barbería, Agenda (relleno hasta M7) y Perfil.
+- **Crear:** Perfil → "Crear mi barbería" (`/create-shop`): barbería o barbero independiente; ubicación con "Usar mi ubicación actual". Al crear se renueva la sesión para traer el rol nuevo y se pasa a modo barbería.
+- **Mi barbería** (`/shop`): varias barberías con selector, estado (en revisión, suspendida) y secciones: datos, estado de atención, servicios, barberos, responsables, horario y bloqueos (`/shop/[shopId]/...`).
+- **Servicios:** precio en soles convertido a céntimos (solo conversión de unidades), duración de 5 a 480 min en pasos de 5, categoría, disponible; eliminar con confirmación.
+- **Barberos:** crear, "Registrarme como barbero", editar, activo, servicios que realiza, invitar una cuenta por correo, horario propio.
+- **Responsables:** lista, cambio de rol, quitar con confirmación, invitar por correo.
+- **Horario:** semana con varias franjas por día en pasos de 5 min, en la zona de la barbería; el barbero puede usar el horario de la barbería. Avisa las reservas que quedan fuera (`bookingsOutsideSchedule`).
+- **Bloqueos:** para toda la barbería o un barbero; tipo, día, horas y motivo. `BLOCK_OVERLAPS_BOOKINGS` explica cuántas reservas chocan. El barbero ve los suyos desde "Como barbero" (su horario solo lectura).
+- **Invitaciones** (`/profile/invitations`): aceptar con el código del correo y renovar la sesión.
+- **Pruebas:** lógica (precio, semana) y pantallas (inicio vacío, con datos y error; servicios; horario; bloqueo que choca; invitación con renovación). Maestro: `e2e/shop-management.yaml`.
+- Sin cambios nativos (la ubicación ya estaba en la compilación).
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
@@ -243,7 +257,10 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 | `/account-deleted` | Eliminación solicitada (fecha) | antes de M6 |
 | `/account-pending` | Cuenta pendiente de eliminación: cancelar | antes de M6 |
 | `/design-system` | Catálogo del sistema de diseño | Solo desarrollo |
-| `/agenda` | Relleno (protegida, personal) | M7 |
+| `/agenda` (pestaña en modo barbería) | Relleno | M7 |
+| `/shop` (pestaña en modo barbería) | Mi barbería | M6 |
+| `/shop/[shopId]/details`, `status`, `services`, `barbers`, `members`, `hours`, `blocks` | Gestión (protegidas, personal) | M6 |
+| `/create-shop`, `/profile/invitations` | Crear barbería, invitaciones (protegidas) | M6 |
 
 ## Pendiente
 

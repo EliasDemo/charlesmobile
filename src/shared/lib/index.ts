@@ -1,5 +1,13 @@
 export { formatMoney, type Money } from './money';
-export { dayOfWeekIn, formatLongDate, formatShortDate, formatTime, toLocalDate, upcomingDays } from './dates';
+export {
+  dayOfWeekIn,
+  formatLongDate,
+  formatShortDate,
+  formatTime,
+  toLocalDate,
+  upcomingDays,
+  zonedTimeToIso,
+} from './dates';
 export { deviceModelName } from './device';
 export { formatDuration, useCountdown } from './useCountdown';
 export { paramString, safeReturnTo } from './routeParams';

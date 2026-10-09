@@ -43,3 +43,5 @@ export { Illustration, type IllustrationProps } from './Illustration';
 export { Skeleton, SkeletonCard, SkeletonList, useReduceMotion } from './Skeleton';
 export { StatusPill, type StatusPillProps } from './StatusPill';
 export { BrandImage, type BrandImageProps } from './BrandImage';
+export { TimeStepper, toMinutes, toTime, type TimeStepperProps } from './TimeStepper';
+export { NumberStepper, type NumberStepperProps } from './NumberStepper';

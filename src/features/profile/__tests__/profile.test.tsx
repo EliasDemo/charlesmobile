@@ -25,6 +25,9 @@ const profileProps = () => ({
   onFavorites: jest.fn(),
   onWelcome: jest.fn(),
   onDeleteAccount: jest.fn(),
+  onSwitchMode: jest.fn(),
+  onCreateShop: jest.fn(),
+  onInvitations: jest.fn(),
   onLoggedOut: jest.fn(),
 });
 
