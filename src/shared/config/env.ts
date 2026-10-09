@@ -21,8 +21,11 @@ export function parseApiUrl(raw: string | undefined, appVariant: AppVariant): Ap
   return { ok: true, apiUrl: parsed.data.replace(/\/$/, '') };
 }
 
-/** Optional public link (e.g. terms). Invalid or missing values become null and the link is hidden. */
-export function parseOptionalUrl(raw: string | undefined): string | null {
+/**
+ * Optional public link (terms, privacy) as the API sends it. Only real web links are kept: anything
+ * else (missing, "javascript:"…) becomes null and the link is hidden.
+ */
+export function parseOptionalUrl(raw: string | null | undefined): string | null {
   const parsed = z.url({ protocol: /^https?$/ }).safeParse(raw);
   return parsed.success ? parsed.data : null;
 }
@@ -40,9 +43,6 @@ export const env = {
   isDevelopment: appVariant === 'development',
   apiUrl: apiUrlResult.ok ? apiUrlResult.apiUrl : '',
   configError: apiUrlResult.ok ? null : apiUrlResult.reason,
-  // Provisional links until GET /auth/terms returns them (docs/pendientes-publicacion.md #9).
-  termsUrl: parseOptionalUrl(process.env.EXPO_PUBLIC_TERMS_URL),
-  privacyUrl: parseOptionalUrl(process.env.EXPO_PUBLIC_PRIVACY_URL),
   /**
    * Android needs a Google Maps key inside the native build. This public flag (never the key) says
    * the installed build has it; until then the map shows a notice. iOS uses Apple Maps (no key).

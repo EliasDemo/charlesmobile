@@ -50,6 +50,17 @@ describe('createApiFetch', () => {
     expect(seen[0]!.headers.has('Authorization')).toBe(false);
   });
 
+  it('keeps an explicit restricted token and never renews the session for it', async () => {
+    const { apiFetch, deps, seen } = setup([apiError(401, 'UNAUTHORIZED')]);
+    const request = new Request('http://api.test/api/v1/me/account/deletion', {
+      headers: { Authorization: 'Bearer restricted' },
+    });
+    const response = await apiFetch(request);
+    expect(seen[0]!.headers.get('Authorization')).toBe('Bearer restricted');
+    expect(response.status).toBe(401);
+    expect(deps.refresh).not.toHaveBeenCalled();
+  });
+
   it('retries network failures on GET with growing delays', async () => {
     const { apiFetch, deps } = setup([
       new TypeError('offline'),

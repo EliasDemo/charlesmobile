@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { isApiError } from '@/shared/api';
-import { env } from '@/shared/config';
+import { parseOptionalUrl } from '@/shared/config';
 import { i18n } from '@/shared/i18n';
 import { applyServerErrors } from '@/shared/ui';
 import { authKeys, fetchTerms, register } from '../api/authApi';
@@ -76,7 +76,8 @@ export function useRegister({ onSuccess }: UseRegisterOptions) {
     isSubmitting: mutation.isPending,
     generalError,
     terms,
-    termsUrl: env.termsUrl,
-    privacyUrl: env.privacyUrl,
+    // Links from GET /auth/terms; shown only when the API sends them.
+    termsUrl: parseOptionalUrl(terms.data?.termsUrl),
+    privacyUrl: parseOptionalUrl(terms.data?.privacyUrl),
   };
 }

@@ -79,7 +79,7 @@ export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop }: Boo
                 }
               />
             ) : null}
-            <When booking={booking} timeZone={data.timeZone} timeZoneFailed={Boolean(data.timeZoneError)} />
+            <When booking={booking} />
             {booking.barbershop.name ? (
               <Button
                 label={`${t('detail.openBarbershop')}: ${booking.barbershop.name}`}
@@ -151,25 +151,14 @@ export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop }: Boo
   );
 }
 
-function When({
-  booking,
-  timeZone,
-  timeZoneFailed,
-}: {
-  booking: Booking;
-  timeZone?: string;
-  timeZoneFailed: boolean;
-}) {
+function When({ booking }: { booking: Booking }) {
   const { t } = useTranslation('booking');
+  const timeZone = booking.barbershop.timezone;
   return (
     <Card>
-      {timeZone ? (
-        <Text variant="bodyStrong">
-          {formatLongDate(booking.startAt, timeZone)} · {formatTime(booking.startAt, timeZone)}
-        </Text>
-      ) : timeZoneFailed ? (
-        <Text color="textSecondary">{t('detail.timezoneUnavailable')}</Text>
-      ) : null}
+      <Text variant="bodyStrong">
+        {formatLongDate(booking.startAt, timeZone)} · {formatTime(booking.startAt, timeZone)}
+      </Text>
       <Text color="textSecondary">{formatMinutes(booking.durationMinutes)}</Text>
       {booking.barber.name ? <Text>{t('detail.barber', { barber: booking.barber.name })}</Text> : null}
     </Card>

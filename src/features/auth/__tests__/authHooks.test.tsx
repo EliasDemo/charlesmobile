@@ -33,7 +33,9 @@ describe('useLogin', () => {
   it('starts the session, sends only the phone model and reports the user', async () => {
     const api = mockApi({ 'POST /api/v1/auth/login': { body: tokens({ emailVerified: false }) } });
     const onSuccess = jest.fn();
-    const { result } = await renderHookWithProviders(() => useLogin({ onSuccess }));
+    const { result } = await renderHookWithProviders(() =>
+      useLogin({ onSuccess, onPendingDeletion: jest.fn() }),
+    );
     await fill(result.current.form, { email: 'ana@example.com', password: 'secreta' });
     await act(() => result.current.submit());
 
@@ -54,7 +56,9 @@ describe('useLogin', () => {
 
   it('shows the generic message for wrong credentials', async () => {
     mockApi({ 'POST /api/v1/auth/login': apiError(401, 'INVALID_CREDENTIALS') });
-    const { result } = await renderHookWithProviders(() => useLogin({ onSuccess: jest.fn() }));
+    const { result } = await renderHookWithProviders(() =>
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn() }),
+    );
     await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
     await waitFor(() => expect(result.current.generalError).toBe(errors.codes.INVALID_CREDENTIALS));
@@ -65,7 +69,9 @@ describe('useLogin', () => {
     const api = mockApi({
       'POST /api/v1/auth/login': apiError(429, 'ACCOUNT_LOCKED', [{ retryAfterSeconds: 90 }]),
     });
-    const { result } = await renderHookWithProviders(() => useLogin({ onSuccess: jest.fn() }));
+    const { result } = await renderHookWithProviders(() =>
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn() }),
+    );
     await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
     await waitFor(() => expect(result.current.lockedSeconds).toBe(90));
@@ -75,7 +81,9 @@ describe('useLogin', () => {
 
   it('handles a lock without a known duration', async () => {
     mockApi({ 'POST /api/v1/auth/login': apiError(429, 'ACCOUNT_LOCKED') });
-    const { result } = await renderHookWithProviders(() => useLogin({ onSuccess: jest.fn() }));
+    const { result } = await renderHookWithProviders(() =>
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn() }),
+    );
     await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
     await waitFor(() => expect(result.current.lockedWithoutTime).toBe(true));
@@ -83,7 +91,9 @@ describe('useLogin', () => {
 
   it('does not call the API with invalid fields', async () => {
     const api = mockApi({});
-    const { result } = await renderHookWithProviders(() => useLogin({ onSuccess: jest.fn() }));
+    const { result } = await renderHookWithProviders(() =>
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn() }),
+    );
     await fill(result.current.form, { email: 'nope', password: '' });
     await act(() => result.current.submit());
     expect(api.calls).toHaveLength(0);
@@ -103,7 +113,7 @@ describe('useRegister', () => {
 
   it('sends the accepted terms version and the phone in the backend format', async () => {
     const api = mockApi({
-      'GET /api/v1/auth/terms': { body: { version: '2026-10' } },
+      'GET /api/v1/auth/terms': { body: { version: '2026-10', termsUrl: null, privacyUrl: null } },
       'POST /api/v1/auth/register': { status: 202, body: { message: 'ok' } },
     });
     const onSuccess = jest.fn();
@@ -126,7 +136,7 @@ describe('useRegister', () => {
 
   it('omits an empty phone', async () => {
     const api = mockApi({
-      'GET /api/v1/auth/terms': { body: { version: '2026-10' } },
+      'GET /api/v1/auth/terms': { body: { version: '2026-10', termsUrl: null, privacyUrl: null } },
       'POST /api/v1/auth/register': { status: 202, body: { message: 'ok' } },
     });
     const { result } = await renderHookWithProviders(() => useRegister({ onSuccess: jest.fn() }));
@@ -140,7 +150,7 @@ describe('useRegister', () => {
   it('asks to accept again when the terms changed', async () => {
     let version = '2026-10';
     const api = mockApi({
-      'GET /api/v1/auth/terms': () => ({ body: { version } }),
+      'GET /api/v1/auth/terms': () => ({ body: { version, termsUrl: null, privacyUrl: null } }),
       'POST /api/v1/auth/register': () => {
         version = '2026-11';
         return apiError(400, 'TERMS_VERSION_OUTDATED');
@@ -159,7 +169,7 @@ describe('useRegister', () => {
 
   it('marks backend validation errors on their fields', async () => {
     mockApi({
-      'GET /api/v1/auth/terms': { body: { version: '2026-10' } },
+      'GET /api/v1/auth/terms': { body: { version: '2026-10', termsUrl: null, privacyUrl: null } },
       'POST /api/v1/auth/register': apiError(400, 'VALIDATION_ERROR', [
         { field: 'password', constraints: ['isNotCommonPassword'] },
       ]),

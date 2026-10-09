@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M4.5 (diseño). Parte 1 con el código terminado, a la espera de las capturas del usuario. Parte 2 (fotos) en espera de las imágenes.
+**Fase actual:** M4.5 parte 1 en revisión por el usuario; eliminación de cuenta terminada (antes de M6). Siguiente: **M6**, pendiente de aprobar el plan.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -203,6 +203,23 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
   - Aplicarlas a la bienvenida, al fondo de inicio de sesión y registro (con velo) y a las pantallas vacías.
   - Medir el tamaño final.
 
+## Antes de M6 — Contrato nuevo y eliminación de cuenta (código terminado)
+
+- **Sincronización de la API:**
+  - `UpdateProfileDto.phone` ya es `string | null`: el teléfono se edita en el perfil con la validación de Perú, y vacío lo borra (`null`).
+  - `GET /auth/terms` trae `termsUrl` y `privacyUrl`: se muestran solo si llegan y son web (`parseOptionalUrl`). Se quitaron `EXPO_PUBLIC_TERMS_URL` y `EXPO_PUBLIC_PRIVACY_URL`.
+  - `barbershop.timezone` en las reservas: se quitó la lectura del detalle de cada barbería.
+  - **Sigue pendiente en el backend:** `service.categoryKey` en `BookingDto` (hoy se busca en los servicios de la barbería).
+- **Eliminación de cuenta** (`docs/api/CUENTA.md`):
+  - Perfil → "Eliminar mi cuenta" (`/profile/delete-account`): vista previa con bloqueos (`SOLE_OWNER`, `STAFF_ROLE`), consecuencias, plazo de `graceDays` y la fecha, y las reservas que se cancelarán con su devolución en la zona de su barbería. Se confirma con la contraseña.
+  - Errores: `INVALID_CREDENTIALS` junto al campo; `DELETION_BLOCKED` vuelve a leer los bloqueos.
+  - Al confirmar se borran la sesión y la caché, y se muestra `/account-deleted` con la fecha.
+  - **Arrepentirse:** si el inicio de sesión responde `ACCOUNT_PENDING_DELETION`, se pide `POST /auth/support-access` con el mismo correo y contraseña. El token limitado (`scope: "deletion"`) vive solo en memoria y nunca es la sesión.
+    - `/account-pending` muestra la fecha y "Cancelar eliminación" (`DELETE /me/account/deletion`); luego, inicio de sesión normal.
+    - Si el acceso venció, pide iniciar sesión de nuevo.
+  - El cliente HTTP respeta un `Authorization` explícito y nunca intenta renovar la sesión por un token limitado.
+- **Pruebas:** 379 en total.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
@@ -220,6 +237,9 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 | `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Cuenta | M2 |
 | `/profile/edit`, `/profile/preferences`, `/profile/favorites` | Perfil (protegidas) | M2 / M3 |
 | `/welcome` | Bienvenida (primera vez y desde Perfil) | M4.5 |
+| `/profile/delete-account` | Eliminar mi cuenta (protegida) | antes de M6 |
+| `/account-deleted` | Eliminación solicitada (fecha) | antes de M6 |
+| `/account-pending` | Cuenta pendiente de eliminación: cancelar | antes de M6 |
 | `/design-system` | Catálogo del sistema de diseño | Solo desarrollo |
 | `/agenda` | Relleno (protegida, personal) | M7 |
 

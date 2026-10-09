@@ -17,7 +17,12 @@ jest.mock('expo-device', () => ({ manufacturer: 'samsung', modelName: 'SM-A546E'
 
 beforeEach(resetAppState);
 
-const loginProps = () => ({ onSuccess: jest.fn(), onForgotPassword: jest.fn(), onRegister: jest.fn() });
+const loginProps = () => ({
+  onSuccess: jest.fn(),
+  onPendingDeletion: jest.fn(),
+  onForgotPassword: jest.fn(),
+  onRegister: jest.fn(),
+});
 
 describe('LoginScreen', () => {
   it('validates when leaving a field and shows the error next to it', async () => {
@@ -94,7 +99,11 @@ describe('RegisterScreen', () => {
   });
 
   it('shows the form, the terms without their internal version and the live password requirements', async () => {
-    mockApi({ 'GET /api/v1/auth/terms': { body: { version: '2026-10' } } });
+    mockApi({
+      'GET /api/v1/auth/terms': {
+        body: { version: '2026-10', termsUrl: 'https://example.com/terminos', privacyUrl: null },
+      },
+    });
     await renderWithProviders(<RegisterScreen {...props()} />);
     expect(await screen.findByText(auth.register.terms)).toBeTruthy();
     // The internal terms version is sent to the backend, never shown.
@@ -104,10 +113,16 @@ describe('RegisterScreen', () => {
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'abcdefghij');
     expect(screen.getByText(/✓ Entre 10 y 128 caracteres \(10 ahora\)/)).toBeTruthy();
     expect(screen.getByText(auth.register.termsLink)).toBeTruthy();
+    // The privacy link is not shown when GET /auth/terms does not send it.
+    expect(screen.queryByText(auth.register.privacyLink)).toBeNull();
   });
 
   it('requires the declarations before sending', async () => {
-    const api = mockApi({ 'GET /api/v1/auth/terms': { body: { version: '2026-10' } } });
+    const api = mockApi({
+      'GET /api/v1/auth/terms': {
+        body: { version: '2026-10', termsUrl: 'https://example.com/terminos', privacyUrl: null },
+      },
+    });
     await renderWithProviders(<RegisterScreen {...props()} />);
     await screen.findByText(auth.register.terms);
     await fireEvent.press(screen.getByRole('button', { name: auth.register.submit }));
@@ -118,7 +133,9 @@ describe('RegisterScreen', () => {
 
   it('creates the account', async () => {
     mockApi({
-      'GET /api/v1/auth/terms': { body: { version: '2026-10' } },
+      'GET /api/v1/auth/terms': {
+        body: { version: '2026-10', termsUrl: 'https://example.com/terminos', privacyUrl: null },
+      },
       'POST /api/v1/auth/register': { status: 202, body: { message: 'ok' } },
     });
     const p = props();

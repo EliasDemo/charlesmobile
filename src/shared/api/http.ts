@@ -77,6 +77,8 @@ export function createApiFetch(deps: ApiFetchDeps) {
     next.headers.set('Accept-Language', 'es');
     next.headers.set('X-App-Version', deps.appVersion);
     next.headers.set('X-App-Platform', deps.platform);
+    // A request that brings its own token (restricted support/deletion access) keeps it.
+    if (request.headers.has('Authorization')) return next;
     if (accessToken) next.headers.set('Authorization', `Bearer ${accessToken}`);
     else next.headers.delete('Authorization');
     return next;
@@ -84,6 +86,8 @@ export function createApiFetch(deps: ApiFetchDeps) {
 
   async function shouldRefresh(request: Request, response: Response): Promise<boolean> {
     if (response.status !== 401) return false;
+    // A restricted token has no refresh: never renew the session because of it.
+    if (request.headers.has('Authorization')) return false;
     if (NO_REFRESH_PATHS.some((path) => new URL(request.url).pathname === path)) return false;
     const error: ApiError = await apiErrorFromResponse(response);
     return error.code === 'UNAUTHORIZED';

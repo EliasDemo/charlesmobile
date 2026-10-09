@@ -9,9 +9,9 @@ export const profileKeys = {
 
 export const fetchProfile = (): Promise<Profile> => unwrap(api.GET('/api/v1/users/me'));
 
-// `phone` is not sent until the contract types it as string | null (backend fix pending).
-export const updateFullName = (fullName: string): Promise<Profile> =>
-  unwrap(api.PATCH('/api/v1/users/me', { body: { fullName } }));
+/** `phone: null` removes it. */
+export const updateProfile = (body: { fullName: string; phone: string | null }): Promise<Profile> =>
+  unwrap(api.PATCH('/api/v1/users/me', { body }));
 
 export type NotificationPreferences = Profile['preferences'];
 

@@ -2,18 +2,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { isApiError, queryClient, startSession, type SessionUser } from '@/shared/api';
+import { isApiError, queryClient, startSession, translateError, type SessionUser } from '@/shared/api';
 import { deviceModelName, useCountdown } from '@/shared/lib';
 import { applyServerErrors } from '@/shared/ui';
-import { login } from '../api/authApi';
+import { login, supportAccess } from '../api/authApi';
 import { loginSchema, type LoginForm } from '../schemas/authSchemas';
+import { useRestrictedAccess } from './usePendingDeletion';
 
 export interface UseLoginOptions {
   /** Called with the signed-in user and the email typed; the route decides where to go next. */
   onSuccess: (user: SessionUser, email: string) => void;
+  /** The account is pending deletion: the restricted access is ready to cancel it. */
+  onPendingDeletion: () => void;
 }
 
-export function useLogin({ onSuccess }: UseLoginOptions) {
+export function useLogin({ onSuccess, onPendingDeletion }: UseLoginOptions) {
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
@@ -22,6 +25,16 @@ export function useLogin({ onSuccess }: UseLoginOptions) {
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [lockedWithoutTime, setLockedWithoutTime] = useState(false);
   const lock = useCountdown();
+
+  const pendingAccess = useMutation({
+    mutationFn: (values: LoginForm) => supportAccess({ email: values.email, password: values.password }),
+    onSuccess: (access) => {
+      if (access.scope !== 'deletion') return setGeneralError(translateError(null).message);
+      useRestrictedAccess.getState().set(access.accessToken);
+      onPendingDeletion();
+    },
+    onError: (error) => setGeneralError(translateError(error).message),
+  });
 
   const mutation = useMutation({
     mutationFn: (values: LoginForm) =>
@@ -32,7 +45,12 @@ export function useLogin({ onSuccess }: UseLoginOptions) {
       void queryClient.invalidateQueries();
       onSuccess(tokens.user, values.email);
     },
-    onError: (error) => {
+    onError: (error, values) => {
+      if (isApiError(error) && error.code === 'ACCOUNT_PENDING_DELETION') {
+        // Same email and password give a restricted access that can only cancel the deletion.
+        pendingAccess.mutate(values);
+        return;
+      }
       if (isApiError(error) && error.code === 'ACCOUNT_LOCKED') {
         const seconds = error.details[0]?.retryAfterSeconds;
         if (typeof seconds === 'number' && seconds > 0) lock.start(seconds);
@@ -53,7 +71,7 @@ export function useLogin({ onSuccess }: UseLoginOptions) {
   return {
     form,
     submit,
-    isSubmitting: mutation.isPending,
+    isSubmitting: mutation.isPending || pendingAccess.isPending,
     generalError,
     /** Seconds until the account can try again (ACCOUNT_LOCKED), 0 when not locked. */
     lockedSeconds: lock.secondsLeft,

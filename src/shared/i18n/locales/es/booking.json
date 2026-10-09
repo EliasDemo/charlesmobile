@@ -71,7 +71,6 @@
       "FAILED": "con problemas: escríbenos a soporte"
     },
     "barber": "con {{barber}}",
-    "timezoneUnavailable": "No pudimos cargar la zona horaria de la barbería para mostrar la hora.",
     "openBarbershop": "Ver barbería"
   },
   "cancel": {

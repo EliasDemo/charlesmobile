@@ -15,7 +15,7 @@ import {
   type InfoItem,
 } from '@/shared/ui';
 import type { Booking, BookingStatus } from '../api/bookingApi';
-import { useBookingCategory, useBookingTimeZone } from '../hooks/useBooking';
+import { useBookingCategory } from '../hooks/useBooking';
 
 /** Color and icon of each booking state. The icon and the label always go with the color. */
 export const STATUS_STYLE: Record<BookingStatus, { tone: StatusTone; icon: IconName }> = {
@@ -62,7 +62,7 @@ export function PriceBreakdown({ price }: { price: Booking['price'] }) {
 /** One booking in "Mis reservas": service first, then where and when, with its state. */
 export function BookingCard({ booking, onPress }: { booking: Booking; onPress: (id: string) => void }) {
   const { t } = useTranslation('booking');
-  const timeZone = useBookingTimeZone(booking.barbershop.id);
+  const timeZone = booking.barbershop.timezone;
   const categoryKey = useBookingCategory(booking.barbershop.id, booking.service.id);
   const details: InfoItem[] = [];
   if (timeZone) {

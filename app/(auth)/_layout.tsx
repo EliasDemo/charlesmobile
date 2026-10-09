@@ -11,6 +11,7 @@ export default function AuthLayout() {
       <Stack.Screen name="verify-email" options={{ title: '' }} />
       <Stack.Screen name="forgot-password" options={{ title: '' }} />
       <Stack.Screen name="reset-password" options={{ title: '' }} />
+      <Stack.Screen name="account-pending" options={{ title: '' }} />
     </Stack>
   );
 }

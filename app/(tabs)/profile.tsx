@@ -12,6 +12,7 @@ export default function ProfileRoute() {
       onPreferences={() => router.push('/profile/preferences')}
       onFavorites={() => router.push('/profile/favorites')}
       onWelcome={() => router.push('/welcome')}
+      onDeleteAccount={() => router.push('/profile/delete-account')}
       onDesignSystem={env.isDevelopment ? () => router.push('/design-system') : undefined}
       onLoggedOut={() => router.replace('/profile')}
     />

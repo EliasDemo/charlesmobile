@@ -2,7 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { LoginScreen } from '@/features/auth';
 import { paramString, safeReturnTo } from '@/shared/lib';
 
-const NOTICES = ['registered', 'passwordChanged'] as const;
+const NOTICES = ['registered', 'passwordChanged', 'deletionCancelled'] as const;
 type Notice = (typeof NOTICES)[number];
 
 export default function LoginRoute() {
@@ -20,6 +20,7 @@ export default function LoginRoute() {
         }
         router.dismissTo(returnTo as never);
       }}
+      onPendingDeletion={() => router.push('/account-pending')}
       onForgotPassword={() => router.push('/forgot-password')}
       onRegister={() => router.push({ pathname: '/register', params: { returnTo } })}
     />

@@ -44,7 +44,8 @@
     "favorites": "Mis favoritas",
     "book": "Reservar",
     "summary": "Resumen",
-    "booking": "Tu reserva"
+    "booking": "Tu reserva",
+    "deleteAccount": "Eliminar mi cuenta"
   },
   "placeholder": {
     "comingSoon": "Disponible en una próxima versión."

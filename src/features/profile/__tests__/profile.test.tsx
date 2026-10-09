@@ -24,6 +24,7 @@ const profileProps = () => ({
   onPreferences: jest.fn(),
   onFavorites: jest.fn(),
   onWelcome: jest.fn(),
+  onDeleteAccount: jest.fn(),
   onLoggedOut: jest.fn(),
 });
 
@@ -119,17 +120,34 @@ describe('EditProfileScreen', () => {
     await fireEvent.press(screen.getByRole('button', { name: texts.edit.submit }));
 
     await waitFor(() => expect(onSaved).toHaveBeenCalled());
-    // Only the name: the phone waits for the contract fix.
-    expect(api.callsTo('PATCH', '/api/v1/users/me')[0]!.body).toEqual({ fullName: 'Ana María Pérez' });
+    expect(api.callsTo('PATCH', '/api/v1/users/me')[0]!.body).toEqual({
+      fullName: 'Ana María Pérez',
+      phone: '+51 987 654 321',
+    });
     expect(useSession.getState().user?.fullName).toBe('Ana María Pérez');
   });
 
-  it('shows email and phone as not editable', async () => {
+  it('keeps the email locked and lets the user change or remove the phone', async () => {
     signIn();
-    mockApi({ 'GET /api/v1/users/me': { body: profile() } });
-    await renderWithProviders(<EditProfileScreen onSaved={jest.fn()} />);
-    expect(await screen.findByText(texts.edit.phoneLocked)).toBeTruthy();
+    const api = mockApi({
+      'GET /api/v1/users/me': { body: profile() },
+      'PATCH /api/v1/users/me': { body: profile({ phone: null }) },
+    });
+    const onSaved = jest.fn();
+    await renderWithProviders(<EditProfileScreen onSaved={onSaved} />);
+    const phone = await screen.findByLabelText(auth.fields.phone);
     expect(screen.getByLabelText(texts.email).props.editable).toBe(false);
+    await waitFor(() => expect(screen.getByLabelText(auth.fields.phone).props.value).toBe('+51 987 654 321'));
+
+    await fireEvent.changeText(phone, '123');
+    await fireEvent(phone, 'blur');
+    expect(await screen.findByText(auth.validation.phoneInvalid)).toBeTruthy();
+
+    await fireEvent.changeText(phone, '');
+    await fireEvent.press(screen.getByRole('button', { name: texts.edit.submit }));
+    await waitFor(() => expect(onSaved).toHaveBeenCalled());
+    // Empty removes the phone.
+    expect(api.callsTo('PATCH', '/api/v1/users/me')[0]!.body).toEqual({ fullName: 'Ana Pérez', phone: null });
   });
 
   it('requires a name and shows server errors', async () => {

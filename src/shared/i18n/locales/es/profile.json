@@ -17,7 +17,7 @@
     "title": "Editar perfil",
     "submit": "Guardar cambios",
     "emailLocked": "El correo no se puede cambiar por ahora.",
-    "phoneLocked": "Pronto podrás cambiar tu teléfono desde aquí."
+    "phoneHint": "Celular de Perú. Déjalo vacío para quitarlo."
   },
   "preferences": {
     "title": "Preferencias",
@@ -35,5 +35,35 @@
   },
   "favorites": "Mis favoritas",
   "devTools": "Sistema de diseño (desarrollo)",
-  "welcomeAgain": "Ver la bienvenida de nuevo"
+  "welcomeAgain": "Ver la bienvenida de nuevo",
+  "deleteAccount": "Eliminar mi cuenta",
+  "deletion": {
+    "title": "Eliminar mi cuenta",
+    "intro": "Antes de confirmar, revisa lo que va a pasar.",
+    "consequencesTitle": "Qué pasará",
+    "consequences": {
+      "sessions": "Se cerrará tu sesión en todos tus dispositivos.",
+      "bookings": "Tus reservas activas se cancelarán con la devolución que corresponda. No se restauran aunque luego te arrepientas.",
+      "grace": "Tu cuenta quedará pendiente {{days}} días. Si no cancelas la eliminación antes del {{date}}, se borrarán tus datos personales. Es irreversible.",
+      "undo": "Hasta esa fecha puedes arrepentirte: inicia sesión y elige \"Cancelar eliminación\".",
+      "kept": "Por obligación legal se conservan, sin datos que te identifiquen, tus reservas, pagos y la puntuación de tus valoraciones.",
+      "email": "Te enviaremos un correo de confirmación y un recordatorio 3 días antes."
+    },
+    "bookingsTitle": "Reservas que se cancelarán",
+    "bookingLine": "{{date}} · {{time}}",
+    "refund": "Devolución: {{amount}} ({{percent}} %)",
+    "noRefund": "Sin devolución",
+    "blockedTitle": "Todavía no puedes eliminar tu cuenta",
+    "blockers": {
+      "SOLE_OWNER": "Eres el único responsable de \"{{name}}\". Transfiere la propiedad o elimina la barbería antes.",
+      "STAFF_ROLE": "Tu cuenta tiene un rol de soporte o administración. Pide que te lo quiten antes."
+    },
+    "alreadyPending": "Ya pediste eliminar tu cuenta. Se eliminará el {{date}}.",
+    "password": "Escribe tu contraseña para confirmar",
+    "confirm": "Eliminar mi cuenta",
+    "wrongPassword": "La contraseña no es correcta.",
+    "doneTitle": "Pediste eliminar tu cuenta",
+    "doneMessage": "Tu cuenta se eliminará el {{date}}. Te enviamos un correo. Si cambias de opinión, inicia sesión antes de esa fecha y cancela la eliminación.",
+    "goHome": "Ir al inicio"
+  }
 }

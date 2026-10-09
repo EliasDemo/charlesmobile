@@ -13,3 +13,4 @@ export {
 } from './location';
 export { useDebouncedValue } from './useDebouncedValue';
 export { callPhone, isWebUrl, openDirections, openWebUrl } from './externalLinks';
+export { formatPeruMobile, peruMobileDigits } from './phone';

@@ -12,5 +12,5 @@ Lista de cosas que hay que resolver antes de subir la app a las tiendas (fase M1
 | 6 | **Servicio de reporte de fallos y analítica** | Se decidió no instalar ninguno hasta M11. | M1 |
 | 7 | **Versión mínima de la app** | La app ya envía `X-App-Version` y `X-App-Platform`; falta que el backend responda con algo como `APP_UPDATE_REQUIRED` (AJUSTES-BACKEND #7) y que la app lo maneje. | M1 |
 | 8 | **Políticas de las tiendas:** privacidad, uso de la ubicación y eliminación de la cuenta | Requisito de Google Play y de App Store. | M11 |
-| 9 | **Enlaces de términos y política de privacidad** | No hay URL pública; la app usa un enlace provisional desde la configuración (`EXPO_PUBLIC_TERMS_URL` y `EXPO_PUBLIC_PRIVACY_URL`). Se pidió al backend que `GET /auth/terms` devuelva los enlaces. | M2 |
-| 10 | **Eliminación de la cuenta desde la app** | Google Play y App Store la exigen. El backend no tiene endpoint todavía. | M2 |
+| 9 | ~~**Enlaces de términos y política de privacidad**~~ | **Resuelto:** llegan en `GET /auth/terms` (`termsUrl`, `privacyUrl`) y se muestran solo si vienen. Falta que el backend configure las URL reales (`legal.terms_url`, `legal.privacy_url`). | M2 / M6 previo |
+| 10 | ~~**Eliminación de la cuenta desde la app**~~ | **Resuelto:** Perfil → "Eliminar mi cuenta" (vista previa, contraseña, 30 días) y cancelación con acceso limitado al iniciar sesión (`docs/api/CUENTA.md`). | M2 / M6 previo |

@@ -1343,6 +1343,45 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/account/deletion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Estado de la eliminación de la cuenta */
+        get: operations["AccountController_status_v1"];
+        put?: never;
+        /**
+         * Solicitar la eliminación de la cuenta (con la contraseña)
+         * @description Cancela al instante sus reservas activas como cancelación del cliente, cierra sus tickets y todas sus sesiones. La eliminación se ejecuta tras account_deletion.grace_days (30); hasta entonces se puede cancelar desde el acceso limitado (POST /auth/support-access). 409 DELETION_BLOCKED con los bloqueos en details.
+         */
+        post: operations["AccountController_request_v1"];
+        /** Cancelar la eliminación (dentro del plazo); las reservas canceladas no se restauran */
+        delete: operations["AccountController_cancel_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/account/deletion/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Vista previa: reservas que se cancelarán (y cuánto se devuelve) y bloqueos */
+        get: operations["AccountController_preview_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/me/barber": {
         parameters: {
             query?: never;
@@ -1883,6 +1922,39 @@ export type components = {
             /** @example 123456 */
             code: string;
         };
+        AccountDeletionBookingDto: {
+            barbershop: components["schemas"]["BookingBarbershopDto"];
+            /** Format: uuid */
+            bookingId: string;
+            refund: components["schemas"]["RefundQuoteDto"];
+            /** Format: date-time */
+            startAt: string;
+            /** @enum {string} */
+            status: "PENDING_PAYMENT" | "CONFIRMED";
+        };
+        AccountDeletionPreviewDto: {
+            blockers: components["schemas"]["DeletionBlockerDto"][];
+            /** @description Reservas que se cancelarán al confirmar (como cancelación del cliente) y cuánto se devuelve por cada una. No se restauran si luego se cancela la eliminación. */
+            bookings: components["schemas"]["AccountDeletionBookingDto"][];
+            /** @description Se puede solicitar ahora (sin bloqueos ni solicitud pendiente). */
+            canRequest: boolean;
+            /** @example 30 */
+            graceDays: number;
+            pending: boolean;
+            /** Format: date-time */
+            scheduledForIfRequestedNow: string;
+        };
+        AccountDeletionStatusDto: {
+            /** @description Hay una eliminación programada (se puede cancelar). */
+            pending: boolean;
+            /** Format: date-time */
+            requestedAt: string | null;
+            /**
+             * Format: date-time
+             * @description Cuándo se ejecuta (hasta entonces se puede cancelar).
+             */
+            scheduledFor: string | null;
+        };
         AdminBarbershopDetailDto: {
             /** Format: date-time */
             createdAt: string;
@@ -1923,7 +1995,7 @@ export type components = {
         };
         AdminBookingDto: {
             barber: components["schemas"]["RefBarberDto"];
-            barbershop: components["schemas"]["RefNameDto"];
+            barbershop: components["schemas"]["RefShopWithZoneDto"];
             client: components["schemas"]["RefPersonDto"];
             currency: string;
             /** Format: date-time */
@@ -2037,10 +2109,15 @@ export type components = {
             key: string;
             readOnlyReason: string | null;
             /** @description type y rango (min, max, multipleOf) o longitud. */
-            schema: Record<string, never> | null;
+            schema: {
+                [key: string]: unknown;
+            } | null;
             /** Format: date-time */
             updatedAt: string | null;
-            value: Record<string, never> | null;
+            /** @description Valor actual (cualquier JSON). */
+            value: (string | number | boolean | unknown[] | {
+                [key: string]: unknown;
+            }) | null;
         };
         AgendaActionsDto: {
             /** @description Solo OWNER o MANAGER, dentro del plazo de corrección. */
@@ -2152,6 +2229,11 @@ export type components = {
         AvailableNowDto: {
             available: boolean;
             slot: components["schemas"]["SlotDto"] | null;
+            /**
+             * @description Zona IANA de la barbería: muestra las horas en esta zona.
+             * @example America/Lima
+             */
+            timezone: string;
         };
         BarberManageDto: {
             bio: string | null;
@@ -2190,6 +2272,11 @@ export type components = {
             days: components["schemas"]["DayScheduleDto"][];
             /** @description true: no tiene horario propio y usa el de la barbería. */
             inheritsBusinessHours: boolean;
+            /**
+             * @description Zona IANA de la barbería: muestra las horas en esta zona.
+             * @example America/Lima
+             */
+            timezone: string;
         };
         BarberScheduleUpdateDto: {
             /** Format: uuid */
@@ -2198,6 +2285,11 @@ export type components = {
             days: components["schemas"]["DayScheduleDto"][];
             /** @description true: no tiene horario propio y usa el de la barbería. */
             inheritsBusinessHours: boolean;
+            /**
+             * @description Zona IANA de la barbería: muestra las horas en esta zona.
+             * @example America/Lima
+             */
+            timezone: string;
         };
         BarbershopManageDto: {
             address: string;
@@ -2263,10 +2355,20 @@ export type components = {
          * @enum {string}
          */
         BarbershopType: "BARBERSHOP" | "INDEPENDENT";
+        BookingBarbershopDto: {
+            /** Format: uuid */
+            id: string;
+            name: string | null;
+            /**
+             * @description Zona IANA de la barbería: muestra las horas en esta zona.
+             * @example America/Lima
+             */
+            timezone: string;
+        };
         BookingDto: {
             barber: components["schemas"]["NamedRefDto"];
             barberChosenByClient: boolean;
-            barbershop: components["schemas"]["NamedRefDto"];
+            barbershop: components["schemas"]["BookingBarbershopDto"];
             cancellation: components["schemas"]["CancellationDto"] | null;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
@@ -2345,7 +2447,7 @@ export type components = {
         CancelledBookingDto: {
             barber: components["schemas"]["NamedRefDto"];
             barberChosenByClient: boolean;
-            barbershop: components["schemas"]["NamedRefDto"];
+            barbershop: components["schemas"]["BookingBarbershopDto"];
             cancellation: components["schemas"]["CancellationDto"] | null;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
@@ -2500,7 +2602,7 @@ export type components = {
         CreatedBookingDto: {
             barber: components["schemas"]["NamedRefDto"];
             barberChosenByClient: boolean;
-            barbershop: components["schemas"]["NamedRefDto"];
+            barbershop: components["schemas"]["BookingBarbershopDto"];
             cancellation: components["schemas"]["CancellationDto"] | null;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
@@ -2680,6 +2782,16 @@ export type components = {
             /** @description Varias ventanas por día permiten descansos. */
             windows: components["schemas"]["WindowDto"][];
         };
+        DeletionBlockerDto: {
+            /** Format: uuid */
+            barbershopId: string | null;
+            barbershopName: string | null;
+            /**
+             * @description SOLE_OWNER: único OWNER de una barbería (transfiere la propiedad o elimínala). STAFF_ROLE: cuenta de soporte o ADMIN (pide que te quiten el rol).
+             * @enum {string}
+             */
+            reason: "SOLE_OWNER" | "STAFF_ROLE";
+        };
         DeviceDto: {
             appVersion: string | null;
             /**
@@ -2706,7 +2818,9 @@ export type components = {
              */
             code: string;
             /** @example [] */
-            details: Record<string, never>[];
+            details: {
+                [key: string]: unknown;
+            }[];
             /**
              * @description Mensaje en español.
              * @example Los datos enviados no son válidos.
@@ -2917,6 +3031,11 @@ export type components = {
         };
         NextAvailabilityDto: {
             slot: components["schemas"]["SlotDto"] | null;
+            /**
+             * @description Zona IANA de la barbería: muestra las horas en esta zona.
+             * @example America/Lima
+             */
+            timezone: string;
         };
         /** @enum {string} */
         NotificationChannel: "PUSH" | "EMAIL" | "IN_APP";
@@ -3073,6 +3192,16 @@ export type components = {
         RefreshDto: {
             refreshToken: string;
         };
+        RefShopWithZoneDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /**
+             * @description Zona IANA de la barbería: muestra las horas en esta zona.
+             * @example America/Lima
+             */
+            timezone: string;
+        };
         RefundQuoteDto: {
             /** @description Lo que se devolverá (redondeado hacia abajo). */
             amount: components["schemas"]["MoneyDto"];
@@ -3128,6 +3257,10 @@ export type components = {
         ReportCountDto: {
             count: number;
             reason: string;
+        };
+        RequestAccountDeletionDto: {
+            /** @description Contraseña actual (confirmación). */
+            password: string;
         };
         ResolveReportsDto: {
             /** @description Resolución (queda en los reportes). */
@@ -3349,6 +3482,11 @@ export type components = {
             accessTokenExpiresAt: string;
             /** @example true */
             restricted: boolean;
+            /**
+             * @description support: cuenta deshabilitada (sus tickets y pedir su eliminación). deletion: cuenta pendiente de eliminación (consultar o cancelar la eliminación).
+             * @enum {string}
+             */
+            scope: "support" | "deletion";
             /** @example Bearer */
             tokenType: string;
         };
@@ -3376,6 +3514,16 @@ export type components = {
             status: "SUSPENDED";
         };
         TermsDto: {
+            /**
+             * @description Política de privacidad (legal.privacy_url). null si no está configurada.
+             * @example https://charles.example/privacidad
+             */
+            privacyUrl: string | null;
+            /**
+             * @description Términos y condiciones (legal.terms_url). null si no está configurada.
+             * @example https://charles.example/terminos
+             */
+            termsUrl: string | null;
             /** @example 2026-10 */
             version: string;
         };
@@ -3450,6 +3598,11 @@ export type components = {
             reason: string | null;
             /** Format: date-time */
             startAt: string;
+            /**
+             * @description Zona IANA de la barbería: muestra las horas en esta zona.
+             * @example America/Lima
+             */
+            timezone: string;
             type: components["schemas"]["TimeBlockType"];
         };
         /** @enum {string} */
@@ -3517,7 +3670,7 @@ export type components = {
              * @description null lo elimina
              * @example +51 987 654 321
              */
-            phone?: Record<string, never> | null;
+            phone?: string | null;
             preferences?: components["schemas"]["NotificationPreferencesDto"];
         };
         UpdateReviewDto: {
@@ -3549,8 +3702,10 @@ export type components = {
         };
         UpdateSettingDto: {
             reason: string;
-            /** @description Nuevo valor, según el esquema del ajuste. */
-            value: Record<string, never>;
+            /** @description Nuevo valor, según el esquema del ajuste (cualquier JSON). */
+            value: string | number | boolean | unknown[] | {
+                [key: string]: unknown;
+            };
         };
         UpdateTicketStatusDto: {
             /** @description Obligatorio al cerrar un ticket que no está resuelto. */
@@ -7144,6 +7299,110 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AccountController_status_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountDeletionStatusDto"];
+                };
+            };
+        };
+    };
+    AccountController_request_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RequestAccountDeletionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountDeletionStatusDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AccountController_cancel_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountDeletionStatusDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AccountController_preview_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountDeletionPreviewDto"];
                 };
             };
         };

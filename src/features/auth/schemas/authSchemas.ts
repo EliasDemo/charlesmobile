@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { peruMobileDigits } from '@/shared/lib';
 
 // Client-side checks only improve the experience; the backend still decides (CLAUDE.md §1.4).
 // Messages are i18n keys of the `auth` namespace, translated by the screen.
@@ -9,24 +10,6 @@ export const PASSWORD_MAX = 128;
 
 export const passwordLengthOk = (password: string) =>
   password.length >= PASSWORD_MIN && password.length <= PASSWORD_MAX;
-
-const PERU_MOBILE = /^9\d{8}$/;
-
-/**
- * Accepts "987654321", "987 654 321", "+51 987 654 321" or "51987654321" and returns the
- * national 9-digit number, or null when it is not a Peruvian mobile number.
- */
-export function peruMobileDigits(input: string): string | null {
-  let digits = input.replace(/[\s\-().]/g, '');
-  if (digits.startsWith('+51')) digits = digits.slice(3);
-  else if (digits.length === 11 && digits.startsWith('51')) digits = digits.slice(2);
-  return PERU_MOBILE.test(digits) ? digits : null;
-}
-
-/** Format sent to the backend, as in its example: "+51 987 654 321". */
-export function formatPeruMobile(digits: string): string {
-  return `+51 ${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
-}
 
 const email = z
   .string()
@@ -68,3 +51,6 @@ export type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;
 
 export const resetPasswordSchema = z.object({ code, newPassword: password });
 export type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
+
+// Re-exported for the register hook and its tests.
+export { formatPeruMobile, peruMobileDigits } from '@/shared/lib';

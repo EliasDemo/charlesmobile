@@ -13,6 +13,7 @@ export interface ProfileScreenProps {
   onPreferences: () => void;
   onFavorites: () => void;
   onWelcome: () => void;
+  onDeleteAccount: () => void;
   /** Development builds only. */
   onDesignSystem?: () => void;
   onLoggedOut: () => void;
@@ -83,6 +84,8 @@ export function ProfileScreen(props: ProfileScreenProps) {
           disabled={logout.isLoggingOut}
         />
       </View>
+      <ListRow title={t('deleteAccount')} onPress={props.onDeleteAccount} destructive />
+
       <ConfirmDialog
         visible={logout.confirmingAll}
         title={t('logout.confirmTitle', { ns: 'auth' })}

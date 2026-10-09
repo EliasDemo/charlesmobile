@@ -28,9 +28,7 @@
           }
         },
         "summary": "Estado del servicio y sus dependencias",
-        "tags": [
-          "health"
-        ]
+        "tags": ["health"]
       }
     },
     "/api/v1/users/me": {
@@ -65,9 +63,7 @@
           }
         ],
         "summary": "RF-CLI-001: consultar mi perfil",
-        "tags": [
-          "users"
-        ]
+        "tags": ["users"]
       },
       "patch": {
         "operationId": "UsersController_update_v1",
@@ -110,9 +106,7 @@
           }
         ],
         "summary": "RF-CLI-002: actualizar nombre, teléfono o preferencias",
-        "tags": [
-          "users"
-        ]
+        "tags": ["users"]
       }
     },
     "/api/v1/auth/terms": {
@@ -142,9 +136,7 @@
           }
         },
         "summary": "Versión vigente de los términos y condiciones",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/register": {
@@ -194,9 +186,7 @@
           }
         },
         "summary": "RF-AUT-001: registro (respuesta idéntica exista o no el correo, ADR 0003)",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/login": {
@@ -256,9 +246,7 @@
           }
         },
         "summary": "RF-AUT-002: inicio de sesión con correo y contraseña",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/support-access": {
@@ -319,9 +307,7 @@
           }
         },
         "summary": "Fase 12: acceso limitado a soporte para una cuenta deshabilitada",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/refresh": {
@@ -371,9 +357,7 @@
           }
         },
         "summary": "Renovar la sesión (rota el token de renovación)",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/logout": {
@@ -421,9 +405,7 @@
           }
         ],
         "summary": "RF-AUT-003: cerrar sesión (este dispositivo o todos)",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/password-reset/request": {
@@ -463,9 +445,7 @@
           }
         },
         "summary": "RF-AUT-004: solicitar código (respuesta idéntica exista o no)",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/password-reset/confirm": {
@@ -508,9 +488,7 @@
           }
         },
         "summary": "RF-AUT-004: nueva contraseña con el código (cierra todas las sesiones)",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/email-verification/request": {
@@ -545,9 +523,7 @@
           }
         ],
         "summary": "Enviar un código nuevo de verificación de correo",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/auth/email-verification/confirm": {
@@ -595,9 +571,7 @@
           }
         ],
         "summary": "Verificar el correo con el código recibido",
-        "tags": [
-          "auth"
-        ]
+        "tags": ["auth"]
       }
     },
     "/api/v1/barbershops": {
@@ -642,9 +616,7 @@
           }
         ],
         "summary": "RF-BAR-001: registrar una barbería (quien la registra queda como OWNER)",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       }
     },
     "/api/v1/barbershops/independent": {
@@ -699,9 +671,7 @@
           }
         ],
         "summary": "Barbero independiente: crea su negocio (INDEPENDENT), queda como OWNER y como su único barbero",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       }
     },
     "/api/v1/barbershops/{id}": {
@@ -750,9 +720,7 @@
           }
         },
         "summary": "RF-BAR-002: información pública de una barbería",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       },
       "patch": {
         "operationId": "BarbershopsController_update_v1",
@@ -804,9 +772,7 @@
           }
         ],
         "summary": "RF-BAR-003: actualizar la información (OWNER o MANAGER)",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       },
       "delete": {
         "operationId": "BarbershopsController_remove_v1",
@@ -851,9 +817,7 @@
           }
         ],
         "summary": "Eliminar (borrado lógico; solo OWNER, sin reservas futuras)",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       }
     },
     "/api/v1/barbershops/{id}/status": {
@@ -917,9 +881,7 @@
           }
         ],
         "summary": "RF-BAR-004: atendiendo o cerrada temporalmente (solo OWNER)",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       }
     },
     "/api/v1/me/barbershops": {
@@ -976,9 +938,7 @@
           }
         ],
         "summary": "Barberías que administro",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       }
     },
     "/api/v1/me/barbershops/{id}": {
@@ -1022,9 +982,7 @@
           }
         ],
         "summary": "Detalle de gestión de una barbería que administro",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       }
     },
     "/api/v1/barbershops/{id}/members": {
@@ -1089,9 +1047,7 @@
           }
         ],
         "summary": "Responsables de la barbería",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       }
     },
     "/api/v1/barbershops/{id}/members/{userId}": {
@@ -1166,9 +1122,7 @@
           }
         ],
         "summary": "Cambiar el rol de un responsable (solo OWNER; nunca sin OWNER)",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       },
       "delete": {
         "operationId": "BarbershopsController_removeMember_v1",
@@ -1231,9 +1185,7 @@
           }
         ],
         "summary": "Quitar un responsable o retirarse (nunca el último OWNER)",
-        "tags": [
-          "barbershops"
-        ]
+        "tags": ["barbershops"]
       }
     },
     "/api/v1/me/barber": {
@@ -1268,9 +1220,7 @@
           }
         ],
         "summary": "Mis perfiles de barbero, con su barbería (para bloqueos propios y agenda)",
-        "tags": [
-          "barbers"
-        ]
+        "tags": ["barbers"]
       }
     },
     "/api/v1/barbershops/{id}/barbers": {
@@ -1330,9 +1280,7 @@
           }
         },
         "summary": "Barberos activos de una barbería (solo datos públicos)",
-        "tags": [
-          "barbers"
-        ]
+        "tags": ["barbers"]
       },
       "post": {
         "operationId": "BarbersController_create_v1",
@@ -1384,9 +1332,7 @@
           }
         ],
         "summary": "RF-BRB-001: registrar un barbero (perfil sin cuenta vinculada)",
-        "tags": [
-          "barbers"
-        ]
+        "tags": ["barbers"]
       }
     },
     "/api/v1/me/barbershops/{id}/barbers": {
@@ -1451,9 +1397,7 @@
           }
         ],
         "summary": "Barberos de una barbería que administro (incluye inactivos)",
-        "tags": [
-          "barbers"
-        ]
+        "tags": ["barbers"]
       }
     },
     "/api/v1/barbershops/{id}/barbers/me": {
@@ -1517,9 +1461,7 @@
           }
         ],
         "summary": "RF-BRB-001: el responsable se registra como barbero (sin invitación)",
-        "tags": [
-          "barbers"
-        ]
+        "tags": ["barbers"]
       }
     },
     "/api/v1/barbershops/{id}/barbers/{barberId}": {
@@ -1591,9 +1533,7 @@
           }
         ],
         "summary": "RF-BRB-002: actualizar un barbero (o desactivarlo)",
-        "tags": [
-          "barbers"
-        ]
+        "tags": ["barbers"]
       }
     },
     "/api/v1/barbershops/{id}/barbers/{barberId}/services": {
@@ -1655,9 +1595,7 @@
           }
         ],
         "summary": "RF-BRB-002: servicios que realiza el barbero",
-        "tags": [
-          "barbers"
-        ]
+        "tags": ["barbers"]
       }
     },
     "/api/v1/service-categories": {
@@ -1687,9 +1625,7 @@
           }
         },
         "summary": "Categorías de servicio activas (para filtros y formularios)",
-        "tags": [
-          "services"
-        ]
+        "tags": ["services"]
       }
     },
     "/api/v1/barbershops/{id}/services": {
@@ -1749,9 +1685,7 @@
           }
         },
         "summary": "RF-SER-003: servicios disponibles con precio y duración",
-        "tags": [
-          "services"
-        ]
+        "tags": ["services"]
       },
       "post": {
         "operationId": "ServicesController_create_v1",
@@ -1803,9 +1737,7 @@
           }
         ],
         "summary": "RF-SER-001: registrar un servicio (precio > 0, 5–480 min en múltiplos de 5)",
-        "tags": [
-          "services"
-        ]
+        "tags": ["services"]
       }
     },
     "/api/v1/me/barbershops/{id}/services": {
@@ -1870,9 +1802,7 @@
           }
         ],
         "summary": "Servicios de una barbería que administro (incluye no disponibles)",
-        "tags": [
-          "services"
-        ]
+        "tags": ["services"]
       }
     },
     "/api/v1/barbershops/{id}/services/{serviceId}": {
@@ -1934,9 +1864,7 @@
           }
         ],
         "summary": "RF-SER-002: actualizar un servicio",
-        "tags": [
-          "services"
-        ]
+        "tags": ["services"]
       },
       "delete": {
         "operationId": "ServicesController_remove_v1",
@@ -1979,9 +1907,7 @@
           }
         ],
         "summary": "Eliminar un servicio (borrado lógico)",
-        "tags": [
-          "services"
-        ]
+        "tags": ["services"]
       }
     },
     "/api/v1/bookings/{id}/review": {
@@ -2066,9 +1992,7 @@
           }
         ],
         "summary": "RF-VAL-001: valorar una reserva atendida (propia, una vez, dentro del plazo)",
-        "tags": [
-          "reviews"
-        ]
+        "tags": ["reviews"]
       }
     },
     "/api/v1/reviews/{id}": {
@@ -2142,9 +2066,7 @@
           }
         ],
         "summary": "RF-VAL-001: editar la valoración propia (una vez, dentro del plazo)",
-        "tags": [
-          "reviews"
-        ]
+        "tags": ["reviews"]
       },
       "delete": {
         "operationId": "ReviewsController_retire_v1",
@@ -2179,9 +2101,7 @@
           }
         ],
         "summary": "RF-VAL-001: retirar la valoración propia",
-        "tags": [
-          "reviews"
-        ]
+        "tags": ["reviews"]
       }
     },
     "/api/v1/me/reviews": {
@@ -2238,9 +2158,7 @@
           }
         ],
         "summary": "RF-VAL-001: mis valoraciones (las más recientes primero)",
-        "tags": [
-          "reviews"
-        ]
+        "tags": ["reviews"]
       }
     },
     "/api/v1/barbershops/{id}/reviews": {
@@ -2322,9 +2240,7 @@
           }
         },
         "summary": "RF-VAL-002: valoraciones públicas de una barbería (las más recientes primero)",
-        "tags": [
-          "reviews"
-        ]
+        "tags": ["reviews"]
       }
     },
     "/api/v1/reviews/{id}/response": {
@@ -2398,9 +2314,7 @@
           }
         ],
         "summary": "RF-VAL-002: responder (o editar la respuesta) como barbería (OWNER o MANAGER)",
-        "tags": [
-          "reviews"
-        ]
+        "tags": ["reviews"]
       }
     },
     "/api/v1/reviews/{id}/reports": {
@@ -2488,9 +2402,7 @@
           }
         ],
         "summary": "RF-VAL-002: reportar una valoración o la respuesta de la barbería",
-        "tags": [
-          "reviews"
-        ]
+        "tags": ["reviews"]
       }
     },
     "/api/v1/me/favorites/{barbershopId}": {
@@ -2527,9 +2439,7 @@
           }
         ],
         "summary": "RF-FAV-001: marcar una barbería como favorita (idempotente)",
-        "tags": [
-          "favorites"
-        ]
+        "tags": ["favorites"]
       },
       "delete": {
         "operationId": "FavoritesController_remove_v1",
@@ -2554,9 +2464,7 @@
           }
         ],
         "summary": "RF-FAV-002: quitar de favoritos (idempotente)",
-        "tags": [
-          "favorites"
-        ]
+        "tags": ["favorites"]
       }
     },
     "/api/v1/me/favorites": {
@@ -2603,9 +2511,7 @@
           }
         ],
         "summary": "RF-FAV-003: mis barberías favoritas (las más recientes primero)",
-        "tags": [
-          "favorites"
-        ]
+        "tags": ["favorites"]
       }
     },
     "/api/v1/barbershops/{id}/members/invitations": {
@@ -2649,9 +2555,7 @@
           }
         ],
         "summary": "Invitar a una cuenta existente como responsable (solo OWNER; respuesta idéntica)",
-        "tags": [
-          "invitations"
-        ]
+        "tags": ["invitations"]
       }
     },
     "/api/v1/barbershops/{id}/barbers/{barberId}/invitations": {
@@ -2713,9 +2617,7 @@
           }
         ],
         "summary": "RF-BRB-001: invitar a una cuenta a vincularse con un barbero",
-        "tags": [
-          "invitations"
-        ]
+        "tags": ["invitations"]
       }
     },
     "/api/v1/me/barbershop-invitations": {
@@ -2762,9 +2664,7 @@
           }
         ],
         "summary": "Mis invitaciones pendientes",
-        "tags": [
-          "invitations"
-        ]
+        "tags": ["invitations"]
       }
     },
     "/api/v1/me/barbershop-invitations/{invitationId}/accept": {
@@ -2821,9 +2721,7 @@
           }
         ],
         "summary": "Aceptar una invitación con su código",
-        "tags": [
-          "invitations"
-        ]
+        "tags": ["invitations"]
       }
     },
     "/api/v1/barbershops/{id}/business-hours": {
@@ -2862,9 +2760,7 @@
           }
         },
         "summary": "RF-DIS-001 / RF-BAR-002: horario semanal e indicador \"abierta ahora\"",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       },
       "put": {
         "operationId": "AvailabilityController_putBusinessHours_v1",
@@ -2916,9 +2812,7 @@
           }
         ],
         "summary": "RF-DIS-001: configurar el horario semanal (OWNER o MANAGER)",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       }
     },
     "/api/v1/barbershops/{id}/availability": {
@@ -2986,9 +2880,7 @@
           }
         },
         "summary": "RF-DIS-003: turnos de una fecha (local de la barbería) para un servicio",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       }
     },
     "/api/v1/barbershops/{id}/availability/now": {
@@ -3046,9 +2938,7 @@
           }
         },
         "summary": "RF-DIS-002: ¿puede atender ahora? (turno dentro de la ventana \"ahora\")",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       }
     },
     "/api/v1/barbershops/{id}/availability/next": {
@@ -3106,9 +2996,7 @@
           }
         },
         "summary": "RF-DIS-004: siguiente turno disponible (hasta el horizonte de reservas)",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       }
     },
     "/api/v1/barbershops/{id}/barbers/{barberId}/schedule": {
@@ -3160,9 +3048,7 @@
           }
         ],
         "summary": "RF-BRB-003: horario del barbero (responsables y el propio barbero)",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       },
       "put": {
         "operationId": "AvailabilityController_putBarberSchedule_v1",
@@ -3232,9 +3118,7 @@
           }
         ],
         "summary": "RF-BRB-003: horario semanal del barbero (solo responsables; vacío = hereda)",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       }
     },
     "/api/v1/barbershops/{id}/time-blocks": {
@@ -3301,9 +3185,7 @@
           }
         ],
         "summary": "Bloqueos (responsables: todos; barbero: los suyos)",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       },
       "post": {
         "operationId": "AvailabilityController_createBlock_v1",
@@ -3365,9 +3247,7 @@
           }
         ],
         "summary": "RF-DIS-001 / RF-BRB-003: bloquear (descanso, ausencia, feriado, manual)",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       }
     },
     "/api/v1/barbershops/{id}/time-blocks/{blockId}": {
@@ -3412,9 +3292,7 @@
           }
         ],
         "summary": "Eliminar un bloqueo",
-        "tags": [
-          "availability"
-        ]
+        "tags": ["availability"]
       }
     },
     "/api/v1/search/barbershops": {
@@ -3542,11 +3420,7 @@
             "description": "Por defecto: distance con ubicación; rating sin ella.",
             "schema": {
               "type": "string",
-              "enum": [
-                "distance",
-                "rating",
-                "price"
-              ]
+              "enum": ["distance", "rating", "price"]
             }
           },
           {
@@ -3602,9 +3476,7 @@
           }
         },
         "summary": "RF-BUS-001…003: buscar barberías (cercanía, texto, categoría, precio, valoración…)",
-        "tags": [
-          "search"
-        ]
+        "tags": ["search"]
       }
     },
     "/api/v1/barbershops/{id}/alternatives": {
@@ -3683,9 +3555,7 @@
           }
         },
         "summary": "RF-BUS-004: barberías cercanas con la misma categoría de servicio y turnos reales",
-        "tags": [
-          "search"
-        ]
+        "tags": ["search"]
       }
     },
     "/api/v1/bookings/{id}/payment": {
@@ -3749,9 +3619,7 @@
           }
         ],
         "summary": "RF-PAG-001: iniciar o reintentar el pago de una reserva pendiente (idempotente)",
-        "tags": [
-          "payments"
-        ]
+        "tags": ["payments"]
       },
       "get": {
         "operationId": "PaymentsController_status_v1",
@@ -3793,9 +3661,7 @@
           }
         ],
         "summary": "RF-PAG-002: estado del pago y de sus reembolsos (cliente)",
-        "tags": [
-          "payments"
-        ]
+        "tags": ["payments"]
       }
     },
     "/api/v1/bookings/{id}/payment/verify": {
@@ -3840,9 +3706,7 @@
           }
         ],
         "summary": "RF-PAG-002: la app reenvía el resultado firmado; el servidor consulta a la pasarela",
-        "tags": [
-          "payments"
-        ]
+        "tags": ["payments"]
       }
     },
     "/api/v1/payments/webhooks/{provider}": {
@@ -3891,9 +3755,7 @@
           }
         },
         "summary": "RF-PAG-002: aviso firmado de la pasarela (IPN). Idempotente por evento.",
-        "tags": [
-          "payments"
-        ]
+        "tags": ["payments"]
       }
     },
     "/api/v1/bookings": {
@@ -3999,9 +3861,7 @@
           }
         ],
         "summary": "RF-RES-001/002: crear una reserva (pendiente de pago) en un turno disponible",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/bookings/{id}": {
@@ -4045,9 +3905,7 @@
           }
         ],
         "summary": "RF-RES-004: detalle (cliente, responsables o barbero asignado)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/bookings/{id}/cancellation-preview": {
@@ -4101,9 +3959,7 @@
           }
         ],
         "summary": "RF-RES-005: si se puede cancelar ahora y cuánto se devolvería (antes de confirmar)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/bookings/{id}/attended": {
@@ -4167,9 +4023,7 @@
           }
         ],
         "summary": "RF-ATE-002: marcar como atendida (barbero asignado o barbería; desde el inicio y hasta 24 h)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/bookings/{id}/attendance-correction": {
@@ -4243,9 +4097,7 @@
           }
         ],
         "summary": "Corregir ATTENDED ↔ NO_SHOW (solo OWNER o MANAGER, con motivo, hasta 48 h)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/me/barber/agenda": {
@@ -4291,9 +4143,7 @@
           }
         ],
         "summary": "RF-ATE-001: mi agenda del día como barbero (pendientes de atención)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/barbershops/{id}/agenda": {
@@ -4357,9 +4207,7 @@
           }
         ],
         "summary": "RF-ATE-001: agenda del día de la barbería (OWNER o MANAGER)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/bookings/{id}/no-show": {
@@ -4423,9 +4271,7 @@
           }
         ],
         "summary": "Marcar inasistencia (barbero asignado o barbería; de 15 min a 24 h tras el inicio)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/bookings/{id}/cancel": {
@@ -4499,9 +4345,7 @@
           }
         ],
         "summary": "RF-RES-005: cancelar (cliente, o OWNER/MANAGER con motivo; el barbero no)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/me/bookings": {
@@ -4516,10 +4360,7 @@
             "schema": {
               "default": "upcoming",
               "type": "string",
-              "enum": [
-                "upcoming",
-                "history"
-              ]
+              "enum": ["upcoming", "history"]
             }
           },
           {
@@ -4570,9 +4411,7 @@
           }
         ],
         "summary": "RF-RES-004/008: mis reservas (próximas o historial)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/me/barber/bookings": {
@@ -4587,10 +4426,7 @@
             "schema": {
               "default": "upcoming",
               "type": "string",
-              "enum": [
-                "upcoming",
-                "history"
-              ]
+              "enum": ["upcoming", "history"]
             }
           },
           {
@@ -4641,9 +4477,7 @@
           }
         ],
         "summary": "RF-RES-004/008: reservas que debo atender como barbero",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/barbershops/{id}/bookings": {
@@ -4666,10 +4500,7 @@
             "schema": {
               "default": "upcoming",
               "type": "string",
-              "enum": [
-                "upcoming",
-                "history"
-              ]
+              "enum": ["upcoming", "history"]
             }
           },
           {
@@ -4720,9 +4551,7 @@
           }
         ],
         "summary": "RF-RES-004/008: reservas de mi barbería (OWNER o MANAGER)",
-        "tags": [
-          "bookings"
-        ]
+        "tags": ["bookings"]
       }
     },
     "/api/v1/support/tickets": {
@@ -4788,9 +4617,7 @@
           }
         ],
         "summary": "RF-SOP-001: abrir un ticket de soporte",
-        "tags": [
-          "support"
-        ]
+        "tags": ["support"]
       }
     },
     "/api/v1/me/support/tickets": {
@@ -4847,9 +4674,7 @@
           }
         ],
         "summary": "RF-SOP-001: mis tickets (los más recientes primero)",
-        "tags": [
-          "support"
-        ]
+        "tags": ["support"]
       }
     },
     "/api/v1/me/support/tickets/{id}": {
@@ -4893,9 +4718,7 @@
           }
         ],
         "summary": "RF-SOP-001: un ticket propio con sus mensajes (sin notas internas)",
-        "tags": [
-          "support"
-        ]
+        "tags": ["support"]
       }
     },
     "/api/v1/me/support/tickets/{id}/messages": {
@@ -4960,9 +4783,7 @@
           }
         ],
         "summary": "RF-SOP-001: responder en un ticket propio",
-        "tags": [
-          "support"
-        ]
+        "tags": ["support"]
       }
     },
     "/api/v1/barbershops/{id}/reports": {
@@ -5040,9 +4861,7 @@
           }
         ],
         "summary": "Fase 12: reportar una barbería (una vez por cuenta)",
-        "tags": [
-          "support"
-        ]
+        "tags": ["support"]
       }
     },
     "/api/v1/admin/tickets": {
@@ -5077,12 +4896,7 @@
             "description": "Por defecto, los abiertos (OPEN e IN_PROGRESS).",
             "schema": {
               "type": "string",
-              "enum": [
-                "OPEN",
-                "IN_PROGRESS",
-                "RESOLVED",
-                "CLOSED"
-              ]
+              "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
             }
           },
           {
@@ -5091,15 +4905,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "ACCOUNT",
-                "BOOKING",
-                "PAYMENT",
-                "BARBERSHOP",
-                "REVIEW",
-                "APP",
-                "OTHER"
-              ]
+              "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
             }
           },
           {
@@ -5109,11 +4915,7 @@
             "schema": {
               "default": "any",
               "type": "string",
-              "enum": [
-                "me",
-                "unassigned",
-                "any"
-              ]
+              "enum": ["me", "unassigned", "any"]
             }
           }
         ],
@@ -5155,9 +4957,7 @@
           }
         ],
         "summary": "RF-SOP-002: cola de tickets (los más antiguos primero)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/tickets/{id}": {
@@ -5211,9 +5011,7 @@
           }
         ],
         "summary": "RF-SOP-002: ticket con todos sus mensajes (incluidas notas internas)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/tickets/{id}/assign": {
@@ -5277,9 +5075,7 @@
           }
         ],
         "summary": "RF-SOP-002: tomar o reasignar un ticket",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/tickets/{id}/messages": {
@@ -5353,9 +5149,7 @@
           }
         ],
         "summary": "RF-SOP-003: responder al usuario o dejar una nota interna",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/tickets/{id}/status": {
@@ -5439,9 +5233,7 @@
           }
         ],
         "summary": "RF-SOP-003: cambiar el estado (resolver, reabrir, cerrar)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/users": {
@@ -5496,9 +5288,7 @@
           }
         ],
         "summary": "RF-OPE-001: buscar una cuenta por correo exacto (datos mínimos)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/users/{id}": {
@@ -5552,9 +5342,7 @@
           }
         ],
         "summary": "RF-OPE-001: datos mínimos (nombre, estado y roles)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/users/{id}/contact": {
@@ -5628,9 +5416,7 @@
           }
         ],
         "summary": "RF-OPE-001: ver el contacto (correo y teléfono), con motivo; cada acceso se audita",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/users/{id}/disable": {
@@ -5705,9 +5491,7 @@
           }
         ],
         "summary": "RF-OPE-001: deshabilitar la cuenta (revoca sus sesiones al instante)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/users/{id}/enable": {
@@ -5781,9 +5565,7 @@
           }
         ],
         "summary": "RF-OPE-001: reactivar la cuenta (con motivo)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/users/{id}/roles/{role}": {
@@ -5803,10 +5585,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "enum": [
-                "support",
-                "admin"
-              ],
+              "enum": ["support", "admin"],
               "type": "string"
             }
           }
@@ -5869,9 +5648,7 @@
           }
         ],
         "summary": "Solo ADMIN: asignar el rol SUPPORT o ADMIN",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       },
       "delete": {
         "description": "Nadie se lo quita a sí mismo; nunca al último ADMIN activo (409 LAST_ADMIN).",
@@ -5890,10 +5667,7 @@
             "required": true,
             "in": "path",
             "schema": {
-              "enum": [
-                "support",
-                "admin"
-              ],
+              "enum": ["support", "admin"],
               "type": "string"
             }
           }
@@ -5956,9 +5730,7 @@
           }
         ],
         "summary": "Solo ADMIN: quitar el rol SUPPORT o ADMIN",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/barbershops": {
@@ -5993,12 +5765,7 @@
             "description": "Sin estado: las que necesitan atención (reportes, marcas, pendientes).",
             "schema": {
               "type": "string",
-              "enum": [
-                "OPEN",
-                "TEMPORARILY_CLOSED",
-                "SUSPENDED",
-                "PENDING_REVIEW"
-              ]
+              "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
             }
           }
         ],
@@ -6040,9 +5807,7 @@
           }
         ],
         "summary": "RF-OPE-002: barberías que necesitan atención (reportes, marcas, pendientes)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/barbershops/{id}": {
@@ -6096,9 +5861,7 @@
           }
         ],
         "summary": "RF-OPE-002: barbería con sus reportes abiertos",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/barbershops/{id}/approve": {
@@ -6172,9 +5935,7 @@
           }
         ],
         "summary": "RF-OPE-002: aprobar una barbería PENDING_REVIEW",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/barbershops/{id}/suspend": {
@@ -6249,9 +6010,7 @@
           }
         ],
         "summary": "RF-OPE-002: suspender, decidiendo qué pasa con las reservas futuras",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/barbershops/{id}/reactivate": {
@@ -6325,9 +6084,7 @@
           }
         ],
         "summary": "RF-OPE-002: reactivar una barbería suspendida",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/barbershops/{id}/reports/resolve": {
@@ -6391,9 +6148,7 @@
           }
         ],
         "summary": "RF-OPE-002: resolver los reportes abiertos y quitar la marca",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/bookings/{id}": {
@@ -6447,9 +6202,7 @@
           }
         ],
         "summary": "RF-OPE-003: reserva con historial y pagos (datos mínimos)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/bookings/{id}/attendance-correction": {
@@ -6523,9 +6276,7 @@
           }
         ],
         "summary": "RF-OPE-003: corregir ATTENDED ↔ NO_SHOW fuera del plazo de 48 h",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/payments/{id}/refunds": {
@@ -6600,9 +6351,7 @@
           }
         ],
         "summary": "Solo ADMIN: reembolso manual, con motivo y hasta lo cobrado",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/refunds/failed": {
@@ -6669,9 +6418,7 @@
           }
         ],
         "summary": "Fase 10: reembolsos fallidos en la pasarela, para resolver",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/cancellation-reviews": {
@@ -6705,11 +6452,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "PENDING_REVIEW",
-                "JUSTIFIED",
-                "UNJUSTIFIED"
-              ]
+              "enum": ["PENDING_REVIEW", "JUSTIFIED", "UNJUSTIFIED"]
             }
           }
         ],
@@ -6751,9 +6494,7 @@
           }
         ],
         "summary": "RF-OPE-003: cancelaciones de barberías por calificar",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/cancellation-reviews/{id}/verdict": {
@@ -6828,9 +6569,7 @@
           }
         ],
         "summary": "RF-OPE-003: calificar una cancelación de la barbería (justificada o no)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/reviews/reported": {
@@ -6897,9 +6636,7 @@
           }
         ],
         "summary": "RF-OPE-003: valoraciones o respuestas en revisión por reportes",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/reviews/{id}/moderation": {
@@ -6973,9 +6710,7 @@
           }
         ],
         "summary": "RF-OPE-003: mantener, ocultar o restaurar una valoración o su respuesta",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/settings": {
@@ -7023,9 +6758,7 @@
           }
         ],
         "summary": "Solo ADMIN: ajustes con su esquema y si son editables",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/settings/{key}": {
@@ -7079,9 +6812,7 @@
           }
         ],
         "summary": "Solo ADMIN: un ajuste",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       },
       "put": {
         "description": "Fuera de rango: 400. Claves de seguridad, pagos sensibles o decisiones pendientes: 403 SETTING_READ_ONLY. Queda el valor anterior y el nuevo en audit_log.",
@@ -7154,9 +6885,7 @@
           }
         ],
         "summary": "Solo ADMIN: cambiar un ajuste (validado por su esquema y rango)",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/service-categories": {
@@ -7204,9 +6933,7 @@
           }
         ],
         "summary": "Solo ADMIN: categorías de servicio, incluidas las inactivas",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       },
       "post": {
         "operationId": "AdminConfigController_createCategory_v1",
@@ -7269,9 +6996,7 @@
           }
         ],
         "summary": "Solo ADMIN: crear una categoría de servicio",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/admin/service-categories/{id}": {
@@ -7335,9 +7060,7 @@
           }
         ],
         "summary": "Solo ADMIN: editar o desactivar (nunca borrar) una categoría",
-        "tags": [
-          "admin"
-        ]
+        "tags": ["admin"]
       }
     },
     "/api/v1/me/devices": {
@@ -7383,9 +7106,7 @@
           }
         ],
         "summary": "RF-NOT-001: registrar o actualizar el dispositivo para recibir push",
-        "tags": [
-          "notifications"
-        ]
+        "tags": ["notifications"]
       },
       "get": {
         "operationId": "NotificationsController_listDevices_v1",
@@ -7408,9 +7129,7 @@
           }
         ],
         "summary": "RF-NOT-001: mis dispositivos con push (sin el token)",
-        "tags": [
-          "notifications"
-        ]
+        "tags": ["notifications"]
       }
     },
     "/api/v1/me/devices/{id}": {
@@ -7447,9 +7166,7 @@
           }
         ],
         "summary": "RF-NOT-001: dejar de recibir push en un dispositivo (por su ID)",
-        "tags": [
-          "notifications"
-        ]
+        "tags": ["notifications"]
       }
     },
     "/api/v1/me/notifications": {
@@ -7505,9 +7222,7 @@
           }
         ],
         "summary": "RF-NOT-004: bandeja de avisos (los más recientes primero; se conservan 90 días)",
-        "tags": [
-          "notifications"
-        ]
+        "tags": ["notifications"]
       }
     },
     "/api/v1/me/notifications/unread-count": {
@@ -7532,9 +7247,7 @@
           }
         ],
         "summary": "RF-NOT-004: avisos sin leer",
-        "tags": [
-          "notifications"
-        ]
+        "tags": ["notifications"]
       }
     },
     "/api/v1/me/notifications/{id}/read": {
@@ -7571,9 +7284,7 @@
           }
         ],
         "summary": "RF-NOT-004: marcar un aviso como leído",
-        "tags": [
-          "notifications"
-        ]
+        "tags": ["notifications"]
       }
     },
     "/api/v1/me/notifications/read-all": {
@@ -7598,9 +7309,144 @@
           }
         ],
         "summary": "RF-NOT-004: marcar todos como leídos",
-        "tags": [
-          "notifications"
-        ]
+        "tags": ["notifications"]
+      }
+    },
+    "/api/v1/me/account/deletion/preview": {
+      "get": {
+        "operationId": "AccountController_preview_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDeletionPreviewDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Vista previa: reservas que se cancelarán (y cuánto se devuelve) y bloqueos",
+        "tags": ["account"]
+      }
+    },
+    "/api/v1/me/account/deletion": {
+      "get": {
+        "operationId": "AccountController_status_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDeletionStatusDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Estado de la eliminación de la cuenta",
+        "tags": ["account"]
+      },
+      "post": {
+        "description": "Cancela al instante sus reservas activas como cancelación del cliente, cierra sus tickets y todas sus sesiones. La eliminación se ejecuta tras account_deletion.grace_days (30); hasta entonces se puede cancelar desde el acceso limitado (POST /auth/support-access). 409 DELETION_BLOCKED con los bloqueos en details.",
+        "operationId": "AccountController_request_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestAccountDeletionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDeletionStatusDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solicitar la eliminación de la cuenta (con la contraseña)",
+        "tags": ["account"]
+      },
+      "delete": {
+        "operationId": "AccountController_cancel_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDeletionStatusDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancelar la eliminación (dentro del plazo); las reservas canceladas no se restauran",
+        "tags": ["account"]
       }
     }
   },
@@ -7623,10 +7469,7 @@
     "schemas": {
       "ComponentStatus": {
         "type": "string",
-        "enum": [
-          "up",
-          "down"
-        ]
+        "enum": ["up", "down"]
       },
       "HealthChecksDto": {
         "type": "object",
@@ -7646,10 +7489,7 @@
             ]
           }
         },
-        "required": [
-          "database",
-          "redis"
-        ]
+        "required": ["database", "redis"]
       },
       "HealthResponseDto": {
         "type": "object",
@@ -7662,10 +7502,7 @@
             "$ref": "#/components/schemas/HealthChecksDto"
           }
         },
-        "required": [
-          "status",
-          "checks"
-        ]
+        "required": ["status", "checks"]
       },
       "ErrorResponseDto": {
         "type": "object",
@@ -7683,7 +7520,8 @@
           "details": {
             "type": "array",
             "items": {
-              "type": "object"
+              "type": "object",
+              "additionalProperties": true
             },
             "example": []
           },
@@ -7692,30 +7530,15 @@
             "example": "0f8fad5b-d9cb-469f-a165-70867728950e"
           }
         },
-        "required": [
-          "code",
-          "message",
-          "details",
-          "requestId"
-        ]
+        "required": ["code", "message", "details", "requestId"]
       },
       "Role": {
         "type": "string",
-        "enum": [
-          "CLIENT",
-          "BARBER",
-          "OWNER",
-          "SUPPORT",
-          "ADMIN"
-        ]
+        "enum": ["CLIENT", "BARBER", "OWNER", "SUPPORT", "ADMIN"]
       },
       "NotificationChannel": {
         "type": "string",
-        "enum": [
-          "PUSH",
-          "EMAIL",
-          "IN_APP"
-        ]
+        "enum": ["PUSH", "EMAIL", "IN_APP"]
       },
       "NotificationPreferencesDto": {
         "type": "object",
@@ -7732,9 +7555,7 @@
             "description": "Fase 10: recordatorios de citas (24 y 2 h antes). Por defecto activos."
           }
         },
-        "required": [
-          "notificationChannels"
-        ]
+        "required": ["notificationChannels"]
       },
       "ProfileDto": {
         "type": "object",
@@ -7790,7 +7611,7 @@
             "example": "Ana Pérez"
           },
           "phone": {
-            "type": "object",
+            "type": "string",
             "example": "+51 987 654 321",
             "nullable": true,
             "description": "null lo elimina"
@@ -7806,11 +7627,21 @@
           "version": {
             "type": "string",
             "example": "2026-10"
+          },
+          "termsUrl": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://charles.example/terminos",
+            "description": "Términos y condiciones (legal.terms_url). null si no está configurada."
+          },
+          "privacyUrl": {
+            "type": "string",
+            "nullable": true,
+            "example": "https://charles.example/privacidad",
+            "description": "Política de privacidad (legal.privacy_url). null si no está configurada."
           }
         },
-        "required": [
-          "version"
-        ]
+        "required": ["version", "termsUrl", "privacyUrl"]
       },
       "RegisterDto": {
         "type": "object",
@@ -7861,9 +7692,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "message"
-        ]
+        "required": ["message"]
       },
       "LoginDto": {
         "type": "object",
@@ -7881,10 +7710,7 @@
             "description": "Nombre del dispositivo."
           }
         },
-        "required": [
-          "email",
-          "password"
-        ]
+        "required": ["email", "password"]
       },
       "SessionUserDto": {
         "type": "object",
@@ -7906,12 +7732,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "id",
-          "fullName",
-          "roles",
-          "emailVerified"
-        ]
+        "required": ["id", "fullName", "roles", "emailVerified"]
       },
       "AuthTokensDto": {
         "type": "object",
@@ -7965,14 +7786,14 @@
           "restricted": {
             "type": "boolean",
             "example": true
+          },
+          "scope": {
+            "type": "string",
+            "enum": ["support", "deletion"],
+            "description": "support: cuenta deshabilitada (sus tickets y pedir su eliminación). deletion: cuenta pendiente de eliminación (consultar o cancelar la eliminación)."
           }
         },
-        "required": [
-          "tokenType",
-          "accessToken",
-          "accessTokenExpiresAt",
-          "restricted"
-        ]
+        "required": ["tokenType", "accessToken", "accessTokenExpiresAt", "restricted", "scope"]
       },
       "RefreshDto": {
         "type": "object",
@@ -7981,9 +7802,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "refreshToken"
-        ]
+        "required": ["refreshToken"]
       },
       "LogoutDto": {
         "type": "object",
@@ -8002,9 +7821,7 @@
             "example": "ana@example.com"
           }
         },
-        "required": [
-          "email"
-        ]
+        "required": ["email"]
       },
       "PasswordResetConfirmDto": {
         "type": "object",
@@ -8023,11 +7840,7 @@
             "maxLength": 128
           }
         },
-        "required": [
-          "email",
-          "code",
-          "newPassword"
-        ]
+        "required": ["email", "code", "newPassword"]
       },
       "EmailVerificationConfirmDto": {
         "type": "object",
@@ -8037,9 +7850,7 @@
             "example": "123456"
           }
         },
-        "required": [
-          "code"
-        ]
+        "required": ["code"]
       },
       "CreateBarbershopDto": {
         "type": "object",
@@ -8093,30 +7904,16 @@
             "nullable": true
           }
         },
-        "required": [
-          "name",
-          "address",
-          "latitude",
-          "longitude",
-          "phone"
-        ]
+        "required": ["name", "address", "latitude", "longitude", "phone"]
       },
       "BarbershopType": {
         "type": "string",
-        "enum": [
-          "BARBERSHOP",
-          "INDEPENDENT"
-        ],
+        "enum": ["BARBERSHOP", "INDEPENDENT"],
         "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero)."
       },
       "BarbershopStatus": {
         "type": "string",
-        "enum": [
-          "OPEN",
-          "TEMPORARILY_CLOSED",
-          "SUSPENDED",
-          "PENDING_REVIEW"
-        ]
+        "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
       },
       "ClosureDto": {
         "type": "object",
@@ -8131,10 +7928,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "reason",
-          "expectedReopenAt"
-        ]
+        "required": ["reason", "expectedReopenAt"]
       },
       "LinksDto": {
         "type": "object",
@@ -8152,11 +7946,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "website",
-          "instagram",
-          "facebook"
-        ]
+        "required": ["website", "instagram", "facebook"]
       },
       "RatingDto": {
         "type": "object",
@@ -8170,17 +7960,11 @@
             "example": 12
           }
         },
-        "required": [
-          "average",
-          "count"
-        ]
+        "required": ["average", "count"]
       },
       "BarbershopMemberRole": {
         "type": "string",
-        "enum": [
-          "OWNER",
-          "MANAGER"
-        ]
+        "enum": ["OWNER", "MANAGER"]
       },
       "CreatedBarbershopDto": {
         "type": "object",
@@ -8349,13 +8133,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "name",
-          "address",
-          "latitude",
-          "longitude",
-          "phone"
-        ]
+        "required": ["name", "address", "latitude", "longitude", "phone"]
       },
       "CreatedIndependentDto": {
         "type": "object",
@@ -8719,10 +8497,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "OPEN",
-              "TEMPORARILY_CLOSED"
-            ]
+            "enum": ["OPEN", "TEMPORARILY_CLOSED"]
           },
           "reason": {
             "type": "string",
@@ -8734,9 +8509,7 @@
             "description": "Fecha estimada de reapertura (futura). Solo con TEMPORARILY_CLOSED."
           }
         },
-        "required": [
-          "status"
-        ]
+        "required": ["status"]
       },
       "MyBarbershopDto": {
         "type": "object",
@@ -8770,13 +8543,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "type",
-          "status",
-          "myRole"
-        ]
+        "required": ["id", "name", "type", "status", "myRole"]
       },
       "MyBarbershopPageDto": {
         "type": "object",
@@ -8792,10 +8559,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "MemberDto": {
         "type": "object",
@@ -8819,12 +8583,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "userId",
-          "fullName",
-          "role",
-          "since"
-        ]
+        "required": ["userId", "fullName", "role", "since"]
       },
       "MemberPageDto": {
         "type": "object",
@@ -8840,10 +8599,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "ChangeMemberRoleDto": {
         "type": "object",
@@ -8856,9 +8612,7 @@
             ]
           }
         },
-        "required": [
-          "role"
-        ]
+        "required": ["role"]
       },
       "MyBarberShopDto": {
         "type": "object",
@@ -8882,12 +8636,7 @@
             "example": "America/Lima"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "status",
-          "timezone"
-        ]
+        "required": ["id", "name", "status", "timezone"]
       },
       "MyBarberProfileDto": {
         "type": "object",
@@ -8914,13 +8663,7 @@
             "$ref": "#/components/schemas/MyBarberShopDto"
           }
         },
-        "required": [
-          "barberId",
-          "displayName",
-          "isActive",
-          "serviceIds",
-          "barbershop"
-        ]
+        "required": ["barberId", "displayName", "isActive", "serviceIds", "barbershop"]
       },
       "MyBarberProfilesDto": {
         "type": "object",
@@ -8933,9 +8676,7 @@
             }
           }
         },
-        "required": [
-          "items"
-        ]
+        "required": ["items"]
       },
       "BarberPublicDto": {
         "type": "object",
@@ -8970,14 +8711,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "displayName",
-          "bio",
-          "photoUrl",
-          "serviceIds",
-          "rating"
-        ]
+        "required": ["id", "displayName", "bio", "photoUrl", "serviceIds", "rating"]
       },
       "BarberPublicPageDto": {
         "type": "object",
@@ -8993,10 +8727,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "LinkedUserDto": {
         "type": "object",
@@ -9009,10 +8740,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "fullName"
-        ]
+        "required": ["id", "fullName"]
       },
       "BarberManageDto": {
         "type": "object",
@@ -9089,10 +8817,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "CreateBarberDto": {
         "type": "object",
@@ -9118,9 +8843,7 @@
             "example": "Carlos"
           }
         },
-        "required": [
-          "displayName"
-        ]
+        "required": ["displayName"]
       },
       "LinkSelfAsBarberDto": {
         "type": "object",
@@ -9177,9 +8900,7 @@
             }
           }
         },
-        "required": [
-          "serviceIds"
-        ]
+        "required": ["serviceIds"]
       },
       "ServiceCategoryDto": {
         "type": "object",
@@ -9193,10 +8914,7 @@
             "example": "Corte de cabello"
           }
         },
-        "required": [
-          "key",
-          "name"
-        ]
+        "required": ["key", "name"]
       },
       "ServiceCategoryListDto": {
         "type": "object",
@@ -9209,9 +8927,7 @@
             }
           }
         },
-        "required": [
-          "items"
-        ]
+        "required": ["items"]
       },
       "MoneyDto": {
         "type": "object",
@@ -9226,10 +8942,7 @@
             "example": "PEN"
           }
         },
-        "required": [
-          "amount",
-          "currency"
-        ]
+        "required": ["amount", "currency"]
       },
       "ServicePublicDto": {
         "type": "object",
@@ -9255,14 +8968,7 @@
             "$ref": "#/components/schemas/ServiceCategoryDto"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "description",
-          "price",
-          "durationMinutes",
-          "category"
-        ]
+        "required": ["id", "name", "description", "price", "durationMinutes", "category"]
       },
       "ServicePublicPageDto": {
         "type": "object",
@@ -9278,10 +8984,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "ServiceManageDto": {
         "type": "object",
@@ -9342,10 +9045,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "CreateServiceDto": {
         "type": "object",
@@ -9378,12 +9078,7 @@
             "default": true
           }
         },
-        "required": [
-          "name",
-          "priceAmount",
-          "durationMinutes",
-          "categoryKey"
-        ]
+        "required": ["name", "priceAmount", "durationMinutes", "categoryKey"]
       },
       "UpdateServiceDto": {
         "type": "object",
@@ -9434,9 +9129,7 @@
             "description": "Texto plano: se recortan los espacios y no se interpreta HTML."
           }
         },
-        "required": [
-          "rating"
-        ]
+        "required": ["rating"]
       },
       "ReviewBarberDto": {
         "type": "object",
@@ -9449,10 +9142,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "displayName"
-        ]
+        "required": ["id", "displayName"]
       },
       "ReviewResponseDto": {
         "type": "object",
@@ -9465,10 +9155,7 @@
             "format": "date-time"
           }
         },
-        "required": [
-          "text",
-          "respondedAt"
-        ]
+        "required": ["text", "respondedAt"]
       },
       "ReviewBarbershopDto": {
         "type": "object",
@@ -9481,10 +9168,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "name"
-        ]
+        "required": ["id", "name"]
       },
       "MyReviewDto": {
         "type": "object",
@@ -9542,11 +9226,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "VISIBLE",
-              "HIDDEN",
-              "UNDER_REVIEW"
-            ],
+            "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"],
             "description": "HIDDEN: no se muestra en público (soporte o asistencia corregida)."
           },
           "canEdit": {
@@ -9601,10 +9281,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "PublicReviewDto": {
         "type": "object",
@@ -9680,10 +9357,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "ReviewResponseInputDto": {
         "type": "object",
@@ -9695,40 +9369,27 @@
             "description": "Texto plano."
           }
         },
-        "required": [
-          "text"
-        ]
+        "required": ["text"]
       },
       "CreateReviewReportDto": {
         "type": "object",
         "properties": {
           "target": {
             "type": "string",
-            "enum": [
-              "REVIEW",
-              "RESPONSE"
-            ],
+            "enum": ["REVIEW", "RESPONSE"],
             "default": "REVIEW",
             "description": "REVIEW: la valoración. RESPONSE: la respuesta de la barbería."
           },
           "reason": {
             "type": "string",
-            "enum": [
-              "OFFENSIVE",
-              "PERSONAL_DATA",
-              "FAKE",
-              "SPAM",
-              "OTHER"
-            ]
+            "enum": ["OFFENSIVE", "PERSONAL_DATA", "FAKE", "SPAM", "OTHER"]
           },
           "details": {
             "type": "string",
             "maxLength": 500
           }
         },
-        "required": [
-          "reason"
-        ]
+        "required": ["reason"]
       },
       "FavoriteDto": {
         "type": "object",
@@ -9745,17 +9406,11 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "BARBERSHOP",
-              "INDEPENDENT"
-            ]
+            "enum": ["BARBERSHOP", "INDEPENDENT"]
           },
           "status": {
             "type": "string",
-            "enum": [
-              "OPEN",
-              "TEMPORARILY_CLOSED"
-            ]
+            "enum": ["OPEN", "TEMPORARILY_CLOSED"]
           },
           "rating": {
             "$ref": "#/components/schemas/RatingDto"
@@ -9765,15 +9420,7 @@
             "format": "date-time"
           }
         },
-        "required": [
-          "barbershopId",
-          "name",
-          "address",
-          "type",
-          "status",
-          "rating",
-          "favoritedAt"
-        ]
+        "required": ["barbershopId", "name", "address", "type", "status", "rating", "favoritedAt"]
       },
       "FavoritePageDto": {
         "type": "object",
@@ -9789,10 +9436,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "InviteMemberDto": {
         "type": "object",
@@ -9810,10 +9454,7 @@
             ]
           }
         },
-        "required": [
-          "email",
-          "role"
-        ]
+        "required": ["email", "role"]
       },
       "InviteBarberDto": {
         "type": "object",
@@ -9824,16 +9465,11 @@
             "description": "Correo de una cuenta existente."
           }
         },
-        "required": [
-          "email"
-        ]
+        "required": ["email"]
       },
       "InvitationKind": {
         "type": "string",
-        "enum": [
-          "MEMBER",
-          "BARBER"
-        ]
+        "enum": ["MEMBER", "BARBER"]
       },
       "InvitationDto": {
         "type": "object",
@@ -9898,10 +9534,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "AcceptInvitationDto": {
         "type": "object",
@@ -9911,9 +9544,7 @@
             "example": "123456"
           }
         },
-        "required": [
-          "code"
-        ]
+        "required": ["code"]
       },
       "WindowDto": {
         "type": "object",
@@ -9929,10 +9560,7 @@
             "description": "Hora local, posterior al inicio (sin cruzar la medianoche)."
           }
         },
-        "required": [
-          "start",
-          "end"
-        ]
+        "required": ["start", "end"]
       },
       "DayScheduleDto": {
         "type": "object",
@@ -9951,10 +9579,7 @@
             }
           }
         },
-        "required": [
-          "dayOfWeek",
-          "windows"
-        ]
+        "required": ["dayOfWeek", "windows"]
       },
       "BusinessHoursDto": {
         "type": "object",
@@ -9974,11 +9599,7 @@
             }
           }
         },
-        "required": [
-          "timezone",
-          "isOpenNow",
-          "days"
-        ]
+        "required": ["timezone", "isOpenNow", "days"]
       },
       "SlotDto": {
         "type": "object",
@@ -9998,11 +9619,7 @@
             }
           }
         },
-        "required": [
-          "startAt",
-          "endAt",
-          "barberIds"
-        ]
+        "required": ["startAt", "endAt", "barberIds"]
       },
       "DayAvailabilityDto": {
         "type": "object",
@@ -10022,17 +9639,18 @@
             }
           }
         },
-        "required": [
-          "date",
-          "timezone",
-          "slots"
-        ]
+        "required": ["date", "timezone", "slots"]
       },
       "AvailableNowDto": {
         "type": "object",
         "properties": {
           "available": {
             "type": "boolean"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona IANA de la barbería: muestra las horas en esta zona."
           },
           "slot": {
             "nullable": true,
@@ -10044,10 +9662,7 @@
             ]
           }
         },
-        "required": [
-          "available",
-          "slot"
-        ]
+        "required": ["available", "timezone", "slot"]
       },
       "NextAvailabilityDto": {
         "type": "object",
@@ -10060,11 +9675,14 @@
                 "$ref": "#/components/schemas/SlotDto"
               }
             ]
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona IANA de la barbería: muestra las horas en esta zona."
           }
         },
-        "required": [
-          "slot"
-        ]
+        "required": ["slot", "timezone"]
       },
       "WeeklyScheduleDto": {
         "type": "object",
@@ -10076,9 +9694,7 @@
             }
           }
         },
-        "required": [
-          "days"
-        ]
+        "required": ["days"]
       },
       "BusinessHoursUpdateDto": {
         "type": "object",
@@ -10102,12 +9718,7 @@
             "description": "Reservas futuras activas que quedan fuera del horario nuevo (se mantienen)."
           }
         },
-        "required": [
-          "timezone",
-          "isOpenNow",
-          "days",
-          "bookingsOutsideSchedule"
-        ]
+        "required": ["timezone", "isOpenNow", "days", "bookingsOutsideSchedule"]
       },
       "BarberScheduleDto": {
         "type": "object",
@@ -10115,6 +9726,11 @@
           "barberId": {
             "type": "string",
             "format": "uuid"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona IANA de la barbería: muestra las horas en esta zona."
           },
           "inheritsBusinessHours": {
             "type": "boolean",
@@ -10127,11 +9743,7 @@
             }
           }
         },
-        "required": [
-          "barberId",
-          "inheritsBusinessHours",
-          "days"
-        ]
+        "required": ["barberId", "timezone", "inheritsBusinessHours", "days"]
       },
       "BarberScheduleUpdateDto": {
         "type": "object",
@@ -10139,6 +9751,11 @@
           "barberId": {
             "type": "string",
             "format": "uuid"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona IANA de la barbería: muestra las horas en esta zona."
           },
           "inheritsBusinessHours": {
             "type": "boolean",
@@ -10156,6 +9773,7 @@
         },
         "required": [
           "barberId",
+          "timezone",
           "inheritsBusinessHours",
           "days",
           "bookingsOutsideSchedule"
@@ -10163,12 +9781,7 @@
       },
       "TimeBlockType": {
         "type": "string",
-        "enum": [
-          "BREAK",
-          "ABSENCE",
-          "HOLIDAY",
-          "MANUAL"
-        ]
+        "enum": ["BREAK", "ABSENCE", "HOLIDAY", "MANUAL"]
       },
       "TimeBlockDto": {
         "type": "object",
@@ -10200,16 +9813,14 @@
           "reason": {
             "type": "string",
             "nullable": true
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona IANA de la barbería: muestra las horas en esta zona."
           }
         },
-        "required": [
-          "id",
-          "barberId",
-          "startAt",
-          "endAt",
-          "type",
-          "reason"
-        ]
+        "required": ["id", "barberId", "startAt", "endAt", "type", "reason", "timezone"]
       },
       "CreateTimeBlockDto": {
         "type": "object",
@@ -10241,11 +9852,7 @@
             "description": "Solo lo ven los responsables y el propio barbero."
           }
         },
-        "required": [
-          "startAt",
-          "endAt",
-          "type"
-        ]
+        "required": ["startAt", "endAt", "type"]
       },
       "SearchRatingDto": {
         "type": "object",
@@ -10259,10 +9866,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "average",
-          "count"
-        ]
+        "required": ["average", "count"]
       },
       "SearchResultDto": {
         "type": "object",
@@ -10372,11 +9976,7 @@
             "description": "true si se alcanzó el tope de barberías evaluadas por petición antes de llenar la página (filtros de disponibilidad). Puede haber más resultados con nextCursor."
           }
         },
-        "required": [
-          "items",
-          "nextCursor",
-          "evaluationLimitReached"
-        ]
+        "required": ["items", "nextCursor", "evaluationLimitReached"]
       },
       "AlternativeServiceDto": {
         "type": "object",
@@ -10395,12 +9995,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "price",
-          "durationMinutes"
-        ]
+        "required": ["id", "name", "price", "durationMinutes"]
       },
       "AlternativeSlotDto": {
         "type": "object",
@@ -10414,10 +10009,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "startAt",
-          "endAt"
-        ]
+        "required": ["startAt", "endAt"]
       },
       "AlternativeDto": {
         "type": "object",
@@ -10442,11 +10034,7 @@
             ]
           }
         },
-        "required": [
-          "barbershop",
-          "service",
-          "firstSlot"
-        ]
+        "required": ["barbershop", "service", "firstSlot"]
       },
       "AlternativesDto": {
         "type": "object",
@@ -10467,32 +10055,18 @@
             }
           }
         },
-        "required": [
-          "date",
-          "categoryKey",
-          "items"
-        ]
+        "required": ["date", "categoryKey", "items"]
       },
       "PaymentStatus": {
         "type": "string",
-        "enum": [
-          "PENDING",
-          "SUCCEEDED",
-          "REJECTED",
-          "CANCELLED",
-          "REFUNDED",
-          "PARTIALLY_REFUNDED"
-        ]
+        "enum": ["PENDING", "SUCCEEDED", "REJECTED", "CANCELLED", "REFUNDED", "PARTIALLY_REFUNDED"]
       },
       "ClientPaymentActionDto": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "FAKE",
-              "IZIPAY_SDK"
-            ]
+            "enum": ["FAKE", "IZIPAY_SDK"]
           },
           "data": {
             "type": "object",
@@ -10501,10 +10075,7 @@
             }
           }
         },
-        "required": [
-          "type",
-          "data"
-        ]
+        "required": ["type", "data"]
       },
       "PaymentStartDto": {
         "type": "object",
@@ -10538,21 +10109,11 @@
             ]
           }
         },
-        "required": [
-          "paymentId",
-          "provider",
-          "status",
-          "amount",
-          "clientAction"
-        ]
+        "required": ["paymentId", "provider", "status", "amount", "clientAction"]
       },
       "RefundStatus": {
         "type": "string",
-        "enum": [
-          "PENDING",
-          "SUCCEEDED",
-          "FAILED"
-        ]
+        "enum": ["PENDING", "SUCCEEDED", "FAILED"]
       },
       "RefundReason": {
         "type": "string",
@@ -10598,14 +10159,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "refundId",
-          "status",
-          "reasonType",
-          "amount",
-          "createdAt",
-          "processedAt"
-        ]
+        "required": ["refundId", "status", "reasonType", "amount", "createdAt", "processedAt"]
       },
       "PaymentViewDto": {
         "type": "object",
@@ -10665,21 +10219,14 @@
             }
           }
         },
-        "required": [
-          "items"
-        ]
+        "required": ["items"]
       },
       "PaymentVerificationDto": {
         "type": "object",
         "properties": {
           "outcome": {
             "type": "string",
-            "enum": [
-              "CONFIRMED",
-              "REVIEW",
-              "UNCHANGED",
-              "UNAVAILABLE"
-            ],
+            "enum": ["CONFIRMED", "REVIEW", "UNCHANGED", "UNAVAILABLE"],
             "description": "Resultado de consultar a la pasarela. La respuesta de la app nunca confirma por sí sola."
           },
           "paymentStatus": {
@@ -10690,10 +10237,7 @@
             ]
           }
         },
-        "required": [
-          "outcome",
-          "paymentStatus"
-        ]
+        "required": ["outcome", "paymentStatus"]
       },
       "WebhookReceiptDto": {
         "type": "object",
@@ -10706,10 +10250,7 @@
             "description": "true si el evento ya se había recibido (no se aplica de nuevo)."
           }
         },
-        "required": [
-          "received",
-          "duplicate"
-        ]
+        "required": ["received", "duplicate"]
       },
       "CreateBookingDto": {
         "type": "object",
@@ -10734,22 +10275,30 @@
             "description": "Sin barbero: se asigna el libre con menos reservas activas ese día."
           }
         },
-        "required": [
-          "barbershopId",
-          "serviceId",
-          "startAt"
-        ]
+        "required": ["barbershopId", "serviceId", "startAt"]
       },
       "BookingStatus": {
         "type": "string",
-        "enum": [
-          "PENDING_PAYMENT",
-          "CONFIRMED",
-          "ATTENDED",
-          "CANCELLED",
-          "NO_SHOW",
-          "EXPIRED"
-        ]
+        "enum": ["PENDING_PAYMENT", "CONFIRMED", "ATTENDED", "CANCELLED", "NO_SHOW", "EXPIRED"]
+      },
+      "BookingBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona IANA de la barbería: muestra las horas en esta zona."
+          }
+        },
+        "required": ["id", "name", "timezone"]
       },
       "NamedRefDto": {
         "type": "object",
@@ -10763,19 +10312,11 @@
             "nullable": true
           }
         },
-        "required": [
-          "id",
-          "name"
-        ]
+        "required": ["id", "name"]
       },
       "PriceLineType": {
         "type": "string",
-        "enum": [
-          "SERVICE",
-          "DISCOUNT",
-          "FEE",
-          "TAX"
-        ]
+        "enum": ["SERVICE", "DISCOUNT", "FEE", "TAX"]
       },
       "PriceLineDto": {
         "type": "object",
@@ -10794,11 +10335,7 @@
             "$ref": "#/components/schemas/MoneyDto"
           }
         },
-        "required": [
-          "type",
-          "description",
-          "amount"
-        ]
+        "required": ["type", "description", "amount"]
       },
       "BookingPriceDto": {
         "type": "object",
@@ -10827,35 +10364,21 @@
             }
           }
         },
-        "required": [
-          "subtotal",
-          "discountTotal",
-          "feeTotal",
-          "total",
-          "lines"
-        ]
+        "required": ["subtotal", "discountTotal", "feeTotal", "total", "lines"]
       },
       "CancellationDto": {
         "type": "object",
         "properties": {
           "byRole": {
             "type": "string",
-            "enum": [
-              "CLIENT",
-              "BARBERSHOP",
-              "SYSTEM",
-              "SUPPORT"
-            ]
+            "enum": ["CLIENT", "BARBERSHOP", "SYSTEM", "SUPPORT"]
           },
           "reason": {
             "type": "string",
             "nullable": true
           }
         },
-        "required": [
-          "byRole",
-          "reason"
-        ]
+        "required": ["byRole", "reason"]
       },
       "CreatedBookingDto": {
         "type": "object",
@@ -10872,7 +10395,7 @@
             ]
           },
           "barbershop": {
-            "$ref": "#/components/schemas/NamedRefDto"
+            "$ref": "#/components/schemas/BookingBarbershopDto"
           },
           "service": {
             "description": "Nombre del servicio al reservar (copia).",
@@ -10969,7 +10492,7 @@
             ]
           },
           "barbershop": {
-            "$ref": "#/components/schemas/NamedRefDto"
+            "$ref": "#/components/schemas/BookingBarbershopDto"
           },
           "service": {
             "description": "Nombre del servicio al reservar (copia).",
@@ -11082,12 +10605,7 @@
             ]
           }
         },
-        "required": [
-          "amount",
-          "percent",
-          "rule",
-          "paid"
-        ]
+        "required": ["amount", "percent", "rule", "paid"]
       },
       "CancellationPreviewDto": {
         "type": "object",
@@ -11098,11 +10616,7 @@
           "reason": {
             "type": "string",
             "nullable": true,
-            "enum": [
-              "ALREADY_CANCELLED",
-              "NOT_CANCELLABLE",
-              "ALREADY_STARTED"
-            ]
+            "enum": ["ALREADY_CANCELLED", "NOT_CANCELLABLE", "ALREADY_STARTED"]
           },
           "refund": {
             "$ref": "#/components/schemas/RefundQuoteDto"
@@ -11112,22 +10626,14 @@
             "description": "true si cancela la barbería: el motivo es obligatorio."
           }
         },
-        "required": [
-          "allowed",
-          "reason",
-          "refund",
-          "reasonRequired"
-        ]
+        "required": ["allowed", "reason", "refund", "reasonRequired"]
       },
       "AttendanceCorrectionDto": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "ATTENDED",
-              "NO_SHOW"
-            ],
+            "enum": ["ATTENDED", "NO_SHOW"],
             "description": "Estado correcto."
           },
           "reason": {
@@ -11135,10 +10641,7 @@
             "description": "Motivo de la corrección (queda en el historial y la auditoría)."
           }
         },
-        "required": [
-          "status",
-          "reason"
-        ]
+        "required": ["status", "reason"]
       },
       "AgendaActionsDto": {
         "type": "object",
@@ -11154,11 +10657,7 @@
             "description": "Solo OWNER o MANAGER, dentro del plazo de corrección."
           }
         },
-        "required": [
-          "canMarkAttended",
-          "canMarkNoShow",
-          "canCorrect"
-        ]
+        "required": ["canMarkAttended", "canMarkNoShow", "canCorrect"]
       },
       "AgendaItemDto": {
         "type": "object",
@@ -11259,14 +10758,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "id",
-          "barberId",
-          "startAt",
-          "endAt",
-          "type",
-          "reason"
-        ]
+        "required": ["id", "barberId", "startAt", "endAt", "type", "reason"]
       },
       "AgendaDto": {
         "type": "object",
@@ -11300,14 +10792,7 @@
             "description": "Reservas confirmadas que ya empezaron y siguen sin marcar."
           }
         },
-        "required": [
-          "date",
-          "timezone",
-          "barbershop",
-          "items",
-          "blocks",
-          "pendingAttention"
-        ]
+        "required": ["date", "timezone", "barbershop", "items", "blocks", "pendingAttention"]
       },
       "CancelBookingDto": {
         "type": "object",
@@ -11333,7 +10818,7 @@
             ]
           },
           "barbershop": {
-            "$ref": "#/components/schemas/NamedRefDto"
+            "$ref": "#/components/schemas/BookingBarbershopDto"
           },
           "service": {
             "description": "Nombre del servicio al reservar (copia).",
@@ -11434,25 +10919,14 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "CreateTicketDto": {
         "type": "object",
         "properties": {
           "category": {
             "type": "string",
-            "enum": [
-              "ACCOUNT",
-              "BOOKING",
-              "PAYMENT",
-              "BARBERSHOP",
-              "REVIEW",
-              "APP",
-              "OTHER"
-            ]
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
           },
           "subject": {
             "type": "string",
@@ -11467,11 +10941,7 @@
           },
           "relatedType": {
             "type": "string",
-            "enum": [
-              "booking",
-              "payment",
-              "barbershop"
-            ],
+            "enum": ["booking", "payment", "barbershop"],
             "description": "Relación opcional con una reserva, un pago o una barbería propios."
           },
           "relatedId": {
@@ -11480,32 +10950,21 @@
             "description": "Obligatorio con relatedType."
           }
         },
-        "required": [
-          "category",
-          "subject",
-          "message"
-        ]
+        "required": ["category", "subject", "message"]
       },
       "TicketRelatedDto": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "booking",
-              "payment",
-              "barbershop"
-            ]
+            "enum": ["booking", "payment", "barbershop"]
           },
           "id": {
             "type": "string",
             "format": "uuid"
           }
         },
-        "required": [
-          "type",
-          "id"
-        ]
+        "required": ["type", "id"]
       },
       "TicketMessageDto": {
         "type": "object",
@@ -11519,22 +10978,14 @@
           },
           "from": {
             "type": "string",
-            "enum": [
-              "USER",
-              "SUPPORT"
-            ]
+            "enum": ["USER", "SUPPORT"]
           },
           "createdAt": {
             "type": "string",
             "format": "date-time"
           }
         },
-        "required": [
-          "id",
-          "body",
-          "from",
-          "createdAt"
-        ]
+        "required": ["id", "body", "from", "createdAt"]
       },
       "TicketDetailDto": {
         "type": "object",
@@ -11545,27 +10996,14 @@
           },
           "category": {
             "type": "string",
-            "enum": [
-              "ACCOUNT",
-              "BOOKING",
-              "PAYMENT",
-              "BARBERSHOP",
-              "REVIEW",
-              "APP",
-              "OTHER"
-            ]
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
           },
           "subject": {
             "type": "string"
           },
           "status": {
             "type": "string",
-            "enum": [
-              "OPEN",
-              "IN_PROGRESS",
-              "RESOLVED",
-              "CLOSED"
-            ]
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
           },
           "related": {
             "nullable": true,
@@ -11628,27 +11066,14 @@
           },
           "category": {
             "type": "string",
-            "enum": [
-              "ACCOUNT",
-              "BOOKING",
-              "PAYMENT",
-              "BARBERSHOP",
-              "REVIEW",
-              "APP",
-              "OTHER"
-            ]
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
           },
           "subject": {
             "type": "string"
           },
           "status": {
             "type": "string",
-            "enum": [
-              "OPEN",
-              "IN_PROGRESS",
-              "RESOLVED",
-              "CLOSED"
-            ]
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
           },
           "related": {
             "nullable": true,
@@ -11704,10 +11129,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "TicketMessageInputDto": {
         "type": "object",
@@ -11718,9 +11140,7 @@
             "maxLength": 2000
           }
         },
-        "required": [
-          "body"
-        ]
+        "required": ["body"]
       },
       "CreateBarbershopReportDto": {
         "type": "object",
@@ -11741,9 +11161,7 @@
             "maxLength": 500
           }
         },
-        "required": [
-          "reason"
-        ]
+        "required": ["reason"]
       },
       "StaffPersonDto": {
         "type": "object",
@@ -11756,10 +11174,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "fullName"
-        ]
+        "required": ["id", "fullName"]
       },
       "StaffTicketDto": {
         "type": "object",
@@ -11770,27 +11185,14 @@
           },
           "category": {
             "type": "string",
-            "enum": [
-              "ACCOUNT",
-              "BOOKING",
-              "PAYMENT",
-              "BARBERSHOP",
-              "REVIEW",
-              "APP",
-              "OTHER"
-            ]
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
           },
           "subject": {
             "type": "string"
           },
           "status": {
             "type": "string",
-            "enum": [
-              "OPEN",
-              "IN_PROGRESS",
-              "RESOLVED",
-              "CLOSED"
-            ]
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
           },
           "related": {
             "nullable": true,
@@ -11860,10 +11262,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "StaffTicketMessageDto": {
         "type": "object",
@@ -11877,10 +11276,7 @@
           },
           "from": {
             "type": "string",
-            "enum": [
-              "USER",
-              "SUPPORT"
-            ]
+            "enum": ["USER", "SUPPORT"]
           },
           "createdAt": {
             "type": "string",
@@ -11893,14 +11289,7 @@
             "$ref": "#/components/schemas/StaffPersonDto"
           }
         },
-        "required": [
-          "id",
-          "body",
-          "from",
-          "createdAt",
-          "isInternal",
-          "author"
-        ]
+        "required": ["id", "body", "from", "createdAt", "isInternal", "author"]
       },
       "StaffTicketDetailDto": {
         "type": "object",
@@ -11911,27 +11300,14 @@
           },
           "category": {
             "type": "string",
-            "enum": [
-              "ACCOUNT",
-              "BOOKING",
-              "PAYMENT",
-              "BARBERSHOP",
-              "REVIEW",
-              "APP",
-              "OTHER"
-            ]
+            "enum": ["ACCOUNT", "BOOKING", "PAYMENT", "BARBERSHOP", "REVIEW", "APP", "OTHER"]
           },
           "subject": {
             "type": "string"
           },
           "status": {
             "type": "string",
-            "enum": [
-              "OPEN",
-              "IN_PROGRESS",
-              "RESOLVED",
-              "CLOSED"
-            ]
+            "enum": ["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]
           },
           "related": {
             "nullable": true,
@@ -12018,20 +11394,14 @@
             "description": "Nota interna: nunca la ve el usuario y no cambia el estado."
           }
         },
-        "required": [
-          "body"
-        ]
+        "required": ["body"]
       },
       "UpdateTicketStatusDto": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "IN_PROGRESS",
-              "RESOLVED",
-              "CLOSED"
-            ]
+            "enum": ["IN_PROGRESS", "RESOLVED", "CLOSED"]
           },
           "reason": {
             "type": "string",
@@ -12039,9 +11409,7 @@
             "description": "Obligatorio al cerrar un ticket que no está resuelto."
           }
         },
-        "required": [
-          "status"
-        ]
+        "required": ["status"]
       },
       "StaffUserDto": {
         "type": "object",
@@ -12055,22 +11423,13 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "ACTIVE",
-              "DISABLED"
-            ]
+            "enum": ["ACTIVE", "DISABLED"]
           },
           "roles": {
             "type": "array",
             "items": {
               "type": "string",
-              "enum": [
-                "CLIENT",
-                "BARBER",
-                "OWNER",
-                "SUPPORT",
-                "ADMIN"
-              ]
+              "enum": ["CLIENT", "BARBER", "OWNER", "SUPPORT", "ADMIN"]
             }
           },
           "emailVerified": {
@@ -12084,15 +11443,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "id",
-          "fullName",
-          "status",
-          "roles",
-          "emailVerified",
-          "createdAt",
-          "deleted"
-        ]
+        "required": ["id", "fullName", "status", "roles", "emailVerified", "createdAt", "deleted"]
       },
       "ContactAccessDto": {
         "type": "object",
@@ -12108,9 +11459,7 @@
             "description": "Ticket de esa cuenta que lo justifica."
           }
         },
-        "required": [
-          "reason"
-        ]
+        "required": ["reason"]
       },
       "ContactDto": {
         "type": "object",
@@ -12123,10 +11472,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "email",
-          "phone"
-        ]
+        "required": ["email", "phone"]
       },
       "ReasonDto": {
         "type": "object",
@@ -12137,9 +11483,7 @@
             "maxLength": 500
           }
         },
-        "required": [
-          "reason"
-        ]
+        "required": ["reason"]
       },
       "AdminBarbershopDto": {
         "type": "object",
@@ -12153,19 +11497,11 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "OPEN",
-              "TEMPORARILY_CLOSED",
-              "SUSPENDED",
-              "PENDING_REVIEW"
-            ]
+            "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
           },
           "type": {
             "type": "string",
-            "enum": [
-              "BARBERSHOP",
-              "INDEPENDENT"
-            ]
+            "enum": ["BARBERSHOP", "INDEPENDENT"]
           },
           "flaggedReason": {
             "type": "string",
@@ -12210,10 +11546,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "BarbershopReportDto": {
         "type": "object",
@@ -12242,12 +11575,7 @@
             "format": "date-time"
           }
         },
-        "required": [
-          "id",
-          "reason",
-          "details",
-          "createdAt"
-        ]
+        "required": ["id", "reason", "details", "createdAt"]
       },
       "AdminBarbershopDetailDto": {
         "type": "object",
@@ -12261,19 +11589,11 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "OPEN",
-              "TEMPORARILY_CLOSED",
-              "SUSPENDED",
-              "PENDING_REVIEW"
-            ]
+            "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
           },
           "type": {
             "type": "string",
-            "enum": [
-              "BARBERSHOP",
-              "INDEPENDENT"
-            ]
+            "enum": ["BARBERSHOP", "INDEPENDENT"]
           },
           "flaggedReason": {
             "type": "string",
@@ -12322,35 +11642,23 @@
           },
           "bookings": {
             "type": "string",
-            "enum": [
-              "KEEP_UPCOMING",
-              "CANCEL_ALL",
-              "KEEP_ALL"
-            ],
+            "enum": ["KEEP_UPCOMING", "CANCEL_ALL", "KEEP_ALL"],
             "default": "KEEP_UPCOMING",
             "description": "Reservas futuras: KEEP_UPCOMING mantiene las de las próximas support.suspension_keep_hours (48) y cancela el resto con devolución total. Las pendientes de pago se cancelan siempre."
           }
         },
-        "required": [
-          "reason"
-        ]
+        "required": ["reason"]
       },
       "SuspensionResultDto": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "SUSPENDED"
-            ]
+            "enum": ["SUSPENDED"]
           },
           "mode": {
             "type": "string",
-            "enum": [
-              "KEEP_UPCOMING",
-              "CANCEL_ALL",
-              "KEEP_ALL"
-            ]
+            "enum": ["KEEP_UPCOMING", "CANCEL_ALL", "KEEP_ALL"]
           },
           "cancelledBookings": {
             "type": "number"
@@ -12360,12 +11668,7 @@
             "description": "Reservas confirmadas futuras que se mantienen."
           }
         },
-        "required": [
-          "status",
-          "mode",
-          "cancelledBookings",
-          "keptBookings"
-        ]
+        "required": ["status", "mode", "cancelledBookings", "keptBookings"]
       },
       "ResolveReportsDto": {
         "type": "object",
@@ -12377,11 +11680,9 @@
             "description": "Resolución (queda en los reportes)."
           }
         },
-        "required": [
-          "resolution"
-        ]
+        "required": ["resolution"]
       },
-      "RefNameDto": {
+      "RefShopWithZoneDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -12390,12 +11691,14 @@
           },
           "name": {
             "type": "string"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona IANA de la barbería: muestra las horas en esta zona."
           }
         },
-        "required": [
-          "id",
-          "name"
-        ]
+        "required": ["id", "name", "timezone"]
       },
       "RefBarberDto": {
         "type": "object",
@@ -12408,10 +11711,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "displayName"
-        ]
+        "required": ["id", "displayName"]
       },
       "RefPersonDto": {
         "type": "object",
@@ -12424,10 +11724,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "fullName"
-        ]
+        "required": ["id", "fullName"]
       },
       "AdminHistoryDto": {
         "type": "object",
@@ -12448,12 +11745,7 @@
             "format": "date-time"
           }
         },
-        "required": [
-          "from",
-          "to",
-          "reason",
-          "at"
-        ]
+        "required": ["from", "to", "reason", "at"]
       },
       "AdminRefundDto": {
         "type": "object",
@@ -12476,13 +11768,7 @@
             "format": "date-time"
           }
         },
-        "required": [
-          "id",
-          "amount",
-          "status",
-          "reasonType",
-          "createdAt"
-        ]
+        "required": ["id", "amount", "status", "reasonType", "createdAt"]
       },
       "AdminPaymentDto": {
         "type": "object",
@@ -12514,15 +11800,7 @@
             }
           }
         },
-        "required": [
-          "id",
-          "status",
-          "amount",
-          "currency",
-          "provider",
-          "refundable",
-          "refunds"
-        ]
+        "required": ["id", "status", "amount", "currency", "provider", "refundable", "refunds"]
       },
       "AdminBookingDto": {
         "type": "object",
@@ -12533,14 +11811,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "PENDING_PAYMENT",
-              "CONFIRMED",
-              "ATTENDED",
-              "CANCELLED",
-              "NO_SHOW",
-              "EXPIRED"
-            ]
+            "enum": ["PENDING_PAYMENT", "CONFIRMED", "ATTENDED", "CANCELLED", "NO_SHOW", "EXPIRED"]
           },
           "startAt": {
             "type": "string",
@@ -12560,7 +11831,7 @@
             "type": "string"
           },
           "barbershop": {
-            "$ref": "#/components/schemas/RefNameDto"
+            "$ref": "#/components/schemas/RefShopWithZoneDto"
           },
           "barber": {
             "$ref": "#/components/schemas/RefBarberDto"
@@ -12606,16 +11877,10 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "ATTENDED",
-              "NO_SHOW"
-            ]
+            "enum": ["ATTENDED", "NO_SHOW"]
           }
         },
-        "required": [
-          "reason",
-          "status"
-        ]
+        "required": ["reason", "status"]
       },
       "ManualRefundDto": {
         "type": "object",
@@ -12631,10 +11896,7 @@
             "description": "Céntimos; hasta lo cobrado y aún no devuelto."
           }
         },
-        "required": [
-          "reason",
-          "amount"
-        ]
+        "required": ["reason", "amount"]
       },
       "RefundRequestedDto": {
         "type": "object",
@@ -12644,9 +11906,7 @@
             "format": "uuid"
           }
         },
-        "required": [
-          "refundId"
-        ]
+        "required": ["refundId"]
       },
       "AdminFailedRefundDto": {
         "type": "object",
@@ -12701,10 +11961,20 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
+      },
+      "RefNameDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name"]
       },
       "AdminCancellationReviewDto": {
         "type": "object",
@@ -12729,21 +11999,10 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "PENDING_REVIEW",
-              "JUSTIFIED",
-              "UNJUSTIFIED"
-            ]
+            "enum": ["PENDING_REVIEW", "JUSTIFIED", "UNJUSTIFIED"]
           }
         },
-        "required": [
-          "id",
-          "bookingId",
-          "barbershop",
-          "reason",
-          "cancelledAt",
-          "status"
-        ]
+        "required": ["id", "bookingId", "barbershop", "reason", "cancelledAt", "status"]
       },
       "AdminCancellationReviewPageDto": {
         "type": "object",
@@ -12759,10 +12018,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "CancellationVerdictDto": {
         "type": "object",
@@ -12774,36 +12030,24 @@
           },
           "verdict": {
             "type": "string",
-            "enum": [
-              "JUSTIFIED",
-              "UNJUSTIFIED"
-            ]
+            "enum": ["JUSTIFIED", "UNJUSTIFIED"]
           }
         },
-        "required": [
-          "reason",
-          "verdict"
-        ]
+        "required": ["reason", "verdict"]
       },
       "VerdictResultDto": {
         "type": "object",
         "properties": {
           "verdict": {
             "type": "string",
-            "enum": [
-              "JUSTIFIED",
-              "UNJUSTIFIED"
-            ]
+            "enum": ["JUSTIFIED", "UNJUSTIFIED"]
           },
           "barbershopSuspended": {
             "type": "boolean",
             "description": "Si este veredicto suspendió la barbería."
           }
         },
-        "required": [
-          "verdict",
-          "barbershopSuspended"
-        ]
+        "required": ["verdict", "barbershopSuspended"]
       },
       "ReportCountDto": {
         "type": "object",
@@ -12815,10 +12059,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "reason",
-          "count"
-        ]
+        "required": ["reason", "count"]
       },
       "AdminReviewDto": {
         "type": "object",
@@ -12836,11 +12077,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "VISIBLE",
-              "HIDDEN",
-              "UNDER_REVIEW"
-            ]
+            "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"]
           },
           "responseText": {
             "type": "string",
@@ -12848,11 +12085,7 @@
           },
           "responseStatus": {
             "type": "string",
-            "enum": [
-              "VISIBLE",
-              "HIDDEN",
-              "UNDER_REVIEW"
-            ],
+            "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"],
             "nullable": true
           },
           "barbershop": {
@@ -12904,10 +12137,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "ReviewModerationDto": {
         "type": "object",
@@ -12919,46 +12149,29 @@
           },
           "target": {
             "type": "string",
-            "enum": [
-              "REVIEW",
-              "RESPONSE"
-            ],
+            "enum": ["REVIEW", "RESPONSE"],
             "default": "REVIEW"
           },
           "decision": {
             "type": "string",
-            "enum": [
-              "KEEP",
-              "HIDE",
-              "RESTORE"
-            ],
+            "enum": ["KEEP", "HIDE", "RESTORE"],
             "description": "KEEP: vuelve a visible. HIDE: oculta. RESTORE: muestra lo que ocultó soporte."
           }
         },
-        "required": [
-          "reason",
-          "decision"
-        ]
+        "required": ["reason", "decision"]
       },
       "ModerationResultDto": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "VISIBLE",
-              "HIDDEN",
-              "UNDER_REVIEW"
-            ]
+            "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"]
           },
           "resolvedReports": {
             "type": "number"
           }
         },
-        "required": [
-          "status",
-          "resolvedReports"
-        ]
+        "required": ["status", "resolvedReports"]
       },
       "AdminSettingDto": {
         "type": "object",
@@ -12967,8 +12180,27 @@
             "type": "string"
           },
           "value": {
-            "type": "object",
-            "nullable": true
+            "nullable": true,
+            "description": "Valor actual (cualquier JSON).",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "object",
+                "additionalProperties": true
+              }
+            ]
           },
           "description": {
             "type": "string",
@@ -12984,6 +12216,7 @@
           "schema": {
             "type": "object",
             "nullable": true,
+            "additionalProperties": true,
             "description": "type y rango (min, max, multipleOf) o longitud."
           },
           "updatedAt": {
@@ -13011,14 +12244,29 @@
             "maxLength": 500
           },
           "value": {
-            "type": "object",
-            "description": "Nuevo valor, según el esquema del ajuste."
+            "description": "Nuevo valor, según el esquema del ajuste (cualquier JSON).",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "array",
+                "items": {}
+              },
+              {
+                "type": "object",
+                "additionalProperties": true
+              }
+            ]
           }
         },
-        "required": [
-          "reason",
-          "value"
-        ]
+        "required": ["reason", "value"]
       },
       "AdminCategoryDto": {
         "type": "object",
@@ -13044,14 +12292,7 @@
             "description": "Servicios que la usan."
           }
         },
-        "required": [
-          "id",
-          "key",
-          "name",
-          "sortOrder",
-          "isActive",
-          "servicesCount"
-        ]
+        "required": ["id", "key", "name", "sortOrder", "isActive", "servicesCount"]
       },
       "CreateCategoryDto": {
         "type": "object",
@@ -13071,10 +12312,7 @@
             "default": 0
           }
         },
-        "required": [
-          "key",
-          "name"
-        ]
+        "required": ["key", "name"]
       },
       "UpdateCategoryDto": {
         "type": "object",
@@ -13102,10 +12340,7 @@
           },
           "platform": {
             "type": "string",
-            "enum": [
-              "IOS",
-              "ANDROID"
-            ]
+            "enum": ["IOS", "ANDROID"]
           },
           "appVersion": {
             "type": "string",
@@ -13113,10 +12348,7 @@
             "maxLength": 40
           }
         },
-        "required": [
-          "pushToken",
-          "platform"
-        ]
+        "required": ["pushToken", "platform"]
       },
       "DeviceDto": {
         "type": "object",
@@ -13128,11 +12360,7 @@
           },
           "platform": {
             "type": "string",
-            "enum": [
-              "IOS",
-              "ANDROID",
-              "WEB"
-            ]
+            "enum": ["IOS", "ANDROID", "WEB"]
           },
           "appVersion": {
             "type": "string",
@@ -13143,12 +12371,7 @@
             "format": "date-time"
           }
         },
-        "required": [
-          "id",
-          "platform",
-          "appVersion",
-          "lastSeenAt"
-        ]
+        "required": ["id", "platform", "appVersion", "lastSeenAt"]
       },
       "DeviceListDto": {
         "type": "object",
@@ -13160,22 +12383,14 @@
             }
           }
         },
-        "required": [
-          "items"
-        ]
+        "required": ["items"]
       },
       "NotificationResourceDto": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "booking",
-              "review",
-              "ticket",
-              "barbershop",
-              "account"
-            ],
+            "enum": ["booking", "review", "ticket", "barbershop", "account"],
             "description": "Pantalla que abre la app al tocar el aviso."
           },
           "id": {
@@ -13183,10 +12398,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "type",
-          "id"
-        ]
+        "required": ["type", "id"]
       },
       "NotificationDto": {
         "type": "object",
@@ -13218,15 +12430,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "id",
-          "type",
-          "title",
-          "body",
-          "resource",
-          "createdAt",
-          "readAt"
-        ]
+        "required": ["id", "type", "title", "body", "resource", "createdAt", "readAt"]
       },
       "NotificationPageDto": {
         "type": "object",
@@ -13242,10 +12446,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "items",
-          "nextCursor"
-        ]
+        "required": ["items", "nextCursor"]
       },
       "UnreadCountDto": {
         "type": "object",
@@ -13254,9 +12455,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "unread"
-        ]
+        "required": ["unread"]
       },
       "MarkedReadDto": {
         "type": "object",
@@ -13265,9 +12464,123 @@
             "type": "number"
           }
         },
+        "required": ["updated"]
+      },
+      "DeletionBlockerDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": ["SOLE_OWNER", "STAFF_ROLE"],
+            "description": "SOLE_OWNER: único OWNER de una barbería (transfiere la propiedad o elimínala). STAFF_ROLE: cuenta de soporte o ADMIN (pide que te quiten el rol)."
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "barbershopName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["reason", "barbershopId", "barbershopName"]
+      },
+      "AccountDeletionBookingDto": {
+        "type": "object",
+        "properties": {
+          "bookingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING_PAYMENT", "CONFIRMED"]
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/BookingBarbershopDto"
+          },
+          "refund": {
+            "$ref": "#/components/schemas/RefundQuoteDto"
+          }
+        },
+        "required": ["bookingId", "status", "startAt", "barbershop", "refund"]
+      },
+      "AccountDeletionPreviewDto": {
+        "type": "object",
+        "properties": {
+          "canRequest": {
+            "type": "boolean",
+            "description": "Se puede solicitar ahora (sin bloqueos ni solicitud pendiente)."
+          },
+          "blockers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DeletionBlockerDto"
+            }
+          },
+          "bookings": {
+            "description": "Reservas que se cancelarán al confirmar (como cancelación del cliente) y cuánto se devuelve por cada una. No se restauran si luego se cancela la eliminación.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountDeletionBookingDto"
+            }
+          },
+          "graceDays": {
+            "type": "number",
+            "example": 30
+          },
+          "scheduledForIfRequestedNow": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "pending": {
+            "type": "boolean"
+          }
+        },
         "required": [
-          "updated"
+          "canRequest",
+          "blockers",
+          "bookings",
+          "graceDays",
+          "scheduledForIfRequestedNow",
+          "pending"
         ]
+      },
+      "AccountDeletionStatusDto": {
+        "type": "object",
+        "properties": {
+          "pending": {
+            "type": "boolean",
+            "description": "Hay una eliminación programada (se puede cancelar)."
+          },
+          "requestedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "scheduledFor": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "Cuándo se ejecuta (hasta entonces se puede cancelar)."
+          }
+        },
+        "required": ["pending", "requestedAt", "scheduledFor"]
+      },
+      "RequestAccountDeletionDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "Contraseña actual (confirmación)."
+          }
+        },
+        "required": ["password"]
       }
     }
   }

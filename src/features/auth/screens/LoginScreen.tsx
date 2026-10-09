@@ -6,16 +6,23 @@ import { useLogin, type UseLoginOptions } from '../hooks/useLogin';
 
 export interface LoginScreenProps extends UseLoginOptions {
   /** Message from the previous step (account created, password changed). */
-  notice?: 'registered' | 'passwordChanged';
+  notice?: 'registered' | 'passwordChanged' | 'deletionCancelled';
   onForgotPassword: () => void;
   onRegister: () => void;
 }
 
-export function LoginScreen({ notice, onForgotPassword, onRegister, onSuccess }: LoginScreenProps) {
+export function LoginScreen({
+  notice,
+  onForgotPassword,
+  onRegister,
+  onSuccess,
+  onPendingDeletion,
+}: LoginScreenProps) {
   const { t } = useTranslation('auth');
   const errorText = useFieldErrorText('auth');
   const { form, submit, isSubmitting, generalError, lockedSeconds, lockedWithoutTime } = useLogin({
     onSuccess,
+    onPendingDeletion,
   });
   const locked = lockedSeconds > 0;
   return (

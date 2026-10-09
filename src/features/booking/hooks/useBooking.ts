@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useIsFocused } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { useBarbershopQuery, useServicesQuery } from '@/features/barbershop';
+import { useServicesQuery } from '@/features/barbershop';
 import { nextPageParam, translateError } from '@/shared/api';
 import { useCountdown } from '@/shared/lib';
 import {
@@ -40,7 +40,6 @@ export function useBooking(id: string) {
     refetchInterval: (q) => pollInterval(q.state.data?.status, isFocused),
   });
   const booking = query.data;
-  const shop = useBarbershopQuery(booking?.barbershop.id);
 
   // Countdown to expiresAt; at zero, ask the server instead of assuming EXPIRED.
   const countdown = useCountdown();
@@ -87,8 +86,8 @@ export function useBooking(id: string) {
   return {
     query,
     booking,
-    timeZone: shop.data?.timezone,
-    timeZoneError: shop.error,
+    /** Hours are always shown in the barbershop's zone, as the API sends it. */
+    timeZone: booking?.barbershop.timezone,
     secondsLeft: countdown.secondsLeft,
     preview,
     canCancel: preview.data?.allowed === true,
@@ -125,14 +124,6 @@ export function useMyBookings(scope: BookingScope) {
     fetchNextPage: query.fetchNextPage,
     refetch: query.refetch,
   };
-}
-
-/**
- * Zone of a booking's barbershop. BookingDto does not carry it yet (requested to the backend as
- * `barbershop.timezone`): read from the barbershop detail, cached per barbershop.
- */
-export function useBookingTimeZone(barbershopId: string) {
-  return useBarbershopQuery(barbershopId).data?.timezone;
 }
 
 /**
