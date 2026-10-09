@@ -25,6 +25,9 @@ export type TimeBlockBody = S['CreateTimeBlockDto'];
 export type TimeBlockType = S['TimeBlockType'];
 export type MyBarberProfile = S['MyBarberProfileDto'];
 export type Category = S['ServiceCategoryDto'];
+export type OwnerDocumentBody = S['OwnerDocumentInputDto'];
+export type ShopReview = S['BarbershopReviewDto'];
+export type ShopStatus = S['BarbershopStatus'];
 
 /** Largest page the API allows: management lists are short. */
 const PAGE = 100;
@@ -41,6 +44,7 @@ export const shopKeys = {
   hours: (id: string) => ['shop-management', id, 'hours'] as const,
   barberSchedule: (id: string, barberId: string) => ['shop-management', id, 'schedule', barberId] as const,
   blocks: (id: string) => ['shop-management', id, 'blocks'] as const,
+  review: (id: string) => ['shop-management', id, 'review'] as const,
   myBarber: ['shop-management', 'me-barber'] as const,
   invitations: ['shop-management', 'invitations'] as const,
   categories: ['service-categories'] as const,
@@ -59,6 +63,14 @@ export const updateShop = (id: string, body: UpdateShopBody): Promise<ManagedSho
   unwrap(api.PATCH('/api/v1/barbershops/{id}', { params: path(id), body }));
 export const updateShopStatus = (id: string, body: StatusBody): Promise<ManagedShop> =>
   unwrap(api.PATCH('/api/v1/barbershops/{id}/status', { params: path(id), body }));
+// Review before publishing (ALTA.md)
+export const fetchReview = (id: string): Promise<ShopReview> =>
+  unwrap(api.GET('/api/v1/barbershops/{id}/review', { params: path(id) }));
+export const submitReview = (id: string) =>
+  unwrap(api.POST('/api/v1/barbershops/{id}/review/submit', { params: path(id) }));
+export const saveOwnerDocument = (id: string, body: OwnerDocumentBody) =>
+  unwrap(api.PUT('/api/v1/barbershops/{id}/owner-document', { params: path(id), body }));
+
 export const fetchCategories = (): Promise<Category[]> =>
   unwrap(api.GET('/api/v1/service-categories')).then((list) => list.items);
 

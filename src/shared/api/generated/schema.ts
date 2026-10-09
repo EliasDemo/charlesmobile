@@ -53,6 +53,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/barbershops/{id}/owner-document": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Alta: ver el documento del responsable, con motivo; se audita */
+        post: operations["AdminBarbershopsController_ownerDocument_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/barbershops/{id}/reactivate": {
         parameters: {
             query?: never;
@@ -64,6 +81,26 @@ export type paths = {
         put?: never;
         /** RF-OPE-002: reactivar una barbería suspendida */
         post: operations["AdminBarbershopsController_reactivate_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/barbershops/{id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Alta: pedir cambios (rechazar con motivo); el dueño corrige y reenvía
+         * @description PENDING_REVIEW → CHANGES_REQUESTED. El motivo lo ve el dueño.
+         */
+        post: operations["AdminBarbershopsController_reject_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1001,6 +1038,26 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/barbershops/{id}/owner-document": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Alta: registrar o cambiar el documento del responsable (solo OWNER)
+         * @description RUC (11 dígitos, dígito verificador válido) o DNI (8). Se guarda cifrado; la respuesta lo devuelve enmascarado. Si la barbería ya estaba aprobada, sigue visible y queda marcada para que soporte revise el cambio.
+         */
+        put: operations["BarbershopsController_setOwnerDocument_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops/{id}/reports": {
         parameters: {
             query?: never;
@@ -1015,6 +1072,43 @@ export type paths = {
          * @description Sus miembros no la reportan (403). Comparte el límite de valoraciones y reportes.
          */
         post: operations["BarbershopReportsController_report_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Alta: estado de la revisión, requisitos que faltan e historial (OWNER o MANAGER) */
+        get: operations["BarbershopsController_review_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/review/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Alta: enviar o reenviar a revisión (solo OWNER, desde DRAFT o CHANGES_REQUESTED)
+         * @description 409 REVIEW_REQUIREMENTS_MISSING con lo que falta en details.
+         */
+        post: operations["BarbershopsController_submitReview_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1966,12 +2060,31 @@ export type components = {
             id: string;
             name: string;
             openReports: number;
+            /**
+             * @description Solo el tipo; el número se pide aparte con motivo.
+             * @enum {string|null}
+             */
+            ownerDocumentType: "RUC" | "DNI" | null;
             /** @description Reportes abiertos. */
             reports: components["schemas"]["BarbershopReportDto"][];
+            /** @description Motivo de la última solicitud de cambios. */
+            reviewNotes: string | null;
             /** @enum {string} */
-            status: "OPEN" | "TEMPORARILY_CLOSED" | "SUSPENDED" | "PENDING_REVIEW";
+            status: "OPEN" | "TEMPORARILY_CLOSED" | "SUSPENDED" | "PENDING_REVIEW" | "DRAFT" | "CHANGES_REQUESTED";
+            /** @description Envíos a revisión, el más reciente primero. */
+            submissions: components["schemas"]["AdminReviewSubmissionDto"][];
+            /**
+             * Format: date-time
+             * @description Envío a revisión en espera.
+             */
+            submittedForReviewAt: string | null;
             /** @enum {string} */
             type: "BARBERSHOP" | "INDEPENDENT";
+            /**
+             * Format: date-time
+             * @description Desde cuándo espera atención (envío, marca o reporte más antiguo). La cola se ordena por esto.
+             */
+            waitingSince: string;
         };
         AdminBarbershopDto: {
             /** Format: date-time */
@@ -1984,10 +2097,25 @@ export type components = {
             id: string;
             name: string;
             openReports: number;
+            /**
+             * @description Solo el tipo; el número se pide aparte con motivo.
+             * @enum {string|null}
+             */
+            ownerDocumentType: "RUC" | "DNI" | null;
             /** @enum {string} */
-            status: "OPEN" | "TEMPORARILY_CLOSED" | "SUSPENDED" | "PENDING_REVIEW";
+            status: "OPEN" | "TEMPORARILY_CLOSED" | "SUSPENDED" | "PENDING_REVIEW" | "DRAFT" | "CHANGES_REQUESTED";
+            /**
+             * Format: date-time
+             * @description Envío a revisión en espera.
+             */
+            submittedForReviewAt: string | null;
             /** @enum {string} */
             type: "BARBERSHOP" | "INDEPENDENT";
+            /**
+             * Format: date-time
+             * @description Desde cuándo espera atención (envío, marca o reporte más antiguo). La cola se ordena por esto.
+             */
+            waitingSince: string;
         };
         AdminBarbershopPageDto: {
             items: components["schemas"]["AdminBarbershopDto"][];
@@ -2103,6 +2231,15 @@ export type components = {
             items: components["schemas"]["AdminReviewDto"][];
             nextCursor: string | null;
         };
+        AdminReviewSubmissionDto: {
+            /** Format: date-time */
+            decidedAt: string | null;
+            /** @enum {string|null} */
+            decision: "APPROVED" | "CHANGES_REQUESTED" | null;
+            reason: string | null;
+            /** Format: date-time */
+            submittedAt: string;
+        };
         AdminSettingDto: {
             description: string | null;
             editable: boolean;
@@ -2166,7 +2303,7 @@ export type components = {
             endAt: string;
             /** @description CONFIRMED que ya empezó y sigue sin marcar (RF-ATE-001). */
             pendingAttention: boolean;
-            service: components["schemas"]["NamedRefDto"];
+            service: components["schemas"]["BookingServiceDto"];
             /** Format: date-time */
             startAt: string;
             status: components["schemas"]["BookingStatus"];
@@ -2306,10 +2443,11 @@ export type components = {
             longitude: number;
             myRole: components["schemas"]["BarbershopMemberRole"];
             name: string;
+            /** @description Solo para el OWNER (enmascarado); null para MANAGER o si aún no se registró. */
+            ownerDocument: components["schemas"]["OwnerDocumentViewDto"] | null;
             /** @description Teléfono del negocio. */
             phone: string | null;
             rating: components["schemas"]["RatingDto"];
-            ruc: string | null;
             status: components["schemas"]["BarbershopStatus"];
             /** @example America/Lima */
             timezone: string;
@@ -2348,8 +2486,24 @@ export type components = {
             /** @enum {string} */
             reason: "FRAUD" | "MISLEADING_INFO" | "INAPPROPRIATE" | "NOT_OPERATING" | "SAFETY" | "OTHER";
         };
+        BarbershopReviewDto: {
+            /** @description Se puede enviar ahora (DRAFT o CHANGES_REQUESTED, sin faltantes). */
+            canSubmit: boolean;
+            /** @description Lo que falta para enviar a revisión (PHOTO solo si barbershops.require_photo). */
+            missingRequirements: ("OWNER_DOCUMENT" | "PHOTO")[];
+            /** @description Motivo de la última solicitud de cambios. */
+            reviewNotes: string | null;
+            status: components["schemas"]["BarbershopStatus"];
+            /** @description Historial, el más reciente primero. */
+            submissions: components["schemas"]["ReviewSubmissionDto"][];
+            /**
+             * Format: date-time
+             * @description Envío en espera.
+             */
+            submittedAt: string | null;
+        };
         /** @enum {string} */
-        BarbershopStatus: "OPEN" | "TEMPORARILY_CLOSED" | "SUSPENDED" | "PENDING_REVIEW";
+        BarbershopStatus: "OPEN" | "TEMPORARILY_CLOSED" | "SUSPENDED" | "PENDING_REVIEW" | "DRAFT" | "CHANGES_REQUESTED";
         /**
          * @description BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).
          * @enum {string}
@@ -2386,8 +2540,8 @@ export type components = {
             /** Format: uuid */
             id: string;
             price: components["schemas"]["BookingPriceDto"];
-            /** @description Nombre del servicio al reservar (copia). */
-            service: components["schemas"]["NamedRefDto"];
+            /** @description Nombre del servicio al reservar (copia) y su categoría. */
+            service: components["schemas"]["BookingServiceDto"];
             /** Format: date-time */
             startAt: string;
             status: components["schemas"]["BookingStatus"];
@@ -2403,6 +2557,16 @@ export type components = {
             subtotal: components["schemas"]["MoneyDto"];
             /** @description Incluye impuestos (ADR 0002). */
             total: components["schemas"]["MoneyDto"];
+        };
+        BookingServiceDto: {
+            /**
+             * @description Clave de la categoría del servicio.
+             * @example haircut
+             */
+            categoryKey: string;
+            /** Format: uuid */
+            id: string;
+            name: string | null;
         };
         /** @enum {string} */
         BookingStatus: "PENDING_PAYMENT" | "CONFIRMED" | "ATTENDED" | "CANCELLED" | "NO_SHOW" | "EXPIRED";
@@ -2467,8 +2631,8 @@ export type components = {
             price: components["schemas"]["BookingPriceDto"];
             /** @description Devolución aplicada. */
             refund: components["schemas"]["RefundQuoteDto"];
-            /** @description Nombre del servicio al reservar (copia). */
-            service: components["schemas"]["NamedRefDto"];
+            /** @description Nombre del servicio al reservar (copia) y su categoría. */
+            service: components["schemas"]["BookingServiceDto"];
             /** Format: date-time */
             startAt: string;
             status: components["schemas"]["BookingStatus"];
@@ -2529,10 +2693,10 @@ export type components = {
             longitude: number;
             /** @example Barbería Central */
             name: string;
+            /** @description Documento del responsable. Con revisión previa activa: si se envía (y se cumplen los demás requisitos) la barbería va directo a PENDING_REVIEW; si no, queda en DRAFT. */
+            ownerDocument?: components["schemas"]["OwnerDocumentInputDto"];
             /** @example +51 1 234 5678 */
             phone: string;
-            /** @example 20123456789 */
-            ruc?: string | null;
             /**
              * @description Zona horaria IANA.
              * @example America/Lima
@@ -2587,12 +2751,13 @@ export type components = {
             longitude: number;
             myRole: components["schemas"]["BarbershopMemberRole"];
             name: string;
+            /** @description Solo para el OWNER (enmascarado); null para MANAGER o si aún no se registró. */
+            ownerDocument: components["schemas"]["OwnerDocumentViewDto"] | null;
             /** @description true si se agregó el rol OWNER a la cuenta: renueva el token para verlo reflejado en él. */
             ownerRoleGranted: boolean;
             /** @description Teléfono del negocio. */
             phone: string | null;
             rating: components["schemas"]["RatingDto"];
-            ruc: string | null;
             status: components["schemas"]["BarbershopStatus"];
             /** @example America/Lima */
             timezone: string;
@@ -2621,8 +2786,8 @@ export type components = {
             id: string;
             payment: components["schemas"]["PaymentStartDto"];
             price: components["schemas"]["BookingPriceDto"];
-            /** @description Nombre del servicio al reservar (copia). */
-            service: components["schemas"]["NamedRefDto"];
+            /** @description Nombre del servicio al reservar (copia) y su categoría. */
+            service: components["schemas"]["BookingServiceDto"];
             /** Format: date-time */
             startAt: string;
             status: components["schemas"]["BookingStatus"];
@@ -2649,12 +2814,13 @@ export type components = {
             longitude: number;
             myRole: components["schemas"]["BarbershopMemberRole"];
             name: string;
+            /** @description Solo para el OWNER (enmascarado); null para MANAGER o si aún no se registró. */
+            ownerDocument: components["schemas"]["OwnerDocumentViewDto"] | null;
             /** @description true si se agregó el rol OWNER a la cuenta: renueva el token para verlo reflejado en él. */
             ownerRoleGranted: boolean;
             /** @description Teléfono del negocio. */
             phone: string | null;
             rating: components["schemas"]["RatingDto"];
-            ruc: string | null;
             status: components["schemas"]["BarbershopStatus"];
             /** @example America/Lima */
             timezone: string;
@@ -2682,10 +2848,10 @@ export type components = {
             longitude: number;
             /** @example Barbería Central */
             name: string;
+            /** @description Documento del responsable. Con revisión previa activa: si se envía (y se cumplen los demás requisitos) la barbería va directo a PENDING_REVIEW; si no, queda en DRAFT. */
+            ownerDocument?: components["schemas"]["OwnerDocumentInputDto"];
             /** @example +51 1 234 5678 */
             phone: string;
-            /** @example 20123456789 */
-            ruc?: string | null;
             /**
              * @description Zona horaria IANA.
              * @example America/Lima
@@ -3072,6 +3238,29 @@ export type components = {
              */
             type: "booking" | "review" | "ticket" | "barbershop" | "account";
         };
+        OwnerDocumentDto: {
+            number: string;
+            /** @enum {string} */
+            type: "RUC" | "DNI";
+        };
+        OwnerDocumentInputDto: {
+            /**
+             * @description RUC: 11 dígitos con dígito verificador válido. DNI: 8 dígitos.
+             * @example 20100047218
+             */
+            number: string;
+            type: components["schemas"]["OwnerDocumentType"];
+        };
+        /** @enum {string} */
+        OwnerDocumentType: "RUC" | "DNI";
+        OwnerDocumentViewDto: {
+            /**
+             * @description Solo los 3 últimos dígitos.
+             * @example ********218
+             */
+            masked: string;
+            type: components["schemas"]["OwnerDocumentType"];
+        };
         PasswordResetConfirmDto: {
             /** @example 123456 */
             code: string;
@@ -3297,6 +3486,16 @@ export type components = {
         ReviewResponseInputDto: {
             /** @description Texto plano. */
             text: string;
+        };
+        ReviewSubmissionDto: {
+            /** Format: date-time */
+            decidedAt: string | null;
+            /** @enum {string|null} */
+            decision: "APPROVED" | "CHANGES_REQUESTED" | null;
+            /** @description Motivo al pedir cambios. */
+            reason: string | null;
+            /** Format: date-time */
+            submittedAt: string;
         };
         /** @enum {string} */
         Role: "CLIENT" | "BARBER" | "OWNER" | "SUPPORT" | "ADMIN";
@@ -3637,8 +3836,6 @@ export type components = {
             name?: string;
             /** @example +51 1 234 5678 */
             phone?: string;
-            /** @example 20123456789 */
-            ruc?: string | null;
             /**
              * @description Zona horaria IANA.
              * @example America/Lima
@@ -3755,7 +3952,7 @@ export interface operations {
                 cursor?: string;
                 limit?: number;
                 /** @description Sin estado: las que necesitan atención (reportes, marcas, pendientes). */
-                status?: "OPEN" | "TEMPORARILY_CLOSED" | "SUSPENDED" | "PENDING_REVIEW";
+                status?: "OPEN" | "TEMPORARILY_CLOSED" | "SUSPENDED" | "PENDING_REVIEW" | "DRAFT" | "CHANGES_REQUESTED";
             };
             header?: never;
             path?: never;
@@ -3875,7 +4072,97 @@ export interface operations {
             };
         };
     };
+    AdminBarbershopsController_ownerDocument_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReasonDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OwnerDocumentDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     AdminBarbershopsController_reactivate_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReasonDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminBarbershopDetailDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminBarbershopsController_reject_v1: {
         parameters: {
             query?: never;
             header?: never;
@@ -6383,6 +6670,47 @@ export interface operations {
             };
         };
     };
+    BarbershopsController_setOwnerDocument_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OwnerDocumentInputDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopManageDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     BarbershopReportsController_report_v1: {
         parameters: {
             query?: never;
@@ -6429,6 +6757,72 @@ export interface operations {
                 };
             };
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopsController_review_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopReviewDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopsController_submitReview_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopReviewDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

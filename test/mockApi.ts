@@ -218,7 +218,7 @@ export const booking = (overrides: Partial<Schemas['BookingDto']> = {}): Schemas
   id: 'bk-1',
   status: 'PENDING_PAYMENT',
   barbershop: { id: SHOP_ID, name: 'Barbería Demo Miraflores', timezone: 'America/Lima' },
-  service: { id: '01990000-0000-7000-8000-00000000012d', name: 'Corte clásico' },
+  service: { id: '01990000-0000-7000-8000-00000000012d', name: 'Corte clásico', categoryKey: 'haircut' },
   barber: { id: '01990000-0000-7000-8000-0000000000ca', name: 'Barbero Demo' },
   barberChosenByClient: false,
   client: null,

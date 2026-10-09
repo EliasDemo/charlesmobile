@@ -112,7 +112,38 @@ function ShopFormView({ shop, onDone }: { shop?: ManagedShop; onDone: (shopId: s
         keyboardType: 'phone-pad',
         placeholder: t('form.phonePlaceholder'),
       })}
-      {field('ruc', t('form.ruc'), { keyboardType: 'number-pad' })}
+      {f.canEditDocument ? (
+        <Card>
+          <Text variant="subtitle">{t('document.title')}</Text>
+          <Text variant="caption" color="textSecondary">
+            {f.editing ? t('document.editHint') : t('document.createHint')}
+          </Text>
+          {f.currentDocument ? (
+            <Text color="textSecondary">
+              {t('document.current', { type: f.currentDocument.type, masked: f.currentDocument.masked })}
+            </Text>
+          ) : null}
+          <Controller
+            control={f.form.control}
+            name="documentType"
+            render={({ field: c }) => (
+              <SegmentedControl
+                label={t('document.type')}
+                value={c.value}
+                onChange={c.onChange}
+                options={[
+                  { value: 'RUC', label: t('document.RUC') },
+                  { value: 'DNI', label: t('document.DNI') },
+                ]}
+              />
+            )}
+          />
+          {field('documentNumber', f.currentDocument ? t('document.newNumber') : t('document.number'), {
+            keyboardType: 'number-pad',
+            maxLength: f.documentMaxLength,
+          })}
+        </Card>
+      ) : null}
       {field('websiteUrl', t('form.website'), {
         keyboardType: 'url',
         autoCapitalize: 'none',

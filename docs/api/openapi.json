@@ -820,6 +820,170 @@
         "tags": ["barbershops"]
       }
     },
+    "/api/v1/barbershops/{id}/owner-document": {
+      "put": {
+        "description": "RUC (11 dígitos, dígito verificador válido) o DNI (8). Se guarda cifrado; la respuesta lo devuelve enmascarado. Si la barbería ya estaba aprobada, sigue visible y queda marcada para que soporte revise el cambio.",
+        "operationId": "BarbershopsController_setOwnerDocument_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OwnerDocumentInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopManageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Alta: registrar o cambiar el documento del responsable (solo OWNER)",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/barbershops/{id}/review": {
+      "get": {
+        "operationId": "BarbershopsController_review_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopReviewDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Alta: estado de la revisión, requisitos que faltan e historial (OWNER o MANAGER)",
+        "tags": ["barbershops"]
+      }
+    },
+    "/api/v1/barbershops/{id}/review/submit": {
+      "post": {
+        "description": "409 REVIEW_REQUIREMENTS_MISSING con lo que falta en details.",
+        "operationId": "BarbershopsController_submitReview_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopReviewDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Alta: enviar o reenviar a revisión (solo OWNER, desde DRAFT o CHANGES_REQUESTED)",
+        "tags": ["barbershops"]
+      }
+    },
     "/api/v1/barbershops/{id}/status": {
       "patch": {
         "operationId": "BarbershopsController_updateStatus_v1",
@@ -5754,7 +5918,6 @@
             "in": "query",
             "description": "Valor de nextCursor de la página anterior.",
             "schema": {
-              "format": "uuid",
               "type": "string"
             }
           },
@@ -5765,7 +5928,14 @@
             "description": "Sin estado: las que necesitan atención (reportes, marcas, pendientes).",
             "schema": {
               "type": "string",
-              "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
+              "enum": [
+                "OPEN",
+                "TEMPORARILY_CLOSED",
+                "SUSPENDED",
+                "PENDING_REVIEW",
+                "DRAFT",
+                "CHANGES_REQUESTED"
+              ]
             }
           }
         ],
@@ -5935,6 +6105,145 @@
           }
         ],
         "summary": "RF-OPE-002: aprobar una barbería PENDING_REVIEW",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/barbershops/{id}/reject": {
+      "post": {
+        "description": "PENDING_REVIEW → CHANGES_REQUESTED. El motivo lo ve el dueño.",
+        "operationId": "AdminBarbershopsController_reject_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminBarbershopDetailDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Alta: pedir cambios (rechazar con motivo); el dueño corrige y reenvía",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/barbershops/{id}/owner-document": {
+      "post": {
+        "operationId": "AdminBarbershopsController_ownerDocument_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OwnerDocumentDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Alta: ver el documento del responsable, con motivo; se audita",
         "tags": ["admin"]
       }
     },
@@ -7852,6 +8161,28 @@
         },
         "required": ["code"]
       },
+      "OwnerDocumentType": {
+        "type": "string",
+        "enum": ["RUC", "DNI"]
+      },
+      "OwnerDocumentInputDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OwnerDocumentType"
+              }
+            ]
+          },
+          "number": {
+            "type": "string",
+            "example": "20100047218",
+            "description": "RUC: 11 dígitos con dígito verificador válido. DNI: 8 dígitos."
+          }
+        },
+        "required": ["type", "number"]
+      },
       "CreateBarbershopDto": {
         "type": "object",
         "properties": {
@@ -7886,10 +8217,13 @@
             "type": "string",
             "example": "+51 1 234 5678"
           },
-          "ruc": {
-            "type": "string",
-            "example": "20123456789",
-            "nullable": true
+          "ownerDocument": {
+            "description": "Documento del responsable. Con revisión previa activa: si se envía (y se cumplen los demás requisitos) la barbería va directo a PENDING_REVIEW; si no, queda en DRAFT.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OwnerDocumentInputDto"
+              }
+            ]
           },
           "websiteUrl": {
             "type": "string",
@@ -7913,7 +8247,14 @@
       },
       "BarbershopStatus": {
         "type": "string",
-        "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
+        "enum": [
+          "OPEN",
+          "TEMPORARILY_CLOSED",
+          "SUSPENDED",
+          "PENDING_REVIEW",
+          "DRAFT",
+          "CHANGES_REQUESTED"
+        ]
       },
       "ClosureDto": {
         "type": "object",
@@ -7961,6 +8302,24 @@
           }
         },
         "required": ["average", "count"]
+      },
+      "OwnerDocumentViewDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OwnerDocumentType"
+              }
+            ]
+          },
+          "masked": {
+            "type": "string",
+            "example": "********218",
+            "description": "Solo los 3 últimos dígitos."
+          }
+        },
+        "required": ["type", "masked"]
       },
       "BarbershopMemberRole": {
         "type": "string",
@@ -8032,9 +8391,15 @@
             "type": "boolean",
             "description": "Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false."
           },
-          "ruc": {
-            "type": "string",
-            "nullable": true
+          "ownerDocument": {
+            "nullable": true,
+            "description": "Solo para el OWNER (enmascarado); null para MANAGER o si aún no se registró.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OwnerDocumentViewDto"
+              }
+            ]
           },
           "myRole": {
             "allOf": [
@@ -8067,7 +8432,7 @@
           "links",
           "rating",
           "isFavorite",
-          "ruc",
+          "ownerDocument",
           "myRole",
           "createdAt",
           "ownerRoleGranted"
@@ -8107,10 +8472,13 @@
             "type": "string",
             "example": "+51 1 234 5678"
           },
-          "ruc": {
-            "type": "string",
-            "example": "20123456789",
-            "nullable": true
+          "ownerDocument": {
+            "description": "Documento del responsable. Con revisión previa activa: si se envía (y se cumplen los demás requisitos) la barbería va directo a PENDING_REVIEW; si no, queda en DRAFT.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OwnerDocumentInputDto"
+              }
+            ]
           },
           "websiteUrl": {
             "type": "string",
@@ -8201,9 +8569,15 @@
             "type": "boolean",
             "description": "Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false."
           },
-          "ruc": {
-            "type": "string",
-            "nullable": true
+          "ownerDocument": {
+            "nullable": true,
+            "description": "Solo para el OWNER (enmascarado); null para MANAGER o si aún no se registró.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OwnerDocumentViewDto"
+              }
+            ]
           },
           "myRole": {
             "allOf": [
@@ -8245,7 +8619,7 @@
           "links",
           "rating",
           "isFavorite",
-          "ruc",
+          "ownerDocument",
           "myRole",
           "createdAt",
           "ownerRoleGranted",
@@ -8371,11 +8745,6 @@
             "type": "string",
             "example": "+51 1 234 5678"
           },
-          "ruc": {
-            "type": "string",
-            "example": "20123456789",
-            "nullable": true
-          },
           "websiteUrl": {
             "type": "string",
             "nullable": true
@@ -8456,9 +8825,15 @@
             "type": "boolean",
             "description": "Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false."
           },
-          "ruc": {
-            "type": "string",
-            "nullable": true
+          "ownerDocument": {
+            "nullable": true,
+            "description": "Solo para el OWNER (enmascarado); null para MANAGER o si aún no se registró.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OwnerDocumentViewDto"
+              }
+            ]
           },
           "myRole": {
             "allOf": [
@@ -8487,9 +8862,84 @@
           "links",
           "rating",
           "isFavorite",
-          "ruc",
+          "ownerDocument",
           "myRole",
           "createdAt"
+        ]
+      },
+      "ReviewSubmissionDto": {
+        "type": "object",
+        "properties": {
+          "submittedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "decision": {
+            "type": "string",
+            "enum": ["APPROVED", "CHANGES_REQUESTED"],
+            "nullable": true
+          },
+          "decidedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true,
+            "description": "Motivo al pedir cambios."
+          }
+        },
+        "required": ["submittedAt", "decision", "decidedAt", "reason"]
+      },
+      "BarbershopReviewDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BarbershopStatus"
+              }
+            ]
+          },
+          "missingRequirements": {
+            "type": "array",
+            "description": "Lo que falta para enviar a revisión (PHOTO solo si barbershops.require_photo).",
+            "items": {
+              "type": "string",
+              "enum": ["OWNER_DOCUMENT", "PHOTO"]
+            }
+          },
+          "canSubmit": {
+            "type": "boolean",
+            "description": "Se puede enviar ahora (DRAFT o CHANGES_REQUESTED, sin faltantes)."
+          },
+          "reviewNotes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Motivo de la última solicitud de cambios."
+          },
+          "submittedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "Envío en espera."
+          },
+          "submissions": {
+            "description": "Historial, el más reciente primero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewSubmissionDto"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "missingRequirements",
+          "canSubmit",
+          "reviewNotes",
+          "submittedAt",
+          "submissions"
         ]
       },
       "UpdateBarbershopStatusDto": {
@@ -10300,6 +10750,25 @@
         },
         "required": ["id", "name", "timezone"]
       },
+      "BookingServiceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryKey": {
+            "type": "string",
+            "example": "haircut",
+            "description": "Clave de la categoría del servicio."
+          }
+        },
+        "required": ["id", "name", "categoryKey"]
+      },
       "NamedRefDto": {
         "type": "object",
         "properties": {
@@ -10398,10 +10867,10 @@
             "$ref": "#/components/schemas/BookingBarbershopDto"
           },
           "service": {
-            "description": "Nombre del servicio al reservar (copia).",
+            "description": "Nombre del servicio al reservar (copia) y su categoría.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/NamedRefDto"
+                "$ref": "#/components/schemas/BookingServiceDto"
               }
             ]
           },
@@ -10495,10 +10964,10 @@
             "$ref": "#/components/schemas/BookingBarbershopDto"
           },
           "service": {
-            "description": "Nombre del servicio al reservar (copia).",
+            "description": "Nombre del servicio al reservar (copia) y su categoría.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/NamedRefDto"
+                "$ref": "#/components/schemas/BookingServiceDto"
               }
             ]
           },
@@ -10682,7 +11151,7 @@
             "type": "string"
           },
           "service": {
-            "$ref": "#/components/schemas/NamedRefDto"
+            "$ref": "#/components/schemas/BookingServiceDto"
           },
           "barber": {
             "$ref": "#/components/schemas/NamedRefDto"
@@ -10821,10 +11290,10 @@
             "$ref": "#/components/schemas/BookingBarbershopDto"
           },
           "service": {
-            "description": "Nombre del servicio al reservar (copia).",
+            "description": "Nombre del servicio al reservar (copia) y su categoría.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/NamedRefDto"
+                "$ref": "#/components/schemas/BookingServiceDto"
               }
             ]
           },
@@ -11497,7 +11966,14 @@
           },
           "status": {
             "type": "string",
-            "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
+            "enum": [
+              "OPEN",
+              "TEMPORARILY_CLOSED",
+              "SUSPENDED",
+              "PENDING_REVIEW",
+              "DRAFT",
+              "CHANGES_REQUESTED"
+            ]
           },
           "type": {
             "type": "string",
@@ -11519,6 +11995,23 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "submittedForReviewAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Envío a revisión en espera."
+          },
+          "ownerDocumentType": {
+            "type": "string",
+            "enum": ["RUC", "DNI"],
+            "nullable": true,
+            "description": "Solo el tipo; el número se pide aparte con motivo."
+          },
+          "waitingSince": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Desde cuándo espera atención (envío, marca o reporte más antiguo). La cola se ordena por esto."
           }
         },
         "required": [
@@ -11529,7 +12022,10 @@
           "flaggedReason",
           "flaggedAt",
           "openReports",
-          "createdAt"
+          "createdAt",
+          "submittedForReviewAt",
+          "ownerDocumentType",
+          "waitingSince"
         ]
       },
       "AdminBarbershopPageDto": {
@@ -11547,6 +12043,30 @@
           }
         },
         "required": ["items", "nextCursor"]
+      },
+      "AdminReviewSubmissionDto": {
+        "type": "object",
+        "properties": {
+          "submittedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "decision": {
+            "type": "string",
+            "enum": ["APPROVED", "CHANGES_REQUESTED"],
+            "nullable": true
+          },
+          "decidedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["submittedAt", "decision", "decidedAt", "reason"]
       },
       "BarbershopReportDto": {
         "type": "object",
@@ -11589,7 +12109,14 @@
           },
           "status": {
             "type": "string",
-            "enum": ["OPEN", "TEMPORARILY_CLOSED", "SUSPENDED", "PENDING_REVIEW"]
+            "enum": [
+              "OPEN",
+              "TEMPORARILY_CLOSED",
+              "SUSPENDED",
+              "PENDING_REVIEW",
+              "DRAFT",
+              "CHANGES_REQUESTED"
+            ]
           },
           "type": {
             "type": "string",
@@ -11612,6 +12139,35 @@
             "type": "string",
             "format": "date-time"
           },
+          "submittedForReviewAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Envío a revisión en espera."
+          },
+          "ownerDocumentType": {
+            "type": "string",
+            "enum": ["RUC", "DNI"],
+            "nullable": true,
+            "description": "Solo el tipo; el número se pide aparte con motivo."
+          },
+          "waitingSince": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Desde cuándo espera atención (envío, marca o reporte más antiguo). La cola se ordena por esto."
+          },
+          "reviewNotes": {
+            "type": "string",
+            "nullable": true,
+            "description": "Motivo de la última solicitud de cambios."
+          },
+          "submissions": {
+            "description": "Envíos a revisión, el más reciente primero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminReviewSubmissionDto"
+            }
+          },
           "reports": {
             "description": "Reportes abiertos.",
             "type": "array",
@@ -11629,8 +12185,26 @@
           "flaggedAt",
           "openReports",
           "createdAt",
+          "submittedForReviewAt",
+          "ownerDocumentType",
+          "waitingSince",
+          "reviewNotes",
+          "submissions",
           "reports"
         ]
+      },
+      "OwnerDocumentDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["RUC", "DNI"]
+          },
+          "number": {
+            "type": "string"
+          }
+        },
+        "required": ["type", "number"]
       },
       "SuspendBarbershopDto": {
         "type": "object",

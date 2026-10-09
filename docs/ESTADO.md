@@ -235,6 +235,12 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 - **Invitaciones** (`/profile/invitations`): aceptar con el código del correo y renovar la sesión.
 - **Pruebas:** lógica (precio, semana) y pantallas (inicio vacío, con datos y error; servicios; horario; bloqueo que choca; invitación con renovación). Maestro: `e2e/shop-management.yaml`.
 - Sin cambios nativos (la ubicación ya estaba en la compilación).
+- **Alta con revisión previa** (`docs/api/ALTA.md`, contrato sincronizado después de la primera prueba):
+  - El campo `ruc` ya no existe (enviarlo daba 400 `whitelistValidation`). Se reemplazó por el **documento del responsable** (`ownerDocument`: RUC o DNI), opcional al crear y omitido si está vacío. Validación local de largo, prefijo y dígito verificador del RUC; los errores `ownerDocument.number`/`type` del backend van junto al campo.
+  - Al editar, solo el OWNER ve el documento enmascarado y puede cambiarlo (`PUT /barbershops/{id}/owner-document`). Nunca se muestra el número completo.
+  - Estados nuevos `DRAFT` y `CHANGES_REQUESTED`. Sección **Revisión** (`/shop/[shopId]/review`) mientras no es pública: lo que falta, el motivo de soporte y "Enviar/Reenviar a revisión" (según `canSubmit`, solo OWNER; el MANAGER ve el aviso). `REVIEW_REQUIREMENTS_MISSING` muestra lo que falta.
+- **Resuelto en el backend:** `service.categoryKey` llega en las reservas; se quitó la búsqueda en los servicios de la barbería.
+- Pedido al backend: publicar el `pattern` de `ownerDocument.number` en el contrato.
 
 ## Pantallas actuales
 

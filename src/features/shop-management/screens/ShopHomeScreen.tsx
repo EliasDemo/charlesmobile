@@ -15,8 +15,10 @@ import {
 } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
 import { useShopHome } from '../hooks/useShopHome';
+import { REVIEW_STATES } from '../hooks/useShopReview';
 
-export type ShopSection = 'details' | 'status' | 'services' | 'barbers' | 'members' | 'hours' | 'blocks';
+export type ShopSection =
+  'review' | 'details' | 'status' | 'services' | 'barbers' | 'members' | 'hours' | 'blocks';
 
 export interface ShopHomeScreenProps {
   onCreate: () => void;
@@ -33,6 +35,8 @@ const STATUS_STYLE: Record<
   OPEN: { tone: 'success', icon: 'storefront' },
   TEMPORARILY_CLOSED: { tone: 'pending', icon: 'pause-circle' },
   PENDING_REVIEW: { tone: 'neutral', icon: 'hourglass' },
+  DRAFT: { tone: 'pending', icon: 'document-text' },
+  CHANGES_REQUESTED: { tone: 'danger', icon: 'alert-circle' },
   SUSPENDED: { tone: 'danger', icon: 'ban' },
 };
 
@@ -91,11 +95,18 @@ export function ShopHomeScreen({ onCreate, onInvitations, onOpen, onOpenAsBarber
                     {shop.status === 'PENDING_REVIEW' ? (
                       <Notice tone="info" message={t('home.pendingReview')} />
                     ) : null}
+                    {shop.status === 'DRAFT' ? <Notice tone="warning" message={t('home.draft')} /> : null}
+                    {shop.status === 'CHANGES_REQUESTED' ? (
+                      <Notice tone="warning" message={t('home.changesRequested')} />
+                    ) : null}
                     {shop.status === 'SUSPENDED' ? (
                       <Notice tone="danger" message={t('home.suspended')} />
                     ) : null}
                     <View>
-                      {SECTIONS.map((section) => (
+                      {(REVIEW_STATES.includes(shop.status)
+                        ? (['review', ...SECTIONS] as ShopSection[])
+                        : SECTIONS
+                      ).map((section) => (
                         <ListRow
                           key={section}
                           title={t(`home.sections.${section}`)}

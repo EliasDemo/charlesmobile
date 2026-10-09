@@ -6,5 +6,6 @@ export { ScheduleScreen } from './screens/ScheduleScreen';
 export { ServiceFormScreen, ServicesScreen } from './screens/ServicesScreens';
 export { CreateShopScreen, EditShopScreen } from './screens/ShopFormScreen';
 export { ShopHomeScreen, type ShopSection } from './screens/ShopHomeScreen';
+export { ShopReviewScreen } from './screens/ShopReviewScreen';
 export { ShopStatusScreen } from './screens/ShopStatusScreen';
 export { TimeBlockFormScreen, TimeBlocksScreen } from './screens/TimeBlocksScreens';

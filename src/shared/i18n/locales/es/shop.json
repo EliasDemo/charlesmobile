@@ -16,9 +16,10 @@
       "OWNER": "Responsable principal",
       "MANAGER": "Administrador"
     },
-    "pendingReview": "Tu barbería está en revisión. Mientras tanto no aparece en las búsquedas; puedes ir preparando servicios, barberos y horario.",
+    "pendingReview": "Tu barbería está en revisión. Mientras tanto no aparece en las búsquedas ni recibe reservas; puedes ir preparando servicios, barberos y horario.",
     "suspended": "Tu barbería está suspendida. Escríbenos a soporte.",
     "sections": {
+      "review": "Revisión",
       "details": "Datos de la barbería",
       "status": "Estado de atención",
       "services": "Servicios",
@@ -30,13 +31,17 @@
     "asBarber": "Como barbero",
     "myBlocks": "Mis bloqueos en {{name}}",
     "mySchedule": "Mi horario en {{name}}",
-    "agendaSoon": "La agenda llega en la próxima fase."
+    "agendaSoon": "La agenda llega en la próxima fase.",
+    "draft": "Tu barbería aún no es pública. Completa lo que falta y envíala a revisión desde \"Revisión\".",
+    "changesRequested": "Soporte pidió cambios antes de publicarla. Míralos en \"Revisión\"."
   },
   "status": {
     "OPEN": "Abierta",
     "TEMPORARILY_CLOSED": "Cerrada temporalmente",
     "SUSPENDED": "Suspendida",
-    "PENDING_REVIEW": "En revisión"
+    "PENDING_REVIEW": "En revisión",
+    "DRAFT": "Borrador",
+    "CHANGES_REQUESTED": "Cambios pedidos"
   },
   "type": {
     "label": "Tipo",
@@ -52,7 +57,6 @@
     "addressHint": "Como la verán tus clientes.",
     "phone": "Teléfono del negocio",
     "phonePlaceholder": "+51 1 234 5678",
-    "ruc": "RUC (opcional)",
     "website": "Sitio web (opcional)",
     "instagram": "Instagram (opcional)",
     "facebook": "Facebook (opcional)",
@@ -222,5 +226,38 @@
     "newBarber": "Nuevo barbero",
     "editBarber": "Editar barbero",
     "newBlock": "Nuevo bloqueo"
+  },
+  "document": {
+    "title": "Documento del responsable",
+    "createHint": "RUC o DNI de quien responde por el negocio. Puedes agregarlo ahora o después, pero es necesario para enviar la barbería a revisión.",
+    "editHint": "Por seguridad solo mostramos los últimos dígitos. Escribe uno nuevo solo si quieres cambiarlo.",
+    "current": "Registrado: {{type}} {{masked}}",
+    "type": "Tipo de documento",
+    "RUC": "RUC",
+    "DNI": "DNI",
+    "number": "Número (opcional)",
+    "newNumber": "Nuevo número (opcional)",
+    "lengthRUC": "El RUC tiene 11 dígitos.",
+    "lengthDNI": "El DNI tiene 8 dígitos.",
+    "rucInvalid": "Ese RUC no es válido. Revisa los números.",
+    "serverInvalid": "Ese número de documento no es válido. Revísalo."
+  },
+  "review": {
+    "draft": "Completa los datos y envía tu barbería a revisión. Mientras tanto puedes configurar servicios, barberos, horarios y bloqueos.",
+    "pending": "Tu barbería está en revisión.",
+    "pendingSince": "En revisión desde el {{date}}. Te avisaremos cuando soporte la revise.",
+    "changesTitle": "Soporte pidió cambios",
+    "noNotes": "Revisa los datos de tu barbería y vuelve a enviarla.",
+    "approved": "Tu barbería está aprobada y publicada.",
+    "sent": "¡Enviada! Soporte la revisará pronto.",
+    "missingTitle": "Falta para enviarla",
+    "requirement": {
+      "OWNER_DOCUMENT": "Documento del responsable (RUC o DNI)",
+      "PHOTO": "Una foto de la barbería"
+    },
+    "submit": "Enviar a revisión",
+    "resubmit": "Reenviar a revisión",
+    "fix": "Corregir datos",
+    "ownerOnly": "Solo el responsable principal puede enviarla a revisión."
   }
 }

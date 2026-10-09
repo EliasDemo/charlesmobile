@@ -162,6 +162,7 @@ Todos los errores tienen la misma forma:
 | `TICKET_CLOSED`                         | 409       | El ticket está cerrado o pasó el plazo para reabrirlo                                     | Ofrecer abrir uno nuevo.                                                             |
 | `ACCOUNT_PENDING_DELETION`              | 403       | Cuenta pendiente de eliminación (login o sesión con `scope: "deletion"`)                  | Pantalla "Tu cuenta se eliminará el …" con "Cancelar eliminación" (ver `CUENTA.md`). |
 | `DELETION_BLOCKED`                      | 409       | No se puede eliminar la cuenta todavía (`details`: bloqueos)                              | Mostrar cada bloqueo (`SOLE_OWNER`, `STAFF_ROLE`).                                   |
+| `REVIEW_REQUIREMENTS_MISSING`           | 409       | Falta algo para enviar la barbería a revisión (`details[].requirement`)                   | Mostrar lo que falta (ver `ALTA.md`).                                                |
 | `ACCOUNT_DISABLED` (sesión restringida) | 403       | La sesión de soporte de una cuenta deshabilitada solo sirve para tickets                  | Volver a la pantalla de ayuda.                                                       |
 | `WEBHOOK_MISMATCH` / `WEBHOOK_TOO_OLD`  | 409 / 400 | Solo para la pasarela                                                                     | No aplica a la app.                                                                  |
 | `INVALID_CODE`                          | 400       | Código incorrecto, vencido o usado                                                        | "Código inválido o vencido." Ofrecer reenviar.                                       |
@@ -208,6 +209,8 @@ Todos los errores tienen la misma forma:
 ---
 
 ## 5. Flujos paso a paso
+
+**Servicio de una reserva:** `service` trae `{ id, name, categoryKey }` en reservas, listas y agenda (para íconos y filtros).
 
 **Zona horaria:** toda respuesta con horas de una barbería trae su `timezone` (IANA): reservas (`barbershop.timezone`), disponibilidad (día, ahora y siguiente), horario de la barbería y del barbero, bloqueos, agenda, resultados de búsqueda y alternativas. Muestra siempre las horas en **esa** zona, no en la del teléfono.
 
@@ -259,6 +262,8 @@ Las rutas son relativas a `/api/v1`. "Sesión" significa la cabecera `Authorizat
 12. **Reportar:** `POST /reviews/{id}/reports` con `{ target: "REVIEW" | "RESPONSE", reason, details? }` (motivos: `OFFENSIVE`, `PERSONAL_DATA`, `FAKE`, `SPAM`, `OTHER`). 204; una vez por contenido (409 `ALREADY_REPORTED`); el propio contenido no se reporta (403).
 
 ### Responsable (OWNER o MANAGER)
+
+> **Alta con revisión previa:** una barbería nueva queda en `DRAFT` o `PENDING_REVIEW` y no es pública hasta que soporte la aprueba. Exige el documento del responsable (RUC o DNI). Ver [`ALTA.md`](ALTA.md).
 
 1. **Crear la barbería:**
    - barbería: `POST /barbershops`;
