@@ -190,7 +190,10 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 
 **Pedido al backend:** `service.categoryKey` en `BookingDto`. Mientras tanto, la categoría se busca en los servicios de la barbería (en caché), con el icono genérico si el servicio ya no existe.
 
-### Parte 2 — Imágenes (en espera de las fotos del usuario)
+### Parte 2 — Imágenes (en curso)
+
+- **Aplicadas (Gemini, revisadas sin texto ni marcas):** bienvenida (3), banda superior de inicio de sesión y registro (`auth-background`) y portadas `cover-haircut`, `cover-beard`, `cover-haircut_beard`, `cover-kids_haircut`. 8 imágenes: 5,7 MB → 277 KB. Originales fuera del repositorio (`assets/stock/` en `.gitignore`).
+- **Rechazada:** `cover-generic` (carteles con nombre de barbería inventado). Mientras tanto, ilustración con iconos. Pantallas vacías: opcionales, con ilustración.
 
 - **Listo:**
   - `pnpm images:optimize` (`scripts/optimize-images.mjs`, con `sharp` como herramienta de desarrollo) convierte `assets/stock/` a WebP por uso (1080, 720 o 480 px) en `assets/images/` y genera `src/shared/ui/brandImages.generated.ts`. Omite cualquier foto sin su fila de licencia.

@@ -2,8 +2,12 @@
 import type { ImageSourcePropType } from 'react-native';
 
 export const brandImages: Partial<Record<string, ImageSourcePropType>> = {
+  'auth-background': require('../../../assets/images/auth-background.webp'),
   'cover-beard': require('../../../assets/images/cover-beard.webp'),
   'cover-haircut': require('../../../assets/images/cover-haircut.webp'),
   'cover-haircut_beard': require('../../../assets/images/cover-haircut_beard.webp'),
   'cover-kids_haircut': require('../../../assets/images/cover-kids_haircut.webp'),
+  'welcome-book': require('../../../assets/images/welcome-book.webp'),
+  'welcome-find': require('../../../assets/images/welcome-find.webp'),
+  'welcome-manage': require('../../../assets/images/welcome-manage.webp'),
 };

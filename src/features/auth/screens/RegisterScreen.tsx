@@ -1,7 +1,9 @@
 import { Controller } from 'react-hook-form';
 import { Linking } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
+import { sizes } from '@/shared/theme';
 import {
+  BrandImage,
   Button,
   Checkbox,
   ErrorState,
@@ -46,6 +48,7 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
 
   return (
     <Screen>
+      <BrandImage imageKeys={['auth-background']} fallbackIcon="cut" height={sizes.cover} />
       <Text variant="title">{t('register.title')}</Text>
       <Text color="textSecondary">{t('register.subtitle')}</Text>
       {generalError ? <Notice tone="danger" message={generalError} /> : null}

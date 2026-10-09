@@ -1,7 +1,17 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from '@/shared/i18n';
+import { sizes } from '@/shared/theme';
 import { formatDuration } from '@/shared/lib';
-import { Button, Notice, PasswordField, Screen, Text, TextField, useFieldErrorText } from '@/shared/ui';
+import {
+  BrandImage,
+  Button,
+  Notice,
+  PasswordField,
+  Screen,
+  Text,
+  TextField,
+  useFieldErrorText,
+} from '@/shared/ui';
 import { useLogin, type UseLoginOptions } from '../hooks/useLogin';
 
 export interface LoginScreenProps extends UseLoginOptions {
@@ -27,6 +37,7 @@ export function LoginScreen({
   const locked = lockedSeconds > 0;
   return (
     <Screen>
+      <BrandImage imageKeys={['auth-background']} fallbackIcon="cut" height={sizes.cover} />
       <Text variant="title">{t('login.title')}</Text>
       <Text color="textSecondary">{t('login.subtitle')}</Text>
       {notice ? <Notice tone="success" message={t(`login.${notice}`)} /> : null}
