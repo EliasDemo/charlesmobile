@@ -24,4 +24,7 @@ Mientras falte una foto, la app muestra una ilustración hecha con iconos y los 
 
 | Nombre | Archivo original | URL de origen | Autor | Licencia | Fecha de descarga |
 |---|---|---|---|---|---|
-| _(pendiente: el usuario aportará las fotos)_ | | | | | |
+| cover-haircut | `cover-haircut.jpg` | Generada con IA | Google Gemini (plan gratuito), por el usuario | Contenido generado con Gemini según los Términos del Servicio de Google y la Política de Uso Prohibido de IA generativa; Google no reclama la propiedad del contenido generado. Lleva la marca invisible SynthID. | 2026-10-09 |
+| cover-beard | `cover-beard.jpg` | Generada con IA | Google Gemini (plan gratuito), por el usuario | Contenido generado con Gemini según los Términos del Servicio de Google y la Política de Uso Prohibido de IA generativa; Google no reclama la propiedad del contenido generado. Lleva la marca invisible SynthID. | 2026-10-09 |
+| cover-haircut_beard | `cover-haircut_beard.jpg` | Generada con IA | Google Gemini (plan gratuito), por el usuario | Contenido generado con Gemini según los Términos del Servicio de Google y la Política de Uso Prohibido de IA generativa; Google no reclama la propiedad del contenido generado. Lleva la marca invisible SynthID. | 2026-10-09 |
+| cover-kids_haircut | `cover-kids_haircut.jpg` | Generada con IA | Google Gemini (plan gratuito), por el usuario | Contenido generado con Gemini según los Términos del Servicio de Google y la Política de Uso Prohibido de IA generativa; Google no reclama la propiedad del contenido generado. Lleva la marca invisible SynthID. | 2026-10-09 |
