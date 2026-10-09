@@ -1,4 +1,5 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Image, StyleSheet, View, type ImageSourcePropType, type LayoutChangeEvent } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
 import { brandImages } from './brandImages.generated';
@@ -32,6 +33,11 @@ export function BrandImage({
   const theme = useTheme();
   const { t } = useTranslation();
   const source = imageKeys.map((key) => brandImages[key]).find(Boolean);
+  const [frame, setFrame] = useState<{ width: number; height: number } | null>(null);
+  const onLayout = (e: LayoutChangeEvent) => {
+    const { width, height: h } = e.nativeEvent.layout;
+    setFrame((f) => (f && f.width === width && f.height === h ? f : { width, height: h }));
+  };
   return (
     <View
       accessibilityElementsHidden={!illustrative}
@@ -41,12 +47,13 @@ export function BrandImage({
         { height, borderRadius: theme.radius.lg, backgroundColor: theme.colors.primarySoft },
       ]}
       testID="brand-image"
+      onLayout={onLayout}
     >
       {source ? (
         <Image
           source={source}
-          style={StyleSheet.absoluteFill}
-          resizeMode="cover"
+          style={coverStyle(source, frame)}
+          resizeMode="stretch"
           accessibilityIgnoresInvertColors
         />
       ) : (
@@ -71,6 +78,25 @@ export function BrandImage({
 }
 
 const FALLBACK_ICON_RATIO = 0.35;
+
+/**
+ * Fills the frame keeping the photo's proportions and centered (like "cover"), computed here:
+ * some Android versions showed a zoomed top-left corner with resizeMode="cover".
+ */
+function coverStyle(source: ImageSourcePropType, frame: { width: number; height: number } | null) {
+  const asset = Image.resolveAssetSource(source);
+  if (!frame || !asset?.width || !asset.height) return StyleSheet.absoluteFill;
+  const scale = Math.max(frame.width / asset.width, frame.height / asset.height);
+  const width = asset.width * scale;
+  const height = asset.height * scale;
+  return {
+    position: 'absolute' as const,
+    width,
+    height,
+    left: (frame.width - width) / 2,
+    top: (frame.height - height) / 2,
+  };
+}
 
 const styles = StyleSheet.create({
   frame: { overflow: 'hidden', alignSelf: 'stretch' },
