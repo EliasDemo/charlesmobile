@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M4.5 parte 1 en revisión por el usuario; eliminación de cuenta terminada (antes de M6). Siguiente: **M6**, pendiente de aprobar el plan.
+**Fase actual:** M6 (gestión de barbería) en curso, plan aprobado el 2026-10-09. M4.5 parte 1 sigue en revisión por el usuario (capturas de tema claro).
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -203,7 +203,9 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
   - Aplicarlas a la bienvenida, al fondo de inicio de sesión y registro (con velo) y a las pantallas vacías.
   - Medir el tamaño final.
 
-## Antes de M6 — Contrato nuevo y eliminación de cuenta (código terminado)
+## Antes de M6 — Contrato nuevo y eliminación de cuenta (verificado)
+
+**Verificado por el usuario en su Android:** teléfono editable (error con `123`, vacío lo borra), enlaces de términos solo si el backend los tiene, horas de Lima en reservas, bloqueo por único responsable, eliminación con reserva pendiente (devolución, fecha a 30 días, contraseña incorrecta, sesión borrada), arrepentimiento con "Cancelar eliminación" y correos con `dev:mail`.
 
 - **Sincronización de la API:**
   - `UpdateProfileDto.phone` ya es `string | null`: el teléfono se edita en el perfil con la validación de Perú, y vacío lo borra (`null`).
