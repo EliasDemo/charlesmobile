@@ -8,7 +8,13 @@ import type { BookingScope } from '../api/bookingApi';
 import { BookingCard } from '../components/BookingParts';
 import { useMyBookings } from '../hooks/useBooking';
 
-export function MyBookingsScreen({ onOpenBooking }: { onOpenBooking: (id: string) => void }) {
+export function MyBookingsScreen({
+  onOpenBooking,
+  onExplore,
+}: {
+  onOpenBooking: (id: string) => void;
+  onExplore: () => void;
+}) {
   const theme = useTheme();
   const { t } = useTranslation('booking');
   const [scope, setScope] = useState<BookingScope>('upcoming');
@@ -19,6 +25,7 @@ export function MyBookingsScreen({ onOpenBooking }: { onOpenBooking: (id: string
       <Text variant="title">{t('nav.bookings', { ns: 'common' })}</Text>
       <SegmentedControl
         label={t('nav.bookings', { ns: 'common' })}
+        hideLabel
         value={scope}
         onChange={setScope}
         options={[
@@ -41,8 +48,13 @@ export function MyBookingsScreen({ onOpenBooking }: { onOpenBooking: (id: string
         keyExtractor={(item) => item.id}
         empty={
           scope === 'upcoming'
-            ? { title: t('list.emptyUpcoming.title'), message: t('list.emptyUpcoming.message') }
-            : { title: t('list.emptyHistory.title') }
+            ? {
+                title: t('list.emptyUpcoming.title'),
+                message: t('list.emptyUpcoming.message'),
+                icon: 'calendar-outline',
+                action: { label: t('list.explore'), onPress: onExplore },
+              }
+            : { title: t('list.emptyHistory.title'), icon: 'time-outline' }
         }
       />
     </SafeAreaView>

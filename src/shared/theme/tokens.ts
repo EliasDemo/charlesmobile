@@ -54,7 +54,21 @@ export interface ThemeColors {
   focus: string;
   /** Dimmed layer behind dialogs. */
   backdrop: string;
+  /**
+   * Status colors (bookings and other states): soft background + text/icon color. Always shown
+   * together with a label or icon, never as color alone.
+   */
+  statusPendingBg: string;
+  statusPendingFg: string;
+  statusSuccessBg: string;
+  statusSuccessFg: string;
+  statusNeutralBg: string;
+  statusNeutralFg: string;
+  statusDangerBg: string;
+  statusDangerFg: string;
 }
+
+export type StatusTone = 'pending' | 'success' | 'neutral' | 'danger';
 
 export const colors: Record<ColorScheme, ThemeColors> = {
   light: {
@@ -78,6 +92,14 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     onStatus: palette.neutral0,
     focus: palette.copper500,
     backdrop: 'rgba(20, 18, 16, 0.5)',
+    statusPendingBg: '#FFF4D6',
+    statusPendingFg: '#7A4F00',
+    statusSuccessBg: '#E3F4E8',
+    statusSuccessFg: '#1E6B37',
+    statusNeutralBg: palette.neutral100,
+    statusNeutralFg: '#4A453F',
+    statusDangerBg: '#FBE4E2',
+    statusDangerFg: '#A3231C',
   },
   dark: {
     background: palette.neutral900,
@@ -100,6 +122,14 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     onStatus: palette.neutral900,
     focus: palette.copper200,
     backdrop: 'rgba(0, 0, 0, 0.6)',
+    statusPendingBg: '#3A2E12',
+    statusPendingFg: palette.amber400,
+    statusSuccessBg: '#173322',
+    statusSuccessFg: palette.green400,
+    statusNeutralBg: '#2E2B27',
+    statusNeutralFg: '#CFC9C0',
+    statusDangerBg: '#3D1D1A',
+    statusDangerFg: palette.red300,
   },
 };
 
@@ -139,4 +169,5 @@ export const sizes = {
   avatarSmall: 40,
   cover: 160,
   mapPreview: 320,
+  illustration: 120,
 } as const;

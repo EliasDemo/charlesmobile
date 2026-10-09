@@ -3,7 +3,17 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { formatMinutes, formatMoney, formatShortDate } from '@/shared/lib';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Badge, Card, Monogram, QueryView, RatingLabel, Text, type QueryLike } from '@/shared/ui';
+import {
+  Badge,
+  Card,
+  IconTile,
+  Monogram,
+  QueryView,
+  RatingLabel,
+  Text,
+  categoryIcon,
+  type QueryLike,
+} from '@/shared/ui';
 import type { Barber, BusinessHours, Review, Service } from '../api/barbershopApi';
 
 /** A section of the detail that loads and fails on its own, so one error never hides the rest. */
@@ -94,8 +104,9 @@ export function ServiceRow({ service, onPress }: { service: Service; onPress: ()
         },
       ]}
     >
+      <IconTile icon={categoryIcon(service.category.key)} />
       <View style={styles.flex}>
-        <Text>{service.name}</Text>
+        <Text variant="bodyStrong">{service.name}</Text>
         {service.description ? (
           <Text variant="caption" color="textSecondary">
             {service.description}
@@ -105,7 +116,9 @@ export function ServiceRow({ service, onPress }: { service: Service; onPress: ()
           {duration}
         </Text>
       </View>
-      <Text variant="bodyStrong">{price}</Text>
+      <Text variant="subtitle" color="primary">
+        {price}
+      </Text>
       <Text color="textMuted" importantForAccessibility="no">
         ›
       </Text>

@@ -105,7 +105,7 @@ export function ExploreScreen({ onOpenBarbershop, onOpenFilters }: ExploreScreen
           header={header}
           renderItem={({ item }) => <ResultCard item={item} onPress={onOpenBarbershop} />}
           keyExtractor={(item) => item.id}
-          empty={{ title: t('empty.title'), message: t('empty.message') }}
+          empty={{ title: t('empty.title'), message: t('empty.message'), icon: 'search' }}
           canSearchMoreWhenEmpty={results.evaluationLimitReached}
         />
       ) : (

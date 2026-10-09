@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M4 cerrada el 2026-10-06. En curso: **M4.5 (diseño)**, parte 1; la parte 2 (fotos) espera las imágenes del usuario.
+**Fase actual:** M4.5 (diseño). Parte 1 con el código terminado, a la espera de las capturas del usuario. Parte 2 (fotos) en espera de las imágenes.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -149,6 +149,51 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 - **Rutas tipadas:** `pnpm typecheck` genera los tipos en `types/generated/` (ignorada por git), no en `.expo/types`, para que el servidor de desarrollo no los pise mientras corre.
 - **Pruebas:** 336 en total; hooks de `booking` con 94 % de cobertura. Flujo de Maestro `e2e/book-cancel.yaml`.
 
+## M4.5 — Diseño
+
+### Parte 1 — Código terminado (falta la revisión del usuario con capturas)
+
+- **Colores de estado:** tokens `status{Pending,Success,Neutral,Danger}{Bg,Fg}` en claro y oscuro, con contraste ≥ 4,5:1 comprobado por pruebas. `StatusPill` siempre lleva icono y texto:
+  - Pendiente de pago: ámbar, reloj.
+  - Confirmada: verde, check.
+  - Atendida: neutro, doble check.
+  - Vencida: neutro, reloj de arena.
+  - Cancelada: rojo, X.
+  - No asistió: rojo, persona tachada.
+  - Lo mismo en las tarjetas de búsqueda: abierta, cerrada, cerrada temporalmente, turno ahora.
+- **Jerarquía:**
+  - Reserva pendiente: tarjeta superior con la cuenta regresiva en tipografía `hero` (en rojo con menos de 1 minuto, siempre con su texto) y "Pagar" como única acción principal.
+  - "Cancelar reserva" pasa a secundaria y "Reservar de nuevo" a principal.
+- **Tarjetas:**
+  - `InfoCard` (dato principal grande; secundarios con iconos pequeños), usada en resultados, reservas y favoritas.
+  - Iconos por categoría de servicio (`categoryIcon`, con uno genérico de respaldo); precio de cada servicio destacado.
+- **Títulos duplicados:**
+  - En Reservas, la etiqueta del selector queda solo para el lector de pantalla.
+  - Inicio de sesión, registro, verificación, recuperación y resumen ya no repiten el título en el encabezado (este conserva el botón de volver).
+- **Bienvenida:**
+  - 3 páginas (`features/onboarding`, ruta `/welcome`), solo la primera vez (marca en SecureStore), con "Saltar", indicador accesible y "Empezar".
+  - En Perfil, "Ver la bienvenida de nuevo".
+  - Las ilustraciones son iconos del tema.
+- **Detalles finos:**
+  - Esqueletos (`Skeleton`, `SkeletonCard`, `SkeletonList`) en lugar del indicador en listas, detalle y secciones; quietos con "Reducir movimiento".
+  - Transiciones: deslizamiento lateral, filtros desde abajo y fundido entre pestañas; sin animación si el sistema pide reducir movimiento.
+  - Pantallas vacías con ilustración (búsqueda, reservas con "Explorar barberías", historial, favoritas y valoraciones).
+- **Regla de ESLint:** en `src/features` y `app` no se permiten colores (`#…`, `rgb(…)`, `hsl(…)`) ni `fontSize` numéricos sueltos.
+- **Tamaño:** el paquete de producción de Android sigue igual (4,2 MB de JS y 7,4 MB de recursos), porque la parte 1 no agrega imágenes.
+
+### Parte 2 — Imágenes (en espera de las fotos del usuario)
+
+- **Listo:**
+  - `pnpm images:optimize` (`scripts/optimize-images.mjs`, con `sharp` como herramienta de desarrollo) convierte `assets/stock/` a WebP por uso (1080, 720 o 480 px) en `assets/images/` y genera `src/shared/ui/brandImages.generated.ts`. Omite cualquier foto sin su fila de licencia.
+  - `BrandImage`: foto o ilustración de respaldo, velo del tema y etiqueta "Imagen ilustrativa".
+  - Portada del detalle: la categoría con más servicios de la barbería, con `cover-generic` por defecto, y siempre "Imagen ilustrativa".
+  - Plantilla `docs/licencias-imagenes.md`.
+- **Falta:**
+  - Que el usuario copie las fotos con su URL, autor y licencia.
+  - Decidir qué categorías tienen foto.
+  - Aplicarlas a la bienvenida, al fondo de inicio de sesión y registro (con velo) y a las pantallas vacías.
+  - Medir el tamaño final.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
@@ -165,6 +210,7 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 | `/profile` (pestaña Perfil) | Perfil o invitación a entrar | M2 |
 | `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Cuenta | M2 |
 | `/profile/edit`, `/profile/preferences`, `/profile/favorites` | Perfil (protegidas) | M2 / M3 |
+| `/welcome` | Bienvenida (primera vez y desde Perfil) | M4.5 |
 | `/design-system` | Catálogo del sistema de diseño | Solo desarrollo |
 | `/agenda` | Relleno (protegida, personal) | M7 |
 

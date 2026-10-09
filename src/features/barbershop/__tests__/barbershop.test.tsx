@@ -318,3 +318,18 @@ describe('ReviewsScreen', () => {
     expect(await screen.findByText(common.actions.retry)).toBeTruthy();
   });
 });
+
+describe('generic cover', () => {
+  it('uses the category with the most services', () => {
+    const { dominantCategory } = jest.requireActual('../hooks/useBarbershop');
+    const beard = { key: 'beard', name: 'Barba' };
+    expect(
+      dominantCategory([
+        service(),
+        service({ id: 'b1', category: beard }),
+        service({ id: 'b2', category: beard }),
+      ]),
+    ).toBe('beard');
+    expect(dominantCategory([])).toBeNull();
+  });
+});

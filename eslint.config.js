@@ -24,6 +24,7 @@ module.exports = defineConfig([
       'src/shared/api/generated/*',
       'docs/api/*',
       'types/generated/*',
+      'src/shared/ui/brandImages.generated.ts',
     ],
   },
   {
@@ -156,6 +157,28 @@ module.exports = defineConfig([
       globals: { __dirname: 'readonly', require: 'readonly', module: 'writable', process: 'readonly' },
     },
     rules: { 'no-console': 'off' },
+  },
+  // Design system only (CLAUDE.md §6): no loose colors or font sizes in screens and routes.
+  {
+    files: ['src/features/**/*.{ts,tsx}', 'app/**/*.{ts,tsx}'],
+    ignores: ['**/__tests__/**'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/]',
+          message: 'Usa un color del tema (useTheme().colors), no un color suelto.',
+        },
+        {
+          selector: 'Literal[value=/^(rgb|rgba|hsl|hsla)[(]/]',
+          message: 'Usa un color del tema (useTheme().colors), no un color suelto.',
+        },
+        {
+          selector: 'Property[key.name="fontSize"] > Literal',
+          message: 'Usa una variante de tipografía del tema (Text variant), no un tamaño suelto.',
+        },
+      ],
+    },
   },
   // jest.mock factories must use require() and run before the imports they affect.
   {

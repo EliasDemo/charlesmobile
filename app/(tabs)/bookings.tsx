@@ -14,6 +14,9 @@ export default function BookingsRoute() {
     );
   }
   return (
-    <MyBookingsScreen onOpenBooking={(id) => router.push({ pathname: '/bookings/[id]', params: { id } })} />
+    <MyBookingsScreen
+      onOpenBooking={(id) => router.push({ pathname: '/bookings/[id]', params: { id } })}
+      onExplore={() => router.navigate('/')}
+    />
   );
 }

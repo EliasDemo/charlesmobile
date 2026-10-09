@@ -20,7 +20,8 @@
     "test:coverage": "jest --coverage",
     "verify": "pnpm check:api && pnpm lint && pnpm typecheck && pnpm format:check && pnpm test:coverage --ci",
     "build:dev:android": "eas build --profile development --platform android",
-    "start:skip-check": "expo start --dev-client"
+    "start:skip-check": "expo start --dev-client",
+    "images:optimize": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "0.4.2",
@@ -69,6 +70,7 @@
     "jest-expo": "57.0.5",
     "openapi-typescript": "7.13.0",
     "prettier": "3.9.9",
+    "sharp": "0.35.5",
     "typescript": "6.0.3"
   }
 }

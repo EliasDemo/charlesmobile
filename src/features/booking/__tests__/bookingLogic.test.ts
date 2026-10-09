@@ -92,3 +92,20 @@ describe('pending booking polling', () => {
     }
   });
 });
+
+describe('booking states are never color only', () => {
+  it('every status has a tone, an icon and a Spanish label', () => {
+    const { STATUS_STYLE } = jest.requireActual('../components/BookingParts');
+    const labels = jest.requireActual('@/shared/i18n/locales/es/booking.json').status;
+    for (const status of ['PENDING_PAYMENT', 'CONFIRMED', 'ATTENDED', 'CANCELLED', 'NO_SHOW', 'EXPIRED']) {
+      expect(STATUS_STYLE[status].icon).toBeTruthy();
+      expect(labels[status]).toBeTruthy();
+    }
+    expect(STATUS_STYLE.PENDING_PAYMENT.tone).toBe('pending');
+    expect(STATUS_STYLE.CONFIRMED.tone).toBe('success');
+    expect(STATUS_STYLE.ATTENDED.tone).toBe('neutral');
+    expect(STATUS_STYLE.EXPIRED.tone).toBe('neutral');
+    expect(STATUS_STYLE.CANCELLED.tone).toBe('danger');
+    expect(STATUS_STYLE.NO_SHOW.tone).toBe('danger');
+  });
+});

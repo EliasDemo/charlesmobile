@@ -11,7 +11,9 @@ import { translateError } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import { Button } from './Button';
-import { EmptyState, ErrorState, LoadingState } from './StateViews';
+import type { IconName } from './Icon';
+import { SkeletonList } from './Skeleton';
+import { EmptyState, ErrorState } from './StateViews';
 import { Text } from './Text';
 
 export interface InfiniteListQuery<T> {
@@ -28,7 +30,12 @@ export interface InfiniteListProps<T> {
   query: InfiniteListQuery<T>;
   renderItem: ListRenderItem<T>;
   keyExtractor: (item: T) => string;
-  empty: { title?: string; message?: string };
+  empty: {
+    title?: string;
+    message?: string;
+    icon?: IconName;
+    action?: { label: string; onPress: () => void };
+  };
   /** Shown above the items (search bar, filters…). Stays visible in every state. */
   header?: ReactElement;
   /**
@@ -64,7 +71,7 @@ export function InfiniteList<T>({
         retrying={query.isRefetching}
       />
     ) : (
-      <LoadingState />
+      <SkeletonList />
     )
   ) : canSearchMoreWhenEmpty && query.hasNextPage ? (
     <EmptyState
@@ -73,7 +80,7 @@ export function InfiniteList<T>({
       action={{ label: t('list.searchMore'), onPress: () => void query.fetchNextPage() }}
     />
   ) : (
-    <EmptyState title={empty.title} message={empty.message} />
+    <EmptyState title={empty.title} message={empty.message} icon={empty.icon} action={empty.action} />
   );
 
   const footer =

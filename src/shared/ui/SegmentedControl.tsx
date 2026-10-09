@@ -7,6 +7,8 @@ export interface SegmentedControlProps<T extends string> {
   options: readonly { value: T; label: string }[];
   value: T;
   onChange: (value: T) => void;
+  /** Keep the label for screen readers only (when the screen title already says it). */
+  hideLabel?: boolean;
 }
 
 /** Choice among a few exclusive options (e.g. System · Light · Dark). */
@@ -15,13 +17,16 @@ export function SegmentedControl<T extends string>({
   options,
   value,
   onChange,
+  hideLabel = false,
 }: SegmentedControlProps<T>) {
   const theme = useTheme();
   return (
     <View style={styles.container}>
-      <Text variant="label" color="textSecondary">
-        {label}
-      </Text>
+      {hideLabel ? null : (
+        <Text variant="label" color="textSecondary">
+          {label}
+        </Text>
+      )}
       <View
         accessibilityRole="radiogroup"
         accessibilityLabel={label}

@@ -3,7 +3,17 @@ import { FavoriteButton } from '@/features/favorites';
 import { useTranslation } from '@/shared/i18n';
 import { callPhone, formatLongDate, isWebUrl, openDirections, openWebUrl } from '@/shared/lib';
 import { sizes, spacing } from '@/shared/theme';
-import { Badge, Button, Monogram, Notice, QueryView, RatingLabel, Screen, Text } from '@/shared/ui';
+import {
+  Badge,
+  BrandImage,
+  Button,
+  Notice,
+  QueryView,
+  RatingLabel,
+  Screen,
+  Text,
+  categoryIcon,
+} from '@/shared/ui';
 import type { Barbershop } from '../api/barbershopApi';
 import { BarberRow, HoursList, ReviewItem, Section, ServiceRow } from '../components/DetailParts';
 import { useBarbershop } from '../hooks/useBarbershop';
@@ -39,7 +49,15 @@ export function BarbershopScreen({
       >
         {(shop) => (
           <View style={styles.content}>
-            <Monogram name={shop.name} shape="cover" size={sizes.cover} />
+            {/* Generic cover by its main category, labeled as illustrative: not the real place. */}
+            <BrandImage
+              imageKeys={
+                detail.coverCategory ? [`cover-${detail.coverCategory}`, 'cover-generic'] : ['cover-generic']
+              }
+              fallbackIcon={categoryIcon(detail.coverCategory)}
+              height={sizes.cover}
+              illustrative
+            />
             <Header shop={shop} onRequireLogin={onRequireLogin} onFavoriteChanged={detail.shop.refetch} />
             <Button label={t('book')} onPress={onBook} fullWidth />
             <About shop={shop} />

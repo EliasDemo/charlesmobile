@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 import { isApiError, isNetworkError, translateError } from '@/shared/api';
 import { DevConnectionHint, showDevConnectionHint } from './DevConnectionHint';
-import { EmptyState, ErrorState, LoadingState } from './StateViews';
+import type { IconName } from './Icon';
+import { SkeletonList } from './Skeleton';
+import { EmptyState, ErrorState } from './StateViews';
 
 export interface QueryLike<T> {
   data: T | undefined;
@@ -13,7 +15,9 @@ export interface QueryLike<T> {
 export interface QueryViewProps<T> {
   query: QueryLike<T>;
   isEmpty?: (data: T) => boolean;
-  empty?: { title?: string; message?: string };
+  empty?: { title?: string; message?: string; icon?: IconName };
+  /** Skeleton cards shown while loading (1 by default: a section or a detail). */
+  skeletonCount?: number;
   children: (data: T) => ReactNode;
   /**
    * 404 (missing or not visible: the backend answers the same for both) shown as an empty state
@@ -26,9 +30,18 @@ export interface QueryViewProps<T> {
  * Renders the four states of a screen with data: loading, error, empty and data.
  * Cached data stays visible when a later refetch fails (e.g. offline).
  */
-export function QueryView<T>({ query, isEmpty, empty, children, notFound }: QueryViewProps<T>) {
+export function QueryView<T>({
+  query,
+  isEmpty,
+  empty,
+  children,
+  notFound,
+  skeletonCount = 1,
+}: QueryViewProps<T>) {
   if (query.data !== undefined) {
-    if (isEmpty?.(query.data)) return <EmptyState title={empty?.title} message={empty?.message} />;
+    if (isEmpty?.(query.data)) {
+      return <EmptyState title={empty?.title} message={empty?.message} icon={empty?.icon} />;
+    }
     return <>{children(query.data)}</>;
   }
   if (notFound && isApiError(query.error) && query.error.status === 404) {
@@ -45,5 +58,5 @@ export function QueryView<T>({ query, isEmpty, empty, children, notFound }: Quer
       </ErrorState>
     );
   }
-  return <LoadingState />;
+  return <SkeletonList count={skeletonCount} />;
 }

@@ -10,6 +10,7 @@ import * as SystemUI from 'expo-system-ui';
 import { useEffect, useMemo, type ReactNode } from 'react';
 import { Platform } from 'react-native';
 import { useTheme, type Theme } from '@/shared/theme';
+import { useReduceMotion } from './Skeleton';
 
 export function buildNavigationTheme(theme: Theme): NavigationTheme {
   const base = theme.scheme === 'dark' ? DarkTheme : DefaultTheme;
@@ -31,6 +32,7 @@ export function buildNavigationTheme(theme: Theme): NavigationTheme {
 /** Header style shared by every stack, so no screen falls back to the default white header. */
 export function useStackScreenOptions() {
   const theme = useTheme();
+  const reduceMotion = useReduceMotion();
   return useMemo(
     () => ({
       headerStyle: { backgroundColor: theme.colors.surface },
@@ -39,8 +41,10 @@ export function useStackScreenOptions() {
       contentStyle: { backgroundColor: theme.colors.background },
       headerShadowVisible: false,
       headerBackButtonDisplayMode: 'minimal' as const,
+      // Smooth side slide between screens; none when the system asks to reduce motion.
+      animation: reduceMotion ? ('none' as const) : ('slide_from_right' as const),
     }),
-    [theme],
+    [theme, reduceMotion],
   );
 }
 
@@ -77,4 +81,18 @@ export function NavigationThemeRoot({ children }: { children: ReactNode }) {
   const theme = useTheme();
   const navigationTheme = useMemo(() => buildNavigationTheme(theme), [theme]);
   return <NavigationThemeProvider value={navigationTheme}>{children}</NavigationThemeProvider>;
+}
+
+/** Options of a screen shown from the bottom (filters, sheets). */
+export function useModalScreenOptions() {
+  const reduceMotion = useReduceMotion();
+  return {
+    presentation: 'modal' as const,
+    animation: reduceMotion ? ('none' as const) : ('slide_from_bottom' as const),
+  };
+}
+
+/** Soft fade between tabs; none when the system asks to reduce motion. */
+export function useTabAnimation() {
+  return useReduceMotion() ? ('none' as const) : ('fade' as const);
 }

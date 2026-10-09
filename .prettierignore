@@ -5,3 +5,4 @@ pnpm-lock.yaml
 .expo/
 *.md
 types/generated/
+src/shared/ui/brandImages.generated.ts

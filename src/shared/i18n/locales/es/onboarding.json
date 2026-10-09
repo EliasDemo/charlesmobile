@@ -1,0 +1,20 @@
+{
+  "skip": "Saltar",
+  "next": "Siguiente",
+  "start": "Empezar",
+  "page": "Página {{current}} de {{total}}",
+  "pages": {
+    "find": {
+      "title": "Encuentra tu barbería",
+      "text": "Cerca de ti o por el servicio que buscas, con precios y valoraciones."
+    },
+    "book": {
+      "title": "Reserva en segundos",
+      "text": "Elige barbero, día y turno. Sin llamadas ni esperas."
+    },
+    "manage": {
+      "title": "Todo en un lugar",
+      "text": "Tus citas, tus recordatorios y tus barberías favoritas."
+    }
+  }
+}

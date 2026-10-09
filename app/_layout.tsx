@@ -11,6 +11,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSessionEndedRedirect } from '@/features/auth';
+import { loadWelcomeSeen, useWelcomeStore } from '@/features/onboarding';
 import { bootstrapSession, queryClient, startQueryListeners } from '@/shared/api';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
@@ -45,6 +46,12 @@ function AppStack() {
   // Renewal failed: go to login, keeping the destination screen.
   useSessionEndedRedirect(pathname, goToLogin);
 
+  // First launch: the welcome pages, once.
+  const welcomeSeen = useWelcomeStore((s) => s.seen);
+  useEffect(() => {
+    if (welcomeSeen === false) router.replace('/welcome');
+  }, [welcomeSeen]);
+
   return (
     <>
       <SystemBars />
@@ -55,6 +62,7 @@ function AppStack() {
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(client)" options={{ headerShown: false }} />
         <Stack.Screen name="(staff)" options={{ headerShown: false }} />
+        <Stack.Screen name="welcome" options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="+not-found" options={{ title: t('notFound.title') }} />
       </Stack>
     </>
@@ -72,7 +80,9 @@ export default function RootLayout() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    void Promise.all([bootstrapSession(), loadThemePreference()]).finally(() => setSessionReady(true));
+    void Promise.all([bootstrapSession(), loadThemePreference(), loadWelcomeSeen()]).finally(() =>
+      setSessionReady(true),
+    );
   }, []);
 
   // Without the fonts the app still works with the system font.

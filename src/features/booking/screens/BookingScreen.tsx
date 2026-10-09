@@ -34,6 +34,41 @@ export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop }: Boo
               </Text>
               <StatusBadge status={booking.status} />
             </View>
+            {booking.status === 'PENDING_PAYMENT' ? (
+              <Card testID="pending-hero">
+                <Text variant="subtitle">{t('detail.pendingTitle')}</Text>
+                {data.secondsLeft > 0 ? (
+                  <View
+                    accessible
+                    accessibilityLiveRegion="polite"
+                    accessibilityLabel={t('detail.pendingCountdown', {
+                      time: formatDuration(data.secondsLeft),
+                    })}
+                  >
+                    <Text
+                      variant="hero"
+                      align="center"
+                      color={data.secondsLeft <= URGENT_SECONDS ? 'danger' : 'warning'}
+                      testID="pending-countdown-time"
+                    >
+                      {formatDuration(data.secondsLeft)}
+                    </Text>
+                    <Text align="center" testID="pending-countdown">
+                      {t('detail.pendingCountdown', { time: formatDuration(data.secondsLeft) })}
+                    </Text>
+                  </View>
+                ) : (
+                  <Text color="textSecondary">{t('detail.checkingExpiry')}</Text>
+                )}
+                <Button label={t('detail.pay')} disabled fullWidth />
+                <Text variant="caption" color="textSecondary" align="center">
+                  {t('detail.paySoon')}
+                </Text>
+                <Text variant="caption" color="textSecondary">
+                  {t('detail.pendingExplain')}
+                </Text>
+              </Card>
+            ) : null}
             {data.cancelled ? (
               <Notice
                 tone="success"
@@ -53,34 +88,13 @@ export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop }: Boo
               />
             ) : null}
 
-            {booking.status === 'PENDING_PAYMENT' ? (
-              <Card>
-                <Text variant="subtitle">{t('detail.pendingTitle')}</Text>
-                {data.secondsLeft > 0 ? (
-                  <Text variant="bodyStrong" color="warning" testID="pending-countdown">
-                    {t('detail.pendingCountdown', { time: formatDuration(data.secondsLeft) })}
-                  </Text>
-                ) : (
-                  <Text color="textSecondary">{t('detail.checkingExpiry')}</Text>
-                )}
-                <Text color="textSecondary">{t('detail.pendingExplain')}</Text>
-                <Button label={t('detail.pay')} disabled fullWidth />
-                <Text variant="caption" color="textSecondary" align="center">
-                  {t('detail.paySoon')}
-                </Text>
-              </Card>
-            ) : null}
             {booking.status === 'PENDING_PAYMENT' ? <DevBookingId bookingId={booking.id} /> : null}
             {booking.status === 'CONFIRMED' ? (
               <Notice tone="success" message={t('detail.confirmedTitle')} />
             ) : null}
             {booking.status === 'EXPIRED' ? (
               <Notice tone="warning" title={t('detail.expiredTitle')} message={t('detail.expiredMessage')}>
-                <Button
-                  label={t('detail.bookAgain')}
-                  variant="secondary"
-                  onPress={() => onBookAgain(booking.barbershop.id)}
-                />
+                <Button label={t('detail.bookAgain')} onPress={() => onBookAgain(booking.barbershop.id)} />
               </Notice>
             ) : null}
             {booking.status === 'CANCELLED' && booking.cancellation ? (
@@ -176,7 +190,8 @@ function CancelSection({
   const { t } = useTranslation('booking');
   if (!preview) return null;
   if (canCancel) {
-    return <Button label={t('cancel.action')} variant="danger" onPress={onAsk} disabled={disabled} />;
+    // Secondary on purpose: the only primary action of a booking is paying (or booking again).
+    return <Button label={t('cancel.action')} variant="secondary" onPress={onAsk} disabled={disabled} />;
   }
   // Only explain when it could have been expected (e.g. it already started); final states say nothing.
   return preview.reason === 'ALREADY_STARTED' ? (
@@ -197,6 +212,9 @@ function cancelMessage(t: T, preview: CancellationPreview | undefined, error: st
   if (preview.refund.amount.amount === 0) return rule;
   return `${t('cancel.refund', { amount: formatMoney(preview.refund.amount), percent: preview.refund.percent })} ${rule}`;
 }
+
+/** Under one minute left the countdown turns red (its text still says the time). */
+const URGENT_SECONDS = 60;
 
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },

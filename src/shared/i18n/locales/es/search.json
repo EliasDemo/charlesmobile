@@ -26,7 +26,6 @@
     "temporarilyClosed": "Cerrada temporalmente",
     "availableNow": "Turno disponible ahora",
     "priceFrom": "Desde {{price}}",
-    "distance": "a {{distance}}",
     "favorite": "En tus favoritas"
   },
   "sort": {

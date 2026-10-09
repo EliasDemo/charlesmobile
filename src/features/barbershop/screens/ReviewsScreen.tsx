@@ -63,7 +63,10 @@ export function ReviewsScreen({ barbershopId }: { barbershopId: string }) {
       header={header}
       renderItem={({ item }) => <ReviewItem review={item} timeZone={timeZone!} />}
       keyExtractor={(item) => item.id}
-      empty={{ title: reviews.hasFilters ? t('reviews.filterEmpty') : t('reviews.empty') }}
+      empty={{
+        title: reviews.hasFilters ? t('reviews.filterEmpty') : t('reviews.empty'),
+        icon: 'chatbubbles-outline',
+      }}
     />
   );
 }

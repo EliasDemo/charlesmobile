@@ -3,6 +3,8 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
 import { Button } from './Button';
+import type { IconName } from './Icon';
+import { Illustration } from './Illustration';
 import { Text } from './Text';
 
 export function LoadingState({ label }: { label?: string }) {
@@ -26,12 +28,15 @@ export interface EmptyStateProps {
   title?: string;
   message?: string;
   action?: { label: string; onPress: () => void };
+  /** Illustration above the title (brand icon until the stock photos arrive). */
+  icon?: IconName;
 }
 
-export function EmptyState({ title, message, action }: EmptyStateProps) {
+export function EmptyState({ title, message, action, icon }: EmptyStateProps) {
   const { t } = useTranslation();
   return (
     <View style={styles.center} testID="empty-state">
+      {icon ? <Illustration icon={icon} /> : null}
       <Text variant="subtitle" align="center">
         {title ?? t('states.emptyTitle')}
       </Text>

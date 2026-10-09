@@ -11,6 +11,7 @@ export default function ProfileRoute() {
       onEditProfile={() => router.push('/profile/edit')}
       onPreferences={() => router.push('/profile/preferences')}
       onFavorites={() => router.push('/profile/favorites')}
+      onWelcome={() => router.push('/welcome')}
       onDesignSystem={env.isDevelopment ? () => router.push('/design-system') : undefined}
       onLoggedOut={() => router.replace('/profile')}
     />

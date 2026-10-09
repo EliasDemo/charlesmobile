@@ -52,7 +52,18 @@ export function useBarbershop(id: string) {
     todayDayOfWeek: shop.data ? dayOfWeekIn(shop.data.timezone) : null,
     /** Services grouped by category, in the order the API returns them. */
     servicesByCategory: groupByCategory(services.data ?? []),
+    /** Category with the most services: picks the generic cover (never a photo of the place). */
+    coverCategory: dominantCategory(services.data ?? []),
   };
+}
+
+export function dominantCategory(services: Service[]): string | null {
+  const counts = new Map<string, number>();
+  for (const service of services)
+    counts.set(service.category.key, (counts.get(service.category.key) ?? 0) + 1);
+  let best: string | null = null;
+  for (const [key, count] of counts) if (best === null || count > (counts.get(best) ?? 0)) best = key;
+  return best;
 }
 
 function groupByCategory(services: Service[]) {

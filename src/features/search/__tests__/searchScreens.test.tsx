@@ -172,7 +172,7 @@ describe('Cerca de mí', () => {
       expect(useSearchStore.getState().center).toMatchObject({ latitude: -12.11, source: 'device' }),
     );
     expect(await screen.findByText(texts.nearMeActive)).toBeTruthy();
-    expect(await screen.findByText(/a 1[.,]2 km/)).toBeTruthy();
+    expect(await screen.findByText(/^1[.,]2 km$/)).toBeTruthy();
   });
 
   it('keeps text search working when the permission is denied', async () => {

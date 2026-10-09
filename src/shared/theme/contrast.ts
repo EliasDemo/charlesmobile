@@ -40,6 +40,13 @@ export const TEXT_PAIRS: readonly [ColorToken, ColorToken][] = [
   ['onDisabled', 'disabledBackground'],
   // Offline banner.
   ['onStatus', 'warning'],
+  // Status pills: text and icon on their soft background, and on plain surfaces.
+  ['statusPendingFg', 'statusPendingBg'],
+  ['statusSuccessFg', 'statusSuccessBg'],
+  ['statusNeutralFg', 'statusNeutralBg'],
+  ['statusDangerFg', 'statusDangerBg'],
+  ['statusPendingFg', 'surface'],
+  ['statusDangerFg', 'surface'],
 ];
 
 export const UI_PAIRS: readonly [ColorToken, ColorToken][] = [

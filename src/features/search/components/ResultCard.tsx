@@ -1,76 +1,62 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { formatDistance, formatMoney } from '@/shared/lib';
+import { formatDistance, formatMoney, formatRating } from '@/shared/lib';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Badge, Icon, Monogram, RatingLabel, Text } from '@/shared/ui';
+import { Badge, Icon, InfoCard, Monogram, StatusPill, type InfoItem } from '@/shared/ui';
 import type { SearchResult } from '../api/searchApi';
 
-/** One search result. Shows only what the API returns: missing values are hidden, never computed. */
+/**
+ * One search result: the name first, then rating, distance and price with small icons, and the
+ * open state with its color and icon. Only what the API returns: missing values are hidden.
+ */
 export function ResultCard({ item, onPress }: { item: SearchResult; onPress: (id: string) => void }) {
   const theme = useTheme();
   const { t } = useTranslation('search');
+  const details: InfoItem[] = [
+    item.rating.average !== null && item.rating.count > 0
+      ? { icon: 'star', text: `${formatRating(item.rating.average)} (${item.rating.count})` }
+      : { icon: 'star-outline', text: t('rating.none', { ns: 'common' }) },
+  ];
+  if (item.distanceMeters !== null) {
+    details.push({ icon: 'navigate', text: formatDistance(item.distanceMeters) });
+  }
+  if (item.priceFrom) {
+    details.push({ icon: 'pricetag', text: t('card.priceFrom', { price: formatMoney(item.priceFrom) }) });
+  }
   const openState =
     item.status === 'TEMPORARILY_CLOSED'
-      ? { label: t('card.temporarilyClosed'), tone: 'warning' as const }
+      ? ({ tone: 'pending', icon: 'pause-circle', label: t('card.temporarilyClosed') } as const)
       : item.isOpenNow
-        ? { label: t('card.openNow'), tone: 'success' as const }
-        : { label: t('card.closed'), tone: 'neutral' as const };
+        ? ({ tone: 'success', icon: 'time', label: t('card.openNow') } as const)
+        : ({ tone: 'neutral', icon: 'moon', label: t('card.closed') } as const);
   return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={() => onPress(item.id)}
+    <InfoCard
       testID={`result-${item.id}`}
-      style={({ pressed }) => [
-        styles.card,
-        {
-          backgroundColor: pressed ? theme.colors.primarySoft : theme.colors.surface,
-          borderColor: theme.colors.border,
-          borderRadius: theme.radius.lg,
-        },
-      ]}
-    >
-      <Monogram name={item.name} size={sizes.avatar} />
-      <View style={styles.body}>
-        <View style={styles.titleRow}>
-          <Text variant="bodyStrong" style={styles.flex}>
-            {item.name}
-          </Text>
-          {item.isFavorite ? (
-            <View accessible accessibilityLabel={t('card.favorite')}>
-              <Icon name="heart" color={theme.colors.danger} />
-            </View>
+      onPress={() => onPress(item.id)}
+      leading={<Monogram name={item.name} size={sizes.avatar} />}
+      title={item.name}
+      subtitle={item.address}
+      details={details}
+      trailing={
+        item.isFavorite ? (
+          <View accessible accessibilityLabel={t('card.favorite')}>
+            <Icon name="heart" color={theme.colors.danger} />
+          </View>
+        ) : undefined
+      }
+      footer={
+        <View style={styles.footer}>
+          <StatusPill tone={openState.tone} icon={openState.icon} label={openState.label} />
+          {item.availableNow ? (
+            <StatusPill tone="success" icon="flash" label={t('card.availableNow')} />
           ) : null}
-        </View>
-        <Text variant="caption" color="textSecondary" numberOfLines={1}>
-          {item.address}
-        </Text>
-        <View style={styles.row}>
-          <RatingLabel average={item.rating.average} count={item.rating.count} variant="caption" />
-          {item.distanceMeters !== null ? (
-            <Text variant="caption" color="textSecondary">
-              {t('card.distance', { distance: formatDistance(item.distanceMeters) })}
-            </Text>
-          ) : null}
-          {item.priceFrom ? (
-            <Text variant="caption" color="textSecondary">
-              {t('card.priceFrom', { price: formatMoney(item.priceFrom) })}
-            </Text>
-          ) : null}
-        </View>
-        <View style={styles.row}>
-          <Badge label={openState.label} tone={openState.tone} />
-          {item.availableNow ? <Badge label={t('card.availableNow')} tone="success" /> : null}
           {item.type === 'INDEPENDENT' ? <Badge label={t('card.independent')} /> : null}
         </View>
-      </View>
-    </Pressable>
+      }
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  card: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderWidth: sizes.borderWidth },
-  body: { flex: 1, gap: spacing.xs },
-  titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  flex: { flex: 1 },
-  row: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.sm },
+  footer: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
 });
