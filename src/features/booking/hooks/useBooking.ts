@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useIsFocused } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { useBarbershopQuery } from '@/features/barbershop';
+import { useBarbershopQuery, useServicesQuery } from '@/features/barbershop';
 import { nextPageParam, translateError } from '@/shared/api';
 import { useCountdown } from '@/shared/lib';
 import {
@@ -133,4 +133,13 @@ export function useMyBookings(scope: BookingScope) {
  */
 export function useBookingTimeZone(barbershopId: string) {
   return useBarbershopQuery(barbershopId).data?.timezone;
+}
+
+/**
+ * Category of the booked service. BookingDto only has the service id and name (requested to the
+ * backend as `service.categoryKey`): looked up in the barbershop's services, cached. A service
+ * that no longer exists returns null (generic icon).
+ */
+export function useBookingCategory(barbershopId: string, serviceId: string): string | null {
+  return useServicesQuery(barbershopId).data?.find((s) => s.id === serviceId)?.category.key ?? null;
 }

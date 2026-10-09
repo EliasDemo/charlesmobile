@@ -181,6 +181,15 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 - **Regla de ESLint:** en `src/features` y `app` no se permiten colores (`#…`, `rgb(…)`, `hsl(…)`) ni `fontSize` numéricos sueltos.
 - **Tamaño:** el paquete de producción de Android sigue igual (4,2 MB de JS y 7,4 MB de recursos), porque la parte 1 no agrega imágenes.
 
+**Correcciones tras la primera revisión (tema oscuro):**
+- Explorar dice "Barberías" si ningún resultado tiene valoraciones.
+- La invitación a entrar es un solo bloque: "Iniciar sesión" como botón principal y "Crear cuenta" justo debajo.
+- Bienvenida: imagen grande arriba (`BrandImage`, lista para las fotos) con el texto debajo; "Saltar" junto a "Siguiente", abajo.
+- Registro: "Acepto los términos y condiciones", sin la versión interna (que se sigue enviando).
+- Las tarjetas de reserva usan el icono de la categoría del servicio.
+
+**Pedido al backend:** `service.categoryKey` en `BookingDto`. Mientras tanto, la categoría se busca en los servicios de la barbería (en caché), con el icono genérico si el servicio ya no existe.
+
 ### Parte 2 — Imágenes (en espera de las fotos del usuario)
 
 - **Listo:**

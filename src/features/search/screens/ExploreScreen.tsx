@@ -89,7 +89,10 @@ export function ExploreScreen({ onOpenBarbershop, onOpenFilters }: ExploreScreen
         </Text>
       ) : null}
       {store.view === 'list' && results.usingDefaultOrder && results.query.items?.length ? (
-        <Text variant="subtitle">{t('topRated')}</Text>
+        // "Mejor valoradas" only when some result actually has reviews.
+        <Text variant="subtitle">
+          {results.query.items.some((item) => item.rating.count > 0) ? t('topRated') : t('allBarbershops')}
+        </Text>
       ) : null}
     </View>
   );

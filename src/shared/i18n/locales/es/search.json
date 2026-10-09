@@ -75,5 +75,6 @@
     "searchHere": "Buscar en esta zona",
     "empty": "No hay barberías en esta zona con estos filtros.",
     "openDetail": "Ver barbería"
-  }
+  },
+  "allBarbershops": "Barberías"
 }

@@ -10,11 +10,12 @@ import {
   InfoCard,
   StatusPill,
   Text,
+  categoryIcon,
   type IconName,
   type InfoItem,
 } from '@/shared/ui';
 import type { Booking, BookingStatus } from '../api/bookingApi';
-import { useBookingTimeZone } from '../hooks/useBooking';
+import { useBookingCategory, useBookingTimeZone } from '../hooks/useBooking';
 
 /** Color and icon of each booking state. The icon and the label always go with the color. */
 export const STATUS_STYLE: Record<BookingStatus, { tone: StatusTone; icon: IconName }> = {
@@ -62,6 +63,7 @@ export function PriceBreakdown({ price }: { price: Booking['price'] }) {
 export function BookingCard({ booking, onPress }: { booking: Booking; onPress: (id: string) => void }) {
   const { t } = useTranslation('booking');
   const timeZone = useBookingTimeZone(booking.barbershop.id);
+  const categoryKey = useBookingCategory(booking.barbershop.id, booking.service.id);
   const details: InfoItem[] = [];
   if (timeZone) {
     details.push({
@@ -75,7 +77,7 @@ export function BookingCard({ booking, onPress }: { booking: Booking; onPress: (
     <InfoCard
       testID={`booking-${booking.id}`}
       onPress={() => onPress(booking.id)}
-      leading={<IconTile icon="calendar-clear" />}
+      leading={<IconTile icon={categoryIcon(categoryKey)} />}
       title={booking.service.name ?? ''}
       subtitle={booking.barbershop.name ?? undefined}
       details={details}

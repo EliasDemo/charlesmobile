@@ -170,4 +170,5 @@ export const sizes = {
   cover: 160,
   mapPreview: 320,
   illustration: 120,
+  welcomeImage: 320,
 } as const;

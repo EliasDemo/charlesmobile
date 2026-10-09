@@ -453,3 +453,16 @@ describe('MyBookingsScreen', () => {
     expect(await screen.findByText(common.actions.retry)).toBeTruthy();
   });
 });
+
+describe('booking category', () => {
+  it('takes the category of the booked service from the barbershop services', async () => {
+    signIn();
+    api({ 'GET /api/v1/barbershops/{id}/services': { body: page([service()]) } });
+    const { useBookingCategory } = jest.requireActual('../hooks/useBooking');
+    const { renderHookWithProviders } = jest.requireActual('@test/render');
+    const { result } = await renderHookWithProviders(() => useBookingCategory(SHOP, SERVICE));
+    await waitFor(() => expect(result.current).toBe('haircut'));
+    const missing = await renderHookWithProviders(() => useBookingCategory(SHOP, 'deleted-service'));
+    await waitFor(() => expect(missing.result.current).toBeNull());
+  });
+});

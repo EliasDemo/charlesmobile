@@ -138,7 +138,7 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
         name="acceptTerms"
         render={({ field, fieldState }) => (
           <Checkbox
-            label={t('register.terms', { version: terms.data.version })}
+            label={t('register.terms')}
             checked={field.value}
             onChange={field.onChange}
             error={errorText(fieldState.error?.message)}

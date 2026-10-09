@@ -273,3 +273,16 @@ describe('FiltersScreen', () => {
     expect(useSearchStore.getState().filters).toEqual(EMPTY_FILTERS);
   });
 });
+
+describe('Explore title', () => {
+  it('says "Barberías" when no result has reviews yet, never "Mejor valoradas"', async () => {
+    mockApi({
+      'GET /api/v1/search/barbershops': {
+        body: searchPage([searchResult({ rating: { average: null, count: 0 } })]),
+      },
+    });
+    await renderWithProviders(<ExploreScreen {...props()} />);
+    expect(await screen.findByText(texts.allBarbershops)).toBeTruthy();
+    expect(screen.queryByText(texts.topRated)).toBeNull();
+  });
+});

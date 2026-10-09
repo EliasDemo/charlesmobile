@@ -93,10 +93,12 @@ describe('RegisterScreen', () => {
     expect(screen.getByText(common.actions.retry)).toBeTruthy();
   });
 
-  it('shows the form, the terms version and the live password requirements', async () => {
+  it('shows the form, the terms without their internal version and the live password requirements', async () => {
     mockApi({ 'GET /api/v1/auth/terms': { body: { version: '2026-10' } } });
     await renderWithProviders(<RegisterScreen {...props()} />);
-    expect(await screen.findByText(/versión 2026-10/)).toBeTruthy();
+    expect(await screen.findByText(auth.register.terms)).toBeTruthy();
+    // The internal terms version is sent to the backend, never shown.
+    expect(screen.queryByText(/2026-10/)).toBeNull();
     expect(screen.getByText(`• ${auth.passwordRules.common}`)).toBeTruthy();
     expect(screen.getByText(/\(0 ahora\)/)).toBeTruthy();
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'abcdefghij');
@@ -107,7 +109,7 @@ describe('RegisterScreen', () => {
   it('requires the declarations before sending', async () => {
     const api = mockApi({ 'GET /api/v1/auth/terms': { body: { version: '2026-10' } } });
     await renderWithProviders(<RegisterScreen {...props()} />);
-    await screen.findByText(/versión 2026-10/);
+    await screen.findByText(auth.register.terms);
     await fireEvent.press(screen.getByRole('button', { name: auth.register.submit }));
     expect(await screen.findByText(auth.validation.adultRequired)).toBeTruthy();
     expect(screen.getByText(auth.validation.termsRequired)).toBeTruthy();
@@ -121,12 +123,12 @@ describe('RegisterScreen', () => {
     });
     const p = props();
     await renderWithProviders(<RegisterScreen {...p} />);
-    await screen.findByText(/versión 2026-10/);
+    await screen.findByText(auth.register.terms);
     await fireEvent.changeText(screen.getByLabelText(auth.fields.fullName), 'Ana Pérez');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.email), 'ana@example.com');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'una-clave-larga');
     await fireEvent.press(screen.getByRole('checkbox', { name: auth.register.adult }));
-    await fireEvent.press(screen.getByRole('checkbox', { name: /Acepto los términos/ }));
+    await fireEvent.press(screen.getByRole('checkbox', { name: auth.register.terms }));
     await fireEvent.press(screen.getByRole('button', { name: auth.register.submit }));
     await waitFor(() => expect(p.onSuccess).toHaveBeenCalled());
   });
