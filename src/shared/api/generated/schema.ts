@@ -3245,7 +3245,7 @@ export type components = {
         };
         OwnerDocumentInputDto: {
             /**
-             * @description RUC: 11 dígitos con dígito verificador válido. DNI: 8 dígitos.
+             * @description Solo dígitos. DNI: 8 dígitos. RUC: 11 dígitos, con prefijo 10, 15, 17 o 20 y dígito verificador válido (módulo 11 de SUNAT: pesos 5,4,3,2,7,6,5,4,3,2 sobre los 10 primeros dígitos; verificador = (11 − suma % 11) % 10, que debe ser igual al último dígito). El largo debe coincidir con el tipo. El prefijo y el verificador no caben en el pattern: el backend los valida y responde VALIDATION_ERROR en ownerDocument.number.
              * @example 20100047218
              */
             number: string;

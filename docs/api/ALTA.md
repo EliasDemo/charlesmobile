@@ -29,7 +29,8 @@ En cualquiera de esos estados el dueño ya puede configurar todo: servicios, bar
    ```
 
    - Con documento (y sin otros faltantes) nace en `PENDING_REVIEW`; sin él, en `DRAFT`.
-   - `type`: `RUC` (11 dígitos con dígito verificador válido) o `DNI` (8 dígitos). Se aceptan espacios, puntos o guiones al escribir.
+   - `type`: `RUC` (11 dígitos, prefijo 10, 15, 17 o 20 y dígito verificador módulo 11) o `DNI` (8 dígitos).
+   - `number`: el contrato publica `pattern: ^\d{8}(\d{3})?$` (envía solo dígitos); la `description` trae el cálculo del dígito verificador para validarlo en la app. El backend lo vuelve a validar.
 
 2. **Estado de la revisión:** `GET /barbershops/{id}/review` devuelve:
    - `status`;

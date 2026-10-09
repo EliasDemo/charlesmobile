@@ -240,7 +240,7 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
   - Al editar, solo el OWNER ve el documento enmascarado y puede cambiarlo (`PUT /barbershops/{id}/owner-document`). Nunca se muestra el número completo.
   - Estados nuevos `DRAFT` y `CHANGES_REQUESTED`. Sección **Revisión** (`/shop/[shopId]/review`) mientras no es pública: lo que falta, el motivo de soporte y "Enviar/Reenviar a revisión" (según `canSubmit`, solo OWNER; el MANAGER ve el aviso). `REVIEW_REQUIREMENTS_MISSING` muestra lo que falta.
 - **Resuelto en el backend:** `service.categoryKey` llega en las reservas; se quitó la búsqueda en los servicios de la barbería.
-- Pedido al backend: publicar el `pattern` de `ownerDocument.number` en el contrato.
+- El contrato ya publica el `pattern` de `ownerDocument.number` (8 u 11 dígitos, solo dígitos); la app ya enviaba solo dígitos.
 
 ## Pantallas actuales
 
