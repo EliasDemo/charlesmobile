@@ -9,3 +9,5 @@ export { ShopHomeScreen, type ShopSection } from './screens/ShopHomeScreen';
 export { ShopReviewScreen } from './screens/ShopReviewScreen';
 export { ShopStatusScreen } from './screens/ShopStatusScreen';
 export { TimeBlockFormScreen, TimeBlocksScreen } from './screens/TimeBlocksScreens';
+export { useShopHome } from './hooks/useShopHome';
+export { useBarbersList } from './hooks/useBarbers';

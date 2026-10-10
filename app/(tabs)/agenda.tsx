@@ -1,7 +1,5 @@
-import { useTranslation } from '@/shared/i18n';
-import { PlaceholderScreen } from '@/shared/ui';
+import { AgendaScreen } from '@/features/agenda';
 
 export default function AgendaRoute() {
-  const { t } = useTranslation();
-  return <PlaceholderScreen title={t('nav.agenda')} />;
+  return <AgendaScreen />;
 }

@@ -55,6 +55,12 @@ export function upcomingDays(
   });
 }
 
+/** Calendar days from `back` days ago to `forward` days ahead in a time zone (today included). */
+export function daysAround(timeZone: string, back: number, forward: number, now: Date = new Date()) {
+  const start = new Date(now.getTime() - back * 24 * 60 * 60 * 1000);
+  return upcomingDays(timeZone, back + forward + 1, start);
+}
+
 /** Day of week (0 = Sunday) of an instant in a time zone, to highlight "today" in business hours. */
 export function dayOfWeekIn(timeZone: string, now: Date = new Date()): number {
   const [year, month, day] = toLocalDate(now.toISOString(), timeZone).split('-').map(Number) as [

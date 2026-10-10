@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M6 (gestión de barbería) en curso, plan aprobado el 2026-10-09. M4.5 parte 1 sigue en revisión por el usuario (capturas de tema claro).
+**Fase actual:** M7 (agenda y atención) en curso, plan aprobado el 2026-10-09. M6 cerrada. M4.5 parte 2: fotos aplicadas; falta `cover-generic`.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -225,7 +225,9 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
   - El cliente HTTP respeta un `Authorization` explícito y nunca intenta renovar la sesión por un token limitado.
 - **Pruebas:** 379 en total.
 
-## M6 — Gestión de barbería (código terminado; falta la prueba del usuario en su teléfono)
+## M6 — Cerrada (gestión de barbería)
+
+Confirmada por el usuario en su teléfono.
 
 - **Modo barbería:** en Perfil, "Cambiar a modo barbería/cliente" (solo con rol OWNER o BARBER del token). Se guarda en el dispositivo. En modo barbería las pestañas son Mi barbería, Agenda (relleno hasta M7) y Perfil.
 - **Crear:** Perfil → "Crear mi barbería" (`/create-shop`): barbería o barbero independiente; ubicación con "Usar mi ubicación actual". Al crear se renueva la sesión para traer el rol nuevo y se pasa a modo barbería.
@@ -244,6 +246,16 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
   - Estados nuevos `DRAFT` y `CHANGES_REQUESTED`. Sección **Revisión** (`/shop/[shopId]/review`) mientras no es pública: lo que falta, el motivo de soporte y "Enviar/Reenviar a revisión" (según `canSubmit`, solo OWNER; el MANAGER ve el aviso). `REVIEW_REQUIREMENTS_MISSING` muestra lo que falta.
 - **Resuelto en el backend:** `service.categoryKey` llega en las reservas; se quitó la búsqueda en los servicios de la barbería.
 - El contrato ya publica el `pattern` de `ownerDocument.number` (8 u 11 dígitos, solo dígitos); la app ya enviaba solo dígitos.
+
+## M7 — Agenda y atención (código terminado; falta la prueba del usuario)
+
+- **Pestaña Agenda** (modo barbería): responsable o administrador →  (filtro por barbero, selector de barbería si administra varias); barbero →  (perfil activo). Si es ambas cosas, selector "Toda la barbería / Mi agenda".
+- Día: de 7 días atrás a 30 adelante (**provisional** hasta que el backend publique su rango y ). Horas en la zona de la barbería. Citas y bloqueos en una sola línea de tiempo; aviso ; se refresca sola cada minuto y al deslizar.
+- **Acciones solo según  de la API:** Atendida, No asistió (confirmación: sin devolución) y Corregir (motivo de 3 a 300, ATTENDED ↔ NO_SHOW). Tras cada acción, o si falla, se vuelve a pedir la agenda. Errores por  (, , ).
+- **Cancelar desde la barbería: pendiente** de  en el contrato. No se muestra ningún botón de cancelar hasta entonces.
+- **Pedidos al backend (aceptados):** ; publicar / (3 a 300) de los motivos; validar fechas de la agenda con rango; comando .
+- Pruebas:  (acciones según la API, sin cancelar, atendida, no-show con confirmación, error de plazo, corrección con motivo, vacío, error, vista de barbero). Maestro: .
+- Sin cambios nativos.
 
 ## Pantallas actuales
 
@@ -266,7 +278,7 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
 | `/account-deleted` | Eliminación solicitada (fecha) | antes de M6 |
 | `/account-pending` | Cuenta pendiente de eliminación: cancelar | antes de M6 |
 | `/design-system` | Catálogo del sistema de diseño | Solo desarrollo |
-| `/agenda` (pestaña en modo barbería) | Relleno | M7 |
+| `/agenda` (pestaña en modo barbería) | Agenda del día y asistencia | M7 |
 | `/shop` (pestaña en modo barbería) | Mi barbería | M6 |
 | `/shop/[shopId]/details`, `status`, `services`, `barbers`, `members`, `hours`, `blocks` | Gestión (protegidas, personal) | M6 |
 | `/create-shop`, `/profile/invitations` | Crear barbería, invitaciones (protegidas) | M6 |

@@ -1,6 +1,7 @@
 export { formatMoney, type Money } from './money';
 export {
   dayOfWeekIn,
+  daysAround,
   formatLongDate,
   formatShortDate,
   formatTime,

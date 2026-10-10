@@ -1,0 +1,52 @@
+{
+  "title": "Agenda",
+  "view": {
+    "label": "Ver",
+    "shop": "Toda la barbería",
+    "mine": "Mi agenda"
+  },
+  "shopLabel": "Barbería",
+  "day": "Día",
+  "barberLabel": "Barbero",
+  "allBarbers": "Todos",
+  "timezone": "Horas de la barbería ({{timezone}})",
+  "pending_one": "{{count}} cita ya empezó y falta marcarla.",
+  "pending_other": "{{count}} citas ya empezaron y falta marcarlas.",
+  "empty": "No hay citas este día.",
+  "noAccess": "Aquí verás tu agenda cuando administres una barbería o seas barbero activo en una.",
+  "noProfile": "No tienes un perfil de barbero activo.",
+  "range": "{{from}}–{{to}}",
+  "client": "Cliente: {{name}}",
+  "barber": "Barbero: {{name}}",
+  "status": {
+    "PENDING_PAYMENT": "Por pagar",
+    "CONFIRMED": "Confirmada",
+    "ATTENDED": "Atendida",
+    "NO_SHOW": "No asistió",
+    "CANCELLED": "Cancelada",
+    "EXPIRED": "Vencida",
+    "pendingAttention": "Por marcar"
+  },
+  "blockFor": {
+    "shop": "Toda la barbería",
+    "barber": "Bloqueo"
+  },
+  "actions": {
+    "attended": "Atendida",
+    "noShow": "No asistió",
+    "correct": "Corregir"
+  },
+  "noShowDialog": {
+    "title": "¿Marcar que no asistió?",
+    "message": "{{client}} no vino a su cita de las {{time}}. El cliente pierde lo que pagó: no hay devolución. Podrás corregirlo dentro de las 48 horas.",
+    "confirm": "Sí, no asistió"
+  },
+  "correctionDialog": {
+    "title": "Corregir asistencia",
+    "toNoShow": "La cita de {{client}} pasará de \"Atendida\" a \"No asistió\". El cliente no recibirá devolución.",
+    "toAttended": "La cita de {{client}} pasará de \"No asistió\" a \"Atendida\".",
+    "reason": "Motivo (obligatorio)",
+    "reasonHint": "Entre 3 y 300 caracteres. Queda registrado en el historial.",
+    "confirm": "Guardar corrección"
+  }
+}

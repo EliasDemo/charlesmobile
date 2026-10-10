@@ -17,8 +17,12 @@ import {
   updateBarber,
 } from '../api/shopApi';
 
-export function useBarbersList(shopId: string) {
-  return useQuery({ queryKey: shopKeys.barbers(shopId), queryFn: () => fetchManagedBarbers(shopId) });
+export function useBarbersList(shopId: string, enabled = true) {
+  return useQuery({
+    queryKey: shopKeys.barbers(shopId),
+    queryFn: () => fetchManagedBarbers(shopId),
+    enabled: enabled && shopId !== '',
+  });
 }
 
 const schema = z.object({

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 
@@ -8,15 +8,37 @@ export interface ScreenProps {
   /** Scrollable content (default). Use false for screens whose lists scroll themselves. */
   scroll?: boolean;
   edges?: Edge[];
+  /** Pull to refresh (scrollable screens only). */
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }
 
-export function Screen({ children, scroll = true, edges = ['left', 'right', 'bottom'] }: ScreenProps) {
+export function Screen({
+  children,
+  scroll = true,
+  edges = ['left', 'right', 'bottom'],
+  refreshing = false,
+  onRefresh,
+}: ScreenProps) {
   const theme = useTheme();
   const content = <View style={styles.content}>{children}</View>;
   return (
     <SafeAreaView edges={edges} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       {scroll ? (
-        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          keyboardShouldPersistTaps="handled"
+          refreshControl={
+            onRefresh ? (
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor={theme.colors.primary}
+                colors={[theme.colors.primary]}
+              />
+            ) : undefined
+          }
+        >
           {content}
         </ScrollView>
       ) : (

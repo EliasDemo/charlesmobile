@@ -118,7 +118,8 @@
   "daysShort": ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
   "date": {
     "today": "Hoy",
-    "tomorrow": "Mañana"
+    "tomorrow": "Mañana",
+    "yesterday": "Ayer"
   },
   "illustrative": "Imagen ilustrativa",
   "time": {

@@ -1,0 +1,28 @@
+# Responsable del seed → modo barbería → Agenda → marcar atendida.
+# Requisito: una reserva CONFIRMED de hoy con Barbero Demo cuya hora de inicio ya pasó
+# (reservar el turno más próximo como cliente.demo y confirmarla con
+# `pnpm --filter api dev:pay <bookingId>` desde ..\charles; esperar a la hora de inicio).
+# Ejecutar: maestro test -e SEED_PASSWORD=<valor de SEED_USER_PASSWORD> e2e/agenda-attendance.yaml
+appId: pe.charlesapp.mobile.dev
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Perfil'
+- tapOn: 'Iniciar sesión'
+- tapOn: 'Correo electrónico'
+- inputText: 'responsable.demo@example.com'
+- tapOn: 'Contraseña'
+- inputText: ${SEED_PASSWORD}
+- tapOn:
+    text: 'Iniciar sesión'
+    index: 1
+- scrollUntilVisible:
+    element: 'Cambiar a modo barbería'
+- tapOn: 'Cambiar a modo barbería'
+- tapOn: 'Agenda'
+- assertVisible: 'Hoy'
+- assertVisible: 'Por marcar'
+- tapOn:
+    text: 'Atendida'
+    index: 0
+- assertVisible: 'Atendida'

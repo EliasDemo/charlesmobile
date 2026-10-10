@@ -17,13 +17,17 @@ export interface DayPickerProps {
   onSelect: (date: string | null) => void;
   /** Accessible name of the group. */
   label: string;
+  /** Today's date: days are named relative to it (Ayer, Hoy, Mañana). Default: the first day is today. */
+  today?: string;
+  /** Selecting again does not clear it. */
+  required?: boolean;
 }
 
 /**
  * Horizontal list of days (no native date picker: it would need a new native module).
  * Tapping the selected day clears it.
  */
-export function DayPicker({ days, selected, onSelect, label }: DayPickerProps) {
+export function DayPicker({ days, selected, onSelect, label, today, required = false }: DayPickerProps) {
   const { t } = useTranslation();
   const shortNames = t('daysShort', { returnObjects: true }) as readonly string[];
   return (
@@ -34,18 +38,22 @@ export function DayPicker({ days, selected, onSelect, label }: DayPickerProps) {
       accessibilityLabel={label}
     >
       {days.map((day, index) => {
+        const offset = today ? days.findIndex((d) => d.date === today) : 0;
+        const relative = index - offset;
         const name =
-          index === 0
+          relative === 0
             ? t('date.today')
-            : index === 1
+            : relative === 1
               ? t('date.tomorrow')
-              : `${shortNames[day.dayOfWeek] ?? ''} ${day.dayOfMonth}`;
+              : relative === -1 && today
+                ? t('date.yesterday')
+                : `${shortNames[day.dayOfWeek] ?? ''} ${day.dayOfMonth}`;
         return (
           <Chip
             key={day.date}
             label={name}
             selected={selected === day.date}
-            onPress={() => onSelect(selected === day.date ? null : day.date)}
+            onPress={() => onSelect(selected === day.date && !required ? null : day.date)}
           />
         );
       })}

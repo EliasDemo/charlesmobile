@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
@@ -14,6 +15,9 @@ export interface ConfirmDialogProps {
   onCancel: () => void;
   destructive?: boolean;
   loading?: boolean;
+  /** Extra content between the message and the buttons (for example, a required reason). */
+  children?: ReactNode;
+  confirmDisabled?: boolean;
 }
 
 /** Confirmation for irreversible actions (CLAUDE.md §6). Same look on Android and iOS. */
@@ -26,6 +30,8 @@ export function ConfirmDialog({
   onCancel,
   destructive,
   loading,
+  children,
+  confirmDisabled,
 }: ConfirmDialogProps) {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -49,6 +55,7 @@ export function ConfirmDialog({
         >
           <Text variant="subtitle">{title}</Text>
           <Text color="textSecondary">{message}</Text>
+          {children}
           <View style={styles.actions}>
             <Button label={t('actions.cancel')} variant="ghost" onPress={onCancel} disabled={loading} />
             <Button
@@ -56,6 +63,7 @@ export function ConfirmDialog({
               variant={destructive ? 'danger' : 'primary'}
               onPress={onConfirm}
               loading={loading}
+              disabled={confirmDisabled}
             />
           </View>
         </Pressable>
