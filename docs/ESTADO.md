@@ -249,12 +249,12 @@ Confirmada por el usuario en su teléfono.
 
 ## M7 — Agenda y atención (código terminado; falta la prueba del usuario)
 
-- **Pestaña Agenda** (modo barbería): responsable o administrador →  (filtro por barbero, selector de barbería si administra varias); barbero →  (perfil activo). Si es ambas cosas, selector "Toda la barbería / Mi agenda".
-- Día: de 7 días atrás a 30 adelante (**provisional** hasta que el backend publique su rango y ). Horas en la zona de la barbería. Citas y bloqueos en una sola línea de tiempo; aviso ; se refresca sola cada minuto y al deslizar.
-- **Acciones solo según  de la API:** Atendida, No asistió (confirmación: sin devolución) y Corregir (motivo de 3 a 300, ATTENDED ↔ NO_SHOW). Tras cada acción, o si falla, se vuelve a pedir la agenda. Errores por  (, , ).
-- **Cancelar desde la barbería: pendiente** de  en el contrato. No se muestra ningún botón de cancelar hasta entonces.
-- **Pedidos al backend (aceptados):** ; publicar / (3 a 300) de los motivos; validar fechas de la agenda con rango; comando .
-- Pruebas:  (acciones según la API, sin cancelar, atendida, no-show con confirmación, error de plazo, corrección con motivo, vacío, error, vista de barbero). Maestro: .
+- **Pestaña Agenda** (modo barbería): responsable o administrador → `GET /barbershops/{id}/agenda` (filtro por barbero, selector de barbería si administra varias); barbero → `GET /me/barber/agenda` (perfil activo). Si es ambas cosas, selector "Toda la barbería / Mi agenda".
+- Día: de 7 días atrás a 30 adelante (**provisional** hasta que el backend publique su rango y `DATE_OUT_OF_RANGE`). Horas en la zona de la barbería. Citas y bloqueos en una sola línea de tiempo; aviso `pendingAttention`; se refresca sola cada minuto y al deslizar.
+- **Acciones solo según `actions` de la API:** Atendida, No asistió (confirmación: sin devolución) y Corregir (motivo de 3 a 300, ATTENDED ↔ NO_SHOW). Tras cada acción, o si falla, se vuelve a pedir la agenda. Errores por `code` (`ATTENDANCE_NOT_ALLOWED`, `NO_SHOW_NOT_ALLOWED`, `ATTENDANCE_CORRECTION_NOT_ALLOWED`).
+- **Cancelar desde la barbería: pendiente** de `actions.canCancel` en el contrato. No se muestra ningún botón de cancelar hasta entonces.
+- **Pedidos al backend (aceptados):** `canCancel`; publicar `minLength`/`maxLength` (3 a 300) de los motivos; validar fechas de la agenda con rango; comando `dev:booking`.
+- Pruebas: `src/features/agenda/__tests__` (acciones según la API, sin cancelar, atendida, no-show con confirmación, error de plazo, corrección con motivo, vacío, error, vista de barbero). Maestro: `e2e/agenda-attendance.yaml`.
 - Sin cambios nativos.
 
 ## Pantallas actuales
