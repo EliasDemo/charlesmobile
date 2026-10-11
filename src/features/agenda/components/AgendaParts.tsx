@@ -37,6 +37,7 @@ export interface AgendaItemCardProps {
   onAttended: () => void;
   onNoShow: () => void;
   onCorrect: () => void;
+  onCancel: () => void;
 }
 
 /** One booking of the day. Its buttons are exactly the actions the API allows now. */
@@ -48,6 +49,7 @@ export function AgendaItemCard({
   onAttended,
   onNoShow,
   onCorrect,
+  onCancel,
 }: AgendaItemCardProps) {
   const { t } = useTranslation('agenda');
   const style = item.pendingAttention
@@ -61,8 +63,8 @@ export function AgendaItemCard({
     { icon: 'person', text: t('client', { name: item.client.name }) },
   ];
   if (showBarber) details.push({ icon: 'cut', text: t('barber', { name: item.barber.name }) });
-  const { canMarkAttended, canMarkNoShow, canCorrect } = item.actions;
-  const hasActions = canMarkAttended || canMarkNoShow || canCorrect;
+  const { canMarkAttended, canMarkNoShow, canCorrect, canCancel } = item.actions;
+  const hasActions = canMarkAttended || canMarkNoShow || canCorrect || canCancel;
   return (
     <InfoCard
       testID={`agenda-item-${item.bookingId}`}
@@ -85,6 +87,7 @@ export function AgendaItemCard({
               />
             ) : null}
             {canCorrect ? <Button label={t('actions.correct')} variant="ghost" onPress={onCorrect} /> : null}
+            {canCancel ? <Button label={t('actions.cancel')} variant="ghost" onPress={onCancel} /> : null}
           </View>
         ) : undefined
       }

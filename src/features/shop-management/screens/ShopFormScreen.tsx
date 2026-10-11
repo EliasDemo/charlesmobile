@@ -16,6 +16,7 @@ import {
 } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
 import { useManagedShop } from '../hooks/useManagedShop';
+import { LIMITS } from '../schemas/limits';
 import { useShopForm, type ShopForm } from '../hooks/useShopForm';
 
 /** Create a barbershop or independent profile. */
@@ -88,9 +89,13 @@ function ShopFormView({ shop, onDone }: { shop?: ManagedShop; onDone: (shopId: s
         </>
       )}
       {f.generalError ? <Notice tone="danger" message={f.generalError} /> : null}
-      {field('name', t('form.name'), { autoCapitalize: 'words' })}
-      {field('description', t('form.description'), { multiline: true })}
-      {field('address', t('form.address'), { hint: t('form.addressHint'), autoComplete: 'street-address' })}
+      {field('name', t('form.name'), { autoCapitalize: 'words', maxLength: LIMITS.shopName.max })}
+      {field('description', t('form.description'), { multiline: true, maxLength: LIMITS.description.max })}
+      {field('address', t('form.address'), {
+        hint: t('form.addressHint'),
+        autoComplete: 'street-address',
+        maxLength: LIMITS.address.max,
+      })}
       <Card>
         <Text variant="subtitle">{t('form.location')}</Text>
         <Text variant="caption" color="textSecondary">
@@ -148,16 +153,19 @@ function ShopFormView({ shop, onDone }: { shop?: ManagedShop; onDone: (shopId: s
         keyboardType: 'url',
         autoCapitalize: 'none',
         placeholder: t('form.urlPlaceholder'),
+        maxLength: LIMITS.url.max,
       })}
       {field('instagramUrl', t('form.instagram'), {
         keyboardType: 'url',
         autoCapitalize: 'none',
         placeholder: t('form.urlPlaceholder'),
+        maxLength: LIMITS.url.max,
       })}
       {field('facebookUrl', t('form.facebook'), {
         keyboardType: 'url',
         autoCapitalize: 'none',
         placeholder: t('form.urlPlaceholder'),
+        maxLength: LIMITS.url.max,
       })}
       <Button
         label={f.editing ? t('form.submitSave') : t('form.submitCreate')}

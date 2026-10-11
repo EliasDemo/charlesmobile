@@ -41,7 +41,7 @@
     "WEBHOOK_TOO_OLD": "Ocurrió un error inesperado.",
     "INVALID_CODE": "Código inválido o vencido.",
     "TERMS_VERSION_OUTDATED": "Los términos cambiaron. Revísalos y acéptalos de nuevo.",
-    "DATE_OUT_OF_RANGE": "Esa fecha no está disponible para reservar.",
+    "DATE_OUT_OF_RANGE": "Esa fecha está fuera del rango permitido.",
     "INVALID_CURSOR": "La lista cambió. La cargamos de nuevo.",
     "IDEMPOTENCY_KEY_REQUIRED": "Ocurrió un error en la aplicación. Inténtalo de nuevo.",
     "PAYLOAD_TOO_LARGE": "Los datos enviados son demasiado grandes.",

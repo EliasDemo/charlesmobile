@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { formatTime } from '@/shared/lib';
+import { formatMoney, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
 import {
   Chip,
@@ -96,6 +96,16 @@ export function AgendaScreen() {
                 {t('timezone', { timezone: a.timeZone })}
               </Text>
               {a.actionError ? <Notice tone="danger" message={a.actionError} /> : null}
+              {a.cancelled ? (
+                <Notice
+                  tone="success"
+                  message={
+                    a.cancelled.refund.amount.amount > 0
+                      ? t('cancelDialog.doneRefund', { amount: formatMoney(a.cancelled.refund.amount) })
+                      : t('cancelDialog.done')
+                  }
+                />
+              ) : null}
               <QueryView
                 query={a.agenda}
                 skeletonCount={3}
@@ -118,6 +128,7 @@ export function AgendaScreen() {
                           onAttended={() => a.markAttended(row.item)}
                           onNoShow={() => a.askNoShow(row.item)}
                           onCorrect={() => a.askCorrection(row.item)}
+                          onCancel={() => a.askCancel(row.item)}
                         />
                       ) : (
                         <AgendaBlockCard
@@ -181,6 +192,33 @@ export function AgendaScreen() {
           hint={t('correctionDialog.reasonHint')}
           value={a.reason}
           onChangeText={a.setReason}
+          maxLength={REASON_MAX}
+          multiline
+        />
+      </ConfirmDialog>
+      <ConfirmDialog
+        visible={a.cancelling !== null}
+        title={t('cancelDialog.title')}
+        message={
+          a.cancelling
+            ? t('cancelDialog.message', {
+                client: a.cancelling.client.name,
+                time: formatTime(a.cancelling.startAt, a.timeZone),
+              })
+            : ''
+        }
+        confirmLabel={t('cancelDialog.confirm')}
+        onConfirm={a.confirmCancel}
+        onCancel={a.dismissCancel}
+        loading={a.isCancelling}
+        confirmDisabled={!a.cancelReasonValid}
+        destructive
+      >
+        <TextField
+          label={t('cancelDialog.reason')}
+          hint={t('cancelDialog.reasonHint')}
+          value={a.cancelReason}
+          onChangeText={a.setCancelReason}
           maxLength={REASON_MAX}
           multiline
         />

@@ -6,7 +6,8 @@ export const editProfileSchema = z.object({
   fullName: z
     .string()
     .trim()
-    .min(1, { error: 'validation.fullNameRequired' })
+    .min(1, { error: 'validation.fullNameRequired', abort: true })
+    .min(2, { error: 'validation.fullNameTooShort' })
     .max(120, { error: 'validation.fullNameTooLong' }),
   /** Empty removes the phone; otherwise a Peruvian mobile, as in sign-up. */
   phone: z.string().refine((value) => value.trim() === '' || peruMobileDigits(value) !== null, {

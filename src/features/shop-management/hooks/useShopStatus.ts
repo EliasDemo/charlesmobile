@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { translateError } from '@/shared/api';
 import { upcomingDays, zonedTimeToIso } from '@/shared/lib';
 import { shopKeys, updateShopStatus, type ManagedShop } from '../api/shopApi';
+import { LIMITS } from '../schemas/limits';
 
 /** Days offered for the expected reopening (from tomorrow, in the barbershop zone). */
 const REOPEN_DAYS = 60;
@@ -41,15 +42,23 @@ export function useShopStatus(shop: ManagedShop, { onSaved }: { onSaved: () => v
     },
   });
 
+  // Optional, but when written it must have at least 2 characters (API: 2 to 200).
+  const reasonLength = reason.trim().length;
+  const reasonError: 'form.min2' | null =
+    closed && reasonLength > 0 && reasonLength < LIMITS.closureReason.min ? 'form.min2' : null;
+
   return {
     closed,
+    reasonError,
     setClosed,
     reason,
     setReason,
     reopenDate,
     setReopenDate,
     days,
-    save: () => mutation.mutate(),
+    save: () => {
+      if (!reasonError) mutation.mutate();
+    },
     isSaving: mutation.isPending,
     error: mutation.error ? translateError(mutation.error).message : null,
   };

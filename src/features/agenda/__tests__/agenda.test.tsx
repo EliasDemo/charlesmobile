@@ -17,7 +17,7 @@ const item = (overrides: Partial<S['AgendaItemDto']> = {}): S['AgendaItemDto'] =
   client: { id: 'c1', name: 'Cliente Demo' },
   awaitingPayment: false,
   pendingAttention: false,
-  actions: { canMarkAttended: false, canMarkNoShow: false, canCorrect: false },
+  actions: { canMarkAttended: false, canMarkNoShow: false, canCorrect: false, canCancel: false },
   ...overrides,
 });
 
@@ -67,12 +67,12 @@ describe('AgendaScreen (manager)', () => {
           items: [
             item({
               pendingAttention: true,
-              actions: { canMarkAttended: true, canMarkNoShow: true, canCorrect: false },
+              actions: { canMarkAttended: true, canMarkNoShow: true, canCorrect: false, canCancel: false },
             }),
             item({
               bookingId: 'bk-2',
               status: 'ATTENDED',
-              actions: { canMarkAttended: false, canMarkNoShow: false, canCorrect: true },
+              actions: { canMarkAttended: false, canMarkNoShow: false, canCorrect: true, canCancel: false },
             }),
           ],
         }),
@@ -97,7 +97,11 @@ describe('AgendaScreen (manager)', () => {
       ...managerRoutes,
       'GET /api/v1/barbershops/{id}/agenda': {
         body: agenda({
-          items: [item({ actions: { canMarkAttended: true, canMarkNoShow: false, canCorrect: false } })],
+          items: [
+            item({
+              actions: { canMarkAttended: true, canMarkNoShow: false, canCorrect: false, canCancel: false },
+            }),
+          ],
         }),
       },
       'POST /api/v1/bookings/{id}/attended': { body: booking({ status: 'ATTENDED' }) },
@@ -117,7 +121,11 @@ describe('AgendaScreen (manager)', () => {
       ...managerRoutes,
       'GET /api/v1/barbershops/{id}/agenda': {
         body: agenda({
-          items: [item({ actions: { canMarkAttended: false, canMarkNoShow: true, canCorrect: false } })],
+          items: [
+            item({
+              actions: { canMarkAttended: false, canMarkNoShow: true, canCorrect: false, canCancel: false },
+            }),
+          ],
         }),
       },
       'POST /api/v1/bookings/{id}/no-show': { body: booking({ status: 'NO_SHOW' }) },
@@ -135,7 +143,11 @@ describe('AgendaScreen (manager)', () => {
       ...managerRoutes,
       'GET /api/v1/barbershops/{id}/agenda': {
         body: agenda({
-          items: [item({ actions: { canMarkAttended: true, canMarkNoShow: false, canCorrect: false } })],
+          items: [
+            item({
+              actions: { canMarkAttended: true, canMarkNoShow: false, canCorrect: false, canCancel: false },
+            }),
+          ],
         }),
       },
       'POST /api/v1/bookings/{id}/attended': apiError(409, 'ATTENDANCE_NOT_ALLOWED', [
@@ -155,7 +167,7 @@ describe('AgendaScreen (manager)', () => {
           items: [
             item({
               status: 'ATTENDED',
-              actions: { canMarkAttended: false, canMarkNoShow: false, canCorrect: true },
+              actions: { canMarkAttended: false, canMarkNoShow: false, canCorrect: true, canCancel: false },
             }),
           ],
         }),
@@ -179,6 +191,48 @@ describe('AgendaScreen (manager)', () => {
         reason: 'Se marcó por error',
       }),
     );
+  });
+
+  it('cancels only when the API allows it, with a reason, and shows the refund', async () => {
+    const api = mockApi({
+      ...managerRoutes,
+      'GET /api/v1/barbershops/{id}/agenda': {
+        body: agenda({
+          items: [
+            item({
+              actions: { canMarkAttended: false, canMarkNoShow: false, canCorrect: false, canCancel: true },
+            }),
+            item({ bookingId: 'bk-2' }),
+          ],
+        }),
+      },
+      'POST /api/v1/bookings/{id}/cancel': {
+        body: {
+          ...booking({ status: 'CANCELLED' }),
+          refund: {
+            amount: { amount: 2500, currency: 'PEN' },
+            percent: 100,
+            rule: 'BARBERSHOP_CANCELLATION',
+            paid: { amount: 2500, currency: 'PEN' },
+          },
+        } as S['CancelledBookingDto'],
+      },
+    });
+    await renderWithProviders(<AgendaScreen />);
+    const second = within(await screen.findByTestId('agenda-item-bk-2'));
+    expect(second.queryByRole('button', { name: texts.actions.cancel })).toBeNull();
+    await fireEvent.press(
+      within(screen.getByTestId('agenda-item-bk-1')).getByRole('button', { name: texts.actions.cancel }),
+    );
+    expect(screen.getByText(/se le devolverá todo lo que pagó/)).toBeTruthy();
+    const confirm = screen.getByRole('button', { name: texts.cancelDialog.confirm });
+    expect(confirm).toBeDisabled();
+    await fireEvent.changeText(screen.getByLabelText(texts.cancelDialog.reason), 'Barbero enfermo');
+    await fireEvent.press(confirm);
+    expect(await screen.findByText(/Se devolverán S\/\s?25[.,]00 al cliente/)).toBeTruthy();
+    expect(api.calls.find((c) => c.path === '/api/v1/bookings/bk-1/cancel')?.body).toEqual({
+      reason: 'Barbero enfermo',
+    });
   });
 
   it('explains an empty day', async () => {

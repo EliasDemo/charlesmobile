@@ -56,3 +56,22 @@ En cada barbería, todos los servicios los realizan sus barberos.
 ## Cuentas nuevas
 
 Para probar el registro, usa cualquier correo inventado. En desarrollo el código de verificación no llega por correo: se lee en Redis (ver `GUIA-API.md` §1).
+
+## Reservas a horas relativas (para probar la agenda y la asistencia)
+
+`pnpm --filter api dev:booking --barber barbero.demo@example.com --start -20m --confirm`
+
+- `--start`: inicio relativo a ahora (`-20m`, `+10m`, `-2h`, `-47h`, `0`). Admite horas pasadas: no pasa por la disponibilidad, pero sí por la restricción contra reservas solapadas.
+- `--confirm`: confirma el pago como `dev:pay`. Sin él queda `PENDING_PAYMENT`.
+- `--attended`: además la deja `ATTENDED` (para probar la corrección de las 48 h, por ejemplo con `--start -47h`).
+- `--client <correo>` (por defecto `cliente.demo@example.com`) y `--service <id>` (por defecto el primer servicio del barbero).
+- Solo desarrollo y pasarela simulada; queda auditado (`dev.booking_created`).
+
+Ventanas para probar (valores por defecto):
+
+| Acción                 | Desde                     | Hasta                   |
+| ---------------------- | ------------------------- | ----------------------- |
+| Marcar atendida        | el inicio                 | 24 h después            |
+| No-show                | 15 min después del inicio | 24 h después            |
+| Corregir (responsable) | —                         | 48 h después del inicio |
+| Cancelar (barbería)    | —                         | antes del inicio        |

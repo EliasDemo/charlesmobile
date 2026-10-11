@@ -300,7 +300,10 @@ Las rutas son relativas a `/api/v1`. "Sesión" significa la cabecera `Authorizat
 7. **Bloqueos:**
    - crear: `POST /barbershops/{id}/time-blocks` (si choca con reservas, 409 `BLOCK_OVERLAPS_BOOKINGS`);
    - listar y eliminar: `GET` y `DELETE /barbershops/{id}/time-blocks[/{blockId}]`.
-8. **Agenda del día:** `GET /barbershops/{id}/agenda?date=&barberId=`. Trae las reservas con `actions` (`canMarkAttended`, `canMarkNoShow`, `canCorrect`), los bloqueos y `pendingAttention`.
+8. **Agenda del día:** `GET /barbershops/{id}/agenda?date=&barberId=`. Trae las reservas con `actions` (`canMarkAttended`, `canMarkNoShow`, `canCorrect`, `canCancel`), los bloqueos y `pendingAttention`.
+   - Usa siempre `actions`: la app no deduce permisos ni plazos. Después de cada acción, vuelve a pedir la agenda.
+   - `date`: fecha real, desde **90 días atrás** hasta el **horizonte de reservas (30 días)** hacia adelante, en el calendario de la barbería. Fuera de ese rango: 400 `DATE_OUT_OF_RANGE` con `details: [{ today, firstDate, lastDate, timezone }]`, útil para limitar el selector. Una fecha imposible (`2030-02-30`): 400 `VALIDATION_ERROR` en `date`.
+   - Los motivos de corrección y de cancelación son de 3 a 300 caracteres (publicado en el contrato).
 9. **Asistencia:**
    - marcar: `POST /bookings/{id}/attended` y `POST /bookings/{id}/no-show`;
    - corregir: `POST /bookings/{id}/attendance-correction` con `{ status, reason }`.
@@ -336,7 +339,7 @@ El panel de soporte (`/api/v1/admin`) no es para la app móvil.
    Después, renueva la sesión para tener el rol BARBER.
 
 2. **Perfil propio:** `GET /me/barber` devuelve `{ items: [{ barberId, displayName, isActive, serviceIds, barbershop: { id, name, status, timezone } }] }` (activos primero; lista vacía si no es barbero). De aquí sale el `barberId` para bloqueos y agenda.
-3. **Agenda del día:** `GET /me/barber/agenda?date=`. El barbero no puede corregir.
+3. **Agenda del día:** `GET /me/barber/agenda?date=` (la del perfil activo; mismo rango de fechas). El barbero no puede corregir ni cancelar (`canCorrect` y `canCancel` siempre `false`).
 4. **Reservas que atiende:** `GET /me/barber/bookings?scope=`.
 5. **Bloqueos propios:**
    - `POST /barbershops/{shopId}/time-blocks` con `barberId` igual a su perfil;

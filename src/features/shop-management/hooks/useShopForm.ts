@@ -22,20 +22,22 @@ import {
   type CreateShopBody,
   type ManagedShop,
 } from '../api/shopApi';
+import { LIMITS } from '../schemas/limits';
 import { DOCUMENT_LENGTH, documentDigits, ownerDocumentError } from '../schemas/ownerDocument';
 
 const optionalUrl = z
   .string()
   .trim()
+  .max(LIMITS.url.max)
   .refine((v) => v === '' || /^https?:\/\/\S+$/i.test(v), { error: 'form.invalidUrl' });
-const required = z.string().trim().min(1, { error: 'form.required' });
+const required = z.string().trim().min(1, { error: 'form.required', abort: true });
 
 const schema = z
   .object({
     type: z.enum(['BARBERSHOP', 'INDEPENDENT']),
-    name: required,
-    description: z.string(),
-    address: required,
+    name: required.min(LIMITS.shopName.min, { error: 'form.min2' }).max(LIMITS.shopName.max),
+    description: z.string().max(LIMITS.description.max),
+    address: required.min(LIMITS.address.min, { error: 'form.min5' }).max(LIMITS.address.max),
     phone: required,
     /** Owner's document (ALTA.md): optional when creating; required later to send it to review. */
     documentType: z.enum(['RUC', 'DNI']),

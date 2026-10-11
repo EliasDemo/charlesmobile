@@ -19,6 +19,7 @@ import {
 } from '@/shared/ui';
 import { useBarberForm, useBarbersList } from '../hooks/useBarbers';
 import { useManagedShop } from '../hooks/useManagedShop';
+import { LIMITS } from '../schemas/limits';
 
 export function BarbersScreen({
   shopId,
@@ -108,6 +109,7 @@ export function BarberFormScreen({
               render={({ field, fieldState }) => (
                 <TextField
                   label={t('barbers.form.displayName')}
+                  maxLength={LIMITS.barberName.max}
                   value={field.value}
                   onChangeText={field.onChange}
                   onBlur={field.onBlur}
@@ -122,6 +124,7 @@ export function BarberFormScreen({
               render={({ field }) => (
                 <TextField
                   label={t('barbers.form.bio')}
+                  maxLength={LIMITS.bio.max}
                   value={field.value}
                   onChangeText={field.onChange}
                   multiline
@@ -208,6 +211,7 @@ export function BarberFormScreen({
                 </Text>
                 <TextField
                   label={t('barbers.form.inviteEmail')}
+                  maxLength={LIMITS.email.max}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   value={f.inviteEmail}

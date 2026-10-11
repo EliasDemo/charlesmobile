@@ -34,7 +34,8 @@
   "actions": {
     "attended": "Atendida",
     "noShow": "No asistió",
-    "correct": "Corregir"
+    "correct": "Corregir",
+    "cancel": "Cancelar cita"
   },
   "noShowDialog": {
     "title": "¿Marcar que no asistió?",
@@ -48,5 +49,14 @@
     "reason": "Motivo (obligatorio)",
     "reasonHint": "Entre 3 y 300 caracteres. Queda registrado en el historial.",
     "confirm": "Guardar corrección"
+  },
+  "cancelDialog": {
+    "title": "¿Cancelar esta cita?",
+    "message": "Se cancelará la cita de {{client}} de las {{time}} y se le devolverá todo lo que pagó. La cancelación queda registrada para revisión.",
+    "reason": "Motivo (obligatorio)",
+    "reasonHint": "Entre 3 y 300 caracteres. El cliente lo verá.",
+    "confirm": "Sí, cancelar cita",
+    "done": "Cita cancelada.",
+    "doneRefund": "Cita cancelada. Se devolverán {{amount}} al cliente."
   }
 }

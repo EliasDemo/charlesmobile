@@ -4,6 +4,7 @@ import { spacing } from '@/shared/theme';
 import { Button, DayPicker, Notice, QueryView, Screen, SegmentedControl, TextField } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
 import { useManagedShop } from '../hooks/useManagedShop';
+import { LIMITS } from '../schemas/limits';
 import { useShopStatus } from '../hooks/useShopStatus';
 
 export function ShopStatusScreen({ shopId, onSaved }: { shopId: string; onSaved: () => void }) {
@@ -33,7 +34,13 @@ function StatusForm({ shop, onSaved }: { shop: ManagedShop; onSaved: () => void 
       {s.closed ? (
         <>
           <Notice tone="warning" message={t('statusForm.explainClosed')} />
-          <TextField label={t('statusForm.reason')} value={s.reason} onChangeText={s.setReason} />
+          <TextField
+            label={t('statusForm.reason')}
+            value={s.reason}
+            onChangeText={s.setReason}
+            maxLength={LIMITS.closureReason.max}
+            error={s.reasonError ? t(s.reasonError) : undefined}
+          />
           <DayPicker
             label={t('statusForm.reopen')}
             days={s.days}

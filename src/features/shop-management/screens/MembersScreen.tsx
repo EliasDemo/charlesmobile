@@ -19,6 +19,7 @@ import {
 } from '@/shared/ui';
 import type { MemberRole } from '../api/shopApi';
 import { useMembers } from '../hooks/useMembers';
+import { LIMITS } from '../schemas/limits';
 
 const ROLES: MemberRole[] = ['OWNER', 'MANAGER'];
 
@@ -70,6 +71,7 @@ export function MembersScreen({ shopId }: { shopId: string }) {
         <Text variant="subtitle">{t('members.invite')}</Text>
         <TextField
           label={t('members.inviteEmail')}
+          maxLength={LIMITS.email.max}
           keyboardType="email-address"
           autoCapitalize="none"
           value={m.email}

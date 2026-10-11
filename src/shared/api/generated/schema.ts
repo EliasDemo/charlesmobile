@@ -2257,6 +2257,8 @@ export type components = {
             }) | null;
         };
         AgendaActionsDto: {
+            /** @description Solo OWNER o MANAGER (el barbero no cancela): reserva pendiente de pago, o confirmada que aún no empieza. POST /bookings/{id}/cancel exige motivo. */
+            canCancel: boolean;
             /** @description Solo OWNER o MANAGER, dentro del plazo de corrección. */
             canCorrect: boolean;
             canMarkAttended: boolean;
@@ -2587,7 +2589,7 @@ export type components = {
             timezone: string;
         };
         CancelBookingDto: {
-            /** @description Obligatorio si cancela la barbería (OWNER o MANAGER). */
+            /** @description Obligatorio si cancela la barbería (OWNER o MANAGER); el cliente puede omitirlo. */
             reason?: string;
         };
         CancellationDto: {

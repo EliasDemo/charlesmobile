@@ -250,10 +250,11 @@ Confirmada por el usuario en su teléfono.
 ## M7 — Agenda y atención (código terminado; falta la prueba del usuario)
 
 - **Pestaña Agenda** (modo barbería): responsable o administrador → `GET /barbershops/{id}/agenda` (filtro por barbero, selector de barbería si administra varias); barbero → `GET /me/barber/agenda` (perfil activo). Si es ambas cosas, selector "Toda la barbería / Mi agenda".
-- Día: de 7 días atrás a 30 adelante (**provisional** hasta que el backend publique su rango y `DATE_OUT_OF_RANGE`). Horas en la zona de la barbería. Citas y bloqueos en una sola línea de tiempo; aviso `pendingAttention`; se refresca sola cada minuto y al deslizar.
+- Día: de 90 días atrás a 30 adelante, el rango del backend (`DATE_OUT_OF_RANGE` fuera de él); el selector se abre en el día elegido. Horas en la zona de la barbería. Citas y bloqueos en una sola línea de tiempo; aviso `pendingAttention`; se refresca sola cada minuto y al deslizar.
 - **Acciones solo según `actions` de la API:** Atendida, No asistió (confirmación: sin devolución) y Corregir (motivo de 3 a 300, ATTENDED ↔ NO_SHOW). Tras cada acción, o si falla, se vuelve a pedir la agenda. Errores por `code` (`ATTENDANCE_NOT_ALLOWED`, `NO_SHOW_NOT_ALLOWED`, `ATTENDANCE_CORRECTION_NOT_ALLOWED`).
-- **Cancelar desde la barbería: pendiente** de `actions.canCancel` en el contrato. No se muestra ningún botón de cancelar hasta entonces.
-- **Pedidos al backend (aceptados):** `canCancel`; publicar `minLength`/`maxLength` (3 a 300) de los motivos; validar fechas de la agenda con rango; comando `dev:booking`.
+- **Cancelar desde la barbería:** botón "Cancelar cita" solo con `actions.canCancel`; motivo obligatorio de 3 a 300; avisa que se devuelve todo y, al terminar, muestra el monto devuelto que responde el backend (`refund.amount`).
+- **Contrato con límites publicados** (sincronizado el 2026-10-10): la app ahora valida igual que el backend: nombre de cuenta 2–120; barbería: nombre 2–120, dirección 5–200, descripción ≤1000, URLs ≤300; barbero: nombre 2–80, presentación ≤500; servicio: nombre 2–80, descripción ≤500; motivo de cierre 2–200; motivo de bloqueo ≤200; correos de invitación ≤254 (`shop-management/schemas/limits.ts`).
+- **Para probar:** `pnpm --filter api dev:booking --barber barbero.demo@example.com --start -20m --confirm` (desde `..\charles`); `--start -47h --attended` para la corrección. Ventanas en `docs/api/DATOS-PRUEBA.md`.
 - Pruebas: `src/features/agenda/__tests__` (acciones según la API, sin cancelar, atendida, no-show con confirmación, error de plazo, corrección con motivo, vacío, error, vista de barbero). Maestro: `e2e/agenda-attendance.yaml`.
 - Sin cambios nativos.
 

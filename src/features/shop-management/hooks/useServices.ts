@@ -13,6 +13,7 @@ import {
   shopKeys,
   updateService,
 } from '../api/shopApi';
+import { LIMITS } from '../schemas/limits';
 
 /** Documented limits: 5 to 480 minutes, in multiples of 5. */
 export const DURATION_MIN = 5;
@@ -36,8 +37,13 @@ export function centimosToSoles(amount: number): string {
 }
 
 const schema = z.object({
-  name: z.string().trim().min(1, { error: 'form.required' }),
-  description: z.string(),
+  name: z
+    .string()
+    .trim()
+    .min(1, { error: 'form.required', abort: true })
+    .min(LIMITS.serviceName.min, { error: 'form.min2' })
+    .max(LIMITS.serviceName.max),
+  description: z.string().max(LIMITS.serviceDescription.max),
   categoryKey: z.string().min(1, { error: 'services.form.chooseCategory' }),
   price: z.string().refine((v) => solesToCentimos(v) !== null, { error: 'services.form.invalidPrice' }),
   durationMinutes: z.number().min(DURATION_MIN).max(DURATION_MAX),

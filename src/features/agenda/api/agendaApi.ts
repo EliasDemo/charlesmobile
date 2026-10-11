@@ -5,6 +5,7 @@ export type Agenda = S['AgendaDto'];
 export type AgendaItem = S['AgendaItemDto'];
 export type AgendaBlock = S['AgendaBlockDto'];
 export type CorrectionBody = S['AttendanceCorrectionDto'];
+export type CancelledBooking = S['CancelledBookingDto'];
 
 export const agendaKeys = {
   all: ['agenda'] as const,
@@ -30,6 +31,10 @@ export const markAttended = (bookingId: string) =>
 
 export const markNoShow = (bookingId: string) =>
   unwrap(api.POST('/api/v1/bookings/{id}/no-show', { params: { path: { id: bookingId } } }));
+
+/** Cancellation by the barbershop: reason required, the backend refunds what was paid. */
+export const cancelBooking = (bookingId: string, reason: string): Promise<CancelledBooking> =>
+  unwrap(api.POST('/api/v1/bookings/{id}/cancel', { params: { path: { id: bookingId } }, body: { reason } }));
 
 export const correctAttendance = (bookingId: string, body: CorrectionBody) =>
   unwrap(

@@ -27,6 +27,7 @@ import {
   useServiceForm,
   useServicesList,
 } from '../hooks/useServices';
+import { LIMITS } from '../schemas/limits';
 
 export function ServicesScreen({
   shopId,
@@ -103,6 +104,7 @@ export function ServiceFormScreen({
               render={({ field, fieldState }) => (
                 <TextField
                   label={t('services.form.name')}
+                  maxLength={LIMITS.serviceName.max}
                   value={field.value}
                   onChangeText={field.onChange}
                   onBlur={field.onBlur}
@@ -117,6 +119,7 @@ export function ServiceFormScreen({
               render={({ field }) => (
                 <TextField
                   label={t('services.form.description')}
+                  maxLength={LIMITS.serviceDescription.max}
                   value={field.value}
                   onChangeText={field.onChange}
                   multiline

@@ -31,7 +31,8 @@ export const registerSchema = z.object({
   fullName: z
     .string()
     .trim()
-    .min(1, { error: 'validation.fullNameRequired' })
+    .min(1, { error: 'validation.fullNameRequired', abort: true })
+    .min(2, { error: 'validation.fullNameTooShort' })
     .max(120, { error: 'validation.fullNameTooLong' }),
   email,
   password,

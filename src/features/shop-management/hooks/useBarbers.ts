@@ -16,6 +16,7 @@ import {
   shopKeys,
   updateBarber,
 } from '../api/shopApi';
+import { LIMITS } from '../schemas/limits';
 
 export function useBarbersList(shopId: string, enabled = true) {
   return useQuery({
@@ -26,8 +27,13 @@ export function useBarbersList(shopId: string, enabled = true) {
 }
 
 const schema = z.object({
-  displayName: z.string().trim().min(1, { error: 'form.required' }),
-  bio: z.string(),
+  displayName: z
+    .string()
+    .trim()
+    .min(1, { error: 'form.required', abort: true })
+    .min(LIMITS.barberName.min, { error: 'form.min2' })
+    .max(LIMITS.barberName.max),
+  bio: z.string().max(LIMITS.bio.max),
   phone: z.string().refine((v) => v.trim() === '' || peruMobileDigits(v) !== null, {
     error: 'validation.phoneInvalid',
   }),

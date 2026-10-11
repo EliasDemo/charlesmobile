@@ -11,19 +11,18 @@ import {
   fetchShopAgenda,
   markAttended,
   markNoShow,
+  cancelBooking,
   type AgendaItem,
+  type CancelledBooking,
 } from '../api/agendaApi';
 
 export type AgendaView = 'mine' | 'shop';
 
-/**
- * Days offered in the picker. Provisional until the backend publishes its range (it will answer
- * DATE_OUT_OF_RANGE outside it): a week back covers the 48 h corrections, a month ahead to plan.
- */
-export const DAYS_BACK = 7;
+/** Days the backend accepts for the agenda (DATE_OUT_OF_RANGE outside): 90 back, 30 ahead. */
+export const DAYS_BACK = 90;
 export const DAYS_AHEAD = 30;
 
-/** Reason rules the backend applies to a correction (3 to 300 characters, trimmed). */
+/** Reason rules the backend applies to a correction or cancellation (3 to 300, trimmed). */
 export const REASON_MIN = 3;
 export const REASON_MAX = 300;
 
@@ -114,6 +113,29 @@ export function useAgenda() {
   });
   const reasonLength = reason.trim().length;
 
+  // Cancellation by the barbershop, only when the API says so (`canCancel`).
+  const [cancelling, setCancelling] = useState<AgendaItem | null>(null);
+  const [cancelReason, setCancelReason] = useState('');
+  const [cancelled, setCancelled] = useState<CancelledBooking | null>(null);
+  const cancel = useMutation({
+    mutationFn: (item: AgendaItem) => cancelBooking(item.bookingId, cancelReason.trim()),
+    onMutate: () => {
+      setActionError(null);
+      setCancelled(null);
+    },
+    onSuccess: (result) => {
+      setCancelling(null);
+      setCancelReason('');
+      setCancelled(result);
+      refresh();
+    },
+    onError: (error) => {
+      setCancelling(null);
+      onError(error);
+    },
+  });
+  const cancelReasonLength = cancelReason.trim().length;
+
   return {
     view,
     setView: (next: AgendaView) => {
@@ -160,5 +182,18 @@ export function useAgenda() {
     reasonValid: reasonLength >= REASON_MIN && reasonLength <= REASON_MAX,
     confirmCorrection: () => correcting && correction.mutate(correcting),
     isCorrecting: correction.isPending,
+    cancelling,
+    askCancel: (item: AgendaItem) => {
+      setCancelReason('');
+      setCancelling(item);
+    },
+    dismissCancel: () => setCancelling(null),
+    cancelReason,
+    setCancelReason,
+    cancelReasonValid: cancelReasonLength >= REASON_MIN && cancelReasonLength <= REASON_MAX,
+    confirmCancel: () => cancelling && cancel.mutate(cancelling),
+    isCancelling: cancel.isPending,
+    /** Last cancellation, with the refund the backend computed. */
+    cancelled,
   };
 }

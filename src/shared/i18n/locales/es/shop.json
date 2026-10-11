@@ -73,7 +73,9 @@
     "created": "¡Listo! Tu barbería quedó creada y en revisión.",
     "saved": "Cambios guardados.",
     "required": "Este dato es obligatorio.",
-    "invalidUrl": "Escribe una dirección que empiece con https://"
+    "invalidUrl": "Escribe una dirección que empiece con https://",
+    "min2": "Escribe al menos 2 caracteres.",
+    "min5": "Escribe al menos 5 caracteres."
   },
   "statusForm": {
     "title": "Estado de atención",

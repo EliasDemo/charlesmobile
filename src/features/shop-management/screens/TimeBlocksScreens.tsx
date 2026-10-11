@@ -20,6 +20,7 @@ import {
 import type { TimeBlockType } from '../api/shopApi';
 import { useManagedShop } from '../hooks/useManagedShop';
 import { useTimeBlockForm, useTimeBlocks } from '../hooks/useTimeBlocks';
+import { LIMITS } from '../schemas/limits';
 
 const TYPES: TimeBlockType[] = ['BREAK', 'ABSENCE', 'HOLIDAY', 'MANUAL'];
 const TYPE_ICON: Record<TimeBlockType, IconName> = {
@@ -195,6 +196,7 @@ function BlockForm({
       </Text>
       <TextField
         label={t('blocks.reason')}
+        maxLength={LIMITS.blockReason.max}
         hint={t('blocks.reasonHint')}
         value={f.reason}
         onChangeText={f.setReason}
