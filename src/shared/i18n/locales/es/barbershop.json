@@ -38,7 +38,9 @@
     "a11y": "{{name}}, {{price}}, {{duration}}"
   },
   "barbers": {
-    "empty": "Esta barbería aún no tiene barberos visibles."
+    "empty": "Esta barbería aún no tiene barberos visibles.",
+    "experience_one": "{{count}} año de experiencia",
+    "experience_other": "{{count}} años de experiencia"
   },
   "reviews": {
     "empty": "Todavía no tiene valoraciones.",

@@ -21,7 +21,7 @@ interface BookingDraftState {
   /** Last bookable day the server reported (DATE_OUT_OF_RANGE); narrows the day picker. */
   lastBookableDate: string | null;
   setLastBookableDate: (date: string) => void;
-  start: (barbershopId: string, serviceId: string | null) => void;
+  start: (barbershopId: string, serviceId: string | null, barberId?: string | null) => void;
   setService: (serviceId: string) => void;
   setBarber: (barberId: string | null) => void;
   setDate: (date: string) => void;
@@ -47,11 +47,16 @@ const EMPTY = {
 /** The booking being prepared. Only in memory: it survives login, sign-up and email verification. */
 export const useBookingDraft = create<BookingDraftState>((set, get) => ({
   ...EMPTY,
-  start: (barbershopId, serviceId) => {
+  start: (barbershopId, serviceId, barberId = null) => {
     const current = get();
     // Coming back to the same barbershop (e.g. after login) keeps the selection.
-    if (current.barbershopId === barbershopId && (!serviceId || current.serviceId === serviceId)) return;
-    set({ ...EMPTY, barbershopId, serviceId });
+    if (
+      current.barbershopId === barbershopId &&
+      (!serviceId || current.serviceId === serviceId) &&
+      (!barberId || current.barberId === barberId)
+    )
+      return;
+    set({ ...EMPTY, barbershopId, serviceId, barberId });
   },
   setService: (serviceId) =>
     set({ serviceId, barberId: null, slot: null, idempotencyKey: null, notice: null }),

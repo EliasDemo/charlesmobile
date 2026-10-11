@@ -118,7 +118,7 @@ export function ShopHomeScreen({
                   <View style={styles.content}>
                     <Card style={styles.header}>
                       <View style={styles.headerTop}>
-                        <Monogram name={shop.name} size={sizes.avatar} />
+                        <Monogram name={shop.name} size={sizes.avatar} imageUrl={shop.logoUrl} />
                         <View style={styles.flex}>
                           <Text variant="title">{shop.name}</Text>
                           <Text variant="caption" color="textSecondary">

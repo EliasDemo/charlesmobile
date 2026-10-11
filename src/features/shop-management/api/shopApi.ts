@@ -109,6 +109,15 @@ export const updateBarber = (id: string, barberId: string, body: UpdateBarberBod
   unwrap(
     api.PATCH('/api/v1/barbershops/{id}/barbers/{barberId}', { params: { path: { id, barberId } }, body }),
   );
+/** Up to 5 styles the barber specializes in (GET /service-styles). */
+export const setBarberSpecialties = (id: string, barberId: string, styleIds: string[]) =>
+  unwrap(
+    api.PUT('/api/v1/barbershops/{id}/barbers/{barberId}/specialties', {
+      params: { path: { id, barberId } },
+      body: { styleIds },
+    }),
+  );
+
 export const setBarberServices = (
   id: string,
   barberId: string,

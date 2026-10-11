@@ -1,4 +1,6 @@
-import { StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
+import { mediaUrl } from '@/shared/api';
 import { initials } from '@/shared/lib';
 import { sizes, useTheme } from '@/shared/theme';
 import { Text } from './Text';
@@ -8,14 +10,19 @@ export interface MonogramProps {
   /** `cover` fills its container (detail header); `avatar` is a circle (barbers, cards). */
   shape?: 'avatar' | 'cover';
   size?: number;
+  /** Real photo or logo (backend phase 14). Initials stay as the fallback if it is missing or fails. */
+  imageUrl?: string | null;
 }
 
 /**
- * Placeholder until the gallery exists (backend phase 14): initials on a brand-colored surface,
- * so a missing photo never looks like an empty box. Decorative: hidden from screen readers.
+ * The photo when there is one; otherwise initials on a brand-colored surface, so a missing photo
+ * never looks like an empty box. Decorative: hidden from screen readers.
  */
-export function Monogram({ name, shape = 'avatar', size = sizes.avatar }: MonogramProps) {
+export function Monogram({ name, shape = 'avatar', size = sizes.avatar, imageUrl }: MonogramProps) {
   const theme = useTheme();
+  const uri = mediaUrl(imageUrl);
+  const [failed, setFailed] = useState<string | null>(null);
+  const showImage = uri !== null && failed !== uri;
   const isCover = shape === 'cover';
   return (
     <View
@@ -29,13 +36,30 @@ export function Monogram({ name, shape = 'avatar', size = sizes.avatar }: Monogr
           : { width: size, height: size, borderRadius: size / 2 },
       ]}
     >
-      <Text variant={isCover ? 'hero' : size >= sizes.avatar ? 'title' : 'bodyStrong'} color="primary">
-        {initials(name)}
-      </Text>
+      {showImage ? (
+        <Image
+          source={{ uri }}
+          style={StyleSheet.absoluteFill}
+          resizeMode="cover"
+          onError={() => setFailed(uri)}
+          accessibilityIgnoresInvertColors
+          testID="monogram-image"
+        />
+      ) : null}
+      {showImage ? null : (
+        <Text variant={isCover ? 'hero' : size >= sizes.avatar ? 'title' : 'bodyStrong'} color="primary">
+          {initials(name)}
+        </Text>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  base: { alignItems: 'center', justifyContent: 'center', borderWidth: StyleSheet.hairlineWidth },
+  base: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    overflow: 'hidden',
+  },
 });

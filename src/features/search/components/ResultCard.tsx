@@ -33,7 +33,7 @@ export function ResultCard({ item, onPress }: { item: SearchResult; onPress: (id
     <InfoCard
       testID={`result-${item.id}`}
       onPress={() => onPress(item.id)}
-      leading={<Monogram name={item.name} size={sizes.avatar} />}
+      leading={<Monogram name={item.name} size={sizes.avatar} imageUrl={item.logoUrl} />}
       title={item.name}
       subtitle={item.address}
       details={details}

@@ -14,6 +14,7 @@ import agenda from './locales/es/agenda.json';
 import notifications from './locales/es/notifications.json';
 import support from './locales/es/support.json';
 import reviews from './locales/es/reviews.json';
+import gallery from './locales/es/gallery.json';
 import type devTexts from './locales/es/dev.json';
 
 export const defaultNS = 'common';
@@ -33,6 +34,7 @@ export const resources = {
     notifications,
     support,
     reviews,
+    gallery,
   },
 } as const;
 

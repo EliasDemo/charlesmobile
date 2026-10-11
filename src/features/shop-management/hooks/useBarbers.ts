@@ -13,6 +13,7 @@ import {
   inviteBarber,
   linkSelfAsBarber,
   setBarberServices,
+  setBarberSpecialties,
   shopKeys,
   updateBarber,
 } from '../api/shopApi';
@@ -25,6 +26,10 @@ export function useBarbersList(shopId: string, enabled = true) {
     enabled: enabled && shopId !== '',
   });
 }
+
+/** Limits published in the contract (UpdateBarberDto, SetSpecialtiesDto). */
+export const YEARS_MAX = 60;
+export const SPECIALTIES_MAX = 5;
 
 const schema = z.object({
   displayName: z
@@ -39,6 +44,9 @@ const schema = z.object({
   }),
   isActive: z.boolean(),
   serviceIds: z.array(z.string()),
+  /** Years of experience: 0 to 60, or none (null). */
+  yearsExperience: z.number().min(0).max(YEARS_MAX).nullable(),
+  specialtyIds: z.array(z.string()).max(SPECIALTIES_MAX),
 });
 export type BarberForm = z.infer<typeof schema>;
 
@@ -61,7 +69,15 @@ export function useBarberForm(
   const form = useForm<BarberForm>({
     resolver: zodResolver(schema),
     mode: 'onTouched',
-    defaultValues: { displayName: '', bio: '', phone: '', isActive: true, serviceIds: [] },
+    defaultValues: {
+      displayName: '',
+      bio: '',
+      phone: '',
+      isActive: true,
+      serviceIds: [],
+      yearsExperience: null,
+      specialtyIds: [],
+    },
   });
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [inviteEmail, setInviteEmail] = useState('');
@@ -75,6 +91,8 @@ export function useBarberForm(
       phone: existing.phone ?? '',
       isActive: existing.isActive,
       serviceIds: existing.serviceIds,
+      yearsExperience: existing.yearsExperience,
+      specialtyIds: existing.specialties.map((s) => s.id),
     });
   }, [existing, form]);
 
@@ -84,8 +102,13 @@ export function useBarberForm(
       const phone = digits ? formatPeruMobile(digits) : null;
       const common = { displayName: values.displayName.trim(), bio: values.bio.trim() || null, phone };
       if (barberId) {
-        await updateBarber(shopId, barberId, { ...common, isActive: values.isActive });
+        await updateBarber(shopId, barberId, {
+          ...common,
+          isActive: values.isActive,
+          yearsExperience: values.yearsExperience,
+        });
         await setBarberServices(shopId, barberId, values.serviceIds);
+        await setBarberSpecialties(shopId, barberId, values.specialtyIds);
         return;
       }
       const body = { ...common, serviceIds: values.serviceIds };

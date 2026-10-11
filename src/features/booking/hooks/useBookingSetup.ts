@@ -15,10 +15,17 @@ import { groupSlotsByDayPart, useBookingDraft } from './bookingDraft';
 const HORIZON_DAYS = 30;
 
 /** Service, barber, day and slot of the booking being prepared. */
-export function useBookingSetup(barbershopId: string, initialServiceId: string | undefined) {
+export function useBookingSetup(
+  barbershopId: string,
+  initialServiceId: string | undefined,
+  initialBarberId?: string,
+) {
   const draft = useBookingDraft();
   const { start, setDate, setService, setLastBookableDate, lastBookableDate } = draft;
-  useEffect(() => start(barbershopId, initialServiceId ?? null), [start, barbershopId, initialServiceId]);
+  useEffect(
+    () => start(barbershopId, initialServiceId ?? null, initialBarberId ?? null),
+    [start, barbershopId, initialServiceId, initialBarberId],
+  );
 
   const shop = useBarbershopQuery(barbershopId);
   const services = useServicesQuery(barbershopId);

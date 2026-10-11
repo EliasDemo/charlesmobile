@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Image, StyleSheet, View, type ImageSourcePropType, type LayoutChangeEvent } from 'react-native';
+import { mediaUrl } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
 import { brandImages } from './brandImages.generated';
@@ -16,6 +17,8 @@ export interface BrandImageProps {
   veil?: boolean;
   /** Visible "Imagen ilustrativa" label: a generic image must never look like the real place. */
   illustrative?: boolean;
+  /** Real photo (the barbershop cover). When present it wins and is never labeled illustrative. */
+  remoteUrl?: string | null;
 }
 
 /**
@@ -29,10 +32,13 @@ export function BrandImage({
   height,
   veil = false,
   illustrative = false,
+  remoteUrl,
 }: BrandImageProps) {
   const theme = useTheme();
   const { t } = useTranslation();
-  const source = imageKeys.map((key) => brandImages[key]).find(Boolean);
+  const remote = mediaUrl(remoteUrl);
+  const source = remote ? { uri: remote } : imageKeys.map((key) => brandImages[key]).find(Boolean);
+  const labeled = illustrative && !remote;
   const [frame, setFrame] = useState<{ width: number; height: number } | null>(null);
   const onLayout = (e: LayoutChangeEvent) => {
     const { width, height: h } = e.nativeEvent.layout;
@@ -40,8 +46,8 @@ export function BrandImage({
   };
   return (
     <View
-      accessibilityElementsHidden={!illustrative}
-      importantForAccessibility={illustrative ? 'auto' : 'no-hide-descendants'}
+      accessibilityElementsHidden={!labeled}
+      importantForAccessibility={labeled ? 'auto' : 'no-hide-descendants'}
       style={[
         styles.frame,
         { height, borderRadius: theme.radius.lg, backgroundColor: theme.colors.primarySoft },
@@ -52,8 +58,8 @@ export function BrandImage({
       {source ? (
         <Image
           source={source}
-          style={coverStyle(source, frame)}
-          resizeMode="stretch"
+          style={remote ? StyleSheet.absoluteFill : coverStyle(source, frame)}
+          resizeMode={remote ? 'cover' : 'stretch'}
           accessibilityIgnoresInvertColors
         />
       ) : (
@@ -64,7 +70,7 @@ export function BrandImage({
       {veil && source ? (
         <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.backdrop }]} />
       ) : null}
-      {illustrative ? (
+      {labeled ? (
         <View
           style={[styles.label, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.pill }]}
         >

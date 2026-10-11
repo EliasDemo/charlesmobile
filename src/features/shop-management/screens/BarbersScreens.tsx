@@ -1,5 +1,6 @@
 import { Controller } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
+import { useStyles } from '@/features/gallery';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing } from '@/shared/theme';
 import {
@@ -9,6 +10,7 @@ import {
   InfoCard,
   Monogram,
   Notice,
+  NumberStepper,
   QueryView,
   Screen,
   StatusPill,
@@ -17,7 +19,7 @@ import {
   TextField,
   useFieldErrorText,
 } from '@/shared/ui';
-import { useBarberForm, useBarbersList } from '../hooks/useBarbers';
+import { SPECIALTIES_MAX, YEARS_MAX, useBarberForm, useBarbersList } from '../hooks/useBarbers';
 import { useManagedShop } from '../hooks/useManagedShop';
 import { LIMITS } from '../schemas/limits';
 
@@ -54,7 +56,9 @@ export function BarbersScreen({
               <InfoCard
                 key={barber.id}
                 onPress={() => onEdit(barber.id)}
-                leading={<Monogram name={barber.displayName} size={sizes.avatarSmall} />}
+                leading={
+                  <Monogram name={barber.displayName} size={sizes.avatarSmall} imageUrl={barber.photoUrl} />
+                }
                 title={barber.displayName}
                 subtitle={
                   barber.linkedUser
@@ -96,6 +100,7 @@ export function BarberFormScreen({
   const { t } = useTranslation('shop');
   const errorText = useFieldErrorText('shop');
   const f = useBarberForm(shopId, barberId, { self, onDone });
+  const styles_ = useStyles();
 
   return (
     <Screen>
@@ -190,6 +195,57 @@ export function BarberFormScreen({
                 </View>
               )}
             />
+            {f.editing ? (
+              <Controller
+                control={f.form.control}
+                name="yearsExperience"
+                render={({ field }) => (
+                  <NumberStepper
+                    label={t('barbers.form.years')}
+                    value={field.value ?? 0}
+                    onChange={field.onChange}
+                    step={1}
+                    min={0}
+                    max={YEARS_MAX}
+                    format={(years) =>
+                      years === 0
+                        ? t('barbers.form.yearsNone')
+                        : t('barbers.form.yearsValue', { count: years })
+                    }
+                  />
+                )}
+              />
+            ) : null}
+            {f.editing && styles_.data && styles_.data.length > 0 ? (
+              <Controller
+                control={f.form.control}
+                name="specialtyIds"
+                render={({ field }) => (
+                  <View style={styles.section}>
+                    <Text variant="label" color="textSecondary">
+                      {t('barbers.form.specialties', { max: SPECIALTIES_MAX })}
+                    </Text>
+                    <View style={styles.chips}>
+                      {styles_.data.map((style) => {
+                        const selected = field.value.includes(style.id);
+                        const full = field.value.length >= SPECIALTIES_MAX;
+                        return (
+                          <Chip
+                            key={style.id}
+                            label={style.name}
+                            selected={selected}
+                            onPress={() => {
+                              if (selected) field.onChange(field.value.filter((id) => id !== style.id));
+                              else if (!full) field.onChange([...field.value, style.id]);
+                            }}
+                          />
+                        );
+                      })}
+                    </View>
+                  </View>
+                )}
+              />
+            ) : null}
             <Button
               label={t('barbers.form.save')}
               onPress={() => void f.submit()}

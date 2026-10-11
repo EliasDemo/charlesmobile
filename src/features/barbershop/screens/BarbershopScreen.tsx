@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FavoriteButton } from '@/features/favorites';
+import { GallerySection } from '@/features/gallery';
 import { useTranslation } from '@/shared/i18n';
 import { callPhone, formatLongDate, isWebUrl, openDirections, openWebUrl } from '@/shared/lib';
 import { sizes, spacing } from '@/shared/theme';
@@ -26,6 +27,9 @@ export interface BarbershopScreenProps {
   onOpenReviews: () => void;
   onRequireLogin: () => void;
   onBook: () => void;
+  onOpenGallery: () => void;
+  /** "Reservar este estilo" from a gallery photo. */
+  onBookStyle: (serviceId: string, barberId: string | null) => void;
   /** Quiet actions at the end (reporting the barbershop). */
   footer?: ReactNode;
 }
@@ -37,6 +41,8 @@ export function BarbershopScreen({
   onOpenService,
   onOpenReviews,
   onRequireLogin,
+  onOpenGallery,
+  onBookStyle,
   footer,
 }: BarbershopScreenProps) {
   const { t } = useTranslation('barbershop');
@@ -53,8 +59,9 @@ export function BarbershopScreen({
       >
         {(shop) => (
           <View style={styles.content}>
-            {/* Generic cover by its main category, labeled as illustrative: not the real place. */}
+            {/* The real cover when there is one; otherwise a generic one labeled as illustrative. */}
             <BrandImage
+              remoteUrl={shop.coverUrl}
               imageKeys={
                 detail.coverCategory ? [`cover-${detail.coverCategory}`, 'cover-generic'] : ['cover-generic']
               }
@@ -65,6 +72,7 @@ export function BarbershopScreen({
             <Header shop={shop} onRequireLogin={onRequireLogin} onFavoriteChanged={detail.shop.refetch} />
             <Button label={t('book')} onPress={onBook} fullWidth />
             <About shop={shop} />
+            <GallerySection barbershopId={shop.id} onOpenAll={onOpenGallery} onBookStyle={onBookStyle} />
             <Section title={t('sections.hours')} query={detail.hours}>
               {(hours) => <HoursList hours={hours} today={detail.todayDayOfWeek} />}
             </Section>

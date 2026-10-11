@@ -1,0 +1,25 @@
+{
+  "title": "Trabajos",
+  "seeAll": "Ver todos los trabajos",
+  "more": "Ver más",
+  "empty": "Aún no hay fotos de trabajos",
+  "photo": "Foto de un trabajo",
+  "by": "Por {{name}}",
+  "close": "Cerrar",
+  "bookStyle": "Reservar este estilo · {{service}} · {{price}}",
+  "report": {
+    "action": "Reportar esta foto",
+    "title": "Reportar foto",
+    "message": "Soporte la revisará. Con varios reportes, la foto se oculta hasta revisarla.",
+    "details": "Detalles (opcional)",
+    "send": "Enviar reporte",
+    "sent": "Reporte enviado",
+    "reasons": {
+      "NOT_MY_PHOTO": "Soy yo y no quiero salir",
+      "NO_CONSENT": "Sin consentimiento",
+      "INAPPROPRIATE": "Inapropiada",
+      "MISLEADING": "Engañosa",
+      "OTHER": "Otro motivo"
+    }
+  }
+}

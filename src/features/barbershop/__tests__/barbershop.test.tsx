@@ -44,6 +44,8 @@ const detailProps = () => ({
   onOpenReviews: jest.fn(),
   onRequireLogin: jest.fn(),
   onBook: jest.fn(),
+  onOpenGallery: jest.fn(),
+  onBookStyle: jest.fn(),
 });
 
 describe('BarbershopScreen', () => {

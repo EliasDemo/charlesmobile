@@ -152,7 +152,12 @@
       "inviteHint": "Le enviaremos un código a ese correo. La cuenta debe existir en Charles.",
       "inviteEmail": "Correo de la cuenta",
       "inviteSend": "Enviar invitación",
-      "inviteSent": "Invitación enviada a {{email}}."
+      "inviteSent": "Invitación enviada a {{email}}.",
+      "years": "Años de experiencia",
+      "yearsNone": "Sin indicar",
+      "yearsValue_one": "{{count}} año",
+      "yearsValue_other": "{{count}} años",
+      "specialties": "Especialidades (hasta {{max}})"
     },
     "servicesCount_one": "{{count}} servicio",
     "servicesCount_other": "{{count}} servicios"

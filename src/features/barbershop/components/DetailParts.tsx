@@ -10,6 +10,7 @@ import {
   Monogram,
   QueryView,
   RatingLabel,
+  StatusPill,
   Text,
   categoryIcon,
   type QueryLike,
@@ -127,9 +128,10 @@ export function ServiceRow({ service, onPress }: { service: Service; onPress: ()
 }
 
 export function BarberRow({ barber }: { barber: Barber }) {
+  const { t } = useTranslation('barbershop');
   return (
     <View style={styles.barberRow}>
-      <Monogram name={barber.displayName} size={sizes.avatarSmall} />
+      <Monogram name={barber.displayName} size={sizes.avatar} imageUrl={barber.photoUrl} />
       <View style={styles.flex}>
         <Text>{barber.displayName}</Text>
         {barber.bio ? (
@@ -138,6 +140,18 @@ export function BarberRow({ barber }: { barber: Barber }) {
           </Text>
         ) : null}
         <RatingLabel average={barber.rating.average} count={barber.rating.count} variant="caption" />
+        {barber.yearsExperience ? (
+          <Text variant="caption" color="textSecondary">
+            {t('barbers.experience', { count: barber.yearsExperience })}
+          </Text>
+        ) : null}
+        {barber.specialties.length > 0 ? (
+          <View style={styles.specialties}>
+            {barber.specialties.map((s) => (
+              <StatusPill key={s.id} tone="neutral" icon="sparkles" label={s.name} />
+            ))}
+          </View>
+        ) : null}
       </View>
     </View>
   );
@@ -192,6 +206,7 @@ export function ReviewItem({
 }
 
 const styles = StyleSheet.create({
+  specialties: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
   list: { gap: spacing.sm },
   flex: { flex: 1, gap: spacing.xxs },
   hoursRow: { flexDirection: 'row', justifyContent: 'space-between', gap: spacing.md },

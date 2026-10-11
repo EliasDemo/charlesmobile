@@ -9,6 +9,8 @@ import { useBookingSetup } from '../hooks/useBookingSetup';
 export interface BookScreenProps {
   barbershopId: string;
   serviceId?: string;
+  /** Barber already chosen ("Reservar este estilo" from a gallery photo). */
+  barberId?: string;
   onContinue: () => void;
   onBack: () => void;
   onOpenBarbershop: (id: string) => void;
@@ -17,12 +19,13 @@ export interface BookScreenProps {
 export function BookScreen({
   barbershopId,
   serviceId,
+  barberId,
   onContinue,
   onBack,
   onOpenBarbershop,
 }: BookScreenProps) {
   const { t } = useTranslation('booking');
-  const setup = useBookingSetup(barbershopId, serviceId);
+  const setup = useBookingSetup(barbershopId, serviceId, barberId);
   const { draft } = setup;
   const notFound = {
     title: t('notFound.title', { ns: 'barbershop' }),
