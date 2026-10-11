@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M8 (notificaciones) en curso, plan aprobado el 2026-10-10. M7 terminada, pendiente de la prueba del usuario. M5 espera la Fase 8B del backend (Izipay). M4.5 parte 2: fotos aplicadas; falta `cover-generic`.
+**Fase actual:** M9 (valoraciones y soporte) en curso, plan aprobado el 2026-10-11: parte 1 (soporte, reportes, cuenta deshabilitada) terminada; las valoraciones esperan el contrato del backend (`canReview`, `review`, `GET /me/barbershops/{id}/reviews`, `GET /me/bookings/pending-reviews`). Después, **M10 (fotos)**, adelantada porque el backend exige portada para enviar una barbería a revisión. M7 y M8 terminadas, pendientes de la prueba del usuario. M5 espera la Fase 8B del backend (Izipay).
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -258,6 +258,15 @@ Confirmada por el usuario en su teléfono.
 - Pruebas: `src/features/agenda/__tests__` (acciones según la API, sin cancelar, atendida, no-show con confirmación, error de plazo, corrección con motivo, vacío, error, vista de barbero). Maestro: `e2e/agenda-attendance.yaml`.
 - Sin cambios nativos.
 
+## M9 — Valoraciones y soporte (parte 1 terminada; falta la prueba del usuario)
+
+- **Ayuda** (Perfil → Ayuda, `/support`): mis consultas con su estado; nueva consulta (categoría, asunto 3–120, mensaje hasta 2000), opcionalmente ligada a una reserva ("Necesito ayuda con esta reserva" en el detalle, `/support/new?bookingId=`); conversación estilo chat (`/support/[id]`) con respuesta solo si `canReply`; `TICKET_CLOSED` ofrece abrir otra.
+- **Reportar una barbería** desde su ficha (con sesión): motivo y detalles (hasta 500); `ALREADY_REPORTED` se explica.
+- **Cuenta deshabilitada:** el login con `ACCOUNT_DISABLED` pide `support-access` (scope `support`, token solo en memoria) y abre `/account-disabled`, que solo muestra la ayuda con ese token.
+- Avisos de la bandeja: `ticket` abre la consulta y `account` abre Ayuda.
+- Pruebas: `src/features/support/__tests__`, `auth/__tests__/disabledAccount.test.tsx`.
+- **Parte 2 (pendiente del backend):** valorar una reserva atendida, editar o retirar, "Mis valoraciones", aviso "¿Cómo te fue?", y en Mi barbería las valoraciones con respuesta.
+
 ## M4.6 — Rediseño visual (código terminado; falta la revisión del usuario con capturas)
 
 - **Cobre renovado** (más vivo) con neutros fríos en tema claro y negro azulado en oscuro; estados más saturados. Contraste mínimo verificado por las pruebas de `shared/theme`.
@@ -326,6 +335,7 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 | Clave de Google Maps (variable de EAS `GOOGLE_MAPS_ANDROID_API_KEY`, leída por el plugin de `react-native-maps` en `app.config.ts`) | Mapa en Android. Después de instalar, poner `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true` en `.env` | La vista de mapa muestra un aviso; la lista funciona completa |
 | `environment` por perfil en `eas.json` (`development`, `preview`, `production`) | EAS entrega a cada compilación las variables de su entorno (la clave de Maps) | Sin efecto |
 | **Firebase (FCM) para push en Android** (aprobado para la compilación final): proyecto de Firebase del usuario, `google-services.json` como archivo de EAS (no en el repositorio) y `android.googleServicesFile` en `app.config.ts`; clave de FCM V1 subida a EAS | El teléfono obtiene su token de Expo y recibe push | `getPushToken` devuelve null: no se registra el dispositivo; la bandeja y la campana funcionan |
+| **`expo-image-picker`** (aprobado el 2026-10-11, para M10): elegir o tomar fotos para la portada, el logo, la foto del barbero y la galería | Subir fotos | Las pantallas de fotos lo cargan solo si existe (`requireOptionalNativeModule`); sin él, explican que llega con la próxima compilación |
 | **Efectos del grupo B** (pendientes, para decidir en la compilación final): vibración leve (`expo-haptics`), deslizar citas en la agenda (`react-native-reanimated` + `react-native-gesture-handler`), animación de celebración (`lottie-react-native`), fondo desenfocado en hojas (`expo-blur`) | Esos efectos | Sin efecto: la app usa los del grupo A |
 
 ## Cuándo hace falta una compilación nueva (EAS)

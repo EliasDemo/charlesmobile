@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FavoriteButton } from '@/features/favorites';
 import { useTranslation } from '@/shared/i18n';
@@ -25,6 +26,8 @@ export interface BarbershopScreenProps {
   onOpenReviews: () => void;
   onRequireLogin: () => void;
   onBook: () => void;
+  /** Quiet actions at the end (reporting the barbershop). */
+  footer?: ReactNode;
 }
 
 export function BarbershopScreen({
@@ -34,6 +37,7 @@ export function BarbershopScreen({
   onOpenService,
   onOpenReviews,
   onRequireLogin,
+  footer,
 }: BarbershopScreenProps) {
   const { t } = useTranslation('barbershop');
   const detail = useBarbershop(id);
@@ -114,6 +118,7 @@ export function BarbershopScreen({
           </View>
         )}
       </QueryView>
+      {footer}
     </Screen>
   );
 }

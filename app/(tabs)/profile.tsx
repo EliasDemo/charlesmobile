@@ -15,6 +15,7 @@ export default function ProfileRoute() {
       onEditProfile={() => router.push('/profile/edit')}
       onPreferences={() => router.push('/profile/preferences')}
       onFavorites={() => router.push('/profile/favorites')}
+      onHelp={() => router.push('/support')}
       onWelcome={() => router.push('/welcome')}
       onDeleteAccount={() => router.push('/profile/delete-account')}
       switchModeTo={switchModeTo}

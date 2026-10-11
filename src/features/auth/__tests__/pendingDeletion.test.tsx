@@ -30,7 +30,7 @@ describe('login of an account pending deletion', () => {
     });
     const onPendingDeletion = jest.fn();
     const { result } = await renderHookWithProviders(() =>
-      useLogin({ onSuccess: jest.fn(), onPendingDeletion }),
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion, onDisabled: jest.fn() }),
     );
     await act(async () => {
       result.current.form.setValue('email', 'ana@example.com');
@@ -51,7 +51,7 @@ const props = () => ({ onCancelled: jest.fn(), onLeave: jest.fn() });
 
 describe('PendingDeletionScreen', () => {
   it('shows the date and cancels the deletion with the restricted token only', async () => {
-    useRestrictedAccess.getState().set('restricted-1');
+    useRestrictedAccess.getState().set('restricted-1', 'deletion');
     const api = mockApi({
       'GET /api/v1/me/account/deletion': {
         body: {
@@ -74,7 +74,7 @@ describe('PendingDeletionScreen', () => {
   });
 
   it('asks to log in again when the restricted access expired', async () => {
-    useRestrictedAccess.getState().set('restricted-1');
+    useRestrictedAccess.getState().set('restricted-1', 'deletion');
     mockApi({ 'GET /api/v1/me/account/deletion': apiError(401, 'UNAUTHORIZED') });
     const p = props();
     await renderWithProviders(<PendingDeletionScreen {...p} />);

@@ -14,9 +14,11 @@ export interface UseLoginOptions {
   onSuccess: (user: SessionUser, email: string) => void;
   /** The account is pending deletion: the restricted access is ready to cancel it. */
   onPendingDeletion: () => void;
+  /** The account is disabled: the restricted access only opens the support screens. */
+  onDisabled: () => void;
 }
 
-export function useLogin({ onSuccess, onPendingDeletion }: UseLoginOptions) {
+export function useLogin({ onSuccess, onPendingDeletion, onDisabled }: UseLoginOptions) {
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
@@ -29,9 +31,9 @@ export function useLogin({ onSuccess, onPendingDeletion }: UseLoginOptions) {
   const pendingAccess = useMutation({
     mutationFn: (values: LoginForm) => supportAccess({ email: values.email, password: values.password }),
     onSuccess: (access) => {
-      if (access.scope !== 'deletion') return setGeneralError(translateError(null).message);
-      useRestrictedAccess.getState().set(access.accessToken);
-      onPendingDeletion();
+      useRestrictedAccess.getState().set(access.accessToken, access.scope);
+      if (access.scope === 'support') onDisabled();
+      else onPendingDeletion();
     },
     onError: (error) => setGeneralError(translateError(error).message),
   });
@@ -46,8 +48,11 @@ export function useLogin({ onSuccess, onPendingDeletion }: UseLoginOptions) {
       onSuccess(tokens.user, values.email);
     },
     onError: (error, values) => {
-      if (isApiError(error) && error.code === 'ACCOUNT_PENDING_DELETION') {
-        // Same email and password give a restricted access that can only cancel the deletion.
+      if (
+        isApiError(error) &&
+        (error.code === 'ACCOUNT_PENDING_DELETION' || error.code === 'ACCOUNT_DISABLED')
+      ) {
+        // Same email and password give a restricted access: cancel the deletion, or write to support.
         pendingAccess.mutate(values);
         return;
       }

@@ -34,7 +34,7 @@ describe('useLogin', () => {
     const api = mockApi({ 'POST /api/v1/auth/login': { body: tokens({ emailVerified: false }) } });
     const onSuccess = jest.fn();
     const { result } = await renderHookWithProviders(() =>
-      useLogin({ onSuccess, onPendingDeletion: jest.fn() }),
+      useLogin({ onSuccess, onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
     await fill(result.current.form, { email: 'ana@example.com', password: 'secreta' });
     await act(() => result.current.submit());
@@ -57,7 +57,7 @@ describe('useLogin', () => {
   it('shows the generic message for wrong credentials', async () => {
     mockApi({ 'POST /api/v1/auth/login': apiError(401, 'INVALID_CREDENTIALS') });
     const { result } = await renderHookWithProviders(() =>
-      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn() }),
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
     await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
@@ -70,7 +70,7 @@ describe('useLogin', () => {
       'POST /api/v1/auth/login': apiError(429, 'ACCOUNT_LOCKED', [{ retryAfterSeconds: 90 }]),
     });
     const { result } = await renderHookWithProviders(() =>
-      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn() }),
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
     await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
@@ -82,7 +82,7 @@ describe('useLogin', () => {
   it('handles a lock without a known duration', async () => {
     mockApi({ 'POST /api/v1/auth/login': apiError(429, 'ACCOUNT_LOCKED') });
     const { result } = await renderHookWithProviders(() =>
-      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn() }),
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
     await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
@@ -92,7 +92,7 @@ describe('useLogin', () => {
   it('does not call the API with invalid fields', async () => {
     const api = mockApi({});
     const { result } = await renderHookWithProviders(() =>
-      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn() }),
+      useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
     await fill(result.current.form, { email: 'nope', password: '' });
     await act(() => result.current.submit());

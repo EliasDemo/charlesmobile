@@ -11,6 +11,7 @@ export default function BookingRoute() {
         router.push({ pathname: '/book/[barbershopId]', params: { barbershopId } })
       }
       onOpenBarbershop={(id) => router.push({ pathname: '/barbershop/[id]', params: { id } })}
+      onHelp={(bookingId) => router.push({ pathname: '/support/new', params: { bookingId } })}
     />
   );
 }

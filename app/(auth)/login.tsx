@@ -21,6 +21,7 @@ export default function LoginRoute() {
         router.dismissTo(returnTo as never);
       }}
       onPendingDeletion={() => router.push('/account-pending')}
+      onDisabled={() => router.push('/account-disabled')}
       onForgotPassword={() => router.push('/forgot-password')}
       onRegister={() => router.push({ pathname: '/register', params: { returnTo } })}
     />

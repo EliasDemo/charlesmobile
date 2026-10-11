@@ -12,6 +12,7 @@ import search from './locales/es/search.json';
 import shop from './locales/es/shop.json';
 import agenda from './locales/es/agenda.json';
 import notifications from './locales/es/notifications.json';
+import support from './locales/es/support.json';
 import type devTexts from './locales/es/dev.json';
 
 export const defaultNS = 'common';
@@ -29,6 +30,7 @@ export const resources = {
     shop,
     agenda,
     notifications,
+    support,
   },
 } as const;
 

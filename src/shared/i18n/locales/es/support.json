@@ -1,0 +1,69 @@
+{
+  "title": "Ayuda",
+  "list": {
+    "new": "Nueva consulta",
+    "empty": "Aún no tienes consultas",
+    "emptyMessage": "Si algo no salió bien con una reserva, un pago o la app, escríbenos."
+  },
+  "status": {
+    "OPEN": "Abierta",
+    "IN_PROGRESS": "En proceso",
+    "RESOLVED": "Resuelta",
+    "CLOSED": "Cerrada"
+  },
+  "category": {
+    "ACCOUNT": "Mi cuenta",
+    "BOOKING": "Una reserva",
+    "PAYMENT": "Un pago",
+    "BARBERSHOP": "Una barbería",
+    "REVIEW": "Una valoración",
+    "APP": "La app",
+    "OTHER": "Otro tema"
+  },
+  "new": {
+    "title": "Nueva consulta",
+    "aboutBooking": "Tu consulta quedará ligada a esta reserva, así soporte la ve directamente.",
+    "category": "¿Sobre qué es?",
+    "subject": "Asunto",
+    "message": "Cuéntanos qué pasó",
+    "messageHint": "No escribas datos de tarjetas ni contraseñas.",
+    "send": "Enviar consulta",
+    "sent": "Consulta enviada"
+  },
+  "ticket": {
+    "title": "Consulta",
+    "you": "Tú",
+    "support": "Soporte",
+    "reply": "Tu respuesta",
+    "send": "Responder",
+    "closed": "Esta consulta está cerrada. Si necesitas más ayuda, abre una nueva."
+  },
+  "form": {
+    "required": "Este dato es obligatorio.",
+    "subjectShort": "Escribe al menos 3 caracteres."
+  },
+  "report": {
+    "action": "Reportar esta barbería",
+    "title": "Reportar barbería",
+    "message": "Cuéntanos qué pasa. Soporte lo revisará; la barbería no sabrá quién la reportó.",
+    "details": "Detalles (opcional)",
+    "send": "Enviar reporte",
+    "sent": "Reporte enviado. Gracias por avisarnos.",
+    "reasons": {
+      "FRAUD": "Fraude o estafa",
+      "MISLEADING_INFO": "Información engañosa",
+      "INAPPROPRIATE": "Contenido inapropiado",
+      "NOT_OPERATING": "Ya no funciona",
+      "SAFETY": "Seguridad",
+      "OTHER": "Otro motivo"
+    }
+  },
+  "disabled": {
+    "title": "Tu cuenta está deshabilitada",
+    "message": "Por ahora solo puedes escribir a soporte para saber qué pasó o pedir ayuda. Este acceso dura 15 minutos.",
+    "leave": "Salir"
+  },
+  "help": {
+    "booking": "Necesito ayuda con esta reserva"
+  }
+}

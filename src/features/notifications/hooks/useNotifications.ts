@@ -170,14 +170,21 @@ export function usePushPrompt(when: boolean) {
   };
 }
 
-export type NotificationTarget = { kind: 'booking'; id: string } | { kind: 'shop' } | { kind: 'inbox' };
+export type NotificationTarget =
+  | { kind: 'booking'; id: string }
+  | { kind: 'ticket'; id: string }
+  | { kind: 'support' }
+  | { kind: 'shop' }
+  | { kind: 'inbox' };
 
 /**
- * Screen a notice leads to (docs/api/PUSH.md): a booking, the barbershop panel, or the inbox
- * itself for support and account notices until those screens exist (M9).
+ * Screen a notice leads to (docs/api/PUSH.md): a booking, a support ticket, the help screen
+ * (account notices), or the barbershop panel.
  */
 export function notificationTarget(resource: NotificationResource): NotificationTarget {
   if (resource.type === 'booking' && resource.id) return { kind: 'booking', id: resource.id };
   if (resource.type === 'barbershop' || resource.type === 'review') return { kind: 'shop' };
+  if (resource.type === 'ticket' && resource.id) return { kind: 'ticket', id: resource.id };
+  if (resource.type === 'account' || resource.type === 'ticket') return { kind: 'support' };
   return { kind: 'inbox' };
 }

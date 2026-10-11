@@ -4,16 +4,19 @@ import { isApiError, translateError } from '@/shared/api';
 import { cancelDeletion, fetchDeletionStatus } from '../api/authApi';
 
 interface RestrictedAccessState {
-  /** Restricted token (scope "deletion"). Memory only: never stored, never the session. */
+  /** Restricted token. Memory only: never stored, never the session. */
   token: string | null;
-  set: (token: string) => void;
+  /** "deletion": account pending deletion. "support": disabled account (only support tickets). */
+  scope: 'deletion' | 'support' | null;
+  set: (token: string, scope: 'deletion' | 'support') => void;
   clear: () => void;
 }
 
 export const useRestrictedAccess = create<RestrictedAccessState>((set) => ({
   token: null,
-  set: (token) => set({ token }),
-  clear: () => set({ token: null }),
+  scope: null,
+  set: (token, scope) => set({ token, scope }),
+  clear: () => set({ token: null, scope: null }),
 }));
 
 /** The restricted token stopped working (expired after 15 minutes, or the account changed). */

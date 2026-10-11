@@ -71,7 +71,8 @@
       "FAILED": "con problemas: escríbenos a soporte"
     },
     "barber": "con {{barber}}",
-    "openBarbershop": "Ver barbería"
+    "openBarbershop": "Ver barbería",
+    "help": "Necesito ayuda con esta reserva"
   },
   "cancel": {
     "action": "Cancelar reserva",

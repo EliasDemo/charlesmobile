@@ -13,9 +13,11 @@ export interface BookingScreenProps {
   onBack: () => void;
   onBookAgain: (barbershopId: string) => void;
   onOpenBarbershop: (barbershopId: string) => void;
+  /** Opens a support ticket about this booking. */
+  onHelp: (bookingId: string) => void;
 }
 
-export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop }: BookingScreenProps) {
+export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop, onHelp }: BookingScreenProps) {
   const { t } = useTranslation('booking');
   const data = useBooking(id);
   const notFound = {
@@ -136,6 +138,12 @@ export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop }: Boo
               canCancel={data.canCancel}
               onAsk={data.askCancel}
               disabled={data.isCancelling}
+            />
+            <Button
+              label={t('detail.help')}
+              variant="ghost"
+              icon="help-buoy"
+              onPress={() => onHelp(booking.id)}
             />
             <ConfirmDialog
               visible={data.confirmingCancel}

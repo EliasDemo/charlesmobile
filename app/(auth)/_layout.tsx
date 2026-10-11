@@ -12,6 +12,9 @@ export default function AuthLayout() {
       <Stack.Screen name="forgot-password" options={{ title: '' }} />
       <Stack.Screen name="reset-password" options={{ title: '' }} />
       <Stack.Screen name="account-pending" options={{ title: '' }} />
+      <Stack.Screen name="account-disabled/index" options={{ title: '' }} />
+      <Stack.Screen name="account-disabled/new" options={{ title: '' }} />
+      <Stack.Screen name="account-disabled/[id]" options={{ title: '' }} />
     </Stack>
   );
 }

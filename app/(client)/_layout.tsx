@@ -20,6 +20,9 @@ export default function ClientLayout() {
       <Stack.Screen name="profile/delete-account" options={{ title: t('nav.deleteAccount') }} />
       <Stack.Screen name="profile/invitations" options={{ title: t('nav.invitations', { ns: 'shop' }) }} />
       <Stack.Screen name="create-shop" options={{ title: t('nav.createShop', { ns: 'shop' }) }} />
+      <Stack.Screen name="support/index" options={{ title: t('title', { ns: 'support' }) }} />
+      <Stack.Screen name="support/new" options={{ title: t('new.title', { ns: 'support' }) }} />
+      <Stack.Screen name="support/[id]" options={{ title: t('ticket.title', { ns: 'support' }) }} />
       <Stack.Screen name="notifications" options={{ title: t('nav.notifications') }} />
       <Stack.Screen name="bookings/[id]" options={{ title: t('nav.booking') }} />
     </Stack>

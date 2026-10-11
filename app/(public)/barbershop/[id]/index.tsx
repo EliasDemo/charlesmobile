@@ -1,8 +1,11 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { BarbershopScreen } from '@/features/barbershop';
+import { ReportBarbershopButton } from '@/features/support';
+import { useSession } from '@/shared/api';
 
 export default function BarbershopRoute() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const authenticated = useSession((s) => s.status === 'authenticated');
   return (
     <BarbershopScreen
       id={id}
@@ -12,6 +15,7 @@ export default function BarbershopRoute() {
       }
       onOpenReviews={() => router.push({ pathname: '/barbershop/[id]/reviews', params: { id } })}
       onBook={() => router.push({ pathname: '/book/[barbershopId]', params: { barbershopId: id } })}
+      footer={authenticated ? <ReportBarbershopButton barbershopId={id} /> : null}
       onRequireLogin={() => router.push({ pathname: '/login', params: { returnTo: `/barbershop/${id}` } })}
     />
   );

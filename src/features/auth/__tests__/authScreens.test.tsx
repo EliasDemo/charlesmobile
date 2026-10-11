@@ -20,6 +20,7 @@ beforeEach(resetAppState);
 const loginProps = () => ({
   onSuccess: jest.fn(),
   onPendingDeletion: jest.fn(),
+  onDisabled: jest.fn(),
   onForgotPassword: jest.fn(),
   onRegister: jest.fn(),
 });

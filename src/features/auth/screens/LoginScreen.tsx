@@ -27,12 +27,14 @@ export function LoginScreen({
   onRegister,
   onSuccess,
   onPendingDeletion,
+  onDisabled,
 }: LoginScreenProps) {
   const { t } = useTranslation('auth');
   const errorText = useFieldErrorText('auth');
   const { form, submit, isSubmitting, generalError, lockedSeconds, lockedWithoutTime } = useLogin({
     onSuccess,
     onPendingDeletion,
+    onDisabled,
   });
   const locked = lockedSeconds > 0;
   return (

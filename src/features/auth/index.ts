@@ -7,3 +7,4 @@ export { SignInPrompt } from './screens/SignInPrompt';
 export { VerifyEmailScreen } from './screens/VerifyEmailScreen';
 export { useSessionEndedRedirect } from './hooks/useSessionEndedRedirect';
 export { PendingDeletionScreen } from './screens/PendingDeletionScreen';
+export { useRestrictedAccess } from './hooks/usePendingDeletion';

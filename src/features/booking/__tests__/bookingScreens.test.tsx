@@ -325,6 +325,7 @@ const detailProps = () => ({
   onBack: jest.fn(),
   onBookAgain: jest.fn(),
   onOpenBarbershop: jest.fn(),
+  onHelp: jest.fn(),
 });
 
 describe('BookingScreen', () => {
