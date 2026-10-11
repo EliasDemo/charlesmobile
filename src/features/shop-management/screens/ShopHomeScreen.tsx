@@ -25,7 +25,16 @@ import { useShopHome } from '../hooks/useShopHome';
 import { REVIEW_STATES } from '../hooks/useShopReview';
 
 export type ShopSection =
-  'review' | 'reviews' | 'details' | 'status' | 'services' | 'barbers' | 'members' | 'hours' | 'blocks';
+  | 'review'
+  | 'reviews'
+  | 'gallery'
+  | 'details'
+  | 'status'
+  | 'services'
+  | 'barbers'
+  | 'members'
+  | 'hours'
+  | 'blocks';
 
 export interface ShopHomeScreenProps {
   /** Action on the right of the title (the notifications bell, given by the route). */
@@ -34,7 +43,12 @@ export interface ShopHomeScreenProps {
   onInvitations: () => void;
   onOpen: (shopId: string, section: ShopSection) => void;
   /** A barber's own blocks or hours in a barbershop they work at. */
-  onOpenAsBarber: (shopId: string, barberId: string, section: 'blocks' | 'hours', timeZone: string) => void;
+  onOpenAsBarber: (
+    shopId: string,
+    barberId: string,
+    section: 'blocks' | 'hours' | 'gallery',
+    timeZone: string,
+  ) => void;
 }
 
 const STATUS_STYLE: Record<
@@ -54,6 +68,7 @@ const SECTIONS: ShopSection[] = [
   'barbers',
   'hours',
   'blocks',
+  'gallery',
   'reviews',
   'status',
   'members',
@@ -63,6 +78,7 @@ const SECTIONS: ShopSection[] = [
 const SECTION_ICON: Record<ShopSection, IconName> = {
   review: 'document-text',
   reviews: 'star',
+  gallery: 'images',
   details: 'storefront',
   status: 'power',
   services: 'cut',
@@ -196,6 +212,20 @@ export function ShopHomeScreen({
                             profile.barbershop.id,
                             profile.barberId,
                             'hours',
+                            profile.barbershop.timezone,
+                          )
+                        }
+                      />,
+                      <ActionTile
+                        key={`${profile.barberId}-gallery`}
+                        icon="images"
+                        label={t('home.sections.gallery')}
+                        hint={profile.barbershop.name}
+                        onPress={() =>
+                          onOpenAsBarber(
+                            profile.barbershop.id,
+                            profile.barberId,
+                            'gallery',
                             profile.barbershop.timezone,
                           )
                         }

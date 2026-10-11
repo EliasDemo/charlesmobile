@@ -18,6 +18,7 @@ export default function StaffLayout() {
   return (
     <Stack screenOptions={screenOptions}>
       <Stack.Screen name="shop/[shopId]/review" options={{ title: t('home.sections.review') }} />
+      <Stack.Screen name="shop/[shopId]/gallery" options={{ title: t('home.sections.gallery') }} />
       <Stack.Screen name="shop/[shopId]/reviews" options={{ title: t('home.sections.reviews') }} />
       <Stack.Screen name="shop/[shopId]/details" options={{ title: t('home.sections.details') }} />
       <Stack.Screen name="shop/[shopId]/status" options={{ title: t('home.sections.status') }} />

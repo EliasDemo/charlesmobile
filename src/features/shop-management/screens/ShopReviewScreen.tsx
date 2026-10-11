@@ -53,7 +53,7 @@ function ReviewView({ shop, onEditDetails }: { shop: ManagedShop; onEditDetails:
                 <ListRow
                   key={requirement}
                   title={t(`review.requirement.${requirement}`)}
-                  onPress={requirement === 'OWNER_DOCUMENT' && isOwner ? onEditDetails : undefined}
+                  onPress={isOwner ? onEditDetails : undefined}
                 />
               ))}
             </Card>

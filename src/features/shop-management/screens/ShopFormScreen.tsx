@@ -15,6 +15,7 @@ import {
   type TextFieldProps,
 } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
+import { PhotoField } from '../components/PhotoField';
 import { useManagedShop } from '../hooks/useManagedShop';
 import { LIMITS } from '../schemas/limits';
 import { useShopForm, type ShopForm } from '../hooks/useShopForm';
@@ -89,6 +90,12 @@ function ShopFormView({ shop, onDone }: { shop?: ManagedShop; onDone: (shopId: s
         </>
       )}
       {f.generalError ? <Notice tone="danger" message={f.generalError} /> : null}
+      {shop ? (
+        <>
+          <PhotoField shopId={shop.id} kind="cover" name={shop.name} url={shop.coverUrl} />
+          <PhotoField shopId={shop.id} kind="logo" name={shop.name} url={shop.logoUrl} />
+        </>
+      ) : null}
       {field('name', t('form.name'), { autoCapitalize: 'words', maxLength: LIMITS.shopName.max })}
       {field('description', t('form.description'), { multiline: true, maxLength: LIMITS.description.max })}
       {field('address', t('form.address'), {

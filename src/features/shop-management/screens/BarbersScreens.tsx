@@ -20,6 +20,7 @@ import {
   useFieldErrorText,
 } from '@/shared/ui';
 import { SPECIALTIES_MAX, YEARS_MAX, useBarberForm, useBarbersList } from '../hooks/useBarbers';
+import { PhotoField } from '../components/PhotoField';
 import { useManagedShop } from '../hooks/useManagedShop';
 import { LIMITS } from '../schemas/limits';
 
@@ -108,6 +109,15 @@ export function BarberFormScreen({
         {(services) => (
           <View style={styles.content}>
             {f.generalError ? <Notice tone="danger" message={f.generalError} /> : null}
+            {f.existing ? (
+              <PhotoField
+                shopId={shopId}
+                kind="barber"
+                barberId={f.existing.id}
+                name={f.existing.displayName}
+                url={f.existing.photoUrl}
+              />
+            ) : null}
             <Controller
               control={f.form.control}
               name="displayName"

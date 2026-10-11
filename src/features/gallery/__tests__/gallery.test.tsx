@@ -102,6 +102,8 @@ describe('GalleryScreen', () => {
     await waitFor(() =>
       expect(api.calls.find((c) => c.method === 'POST')?.body).toEqual({ reason: 'NO_CONSENT' }),
     );
+    // The sheet closes once the report is accepted.
+    await waitFor(() => expect(screen.queryByRole('button', { name: texts.report.send })).toBeNull());
   });
 
   it('explains an empty gallery', async () => {

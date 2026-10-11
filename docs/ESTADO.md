@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M9 (valoraciones y soporte) terminada, pendiente de la prueba del usuario. Sigue **M10 (fotos)**, adelantada porque el backend exige portada para enviar una barbería a revisión; necesita `expo-image-picker` (compilación nueva). M7 y M8 terminadas, pendientes de la prueba del usuario. M5 espera la Fase 8B del backend (Izipay).
+**Fase actual:** M10 (fotos) — código terminado; la subida de fotos se prueba con la **compilación única** (ver la guía al final), que el usuario lanza. M7, M8 y M9 terminadas, pendientes de la prueba del usuario. M5 espera la Fase 8B del backend (Izipay). Después: M11 (publicación).
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -296,6 +296,15 @@ Confirmada por el usuario en su teléfono.
 - Pruebas: `src/features/notifications/__tests__`. `expo-notifications` simulado en `jest.setup.tsx`.
 - **Push real en Android: pendiente de Firebase (FCM)** en la compilación final (ver cambios nativos pendientes). En desarrollo el backend usa `PUSH_DRIVER=fake`.
 
+## M10 — Fotos y galería (código terminado; la subida necesita la compilación única)
+
+- **Sin compilar:** logo y portada reales (búsqueda, ficha, Mi barbería), foto, años de experiencia y especialidades de cada barbero; galería pública "Trabajos" en la ficha (destacadas primero), pantalla completa (`/barbershop/[id]/gallery`), visor con estilos, barbero, **"Reservar este estilo"** (abre la reserva con servicio y barbero) y **reportar foto** (con sesión). URLs relativas en desarrollo: `mediaUrl`.
+- **Editar barbero:** años de experiencia (0–60) y hasta 5 especialidades (`GET /service-styles`, `PUT .../specialties`).
+- **Con la compilación:** subir o quitar portada (16:9, cumple el requisito PHOTO de la revisión) y logo en Datos de la barbería; foto del barbero; **Galería** (mosaico en Mi barbería y "Galería" como barbero): subir con consentimiento obligatorio, descripción, hasta 3 estilos y servicio; destacar, editar, borrar; aviso de "Oculta por reportes" / "Retirada por soporte". Errores `INVALID_IMAGE`, `IMAGE_LIMIT_REACHED`, `PAYLOAD_TOO_LARGE`, `STORAGE_UNAVAILABLE`.
+- **Pantalla de carga animada** al abrir (JavaScript) y vibración leve en confirmaciones (con la compilación).
+- Pruebas: `gallery/__tests__`, `shop-management/__tests__/shopPhotos.test.tsx`. `mockApi` acepta cuerpos multipart.
+- Pendiente para después de compilar: búsqueda por estilo, caché con `expo-image`, deslizar citas, celebración, agregar al calendario.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
@@ -342,8 +351,20 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 | Clave de Google Maps (variable de EAS `GOOGLE_MAPS_ANDROID_API_KEY`, leída por el plugin de `react-native-maps` en `app.config.ts`) | Mapa en Android. Después de instalar, poner `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true` en `.env` | La vista de mapa muestra un aviso; la lista funciona completa |
 | `environment` por perfil en `eas.json` (`development`, `preview`, `production`) | EAS entrega a cada compilación las variables de su entorno (la clave de Maps) | Sin efecto |
 | **Firebase (FCM) para push en Android** (aprobado para la compilación final): proyecto de Firebase del usuario, `google-services.json` como archivo de EAS (no en el repositorio) y `android.googleServicesFile` en `app.config.ts`; clave de FCM V1 subida a EAS | El teléfono obtiene su token de Expo y recibe push | `getPushToken` devuelve null: no se registra el dispositivo; la bandeja y la campana funcionan |
-| **`expo-image-picker`** (aprobado el 2026-10-11, para M10): elegir o tomar fotos para la portada, el logo, la foto del barbero y la galería | Subir fotos | Las pantallas de fotos lo cargan solo si existe (`requireOptionalNativeModule`); sin él, explican que llega con la próxima compilación |
-| **Efectos del grupo B** (pendientes, para decidir en la compilación final): vibración leve (`expo-haptics`), deslizar citas en la agenda (`react-native-reanimated` + `react-native-gesture-handler`), animación de celebración (`lottie-react-native`), fondo desenfocado en hojas (`expo-blur`) | Esos efectos | Sin efecto: la app usa los del grupo A |
+| **Fotos** (M10): `expo-image-picker` (plugin con permisos de fotos y cámara), `expo-image-manipulator` (2000 px y JPEG; convierte HEIC) | Subir portada, logo, foto del barbero y galería | `photosAvailable()` es false: las pantallas explican que llega con la próxima versión |
+| `expo-haptics` | Vibración leve al confirmar y en los mensajes breves (`haptic()`) | No vibra |
+| Instalados para usar **después de compilar** (aprobados el 2026-10-11 como "compilación única"): `expo-image` (caché de fotos), `react-native-reanimated` 4 + `react-native-worklets` + `react-native-gesture-handler` (deslizar citas), `lottie-react-native` (celebración), `expo-blur`, `expo-linear-gradient`, `expo-calendar` (plugin: agregar la cita al calendario), `expo-web-browser` (plugin), `expo-clipboard`, `expo-store-review`, `expo-updates` (`runtimeVersion` = versión de la app; activo fuera de desarrollo), `react-native-ssl-public-key-pinning` (M11), `@sentry/react-native` (M11, apagado) | Cada función se conecta y se prueba con la compilación instalada | **No se importan todavía** en el código (salvo los protegidos): la app actual no los necesita |
+| Colores de la pantalla de carga nativa (`#F4F6F8` / `#0D1015`) y `backgroundColor` | Splash con la paleta nueva | Ya se ve la pantalla de carga animada en JavaScript |
+
+### Guía de la compilación única (la lanza el usuario)
+
+1. **Firebase:** crear un proyecto en console.firebase.google.com → agregar app Android con paquete `pe.charlesapp.mobile.dev` → descargar `google-services.json` (no al repositorio). En "Configuración del proyecto → Cuentas de servicio" generar una clave privada (JSON) para FCM V1.
+2. **Variables de EAS** (expo.dev → proyecto charles → Environment variables, entorno `development`):
+   - `GOOGLE_MAPS_ANDROID_API_KEY` (texto secreto);
+   - `GOOGLE_SERVICES_JSON` como **archivo** (`google-services.json`).
+3. **Credenciales de push:** `eas credentials -p android` → perfil development → Google Service Account → subir la clave FCM V1.
+4. Compilar: `eas build --profile development --platform android` e instalar el APK.
+5. En `.env`: `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true`. Luego `pnpm start`.
 
 ## Cuándo hace falta una compilación nueva (EAS)
 

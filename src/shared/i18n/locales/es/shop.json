@@ -27,7 +27,8 @@
       "members": "Responsables",
       "hours": "Horario",
       "blocks": "Bloqueos",
-      "reviews": "Valoraciones"
+      "reviews": "Valoraciones",
+      "gallery": "Galería"
     },
     "asBarber": "Como barbero",
     "myBlocks": "Mis bloqueos en {{name}}",
@@ -44,7 +45,8 @@
       "members": "Quién administra",
       "hours": "Días y horas de atención",
       "blocks": "Descansos y ausencias",
-      "reviews": "Lo que dicen tus clientes"
+      "reviews": "Lo que dicen tus clientes",
+      "gallery": "Fotos de tus trabajos"
     }
   },
   "status": {
@@ -278,5 +280,48 @@
     "resubmit": "Reenviar a revisión",
     "fix": "Corregir datos",
     "ownerOnly": "Solo el responsable principal puede enviarla a revisión."
+  },
+  "photos": {
+    "title": "Fotos",
+    "cover": "Portada (foto del local)",
+    "coverHint": "Es la foto que pide la revisión. Horizontal, del frente o del interior del local.",
+    "logo": "Logo",
+    "barber": "Foto del barbero",
+    "choose": "Elegir de la galería",
+    "take": "Tomar foto",
+    "remove": "Quitar",
+    "uploaded": "Foto guardada",
+    "denied": "Sin permiso no podemos acceder a tus fotos. Actívalo en los ajustes del teléfono.",
+    "unavailable": "Subir fotos llega con la próxima versión de la app.",
+    "none": "Sin foto"
+  },
+  "gallery": {
+    "title": "Galería de trabajos",
+    "hint": "Fotos de tus cortes: se ven en la ficha de la barbería y permiten reservar el estilo.",
+    "empty": "Aún no hay fotos de trabajos",
+    "upload": "Subir foto",
+    "uploadTitle": "Nueva foto",
+    "who": "Barbero",
+    "consent": "La persona de la foto dio su consentimiento para publicarla",
+    "caption": "Descripción (opcional)",
+    "styles": "Estilos (hasta 3)",
+    "service": "Servicio para \"Reservar este estilo\" (opcional)",
+    "noService": "Ninguno",
+    "send": "Publicar foto",
+    "saved": "Cambios guardados",
+    "pin": "Destacar",
+    "unpin": "Quitar de destacadas",
+    "pinned": "Destacada",
+    "hidden": "Oculta por reportes",
+    "removed": "Retirada por soporte",
+    "reports_one": "{{count}} reporte abierto",
+    "reports_other": "{{count}} reportes abiertos",
+    "edit": "Editar",
+    "save": "Guardar",
+    "delete": "Borrar foto",
+    "deleteTitle": "¿Borrar esta foto?",
+    "deleteMessage": "Dejará de verse en la galería. No se puede deshacer.",
+    "deleteConfirm": "Sí, borrar",
+    "limit": "Hasta 60 fotos por barbero y 6 destacadas."
   }
 }

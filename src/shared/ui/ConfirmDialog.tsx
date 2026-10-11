@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from '@/shared/i18n';
+import { haptic } from '@/shared/lib';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import { Button } from './Button';
 import { Icon, type IconName } from './Icon';
@@ -93,7 +94,10 @@ export function ConfirmDialog({
               <Button
                 label={confirmLabel}
                 variant={destructive ? 'danger' : 'primary'}
-                onPress={onConfirm}
+                onPress={() => {
+                  haptic(destructive ? 'warning' : 'light');
+                  onConfirm();
+                }}
                 loading={loading}
                 disabled={confirmDisabled}
                 fullWidth

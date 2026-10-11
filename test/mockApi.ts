@@ -30,6 +30,15 @@ export const apiError = (
   > & { details: unknown[] },
 });
 
+/** JSON bodies are parsed; anything else (multipart uploads) is kept as text. */
+function parseBody(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+}
+
 /** Matches "GET /api/v1/barbershops/{id}" against a real path, as the contract writes it. */
 function findHandler(routes: Record<string, Handler>, method: string, path: string): Handler | undefined {
   for (const [key, handler] of Object.entries(routes)) {
@@ -54,7 +63,7 @@ export function mockApi(routes: Partial<Record<`${Method} ${ApiPath}`, Handler>>
       method: request.method,
       path,
       headers: request.headers,
-      body: text ? JSON.parse(text) : undefined,
+      body: text ? parseBody(text) : undefined,
     });
     const handler = findHandler(routes as Record<string, Handler>, request.method, path);
     const reply: MockReply = handler

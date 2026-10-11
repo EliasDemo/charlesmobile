@@ -10,8 +10,17 @@ export {
   zonedTimeToIso,
 } from './dates';
 export { deviceModelName } from './device';
+export { haptic, type HapticKind } from './haptics';
 export { formatDuration, useCountdown } from './useCountdown';
 export { paramString, safeReturnTo } from './routeParams';
+export {
+  photoForm,
+  photosAvailable,
+  pickPhoto,
+  type PhotoSource,
+  type PickResult,
+  type PickedPhoto,
+} from './photos';
 export {
   getPushPermission,
   getPushToken,

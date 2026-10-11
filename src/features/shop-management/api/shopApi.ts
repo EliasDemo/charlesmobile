@@ -46,6 +46,8 @@ export const shopKeys = {
   blocks: (id: string) => ['shop-management', id, 'blocks'] as const,
   review: (id: string) => ['shop-management', id, 'review'] as const,
   myBarber: ['shop-management', 'me-barber'] as const,
+  gallery: (id: string, barberId: string | null) =>
+    ['shop-management', id, 'gallery', barberId ?? 'all'] as const,
   invitations: ['shop-management', 'invitations'] as const,
   categories: ['service-categories'] as const,
 };
@@ -196,3 +198,59 @@ export const acceptInvitation = (invitationId: string, code: string) =>
       body: { code },
     }),
   );
+
+// Photos (backend phase 14): multipart with the image in `file` (docs/api/IMAGENES.md).
+export type ManagedGalleryImage = S['GalleryImageManageDto'];
+export type ManagedGalleryPage = S['GalleryManagePageDto'];
+export type GalleryUpdateBody = S['UpdateGalleryImageDto'];
+const multipart = { bodySerializer: (body: unknown) => body as FormData };
+
+export const uploadCover = (id: string, form: FormData) =>
+  unwrap(api.PUT('/api/v1/barbershops/{id}/cover', { params: path(id), body: form as never, ...multipart }));
+export const deleteCover = (id: string) =>
+  unwrap(api.DELETE('/api/v1/barbershops/{id}/cover', { params: path(id) }));
+export const uploadLogo = (id: string, form: FormData) =>
+  unwrap(api.PUT('/api/v1/barbershops/{id}/logo', { params: path(id), body: form as never, ...multipart }));
+export const deleteLogo = (id: string) =>
+  unwrap(api.DELETE('/api/v1/barbershops/{id}/logo', { params: path(id) }));
+export const uploadBarberPhoto = (id: string, barberId: string, form: FormData) =>
+  unwrap(
+    api.PUT('/api/v1/barbershops/{id}/barbers/{barberId}/photo', {
+      params: { path: { id, barberId } },
+      body: form as never,
+      ...multipart,
+    }),
+  );
+export const deleteBarberPhoto = (id: string, barberId: string) =>
+  unwrap(
+    api.DELETE('/api/v1/barbershops/{id}/barbers/{barberId}/photo', { params: { path: { id, barberId } } }),
+  );
+
+/** Gallery for management: also hidden ones, with openReports / hidden / removed. */
+export const fetchManagedGallery = (
+  id: string,
+  barberId: string | null,
+  cursor?: string,
+): Promise<ManagedGalleryPage> =>
+  unwrap(
+    api.GET('/api/v1/me/barbershops/{id}/gallery', {
+      params: {
+        path: { id },
+        query: { limit: PAGE, ...(barberId ? { barberId } : {}), ...(cursor ? { cursor } : {}) },
+      },
+    }),
+  );
+export const uploadGalleryImage = (id: string, barberId: string, form: FormData) =>
+  unwrap(
+    api.POST('/api/v1/barbershops/{id}/barbers/{barberId}/gallery', {
+      params: { path: { id, barberId } },
+      body: form as never,
+      ...multipart,
+    }),
+  );
+export const updateGalleryImage = (id: string, imageId: string, body: GalleryUpdateBody) =>
+  unwrap(
+    api.PATCH('/api/v1/barbershops/{id}/gallery/{imageId}', { params: { path: { id, imageId } }, body }),
+  );
+export const deleteGalleryImage = (id: string, imageId: string) =>
+  unwrap(api.DELETE('/api/v1/barbershops/{id}/gallery/{imageId}', { params: { path: { id, imageId } } }));

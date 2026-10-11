@@ -44,7 +44,7 @@
     "DATE_OUT_OF_RANGE": "Esa fecha está fuera del rango permitido.",
     "INVALID_CURSOR": "La lista cambió. La cargamos de nuevo.",
     "IDEMPOTENCY_KEY_REQUIRED": "Ocurrió un error en la aplicación. Inténtalo de nuevo.",
-    "PAYLOAD_TOO_LARGE": "Los datos enviados son demasiado grandes.",
+    "PAYLOAD_TOO_LARGE": "El archivo es demasiado grande (máximo 10 MB).",
     "UNSUPPORTED_MEDIA_TYPE": "Ocurrió un error en la aplicación. Inténtalo de nuevo.",
     "ACCOUNT_LOCKED": "Demasiados intentos. Espera unos minutos.",
     "TOO_MANY_REQUESTS": "Demasiadas solicitudes. Espera un momento.",
@@ -57,7 +57,10 @@
     "ALREADY_REPORTED": "Ya lo reportaste.",
     "TICKET_CLOSED": "Esta consulta está cerrada. Puedes abrir una nueva.",
     "ACCOUNT_PENDING_DELETION": "Tu cuenta está pendiente de eliminación.",
-    "DELETION_BLOCKED": "Todavía no se puede eliminar tu cuenta."
+    "DELETION_BLOCKED": "Todavía no se puede eliminar tu cuenta.",
+    "INVALID_IMAGE": "Esa imagen no se puede usar. Elige una foto JPEG, PNG o WebP.",
+    "IMAGE_LIMIT_REACHED": "Llegaste al límite de fotos. Borra alguna para subir otra.",
+    "STORAGE_UNAVAILABLE": "No pudimos guardar la foto ahora. Inténtalo en un momento."
   },
   "fields": {
     "required": "Este campo es obligatorio.",

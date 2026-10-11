@@ -9,6 +9,8 @@ const BASE_ID = 'pe.charlesapp.mobile';
 const EAS_PROJECT_ID: string = '1d025d83-2f2c-43d5-9790-a672d8b63389';
 // Google Maps key for Android, injected at build time from an EAS environment variable (never committed).
 const GOOGLE_MAPS_ANDROID_API_KEY = process.env.GOOGLE_MAPS_ANDROID_API_KEY;
+// Firebase config for Android push (FCM), uploaded as an EAS file variable (never committed).
+const GOOGLE_SERVICES_JSON = process.env.GOOGLE_SERVICES_JSON;
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -30,7 +32,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       ...(isDevelopment
         ? { NSAppTransportSecurity: { NSAllowsLocalNetworking: true, NSAllowsArbitraryLoads: true } }
         : {}),
-      NSCameraUsageDescription: 'Charles usa la cámara para escanear tu tarjeta al pagar.',
+      NSCameraUsageDescription:
+        'Charles usa la cámara para tomar fotos de tu barbería y tus trabajos, y para escanear tu tarjeta al pagar.',
     },
   },
   android: {
@@ -42,6 +45,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       monochromeImage: './assets/android-icon-monochrome.png',
     },
     predictiveBackGestureEnabled: false,
+    ...(GOOGLE_SERVICES_JSON ? { googleServicesFile: GOOGLE_SERVICES_JSON } : {}),
   },
   plugins: [
     'expo-router',
@@ -76,7 +80,29 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       GOOGLE_MAPS_ANDROID_API_KEY ? { androidGoogleMapsApiKey: GOOGLE_MAPS_ANDROID_API_KEY } : {},
     ],
     './plugins/withLyraPaymentSDK',
+    [
+      'expo-image-picker',
+      {
+        photosPermission:
+          'Charles usa tus fotos solo para las que elijas subir: tu barbería, tu perfil y tus trabajos.',
+        cameraPermission: 'Charles usa la cámara para tomar fotos de tu barbería y tus trabajos.',
+        microphonePermission: false,
+      },
+    ],
+    [
+      'expo-calendar',
+      { calendarPermission: 'Charles agrega tus citas a tu calendario solo cuando lo pides.' },
+    ],
+    'expo-web-browser',
+    // OTA updates of JavaScript (EAS Update). Only used outside development builds.
+    'expo-updates',
   ],
+  runtimeVersion: { policy: 'appVersion' },
+  updates: {
+    url: `https://u.expo.dev/${EAS_PROJECT_ID}`,
+    enabled: !isDevelopment,
+    checkAutomatically: 'ON_LOAD',
+  },
   experiments: { typedRoutes: true },
   extra: {
     appVariant: variant,

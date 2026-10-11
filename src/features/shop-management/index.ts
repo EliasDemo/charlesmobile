@@ -11,3 +11,4 @@ export { ShopStatusScreen } from './screens/ShopStatusScreen';
 export { TimeBlockFormScreen, TimeBlocksScreen } from './screens/TimeBlocksScreens';
 export { useShopHome } from './hooks/useShopHome';
 export { useBarbersList } from './hooks/useBarbers';
+export { ShopGalleryScreen } from './screens/ShopGalleryScreen';
