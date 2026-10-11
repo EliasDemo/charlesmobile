@@ -11,7 +11,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSessionEndedRedirect } from '@/features/auth';
-import { loadAppMode } from '@/features/shop-management';
+import { notificationTarget, useDeviceRegistration, usePushTaps } from '@/features/notifications';
+import { loadAppMode, useAppMode } from '@/features/shop-management';
 import { loadWelcomeSeen, useWelcomeStore } from '@/features/onboarding';
 import { bootstrapSession, queryClient, startQueryListeners } from '@/shared/api';
 import { env } from '@/shared/config';
@@ -46,6 +47,16 @@ function AppStack() {
   const pathname = usePathname();
   // Renewal failed: go to login, keeping the destination screen.
   useSessionEndedRedirect(pathname, goToLogin);
+  // Push: register this device while there is a session; a tapped push opens its screen.
+  useDeviceRegistration();
+  usePushTaps((resource) => {
+    const target = notificationTarget(resource);
+    if (target.kind === 'booking') router.push({ pathname: '/bookings/[id]', params: { id: target.id } });
+    else if (target.kind === 'shop') {
+      useAppMode.getState().setMode('shop');
+      router.navigate('/shop');
+    } else router.push('/notifications');
+  });
 
   // First launch: the welcome pages, once.
   const welcomeSeen = useWelcomeStore((s) => s.seen);

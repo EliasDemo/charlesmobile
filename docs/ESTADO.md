@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M7 (agenda y atención) en curso, plan aprobado el 2026-10-09. M6 cerrada. M4.5 parte 2: fotos aplicadas; falta `cover-generic`.
+**Fase actual:** M8 (notificaciones) en curso, plan aprobado el 2026-10-10. M7 terminada, pendiente de la prueba del usuario. M5 espera la Fase 8B del backend (Izipay). M4.5 parte 2: fotos aplicadas; falta `cover-generic`.
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -258,6 +258,16 @@ Confirmada por el usuario en su teléfono.
 - Pruebas: `src/features/agenda/__tests__` (acciones según la API, sin cancelar, atendida, no-show con confirmación, error de plazo, corrección con motivo, vacío, error, vista de barbero). Maestro: `e2e/agenda-attendance.yaml`.
 - Sin cambios nativos.
 
+## M8 — Notificaciones (código terminado; falta la prueba del usuario)
+
+- **Bandeja** (`/notifications`, protegida): `GET /me/notifications` con lista infinita; los no leídos con "Nuevo"; al tocar se marca leído (`POST .../{id}/read`) y abre su pantalla: `booking` → la reserva; `barbershop` y `review` → Mi barbería (modo barbería); `ticket` y `account` → la bandeja hasta M9. "Marcar todo como leído".
+- **Campana** con el número de no leídos (`unread-count`, cada minuto y al volver a la app), arriba a la derecha en Explorar y en Mi barbería, solo con sesión.
+- **Permiso de push:** se explica y se pide una sola vez, en la **primera reserva confirmada** (pantalla de la reserva). Si se niega, Preferencias muestra el aviso y "Abrir ajustes".
+- **Registro del dispositivo** (`PUT /me/devices`, token en el cuerpo): al aceptar el permiso y al abrir la app con sesión y permiso. Sin token (Android sin Firebase) no hace nada y la bandeja funciona igual. Al cerrar sesión el backend borra el dispositivo.
+- **Toque en un push:** abre su pantalla, también con la app cerrada. El push nunca trae datos sensibles.
+- Pruebas: `src/features/notifications/__tests__`. `expo-notifications` simulado en `jest.setup.tsx`.
+- **Push real en Android: pendiente de Firebase (FCM)** en la compilación final (ver cambios nativos pendientes). En desarrollo el backend usa `PUSH_DRIVER=fake`.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
@@ -303,6 +313,7 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 | `backgroundColor` en `app.config.ts` | Fondo oscuro antes de que cargue la app (sin destello blanco) | Ya se aplica en tiempo de ejecución con `expo-system-ui` |
 | Clave de Google Maps (variable de EAS `GOOGLE_MAPS_ANDROID_API_KEY`, leída por el plugin de `react-native-maps` en `app.config.ts`) | Mapa en Android. Después de instalar, poner `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true` en `.env` | La vista de mapa muestra un aviso; la lista funciona completa |
 | `environment` por perfil en `eas.json` (`development`, `preview`, `production`) | EAS entrega a cada compilación las variables de su entorno (la clave de Maps) | Sin efecto |
+| **Firebase (FCM) para push en Android** (aprobado para la compilación final): proyecto de Firebase del usuario, `google-services.json` como archivo de EAS (no en el repositorio) y `android.googleServicesFile` en `app.config.ts`; clave de FCM V1 subida a EAS | El teléfono obtiene su token de Expo y recibe push | `getPushToken` devuelve null: no se registra el dispositivo; la bandeja y la campana funcionan |
 
 ## Cuándo hace falta una compilación nueva (EAS)
 

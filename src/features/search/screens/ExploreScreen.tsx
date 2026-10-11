@@ -1,8 +1,18 @@
+import type { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Button, Chip, ConfirmDialog, InfiniteList, Notice, SearchField, Text } from '@/shared/ui';
+import {
+  Button,
+  Chip,
+  ConfirmDialog,
+  InfiniteList,
+  Notice,
+  SearchField,
+  Text,
+  ScreenTitle,
+} from '@/shared/ui';
 import { ResultCard } from '../components/ResultCard';
 import { SearchMap } from '../components/SearchMap';
 import { useSearchStore } from '../hooks/searchStore';
@@ -12,9 +22,11 @@ import { useCategories, useSearchResults } from '../hooks/useSearchResults';
 export interface ExploreScreenProps {
   onOpenBarbershop: (id: string) => void;
   onOpenFilters: () => void;
+  /** Action on the right of the title (the notifications bell, given by the route). */
+  headerRight?: ReactNode;
 }
 
-export function ExploreScreen({ onOpenBarbershop, onOpenFilters }: ExploreScreenProps) {
+export function ExploreScreen({ onOpenBarbershop, onOpenFilters, headerRight }: ExploreScreenProps) {
   const theme = useTheme();
   const { t } = useTranslation('search');
   const store = useSearchStore();
@@ -24,7 +36,7 @@ export function ExploreScreen({ onOpenBarbershop, onOpenFilters }: ExploreScreen
 
   const header = (
     <View style={styles.header}>
-      <Text variant="title">{t('title')}</Text>
+      <ScreenTitle title={t('title')} right={headerRight} />
       <SearchField
         value={store.text}
         onChangeText={store.setText}

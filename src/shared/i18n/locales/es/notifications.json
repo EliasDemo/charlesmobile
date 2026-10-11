@@ -1,0 +1,18 @@
+{
+  "title": "Avisos",
+  "bell": "Avisos",
+  "bellUnread_one": "Avisos: {{count}} sin leer",
+  "bellUnread_other": "Avisos: {{count}} sin leer",
+  "unread": "Nuevo",
+  "when": "{{date}} · {{time}}",
+  "empty": "No tienes avisos",
+  "emptyMessage": "Aquí verás confirmaciones, recordatorios y novedades de tus citas.",
+  "readAll": "Marcar todo como leído",
+  "prompt": {
+    "title": "¿Te avisamos de tus citas?",
+    "message": "Te enviaremos un recordatorio antes de tu cita y te avisaremos si hay cambios. Nunca mostramos datos personales ni montos en la notificación.",
+    "accept": "Sí, avisarme"
+  },
+  "blocked": "Las notificaciones están desactivadas para Charles en tu teléfono. Igual verás todo en Avisos.",
+  "openSettings": "Abrir ajustes"
+}

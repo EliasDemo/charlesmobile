@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { PushPermissionNotice } from '@/features/notifications';
 import { useTranslation } from '@/shared/i18n';
 import { spacing } from '@/shared/theme';
 import { Notice, QueryView, Screen, SegmentedControl, SwitchRow, Text } from '@/shared/ui';
@@ -10,6 +11,7 @@ export function PreferencesScreen() {
     usePreferences();
   return (
     <Screen>
+      <PushPermissionNotice />
       <SegmentedControl
         label={t('preferences.theme')}
         value={themePreference}

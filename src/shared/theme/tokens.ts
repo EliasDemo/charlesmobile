@@ -171,4 +171,6 @@ export const sizes = {
   mapPreview: 320,
   illustration: 120,
   welcomeImage: 320,
+  /** Unread counter on the notifications bell. */
+  badge: 18,
 } as const;

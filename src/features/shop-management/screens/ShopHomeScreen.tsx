@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { spacing } from '@/shared/theme';
@@ -12,6 +13,7 @@ import {
   StatusPill,
   Text,
   type IconName,
+  ScreenTitle,
 } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
 import { useShopHome } from '../hooks/useShopHome';
@@ -21,6 +23,8 @@ export type ShopSection =
   'review' | 'details' | 'status' | 'services' | 'barbers' | 'members' | 'hours' | 'blocks';
 
 export interface ShopHomeScreenProps {
+  /** Action on the right of the title (the notifications bell, given by the route). */
+  headerRight?: ReactNode;
   onCreate: () => void;
   onInvitations: () => void;
   onOpen: (shopId: string, section: ShopSection) => void;
@@ -42,12 +46,18 @@ const STATUS_STYLE: Record<
 
 const SECTIONS: ShopSection[] = ['details', 'status', 'services', 'barbers', 'members', 'hours', 'blocks'];
 
-export function ShopHomeScreen({ onCreate, onInvitations, onOpen, onOpenAsBarber }: ShopHomeScreenProps) {
+export function ShopHomeScreen({
+  onCreate,
+  onInvitations,
+  onOpen,
+  onOpenAsBarber,
+  headerRight,
+}: ShopHomeScreenProps) {
   const { t } = useTranslation('shop');
   const home = useShopHome();
   return (
     <Screen edges={['top', 'left', 'right']}>
-      <Text variant="title">{t('home.title')}</Text>
+      <ScreenTitle title={t('home.title')} right={headerRight} />
       <QueryView query={home.mine} skeletonCount={2}>
         {() => (
           <View style={styles.content}>

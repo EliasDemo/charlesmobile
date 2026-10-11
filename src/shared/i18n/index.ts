@@ -11,11 +11,25 @@ import profile from './locales/es/profile.json';
 import search from './locales/es/search.json';
 import shop from './locales/es/shop.json';
 import agenda from './locales/es/agenda.json';
+import notifications from './locales/es/notifications.json';
 import type devTexts from './locales/es/dev.json';
 
 export const defaultNS = 'common';
 export const resources = {
-  es: { common, errors, auth, profile, search, barbershop, favorites, booking, onboarding, shop, agenda },
+  es: {
+    common,
+    errors,
+    auth,
+    profile,
+    search,
+    barbershop,
+    favorites,
+    booking,
+    onboarding,
+    shop,
+    agenda,
+    notifications,
+  },
 } as const;
 
 // Development-only texts: required inside a __DEV__ branch so release bundles do not contain them.

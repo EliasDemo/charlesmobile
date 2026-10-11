@@ -45,7 +45,8 @@
     "book": "Reservar",
     "summary": "Resumen",
     "booking": "Tu reserva",
-    "deleteAccount": "Eliminar mi cuenta"
+    "deleteAccount": "Eliminar mi cuenta",
+    "notifications": "Avisos"
   },
   "placeholder": {
     "comingSoon": "Disponible en una próxima versión."

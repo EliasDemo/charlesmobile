@@ -20,6 +20,7 @@ export {
   type EmptyStateProps,
   type ErrorStateProps,
 } from './StateViews';
+export { ScreenTitle } from './ScreenTitle';
 export { Text, type TextProps } from './Text';
 export { TextField, type TextFieldProps } from './TextField';
 export { Checkbox, type CheckboxProps } from './Checkbox';

@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { PushPermissionPrompt } from '@/features/notifications';
 import { useTranslation } from '@/shared/i18n';
 import { formatDuration, formatLongDate, formatMinutes, formatMoney, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
@@ -92,6 +93,7 @@ export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop }: Boo
             {booking.status === 'CONFIRMED' ? (
               <Notice tone="success" message={t('detail.confirmedTitle')} />
             ) : null}
+            <PushPermissionPrompt when={booking.status === 'CONFIRMED'} />
             {booking.status === 'EXPIRED' ? (
               <Notice tone="warning" title={t('detail.expiredTitle')} message={t('detail.expiredMessage')}>
                 <Button label={t('detail.bookAgain')} onPress={() => onBookAgain(booking.barbershop.id)} />

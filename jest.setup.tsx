@@ -32,3 +32,15 @@ jest.mock('react-native-maps', () => {
 
 // expo-crypto's native randomUUID is not available in Jest: use Node's.
 jest.mock('expo-crypto', () => ({ randomUUID: () => require('node:crypto').randomUUID() }));
+
+// expo-notifications needs the native module: by default, never asked and no token.
+jest.mock('expo-notifications', () => ({
+  PermissionStatus: { GRANTED: 'granted', UNDETERMINED: 'undetermined', DENIED: 'denied' },
+  getPermissionsAsync: jest.fn(async () => ({ status: 'undetermined', granted: false, canAskAgain: true })),
+  requestPermissionsAsync: jest.fn(async () => ({ status: 'denied', granted: false, canAskAgain: false })),
+  getExpoPushTokenAsync: jest.fn(async () => {
+    throw new Error('no push in tests');
+  }),
+  getLastNotificationResponseAsync: jest.fn(async () => null),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+}));
