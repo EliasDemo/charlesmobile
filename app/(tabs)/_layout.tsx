@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs, usePathname } from 'expo-router';
 import type { ColorValue } from 'react-native';
 import { useEffectiveMode } from '@/features/shop-management';
 import { useTranslation } from '@/shared/i18n';
@@ -19,6 +19,11 @@ export default function TabsLayout() {
   const shopMode = useEffectiveMode() === 'shop';
   const client = shopMode ? null : undefined;
   const shop = shopMode ? undefined : null;
+  // A hidden tab can still be the current one (the app opens on Explorar, or the mode changed):
+  // send each mode to its own first tab.
+  const pathname = usePathname();
+  if (shopMode && (pathname === '/' || pathname === '/bookings')) return <Redirect href="/shop" />;
+  if (!shopMode && (pathname === '/shop' || pathname === '/agenda')) return <Redirect href="/" />;
   return (
     <Tabs
       screenOptions={{
