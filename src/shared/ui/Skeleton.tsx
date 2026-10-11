@@ -1,29 +1,12 @@
 import { useEffect, useState } from 'react';
-import { AccessibilityInfo, Animated, StyleSheet, View, type DimensionValue } from 'react-native';
+import { Animated, Easing, StyleSheet, View, type DimensionValue } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
+import { useReduceMotion } from './motion';
 
-const PULSE_MS = 800;
-const PULSE_MIN_OPACITY = 0.4;
+const SHIMMER_MS = 1200;
 
-/** Respects the system "reduce motion" setting: a still placeholder instead of a pulse. */
-export function useReduceMotion() {
-  const [reduce, setReduce] = useState(false);
-  useEffect(() => {
-    let mounted = true;
-    void AccessibilityInfo.isReduceMotionEnabled().then((value) => {
-      if (mounted) setReduce(value);
-    });
-    const subscription = AccessibilityInfo.addEventListener('reduceMotionChanged', setReduce);
-    return () => {
-      mounted = false;
-      subscription.remove();
-    };
-  }, []);
-  return reduce;
-}
-
-/** Block with a soft pulse, shaped like the content that is loading. */
+/** Block with a light band sweeping across (shimmer), shaped like the content that is loading. */
 export function Skeleton({
   width = '100%',
   height = spacing.lg,
@@ -33,29 +16,53 @@ export function Skeleton({
 }) {
   const theme = useTheme();
   const reduceMotion = useReduceMotion();
-  const [opacity] = useState(() => new Animated.Value(1));
+  const [progress] = useState(() => new Animated.Value(0));
+  const [boxWidth, setBoxWidth] = useState(0);
   useEffect(() => {
     if (reduceMotion) return;
     const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(opacity, { toValue: PULSE_MIN_OPACITY, duration: PULSE_MS, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 1, duration: PULSE_MS, useNativeDriver: true }),
-      ]),
+      Animated.timing(progress, {
+        toValue: 1,
+        duration: SHIMMER_MS,
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: true,
+      }),
     );
     loop.start();
     return () => loop.stop();
-  }, [opacity, reduceMotion]);
+  }, [progress, reduceMotion]);
   return (
-    <Animated.View
+    <View
       testID={reduceMotion ? 'skeleton-still' : 'skeleton'}
+      onLayout={(e) => setBoxWidth(e.nativeEvent.layout.width)}
       style={{
         width,
         height,
         borderRadius: theme.radius.sm,
         backgroundColor: theme.colors.disabledBackground,
-        opacity: reduceMotion ? 1 : opacity,
+        overflow: 'hidden',
       }}
-    />
+    >
+      {reduceMotion || boxWidth === 0 ? null : (
+        <Animated.View
+          style={[
+            styles.band,
+            {
+              width: boxWidth / 2,
+              backgroundColor: theme.colors.surface,
+              transform: [
+                {
+                  translateX: progress.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-boxWidth / 2, boxWidth],
+                  }),
+                },
+              ],
+            },
+          ]}
+        />
+      )}
+    </View>
   );
 }
 
@@ -105,4 +112,5 @@ const styles = StyleSheet.create({
   card: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderWidth: sizes.borderWidth },
   lines: { flex: 1, gap: spacing.sm, justifyContent: 'center' },
   list: { gap: spacing.md },
+  band: { position: 'absolute', top: 0, bottom: 0, opacity: 0.5 },
 });

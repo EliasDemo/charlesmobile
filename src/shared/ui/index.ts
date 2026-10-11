@@ -44,7 +44,18 @@ export { SearchField, type SearchFieldProps } from './SearchField';
 export { GENERIC_CATEGORY_ICON, categoryIcon } from './categoryIcons';
 export { IconTile, InfoCard, type InfoCardProps, type InfoItem } from './InfoCard';
 export { Illustration, type IllustrationProps } from './Illustration';
-export { Skeleton, SkeletonCard, SkeletonList, useReduceMotion } from './Skeleton';
+export { Skeleton, SkeletonCard, SkeletonList } from './Skeleton';
+export {
+  AnimatedNumber,
+  FadeIn,
+  SuccessCheck,
+  useFadeOnChange,
+  usePopWhen,
+  usePressScale,
+  useReduceMotion,
+  syncReduceMotion,
+  useWiggle,
+} from './motion';
 export { StatusPill, type StatusPillProps } from './StatusPill';
 export { BrandImage, type BrandImageProps } from './BrandImage';
 export { TimeStepper, toMinutes, toTime, type TimeStepperProps } from './TimeStepper';

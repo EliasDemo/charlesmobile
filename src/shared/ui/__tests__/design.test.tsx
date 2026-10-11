@@ -10,6 +10,7 @@ import {
   SkeletonList,
   StatusPill,
   categoryIcon,
+  syncReduceMotion,
 } from '..';
 
 describe('StatusPill', () => {
@@ -75,6 +76,7 @@ describe('skeletons', () => {
 
   it('stay still when the system asks to reduce motion', async () => {
     jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
+    await act(() => syncReduceMotion());
     await render(<SkeletonList count={1} />);
     await act(async () => undefined);
     expect(screen.getAllByTestId('skeleton-still').length).toBeGreaterThan(0);

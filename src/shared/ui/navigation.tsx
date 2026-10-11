@@ -10,7 +10,7 @@ import * as SystemUI from 'expo-system-ui';
 import { useEffect, useMemo, type ReactNode } from 'react';
 import { Platform } from 'react-native';
 import { useTheme, type Theme } from '@/shared/theme';
-import { useReduceMotion } from './Skeleton';
+import { useReduceMotion } from './motion';
 
 export function buildNavigationTheme(theme: Theme): NavigationTheme {
   const base = theme.scheme === 'dark' ? DarkTheme : DefaultTheme;

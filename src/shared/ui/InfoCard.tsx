@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { sizes, spacing, useTheme, type StatusTone } from '@/shared/theme';
 import { Icon, type IconName } from './Icon';
+import { usePressScale } from './motion';
 import { TONE_COLORS, useSurfaceStyle } from './surface';
 import { Text } from './Text';
 
@@ -75,6 +76,7 @@ export function InfoCard({
     </>
   );
   const surface = useSurfaceStyle();
+  const press = usePressScale();
   if (!onPress) {
     return (
       <View style={[styles.card, surface]} testID={testID}>
@@ -83,18 +85,21 @@ export function InfoCard({
     );
   }
   return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      testID={testID}
-      style={({ pressed }) => [
-        styles.card,
-        surface,
-        pressed ? { backgroundColor: theme.colors.primarySoft } : null,
-      ]}
-    >
-      {content}
-    </Pressable>
+    <Animated.View style={press.style}>
+      <Pressable
+        accessibilityRole="button"
+        onPress={onPress}
+        testID={testID}
+        {...press.handlers}
+        style={({ pressed }) => [
+          styles.card,
+          surface,
+          pressed ? { backgroundColor: theme.colors.primarySoft } : null,
+        ]}
+      >
+        {content}
+      </Pressable>
+    </Animated.View>
   );
 }
 

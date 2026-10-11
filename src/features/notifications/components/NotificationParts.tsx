@@ -1,7 +1,7 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
-import { Button, ConfirmDialog, Icon, Notice, Text } from '@/shared/ui';
+import { Button, ConfirmDialog, Icon, Notice, Text, useWiggle } from '@/shared/ui';
 import { usePushPrompt, useUnreadCount } from '../hooks/useNotifications';
 
 /** Bell with the unread count, for the top right of Explorar and Mi barbería. Only with a session. */
@@ -9,6 +9,7 @@ export function NotificationBell({ onPress }: { onPress: () => void }) {
   const { t } = useTranslation('notifications');
   const theme = useTheme();
   const { authenticated, count } = useUnreadCount();
+  const wiggle = useWiggle(count);
   if (!authenticated) return null;
   const label = count > 0 ? t('bellUnread', { count }) : t('bell');
   return (
@@ -20,7 +21,9 @@ export function NotificationBell({ onPress }: { onPress: () => void }) {
       style={styles.bell}
       testID="notification-bell"
     >
-      <Icon name="notifications-outline" size={sizes.icon} color={theme.colors.textPrimary} />
+      <Animated.View style={wiggle}>
+        <Icon name="notifications-outline" size={sizes.icon} color={theme.colors.textPrimary} />
+      </Animated.View>
       {count > 0 ? (
         <View
           style={[styles.badge, { backgroundColor: theme.colors.primary, borderRadius: theme.radius.pill }]}

@@ -10,6 +10,7 @@ import {
   EmptyState,
   Notice,
   QueryView,
+  FadeIn,
   Screen,
   ScreenTitle,
   SegmentedControl,
@@ -140,33 +141,35 @@ export function AgendaScreen({ headerRight }: { headerRight?: ReactNode }) {
                       <Notice tone="warning" message={t('pending', { count: agenda.pendingAttention })} />
                     ) : null}
                     <View>
-                      {timeline(agenda).map((row, index, rows) =>
-                        row.kind === 'item' ? (
-                          <AgendaItemCard
-                            key={row.item.bookingId}
-                            item={row.item}
-                            timeZone={agenda.timezone}
-                            showBarber={a.view === 'shop' && a.barberId === null}
-                            attending={a.attendingId === row.item.bookingId}
-                            onAttended={() => a.markAttended(row.item)}
-                            onNoShow={() => a.askNoShow(row.item)}
-                            onCorrect={() => a.askCorrection(row.item)}
-                            onCancel={() => a.askCancel(row.item)}
-                            last={index === rows.length - 1}
-                          />
-                        ) : (
-                          <AgendaBlockCard
-                            key={row.block.id}
-                            block={row.block}
-                            timeZone={agenda.timezone}
-                            last={index === rows.length - 1}
-                            barberName={
-                              a.barbers.find((barber) => barber.id === row.block.barberId)?.displayName ??
-                              null
-                            }
-                          />
-                        ),
-                      )}
+                      {timeline(agenda).map((row, index, rows) => (
+                        <FadeIn key={row.kind === 'item' ? row.item.bookingId : row.block.id} index={index}>
+                          {row.kind === 'item' ? (
+                            <AgendaItemCard
+                              key={row.item.bookingId}
+                              item={row.item}
+                              timeZone={agenda.timezone}
+                              showBarber={a.view === 'shop' && a.barberId === null}
+                              attending={a.attendingId === row.item.bookingId}
+                              onAttended={() => a.markAttended(row.item)}
+                              onNoShow={() => a.askNoShow(row.item)}
+                              onCorrect={() => a.askCorrection(row.item)}
+                              onCancel={() => a.askCancel(row.item)}
+                              last={index === rows.length - 1}
+                            />
+                          ) : (
+                            <AgendaBlockCard
+                              key={row.block.id}
+                              block={row.block}
+                              timeZone={agenda.timezone}
+                              last={index === rows.length - 1}
+                              barberName={
+                                a.barbers.find((barber) => barber.id === row.block.barberId)?.displayName ??
+                                null
+                              }
+                            />
+                          )}
+                        </FadeIn>
+                      ))}
                     </View>
                   </View>
                 )}

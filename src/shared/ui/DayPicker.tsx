@@ -1,7 +1,8 @@
 import { useRef } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Animated, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
+import { usePressScale } from './motion';
 import { Text } from './Text';
 
 export interface DayOption {
@@ -31,7 +32,6 @@ export interface DayPickerProps {
  */
 export function DayPicker({ days, selected, onSelect, label, today, required = false }: DayPickerProps) {
   const { t } = useTranslation();
-  const theme = useTheme();
   const shortNames = t('daysShort', { returnObjects: true }) as readonly string[];
   // With past days first, open showing the selected day (once), not the start of the list.
   const scroll = useRef<ScrollView>(null);
@@ -74,42 +74,72 @@ export function DayPicker({ days, selected, onSelect, label, today, required = f
                 : undefined
             }
           >
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={name}
-              accessibilityState={{ selected: isSelected }}
+            <DayTile
+              name={name}
+              top={relativeName ?? weekday}
+              dayOfMonth={day.dayOfMonth}
+              selected={isSelected}
               onPress={() => onSelect(isSelected && !required ? null : day.date)}
-              style={({ pressed }) => [
-                styles.day,
-                {
-                  borderRadius: theme.radius.md,
-                  backgroundColor: isSelected
-                    ? theme.colors.primary
-                    : pressed
-                      ? theme.colors.primarySoft
-                      : theme.colors.surface,
-                  borderColor: isSelected ? theme.colors.primary : theme.colors.border,
-                },
-              ]}
-            >
-              <Text
-                variant="caption"
-                style={{ color: isSelected ? theme.colors.onPrimary : theme.colors.textSecondary }}
-                numberOfLines={1}
-              >
-                {relativeName ?? weekday}
-              </Text>
-              <Text
-                variant="subtitle"
-                style={{ color: isSelected ? theme.colors.onPrimary : theme.colors.textPrimary }}
-              >
-                {String(day.dayOfMonth)}
-              </Text>
-            </Pressable>
+            />
           </View>
         );
       })}
     </ScrollView>
+  );
+}
+
+/** One day: weekday (or Hoy/Mañana/Ayer) on top, the number big; bounces while pressed. */
+function DayTile({
+  name,
+  top,
+  dayOfMonth,
+  selected,
+  onPress,
+}: {
+  name: string;
+  top: string;
+  dayOfMonth: number;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  const theme = useTheme();
+  const press = usePressScale();
+  return (
+    <Animated.View style={press.style}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={name}
+        accessibilityState={{ selected }}
+        onPress={onPress}
+        {...press.handlers}
+        style={({ pressed }) => [
+          styles.day,
+          {
+            borderRadius: theme.radius.md,
+            backgroundColor: selected
+              ? theme.colors.primary
+              : pressed
+                ? theme.colors.primarySoft
+                : theme.colors.surface,
+            borderColor: selected ? theme.colors.primary : theme.colors.border,
+          },
+        ]}
+      >
+        <Text
+          variant="caption"
+          style={{ color: selected ? theme.colors.onPrimary : theme.colors.textSecondary }}
+          numberOfLines={1}
+        >
+          {top}
+        </Text>
+        <Text
+          variant="subtitle"
+          style={{ color: selected ? theme.colors.onPrimary : theme.colors.textPrimary }}
+        >
+          {String(dayOfMonth)}
+        </Text>
+      </Pressable>
+    </Animated.View>
   );
 }
 

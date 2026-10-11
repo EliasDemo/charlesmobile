@@ -3,7 +3,7 @@ import { PushPermissionPrompt } from '@/features/notifications';
 import { useTranslation } from '@/shared/i18n';
 import { formatDuration, formatLongDate, formatMinutes, formatMoney, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
-import { Button, Card, ConfirmDialog, Notice, QueryView, Screen, Text } from '@/shared/ui';
+import { Button, Card, ConfirmDialog, Notice, QueryView, Screen, Text, SuccessCheck } from '@/shared/ui';
 import type { Booking, CancellationPreview } from '../api/bookingApi';
 import { DevBookingId, PriceBreakdown, StatusBadge } from '../components/BookingParts';
 import { useBooking } from '../hooks/useBooking';
@@ -90,6 +90,7 @@ export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop }: Boo
             ) : null}
 
             {booking.status === 'PENDING_PAYMENT' ? <DevBookingId bookingId={booking.id} /> : null}
+            {booking.status === 'CONFIRMED' ? <SuccessCheck /> : null}
             {booking.status === 'CONFIRMED' ? (
               <Notice tone="success" message={t('detail.confirmedTitle')} />
             ) : null}

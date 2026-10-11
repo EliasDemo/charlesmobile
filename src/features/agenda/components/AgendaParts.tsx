@@ -3,6 +3,7 @@ import { useTranslation } from '@/shared/i18n';
 import { formatTime } from '@/shared/lib';
 import { sizes, spacing, useTheme, type StatusTone } from '@/shared/theme';
 import {
+  AnimatedNumber,
   Button,
   Icon,
   IconTile,
@@ -53,7 +54,7 @@ export function StatTile({
   return (
     <View style={[styles.stat, surface]} accessible accessibilityLabel={`${value} ${label}`}>
       <IconTile icon={icon} tone={tone} />
-      <Text variant="display">{String(value)}</Text>
+      <AnimatedNumber variant="display" value={value} />
       <Text variant="caption" color="textSecondary" numberOfLines={1}>
         {label}
       </Text>

@@ -267,6 +267,8 @@ Confirmada por el usuario en su teléfono.
 - **Agenda:** fecha larga del día, resumen en tarjetas (citas, por marcar, atendidas), línea de tiempo con hora a la izquierda y punto de color por estado; bloqueos con borde punteado; campana también en Agenda.
 - **Mi barbería:** tarjeta de cabecera (inicial, nombre, rol, tipo y estado) y secciones en cuadrícula de mosaicos con ícono y descripción (`ActionTile`/`TileGrid`); "Como barbero" también en mosaicos.
 - Sin cambios nativos. La vibración al confirmar (`expo-haptics`) quedó fuera.
+- **Efectos (grupo A, `shared/ui/motion.tsx`, solo `Animated` de React Native):** rebote al tocar (botones, chips, mosaicos, tarjetas, días), aparición escalonada (listas, agenda, mosaicos), mensaje breve que sube con check animado, números que cuentan en el resumen de la agenda, check al confirmar una reserva, brillo que recorre las tarjetas de carga, campana que se mueve con avisos nuevos, ícono de pestaña que rebota y fundido al cambiar de modo. Todo se apaga con "Reducir movimiento" (un solo detector: `useReduceMotion`, `syncReduceMotion`).
+- **Corrección:** al abrir o recargar en modo barbería, la app iba a Explorar (ruta inicial oculta). Ahora cada modo va a su primera pestaña.
 
 ## M8 — Notificaciones (código terminado; falta la prueba del usuario)
 
@@ -324,6 +326,7 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 | Clave de Google Maps (variable de EAS `GOOGLE_MAPS_ANDROID_API_KEY`, leída por el plugin de `react-native-maps` en `app.config.ts`) | Mapa en Android. Después de instalar, poner `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true` en `.env` | La vista de mapa muestra un aviso; la lista funciona completa |
 | `environment` por perfil en `eas.json` (`development`, `preview`, `production`) | EAS entrega a cada compilación las variables de su entorno (la clave de Maps) | Sin efecto |
 | **Firebase (FCM) para push en Android** (aprobado para la compilación final): proyecto de Firebase del usuario, `google-services.json` como archivo de EAS (no en el repositorio) y `android.googleServicesFile` en `app.config.ts`; clave de FCM V1 subida a EAS | El teléfono obtiene su token de Expo y recibe push | `getPushToken` devuelve null: no se registra el dispositivo; la bandeja y la campana funcionan |
+| **Efectos del grupo B** (pendientes, para decidir en la compilación final): vibración leve (`expo-haptics`), deslizar citas en la agenda (`react-native-reanimated` + `react-native-gesture-handler`), animación de celebración (`lottie-react-native`), fondo desenfocado en hojas (`expo-blur`) | Esos efectos | Sin efecto: la app usa los del grupo A |
 
 ## Cuándo hace falta una compilación nueva (EAS)
 

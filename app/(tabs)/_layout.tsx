@@ -1,13 +1,32 @@
 import { Redirect, Tabs, usePathname } from 'expo-router';
-import type { ColorValue } from 'react-native';
+import { Animated, StyleSheet, type ColorValue } from 'react-native';
 import { useEffectiveMode } from '@/features/shop-management';
 import { useTranslation } from '@/shared/i18n';
 import { fontFamily, useTheme } from '@/shared/theme';
-import { Icon, useTabAnimation, type IconName } from '@/shared/ui';
+import { Icon, useFadeOnChange, usePopWhen, useTabAnimation, type IconName } from '@/shared/ui';
+
+function PoppingIcon({
+  name,
+  color,
+  size,
+  focused,
+}: {
+  name: IconName;
+  color: ColorValue;
+  size: number;
+  focused: boolean;
+}) {
+  const pop = usePopWhen(focused);
+  return (
+    <Animated.View style={pop}>
+      <Icon name={name} color={color} size={size} />
+    </Animated.View>
+  );
+}
 
 function tabIcon(name: IconName) {
-  return function TabIcon({ color, size }: { color: ColorValue; size: number }) {
-    return <Icon name={name} color={color} size={size} />;
+  return function TabIcon({ color, size, focused }: { color: ColorValue; size: number; focused: boolean }) {
+    return <PoppingIcon name={name} color={color} size={size} focused={focused} />;
   };
 }
 
@@ -22,36 +41,41 @@ export default function TabsLayout() {
   // A hidden tab can still be the current one (the app opens on Explorar, or the mode changed):
   // send each mode to its own first tab.
   const pathname = usePathname();
+  const fade = useFadeOnChange(shopMode ? 'shop' : 'client');
   if (shopMode && (pathname === '/' || pathname === '/bookings')) return <Redirect href="/shop" />;
   if (!shopMode && (pathname === '/shop' || pathname === '/agenda')) return <Redirect href="/" />;
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        animation,
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.textSecondary,
-        tabBarStyle: { backgroundColor: theme.colors.surface, borderTopColor: theme.colors.border },
-        tabBarLabelStyle: { fontFamily: fontFamily.medium },
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{ href: client, title: t('nav.explore'), tabBarIcon: tabIcon('search') }}
-      />
-      <Tabs.Screen
-        name="shop"
-        options={{ href: shop, title: t('nav.shop'), tabBarIcon: tabIcon('storefront') }}
-      />
-      <Tabs.Screen
-        name="agenda"
-        options={{ href: shop, title: t('nav.agenda'), tabBarIcon: tabIcon('today') }}
-      />
-      <Tabs.Screen
-        name="bookings"
-        options={{ href: client, title: t('nav.bookings'), tabBarIcon: tabIcon('calendar') }}
-      />
-      <Tabs.Screen name="profile" options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person') }} />
-    </Tabs>
+    <Animated.View style={[styles.fill, fade]}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          animation,
+          tabBarActiveTintColor: theme.colors.primary,
+          tabBarInactiveTintColor: theme.colors.textSecondary,
+          tabBarStyle: { backgroundColor: theme.colors.surface, borderTopColor: theme.colors.border },
+          tabBarLabelStyle: { fontFamily: fontFamily.medium },
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{ href: client, title: t('nav.explore'), tabBarIcon: tabIcon('search') }}
+        />
+        <Tabs.Screen
+          name="shop"
+          options={{ href: shop, title: t('nav.shop'), tabBarIcon: tabIcon('storefront') }}
+        />
+        <Tabs.Screen
+          name="agenda"
+          options={{ href: shop, title: t('nav.agenda'), tabBarIcon: tabIcon('today') }}
+        />
+        <Tabs.Screen
+          name="bookings"
+          options={{ href: client, title: t('nav.bookings'), tabBarIcon: tabIcon('calendar') }}
+        />
+        <Tabs.Screen name="profile" options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person') }} />
+      </Tabs>
+    </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({ fill: { flex: 1 } });

@@ -1,6 +1,7 @@
-import { ActivityIndicator, Pressable, StyleSheet, View, type PressableProps } from 'react-native';
+import { ActivityIndicator, Animated, Pressable, StyleSheet, View, type PressableProps } from 'react-native';
 import { sizes, spacing, touchTarget, useTheme, type Theme } from '@/shared/theme';
 import { Icon, type IconName } from './Icon';
+import { usePressScale } from './motion';
 import { Text, type TextProps } from './Text';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
@@ -75,41 +76,49 @@ export function Button({
 }: ButtonProps) {
   const theme = useTheme();
   const isDisabled = Boolean(disabled) && !loading;
+  const press = usePressScale();
   const stateFor = (pressed: boolean): ButtonState =>
     isDisabled ? 'disabled' : pressed && !loading ? 'pressed' : 'normal';
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ disabled: isDisabled || loading, busy: loading }}
-      disabled={isDisabled || loading}
-      style={({ pressed }) => {
-        const colors = buttonColors(theme, variant, stateFor(pressed));
-        return [
-          styles.base,
-          { backgroundColor: colors.background, borderColor: colors.border, borderRadius: theme.radius.pill },
-          fullWidth && styles.fullWidth,
-        ];
-      }}
-      {...props}
-    >
-      {({ pressed }) => {
-        const colors = buttonColors(theme, variant, stateFor(pressed));
-        const textColor = theme.colors[colors.text];
-        return (
-          <View style={styles.content}>
-            {loading ? (
-              <ActivityIndicator color={textColor} testID="button-spinner" />
-            ) : icon ? (
-              <Icon name={icon} size={sizes.icon} color={textColor} />
-            ) : null}
-            <Text variant="bodyStrong" style={{ color: textColor }}>
-              {label}
-            </Text>
-          </View>
-        );
-      }}
-    </Pressable>
+    <Animated.View style={[press.style, fullWidth && styles.fullWidth]}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={label}
+        accessibilityState={{ disabled: isDisabled || loading, busy: loading }}
+        disabled={isDisabled || loading}
+        style={({ pressed }) => {
+          const colors = buttonColors(theme, variant, stateFor(pressed));
+          return [
+            styles.base,
+            {
+              backgroundColor: colors.background,
+              borderColor: colors.border,
+              borderRadius: theme.radius.pill,
+            },
+            fullWidth && styles.fullWidth,
+          ];
+        }}
+        {...press.handlers}
+        {...props}
+      >
+        {({ pressed }) => {
+          const colors = buttonColors(theme, variant, stateFor(pressed));
+          const textColor = theme.colors[colors.text];
+          return (
+            <View style={styles.content}>
+              {loading ? (
+                <ActivityIndicator color={textColor} testID="button-spinner" />
+              ) : icon ? (
+                <Icon name={icon} size={sizes.icon} color={textColor} />
+              ) : null}
+              <Text variant="bodyStrong" style={{ color: textColor }}>
+                {label}
+              </Text>
+            </View>
+          );
+        }}
+      </Pressable>
+    </Animated.View>
   );
 }
 

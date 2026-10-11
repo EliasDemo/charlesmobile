@@ -11,6 +11,7 @@ import { translateError } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import { Button } from './Button';
+import { FadeIn } from './motion';
 import type { IconName } from './Icon';
 import { SkeletonList } from './Skeleton';
 import { EmptyState, ErrorState } from './StateViews';
@@ -102,7 +103,7 @@ export function InfiniteList<T>({
   return (
     <FlatList
       data={items}
-      renderItem={renderItem}
+      renderItem={(info) => <FadeIn index={info.index}>{renderItem(info)}</FadeIn>}
       keyExtractor={keyExtractor}
       testID="infinite-list"
       ListHeaderComponent={header}

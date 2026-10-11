@@ -4,6 +4,7 @@ import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import {
   ActionTile,
+  FadeIn,
   Button,
   Card,
   Chip,
@@ -135,15 +136,16 @@ export function ShopHomeScreen({
                       {(REVIEW_STATES.includes(shop.status)
                         ? (['review', ...SECTIONS] as ShopSection[])
                         : SECTIONS
-                      ).map((section) => (
-                        <ActionTile
-                          key={section}
-                          icon={SECTION_ICON[section]}
-                          label={t(`home.sections.${section}`)}
-                          hint={t(`home.sectionHints.${section}`)}
-                          tone={section === 'review' ? 'pending' : undefined}
-                          onPress={() => onOpen(shop.id, section)}
-                        />
+                      ).map((section, index) => (
+                        <FadeIn key={section} index={index} style={styles.cell}>
+                          <ActionTile
+                            icon={SECTION_ICON[section]}
+                            label={t(`home.sections.${section}`)}
+                            hint={t(`home.sectionHints.${section}`)}
+                            tone={section === 'review' ? 'pending' : undefined}
+                            onPress={() => onOpen(shop.id, section)}
+                          />
+                        </FadeIn>
                       ))}
                     </TileGrid>
                   </View>
@@ -211,6 +213,7 @@ const styles = StyleSheet.create({
   header: { gap: spacing.md },
   headerTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   flex: { flex: 1 },
+  cell: { flexGrow: 1, flexBasis: '40%' },
   section: { gap: spacing.md },
   sectionTitle: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   actions: { gap: spacing.sm },
