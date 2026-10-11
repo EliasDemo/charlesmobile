@@ -8,7 +8,7 @@ import {
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack, router, usePathname, type ErrorBoundaryProps } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSessionEndedRedirect } from '@/features/auth';
 import { notificationTarget, useDeviceRegistration, usePushTaps } from '@/features/notifications';
@@ -19,6 +19,7 @@ import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { ThemeProvider, loadThemePreference } from '@/shared/theme';
 import {
+  BrandSplash,
   ErrorFallback,
   NavigationThemeRoot,
   OfflineBanner,
@@ -106,9 +107,12 @@ export default function RootLayout() {
 
   // Without the fonts the app still works with the system font.
   const ready = (fontsLoaded || fontError !== null) && sessionReady;
+  // The native splash hands over at once to the animated one, which stays until the app is ready.
   useEffect(() => {
-    if (ready || env.configError) void SplashScreen.hideAsync();
-  }, [ready]);
+    void SplashScreen.hideAsync();
+  }, []);
+  const [splashDone, setSplashDone] = useState(false);
+  const finishSplash = useCallback(() => setSplashDone(true), []);
 
   if (env.configError) {
     return (
@@ -118,16 +122,17 @@ export default function RootLayout() {
       </ThemeProvider>
     );
   }
-  if (!ready) return null;
-
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <NavigationThemeRoot>
-          <QueryClientProvider client={queryClient}>
-            <AppStack />
-          </QueryClientProvider>
-        </NavigationThemeRoot>
+        {ready ? (
+          <NavigationThemeRoot>
+            <QueryClientProvider client={queryClient}>
+              <AppStack />
+            </QueryClientProvider>
+          </NavigationThemeRoot>
+        ) : null}
+        {splashDone ? null : <BrandSplash ready={ready} onDone={finishSplash} />}
       </ThemeProvider>
     </SafeAreaProvider>
   );

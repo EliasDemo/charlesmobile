@@ -21,7 +21,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
   // Root background before React draws (avoids a white flash); matches the dark background token.
-  backgroundColor: '#141210',
+  backgroundColor: '#0D1015',
   ios: {
     supportsTablet: false,
     bundleIdentifier: isDevelopment ? `${BASE_ID}.dev` : BASE_ID,
@@ -36,7 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     package: isDevelopment ? `${BASE_ID}.dev` : BASE_ID,
     adaptiveIcon: {
-      backgroundColor: '#141210',
+      backgroundColor: '#0D1015',
       foregroundImage: './assets/android-icon-foreground.png',
       backgroundImage: './assets/android-icon-background.png',
       monochromeImage: './assets/android-icon-monochrome.png',
@@ -51,8 +51,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       {
         image: './assets/splash-icon.png',
         imageWidth: 160,
-        backgroundColor: '#F7F5F2',
-        dark: { backgroundColor: '#141210' },
+        backgroundColor: '#F4F6F8',
+        dark: { backgroundColor: '#0D1015' },
       },
     ],
     'expo-font',

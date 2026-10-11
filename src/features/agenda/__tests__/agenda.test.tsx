@@ -4,6 +4,8 @@ import { renderWithProviders, resetAppState, signIn } from '@test/render';
 import type { components } from '@/shared/api';
 import texts from '@/shared/i18n/locales/es/agenda.json';
 import { AgendaScreen } from '..';
+import { AccessibilityInfo } from 'react-native';
+import { syncReduceMotion } from '@/shared/ui';
 
 type S = components['schemas'];
 
@@ -51,6 +53,12 @@ const managerRoutes = {
   },
   'GET /api/v1/me/barbershops/{id}/barbers': { body: { items: [], nextCursor: null } },
 } as const;
+
+// Counting numbers would keep animating after each test: show them still here.
+beforeAll(async () => {
+  jest.spyOn(AccessibilityInfo, 'isReduceMotionEnabled').mockResolvedValue(true);
+  await syncReduceMotion();
+});
 
 beforeEach(() => {
   resetAppState();

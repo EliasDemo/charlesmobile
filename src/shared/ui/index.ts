@@ -58,6 +58,7 @@ export {
   useWiggle,
 } from './motion';
 export { StatusPill, type StatusPillProps } from './StatusPill';
+export { BrandSplash } from './BrandSplash';
 export { BrandImage, type BrandImageProps } from './BrandImage';
 export { TimeStepper, toMinutes, toTime, type TimeStepperProps } from './TimeStepper';
 export { NumberStepper, type NumberStepperProps } from './NumberStepper';
