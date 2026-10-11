@@ -13,6 +13,7 @@ export interface ProfileScreenProps {
   onPreferences: () => void;
   onFavorites: () => void;
   onHelp: () => void;
+  onMyReviews: () => void;
   onWelcome: () => void;
   onDeleteAccount: () => void;
   /** Mode the account would switch to; absent when it has no barbershop role. */
@@ -87,6 +88,7 @@ export function ProfileScreen(props: ProfileScreenProps) {
                 {t('sections.settings')}
               </Text>
               <ListRow icon="heart" title={t('favorites')} onPress={props.onFavorites} />
+              <ListRow icon="star" title={t('mine.title', { ns: 'reviews' })} onPress={props.onMyReviews} />
               <ListRow icon="settings" title={t('preferences.title')} onPress={props.onPreferences} />
               <ListRow icon="help-buoy" title={t('title', { ns: 'support' })} onPress={props.onHelp} />
               <ListRow icon="sparkles" title={t('welcomeAgain')} onPress={props.onWelcome} />

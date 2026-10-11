@@ -55,7 +55,10 @@ function AppStack() {
     if (target.kind === 'booking') router.push({ pathname: '/bookings/[id]', params: { id: target.id } });
     else if (target.kind === 'ticket') router.push({ pathname: '/support/[id]', params: { id: target.id } });
     else if (target.kind === 'support') router.push('/support');
-    else if (target.kind === 'shop') {
+    else if (target.kind === 'shopReviews') {
+      useAppMode.getState().setMode('shop');
+      router.push({ pathname: '/shop/[shopId]/reviews', params: { shopId: target.shopId } });
+    } else if (target.kind === 'shop') {
       useAppMode.getState().setMode('shop');
       router.navigate('/shop');
     } else router.push('/notifications');

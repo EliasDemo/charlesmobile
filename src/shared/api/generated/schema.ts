@@ -215,6 +215,40 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/images/{id}/moderation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Fase 14: mantener, retirar o restaurar una foto reportada */
+        post: operations["ImagesAdminController_moderate_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/images/reported": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fase 14: fotos reportadas (por defecto, con reportes abiertos) */
+        get: operations["ImagesAdminController_reported_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/payments/{id}/refunds": {
         parameters: {
             query?: never;
@@ -319,6 +353,41 @@ export type paths = {
         head?: never;
         /** Solo ADMIN: editar o desactivar (nunca borrar) una categoría */
         patch: operations["AdminConfigController_updateCategory_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/service-styles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: estilos, incluidos los inactivos */
+        get: operations["ImagesAdminController_listStyles_v1"];
+        put?: never;
+        /** Solo ADMIN: crear un estilo */
+        post: operations["ImagesAdminController_createStyle_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/service-styles/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar o desactivar (nunca borrar) un estilo */
+        patch: operations["ImagesAdminController_updateStyle_v1"];
         trace?: never;
     };
     "/api/v1/admin/settings": {
@@ -882,6 +951,26 @@ export type paths = {
         patch: operations["BarbersController_update_v1"];
         trace?: never;
     };
+    "/api/v1/barbershops/{id}/barbers/{barberId}/gallery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fase 14: subir una foto a la galería del barbero
+         * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Exige consent=true (consentimiento de la persona fotografiada). Máximo images.gallery_max_per_barber (60) por barbero.
+         */
+        post: operations["ImagesController_uploadGallery_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops/{id}/barbers/{barberId}/invitations": {
         parameters: {
             query?: never;
@@ -894,6 +983,27 @@ export type paths = {
         /** RF-BRB-001: invitar a una cuenta a vincularse con un barbero */
         post: operations["InvitationsController_inviteBarber_v1"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/barbers/{barberId}/photo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Fase 14: subir o reemplazar la foto del barbero (512 px)
+         * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP.
+         */
+        put: operations["ImagesController_setBarberPhoto_v1"];
+        post?: never;
+        /** Fase 14: quitar la foto del barbero */
+        delete: operations["ImagesController_deleteBarberPhoto_v1"];
         options?: never;
         head?: never;
         patch?: never;
@@ -927,6 +1037,23 @@ export type paths = {
         get?: never;
         /** RF-BRB-002: servicios que realiza el barbero */
         put: operations["BarbersController_setServices_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/barbers/{barberId}/specialties": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Fase 14: especialidades del barbero (hasta 5 estilos) */
+        put: operations["ImagesController_setSpecialties_v1"];
         post?: never;
         delete?: never;
         options?: never;
@@ -981,6 +1108,86 @@ export type paths = {
         put: operations["AvailabilityController_putBusinessHours_v1"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/cover": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Fase 14: subir o reemplazar la portada (foto del local; 400 y 1600 px)
+         * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Cumple el requisito PHOTO del envío a revisión.
+         */
+        put: operations["ImagesController_setCover_v1"];
+        post?: never;
+        /** Fase 14: quitar la portada */
+        delete: operations["ImagesController_deleteCover_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/gallery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fase 14: galería pública de la barbería (filtros: barbero y estilo)
+         * @description Destacadas aparte en la primera página. Sin fotos retiradas ni ocultas por reportes. Cada foto trae, si aplica, el servicio para "reservar este estilo".
+         */
+        get: operations["ImagesController_publicGallery_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/gallery/{imageId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Fase 14: borrar una foto de la galería (también el archivo) */
+        delete: operations["ImagesController_deleteGallery_v1"];
+        options?: never;
+        head?: never;
+        /** Fase 14: editar una foto (texto, estilos, servicio, destacar) */
+        patch: operations["ImagesController_updateGallery_v1"];
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/logo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Fase 14: subir o reemplazar el logo (cuadrado de 512 px)
+         * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP.
+         */
+        put: operations["ImagesController_setLogo_v1"];
+        post?: never;
+        /** Fase 14: quitar el logo */
+        delete: operations["ImagesController_deleteLogo_v1"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1420,6 +1627,26 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/gallery/{imageId}/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fase 14: reportar una foto (no es mía, sin consentimiento, inapropiada…)
+         * @description Una vez por persona y foto. Con images.report_hide_threshold (3) reportes abiertos se oculta hasta que soporte la revise.
+         */
+        post: operations["ImagesController_report_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/health": {
         parameters: {
             query?: never;
@@ -1612,6 +1839,46 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/barbershops/{id}/gallery": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Fase 14: galería de gestión (incluye ocultas y reportes abiertos)
+         * @description OWNER y MANAGER ven todas; el barbero, solo la suya.
+         */
+        get: operations["ImagesController_manageGallery_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/barbershops/{id}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * M9: valoraciones de mi barbería (OWNER o MANAGER), también ocultas o en revisión
+         * @description Con el estado de cada una y de su respuesta, y canRespond. El barbero recibe 403.
+         */
+        get: operations["ReviewsController_listManaged_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/me/barbershops/{id}/services": {
         parameters: {
             query?: never;
@@ -1638,6 +1905,26 @@ export type paths = {
         };
         /** RF-RES-004/008: mis reservas (próximas o historial) */
         get: operations["BookingsController_listMine_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/bookings/pending-reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * M9: reservas que puedo valorar ahora (aviso "¿Cómo te fue con tu corte?")
+         * @description Las mismas que tienen canReview = true en BookingDto, las más recientes primero (hasta 20).
+         */
+        get: operations["BookingsController_pendingReviews_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1967,6 +2254,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/service-styles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fase 14: estilos activos (para etiquetar fotos y filtrar la búsqueda) */
+        get: operations["ImagesController_listStyles_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/support/tickets": {
         parameters: {
             query?: never;
@@ -2209,6 +2513,40 @@ export type components = {
             reasonType: string;
             status: string;
         };
+        AdminReportedImageDto: {
+            /** Format: uuid */
+            barberId: string | null;
+            barberName: string | null;
+            /** Format: uuid */
+            barbershopId: string;
+            caption: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            height: number;
+            /** @description Oculta al público: por reportes (images.report_hide_threshold) o retirada por soporte. */
+            hidden: boolean;
+            /** Format: uuid */
+            id: string;
+            /** @description Grande (hasta 1600 px de ancho, WebP). */
+            largeUrl: string;
+            /** @description Reportes abiertos. */
+            openReports: number;
+            /** @description Destacada (fijada arriba). */
+            pinned: boolean;
+            /** @description Retirada por soporte. */
+            removed: boolean;
+            reports: components["schemas"]["ImageReportViewDto"][];
+            /** @description Solo si el servicio existe y está disponible: la app ofrece "reservar este estilo". */
+            service: components["schemas"]["GalleryServiceDto"] | null;
+            styles: components["schemas"]["StyleRefDto"][];
+            /** @description Miniatura (400 px de ancho, WebP). */
+            thumbUrl: string;
+            width: number;
+        };
+        AdminReportedImagePageDto: {
+            items: components["schemas"]["AdminReportedImageDto"][];
+            nextCursor: string | null;
+        };
         AdminReviewDto: {
             barbershop: components["schemas"]["RefNameDto"];
             comment: string | null;
@@ -2239,6 +2577,20 @@ export type components = {
             reason: string | null;
             /** Format: date-time */
             submittedAt: string;
+        };
+        AdminServiceStyleDto: {
+            /** Format: uuid */
+            categoryId: string;
+            /** @example haircut */
+            categoryKey: string;
+            /** Format: uuid */
+            id: string;
+            isActive: boolean;
+            /** @example fade_low */
+            key: string;
+            /** @example Degradado bajo */
+            name: string;
+            sortOrder: number;
         };
         AdminSettingDto: {
             description: string | null;
@@ -2386,10 +2738,17 @@ export type components = {
             /** @description Valoraciones visibles del barbero (Fase 11). */
             rating: components["schemas"]["RatingDto"];
             serviceIds: string[];
+            /** @description Especialidades (hasta 5 estilos), en el orden del catálogo. */
+            specialties: components["schemas"]["StyleRefDto"][];
+            /** @description Años de experiencia (Fase 14). */
+            yearsExperience: number | null;
         };
         BarberManagePageDto: {
             items: components["schemas"]["BarberManageDto"][];
             nextCursor: string | null;
+        };
+        BarberPhotoDto: {
+            photoUrl: string | null;
         };
         BarberPublicDto: {
             bio: string | null;
@@ -2400,6 +2759,10 @@ export type components = {
             /** @description Valoraciones visibles del barbero (Fase 11). */
             rating: components["schemas"]["RatingDto"];
             serviceIds: string[];
+            /** @description Especialidades (hasta 5 estilos), en el orden del catálogo. */
+            specialties: components["schemas"]["StyleRefDto"][];
+            /** @description Años de experiencia (Fase 14). */
+            yearsExperience: number | null;
         };
         BarberPublicPageDto: {
             items: components["schemas"]["BarberPublicDto"][];
@@ -2433,6 +2796,10 @@ export type components = {
         BarbershopManageDto: {
             address: string;
             closure: components["schemas"]["ClosureDto"] | null;
+            /** @description Fase 14: portada en miniatura (400 px). */
+            coverThumbUrl: string | null;
+            /** @description Fase 14: portada (1600 px de ancho, WebP). */
+            coverUrl: string | null;
             /** Format: date-time */
             createdAt: string;
             description: string | null;
@@ -2442,6 +2809,8 @@ export type components = {
             isFavorite: boolean;
             latitude: number;
             links: components["schemas"]["LinksDto"];
+            /** @description Fase 14: logo (cuadrado de 512 px, WebP). */
+            logoUrl: string | null;
             longitude: number;
             myRole: components["schemas"]["BarbershopMemberRole"];
             name: string;
@@ -2456,11 +2825,20 @@ export type components = {
             /** @description BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero). */
             type: components["schemas"]["BarbershopType"];
         };
+        BarbershopMediaDto: {
+            coverThumbUrl: string | null;
+            coverUrl: string | null;
+            logoUrl: string | null;
+        };
         /** @enum {string} */
         BarbershopMemberRole: "OWNER" | "MANAGER";
         BarbershopPublicDto: {
             address: string;
             closure: components["schemas"]["ClosureDto"] | null;
+            /** @description Fase 14: portada en miniatura (400 px). */
+            coverThumbUrl: string | null;
+            /** @description Fase 14: portada (1600 px de ancho, WebP). */
+            coverUrl: string | null;
             description: string | null;
             /** Format: uuid */
             id: string;
@@ -2468,6 +2846,8 @@ export type components = {
             isFavorite: boolean;
             latitude: number;
             links: components["schemas"]["LinksDto"];
+            /** @description Fase 14: logo (cuadrado de 512 px, WebP). */
+            logoUrl: string | null;
             longitude: number;
             name: string;
             /** @description Teléfono del negocio. */
@@ -2526,6 +2906,8 @@ export type components = {
             barberChosenByClient: boolean;
             barbershop: components["schemas"]["BookingBarbershopDto"];
             cancellation: components["schemas"]["CancellationDto"] | null;
+            /** @description Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false. */
+            canReview: boolean;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
             /** Format: date-time */
@@ -2542,11 +2924,20 @@ export type components = {
             /** Format: uuid */
             id: string;
             price: components["schemas"]["BookingPriceDto"];
+            /** @description Solo para el cliente: su valoración de esta reserva, si existe. Para la barbería, null. */
+            review: components["schemas"]["BookingOwnReviewDto"] | null;
             /** @description Nombre del servicio al reservar (copia) y su categoría. */
             service: components["schemas"]["BookingServiceDto"];
             /** Format: date-time */
             startAt: string;
             status: components["schemas"]["BookingStatus"];
+        };
+        BookingOwnReviewDto: {
+            /** @description Puede editarla (una sola vez, dentro del plazo). */
+            canEdit: boolean;
+            /** Format: uuid */
+            id: string;
+            rating: number;
         };
         BookingPageDto: {
             items: components["schemas"]["BookingDto"][];
@@ -2615,6 +3006,8 @@ export type components = {
             barberChosenByClient: boolean;
             barbershop: components["schemas"]["BookingBarbershopDto"];
             cancellation: components["schemas"]["CancellationDto"] | null;
+            /** @description Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false. */
+            canReview: boolean;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
             /** Format: date-time */
@@ -2633,6 +3026,8 @@ export type components = {
             price: components["schemas"]["BookingPriceDto"];
             /** @description Devolución aplicada. */
             refund: components["schemas"]["RefundQuoteDto"];
+            /** @description Solo para el cliente: su valoración de esta reserva, si existe. Para la barbería, null. */
+            review: components["schemas"]["BookingOwnReviewDto"] | null;
             /** @description Nombre del servicio al reservar (copia) y su categoría. */
             service: components["schemas"]["BookingServiceDto"];
             /** Format: date-time */
@@ -2741,6 +3136,10 @@ export type components = {
         CreatedBarbershopDto: {
             address: string;
             closure: components["schemas"]["ClosureDto"] | null;
+            /** @description Fase 14: portada en miniatura (400 px). */
+            coverThumbUrl: string | null;
+            /** @description Fase 14: portada (1600 px de ancho, WebP). */
+            coverUrl: string | null;
             /** Format: date-time */
             createdAt: string;
             description: string | null;
@@ -2750,6 +3149,8 @@ export type components = {
             isFavorite: boolean;
             latitude: number;
             links: components["schemas"]["LinksDto"];
+            /** @description Fase 14: logo (cuadrado de 512 px, WebP). */
+            logoUrl: string | null;
             longitude: number;
             myRole: components["schemas"]["BarbershopMemberRole"];
             name: string;
@@ -2771,6 +3172,8 @@ export type components = {
             barberChosenByClient: boolean;
             barbershop: components["schemas"]["BookingBarbershopDto"];
             cancellation: components["schemas"]["CancellationDto"] | null;
+            /** @description Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false. */
+            canReview: boolean;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
             /** Format: date-time */
@@ -2788,6 +3191,8 @@ export type components = {
             id: string;
             payment: components["schemas"]["PaymentStartDto"];
             price: components["schemas"]["BookingPriceDto"];
+            /** @description Solo para el cliente: su valoración de esta reserva, si existe. Para la barbería, null. */
+            review: components["schemas"]["BookingOwnReviewDto"] | null;
             /** @description Nombre del servicio al reservar (copia) y su categoría. */
             service: components["schemas"]["BookingServiceDto"];
             /** Format: date-time */
@@ -2804,6 +3209,10 @@ export type components = {
             /** @description true si se agregó el rol BARBER a la cuenta: renueva el token para verlo. */
             barberRoleGranted: boolean;
             closure: components["schemas"]["ClosureDto"] | null;
+            /** @description Fase 14: portada en miniatura (400 px). */
+            coverThumbUrl: string | null;
+            /** @description Fase 14: portada (1600 px de ancho, WebP). */
+            coverUrl: string | null;
             /** Format: date-time */
             createdAt: string;
             description: string | null;
@@ -2813,6 +3222,8 @@ export type components = {
             isFavorite: boolean;
             latitude: number;
             links: components["schemas"]["LinksDto"];
+            /** @description Fase 14: logo (cuadrado de 512 px, WebP). */
+            logoUrl: string | null;
             longitude: number;
             myRole: components["schemas"]["BarbershopMemberRole"];
             name: string;
@@ -2828,6 +3239,10 @@ export type components = {
             timezone: string;
             /** @description BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero). */
             type: components["schemas"]["BarbershopType"];
+        };
+        CreateImageReportDto: {
+            details?: string;
+            reason: components["schemas"]["ImageReportReason"];
         };
         CreateIndependentDto: {
             /** @example Av. Larco 123, Miraflores, Lima */
@@ -2899,6 +3314,15 @@ export type components = {
              * @example 2500
              */
             priceAmount: number;
+        };
+        CreateStyleDto: {
+            /** Format: uuid */
+            categoryId: string;
+            /** @example fade_low */
+            key: string;
+            /** @example Degradado bajo */
+            name: string;
+            sortOrder?: number;
         };
         CreateTicketDto: {
             /** @enum {string} */
@@ -3014,6 +3438,93 @@ export type components = {
             items: components["schemas"]["FavoriteDto"][];
             nextCursor: string | null;
         };
+        GalleryImageDto: {
+            /** Format: uuid */
+            barberId: string | null;
+            barberName: string | null;
+            /** Format: uuid */
+            barbershopId: string;
+            caption: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            height: number;
+            /** Format: uuid */
+            id: string;
+            /** @description Grande (hasta 1600 px de ancho, WebP). */
+            largeUrl: string;
+            /** @description Destacada (fijada arriba). */
+            pinned: boolean;
+            /** @description Solo si el servicio existe y está disponible: la app ofrece "reservar este estilo". */
+            service: components["schemas"]["GalleryServiceDto"] | null;
+            styles: components["schemas"]["StyleRefDto"][];
+            /** @description Miniatura (400 px de ancho, WebP). */
+            thumbUrl: string;
+            width: number;
+        };
+        GalleryImageManageDto: {
+            /** Format: uuid */
+            barberId: string | null;
+            barberName: string | null;
+            /** Format: uuid */
+            barbershopId: string;
+            caption: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            height: number;
+            /** @description Oculta al público: por reportes (images.report_hide_threshold) o retirada por soporte. */
+            hidden: boolean;
+            /** Format: uuid */
+            id: string;
+            /** @description Grande (hasta 1600 px de ancho, WebP). */
+            largeUrl: string;
+            /** @description Reportes abiertos. */
+            openReports: number;
+            /** @description Destacada (fijada arriba). */
+            pinned: boolean;
+            /** @description Retirada por soporte. */
+            removed: boolean;
+            /** @description Solo si el servicio existe y está disponible: la app ofrece "reservar este estilo". */
+            service: components["schemas"]["GalleryServiceDto"] | null;
+            styles: components["schemas"]["StyleRefDto"][];
+            /** @description Miniatura (400 px de ancho, WebP). */
+            thumbUrl: string;
+            width: number;
+        };
+        GalleryManagePageDto: {
+            items: components["schemas"]["GalleryImageManageDto"][];
+            nextCursor: string | null;
+        };
+        GalleryPageDto: {
+            /** @description Resto, las más recientes primero. */
+            items: components["schemas"]["GalleryImageDto"][];
+            nextCursor: string | null;
+            /** @description Destacadas: solo en la primera página (sin cursor). No se repiten en items. */
+            pinned: components["schemas"]["GalleryImageDto"][];
+        };
+        GalleryServiceDto: {
+            durationMinutes: number;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            price: components["schemas"]["MoneyDto"];
+        };
+        GalleryUploadDto: {
+            caption?: string | null;
+            /** @description Obligatorio y true: quien sube declara que la persona fotografiada dio su consentimiento. */
+            consent: boolean;
+            /**
+             * Format: binary
+             * @description JPEG, PNG o WebP (HEIC: convertir en la app), hasta 10 MB.
+             */
+            file: string;
+            /**
+             * Format: uuid
+             * @description Servicio para "reservar este estilo" desde la foto (de la misma barbería).
+             */
+            serviceId?: string | null;
+            /** @description Estilos (hasta 3). En multipart: separados por comas o campo repetido. */
+            styleIds?: string[];
+        };
         HealthChecksDto: {
             database: components["schemas"]["ComponentStatus"];
             redis: components["schemas"]["ComponentStatus"];
@@ -3022,6 +3533,33 @@ export type components = {
             checks: components["schemas"]["HealthChecksDto"];
             /** @example ok */
             status: string;
+        };
+        ImageModerationDto: {
+            /**
+             * @description KEEP: se mantiene y se cierran los reportes. REMOVE: se retira (no se muestra). RESTORE: vuelve a mostrarse.
+             * @enum {string}
+             */
+            decision: "KEEP" | "REMOVE" | "RESTORE";
+            /** @description Motivo (queda en la auditoría). */
+            reason: string;
+        };
+        /** @enum {string} */
+        ImageReportReason: "NOT_MY_PHOTO" | "NO_CONSENT" | "INAPPROPRIATE" | "MISLEADING" | "OTHER";
+        ImageReportViewDto: {
+            /** Format: date-time */
+            createdAt: string;
+            details: string | null;
+            /** Format: uuid */
+            id: string;
+            reason: components["schemas"]["ImageReportReason"];
+            status: components["schemas"]["ReportStatus"];
+        };
+        ImageUploadDto: {
+            /**
+             * Format: binary
+             * @description JPEG, PNG o WebP (HEIC: convertir en la app), hasta 10 MB.
+             */
+            file: string;
         };
         InvitationDto: {
             /** @description Perfil de barbero a vincular. */
@@ -3089,6 +3627,36 @@ export type components = {
         LogoutDto: {
             /** @description true cierra la sesión en todos los dispositivos. */
             allDevices?: boolean;
+        };
+        ManagedReviewDto: {
+            /**
+             * @description Nombre e inicial del apellido.
+             * @example Ana R.
+             */
+            authorName: string;
+            barber: components["schemas"]["ReviewBarberDto"];
+            /** @description Puede responder o editar la respuesta (OWNER o MANAGER). */
+            canRespond: boolean;
+            comment: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            editedAt: string | null;
+            /** Format: uuid */
+            id: string;
+            rating: number;
+            /** @description Respuesta de la barbería (null si no hay o la ocultó soporte). */
+            response: components["schemas"]["ReviewResponseDto"] | null;
+            /** @description Estado de la respuesta de la barbería; null si no respondió. */
+            responseStatus: components["schemas"]["ReviewStatus"] | null;
+            /** @description Servicio tal como se reservó. */
+            serviceName: string;
+            /** @description VISIBLE; UNDER_REVIEW (reportada, sigue visible); HIDDEN (oculta por soporte). */
+            status: components["schemas"]["ReviewStatus"];
+        };
+        ManagedReviewPageDto: {
+            items: components["schemas"]["ManagedReviewDto"][];
+            nextCursor: string | null;
         };
         ManualRefundDto: {
             /** @description Céntimos; hasta lo cobrado y aún no devuelto. */
@@ -3312,6 +3880,10 @@ export type components = {
             startedAt: string | null;
             status: components["schemas"]["PaymentStatus"];
         };
+        PendingReviewsDto: {
+            /** @description Reservas que el cliente puede valorar ahora (canReview), las más recientes primero. */
+            items: components["schemas"]["BookingDto"][];
+        };
         PriceLineDto: {
             amount: components["schemas"]["MoneyDto"];
             description: string;
@@ -3449,6 +4021,8 @@ export type components = {
             count: number;
             reason: string;
         };
+        /** @enum {string} */
+        ReportStatus: "OPEN" | "IN_REVIEW" | "RESOLVED";
         RequestAccountDeletionDto: {
             /** @description Contraseña actual (confirmación). */
             password: string;
@@ -3489,6 +4063,8 @@ export type components = {
             /** @description Texto plano. */
             text: string;
         };
+        /** @enum {string} */
+        ReviewStatus: "VISIBLE" | "HIDDEN" | "UNDER_REVIEW";
         ReviewSubmissionDto: {
             /** Format: date-time */
             decidedAt: string | null;
@@ -3516,6 +4092,8 @@ export type components = {
             address: string;
             /** @description Hay un turno que empieza dentro de la ventana "ahora". */
             availableNow: boolean;
+            /** @description Fase 14: portada en miniatura (400 px). */
+            coverThumbUrl: string | null;
             /** @description Distancia al punto de búsqueda, en metros redondeados (null sin ubicación). */
             distanceMeters: number | null;
             /** @description Resultado destacado (pagado). Hoy siempre false (Fase 13). */
@@ -3526,6 +4104,8 @@ export type components = {
             isFavorite: boolean;
             isOpenNow: boolean;
             latitude: number;
+            /** @description Fase 14: logo (512 px, WebP). */
+            logoUrl: string | null;
             longitude: number;
             name: string;
             /** @description Precio más bajo entre los servicios que cumplen los filtros. */
@@ -3578,6 +4158,19 @@ export type components = {
             items: components["schemas"]["ServicePublicDto"][];
             nextCursor: string | null;
         };
+        ServiceStyleDto: {
+            /** Format: uuid */
+            categoryId: string;
+            /** @example haircut */
+            categoryKey: string;
+            /** Format: uuid */
+            id: string;
+            /** @example fade_low */
+            key: string;
+            /** @example Degradado bajo */
+            name: string;
+            sortOrder: number;
+        };
         SessionUserDto: {
             emailVerified: boolean;
             fullName: string;
@@ -3587,6 +4180,10 @@ export type components = {
         };
         SetBarberServicesDto: {
             serviceIds: string[];
+        };
+        SetSpecialtiesDto: {
+            /** @description Estilos (hasta 5). */
+            styleIds: string[];
         };
         SlotDto: {
             barberIds: string[];
@@ -3675,6 +4272,14 @@ export type components = {
             roles: ("CLIENT" | "BARBER" | "OWNER" | "SUPPORT" | "ADMIN")[];
             /** @enum {string} */
             status: "ACTIVE" | "DISABLED";
+        };
+        StyleRefDto: {
+            /** Format: uuid */
+            id: string;
+            /** @example fade_low */
+            key: string;
+            /** @example Degradado bajo */
+            name: string;
         };
         SupportAccessDto: {
             /** @description Solo vale para /support/tickets y /me/support/tickets. */
@@ -3817,6 +4422,8 @@ export type components = {
             /** @description false lo desactiva (rechazado si tiene reservas futuras). */
             isActive?: boolean;
             phone?: string | null;
+            /** @description Años de experiencia (Fase 14). null lo quita. */
+            yearsExperience?: number | null;
         };
         UpdateBarbershopDto: {
             /** @example Av. Larco 123, Miraflores, Lima */
@@ -3862,6 +4469,15 @@ export type components = {
             name?: string;
             sortOrder?: number;
         };
+        UpdateGalleryImageDto: {
+            caption?: string | null;
+            /** @description true la destaca (hasta 6 por barbero, images.pinned_max_per_barber). */
+            pinned?: boolean;
+            /** Format: uuid */
+            serviceId?: string | null;
+            /** @description Reemplaza los estilos (hasta 3). */
+            styleIds?: string[];
+        };
         UpdateProfileDto: {
             /** @example Ana Pérez */
             fullName?: string;
@@ -3905,6 +4521,12 @@ export type components = {
             value: string | number | boolean | unknown[] | {
                 [key: string]: unknown;
             };
+        };
+        UpdateStyleDto: {
+            /** @description false lo oculta de la app y de la búsqueda (no se borra). */
+            isActive?: boolean;
+            name?: string;
+            sortOrder?: number;
         };
         UpdateTicketStatusDto: {
             /** @description Obligatorio al cerrar un ticket que no está resuelto. */
@@ -4478,6 +5100,95 @@ export interface operations {
             };
         };
     };
+    ImagesAdminController_moderate_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImageModerationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReportedImageDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesAdminController_reported_v1: {
+        parameters: {
+            query?: {
+                /** @description Valor de nextCursor de la página anterior. */
+                cursor?: string;
+                limit?: number;
+                status?: components["schemas"]["ReportStatus"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReportedImagePageDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     AdminOperationsController_refund_v1: {
         parameters: {
             query?: never;
@@ -4757,6 +5468,129 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminCategoryDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesAdminController_listStyles_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminServiceStyleDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesAdminController_createStyle_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateStyleDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminServiceStyleDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesAdminController_updateStyle_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateStyleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminServiceStyleDto"];
                 };
             };
             403: {
@@ -6245,6 +7079,80 @@ export interface operations {
             };
         };
     };
+    ImagesController_uploadGallery_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barberId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["GalleryUploadDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalleryImageManageDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     InvitationsController_inviteBarber_v1: {
         parameters: {
             query?: never;
@@ -6270,6 +7178,102 @@ export interface operations {
                 };
             };
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_setBarberPhoto_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barberId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["ImageUploadDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarberPhotoDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_deleteBarberPhoto_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barberId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarberPhotoDto"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6373,6 +7377,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BarberManageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_setSpecialties_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barberId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetSpecialtiesDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
             404: {
@@ -6510,6 +7554,317 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BusinessHoursUpdateDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_setCover_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["ImageUploadDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopMediaDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_deleteCover_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopMediaDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_publicGallery_v1: {
+        parameters: {
+            query?: {
+                /** @description Solo las fotos de este barbero. */
+                barberId?: string;
+                /** @description Valor de nextCursor de la página anterior. */
+                cursor?: string;
+                limit?: number;
+                /** @description Solo las fotos de este estilo. */
+                style?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalleryPageDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_deleteGallery_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                imageId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_updateGallery_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                imageId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateGalleryImageDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalleryImageManageDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_setLogo_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["ImageUploadDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopMediaDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_deleteLogo_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopMediaDto"];
                 };
             };
             404: {
@@ -7672,6 +9027,69 @@ export interface operations {
             };
         };
     };
+    ImagesController_report_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                imageId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateImageReportDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     HealthController_check_v1: {
         parameters: {
             query?: never;
@@ -8047,6 +9465,98 @@ export interface operations {
             };
         };
     };
+    ImagesController_manageGallery_v1: {
+        parameters: {
+            query?: {
+                /** @description Solo las fotos de este barbero. */
+                barberId?: string;
+                /** @description Valor de nextCursor de la página anterior. */
+                cursor?: string;
+                limit?: number;
+                /** @description Solo las fotos de este estilo. */
+                style?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GalleryManagePageDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ReviewsController_listManaged_v1: {
+        parameters: {
+            query?: {
+                /** @description Solo las de este barbero. */
+                barberId?: string;
+                /** @description Valor de nextCursor de la página anterior. */
+                cursor?: string;
+                limit?: number;
+                /** @description Solo esta puntuación. */
+                rating?: number;
+                /** @description Solo las de este estado (VISIBLE, UNDER_REVIEW u HIDDEN). */
+                status?: components["schemas"]["ReviewStatus"];
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagedReviewPageDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     ServicesController_listManaged_v1: {
         parameters: {
             query?: {
@@ -8100,6 +9610,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BookingPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BookingsController_pendingReviews_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PendingReviewsDto"];
                 };
             };
             404: {
@@ -8735,6 +10272,8 @@ export interface operations {
                 radiusKm?: number;
                 /** @description Por defecto: distance con ubicación; rating sin ella. */
                 sort?: "distance" | "rating" | "price";
+                /** @description Fase 14: clave de estilo. Barberías con fotos de ese estilo o un barbero con esa especialidad. */
+                style?: string;
                 type?: components["schemas"]["BarbershopType"];
             };
             header?: never;
@@ -8784,6 +10323,36 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ServiceCategoryListDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_listStyles_v1: {
+        parameters: {
+            query?: {
+                /** @description Solo los estilos de esta categoría. */
+                category?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ServiceStyleDto"][];
                 };
             };
             404: {

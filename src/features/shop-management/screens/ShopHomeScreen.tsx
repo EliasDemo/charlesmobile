@@ -25,7 +25,7 @@ import { useShopHome } from '../hooks/useShopHome';
 import { REVIEW_STATES } from '../hooks/useShopReview';
 
 export type ShopSection =
-  'review' | 'details' | 'status' | 'services' | 'barbers' | 'members' | 'hours' | 'blocks';
+  'review' | 'reviews' | 'details' | 'status' | 'services' | 'barbers' | 'members' | 'hours' | 'blocks';
 
 export interface ShopHomeScreenProps {
   /** Action on the right of the title (the notifications bell, given by the route). */
@@ -49,10 +49,20 @@ const STATUS_STYLE: Record<
   SUSPENDED: { tone: 'danger', icon: 'ban' },
 };
 
-const SECTIONS: ShopSection[] = ['services', 'barbers', 'hours', 'blocks', 'status', 'members', 'details'];
+const SECTIONS: ShopSection[] = [
+  'services',
+  'barbers',
+  'hours',
+  'blocks',
+  'reviews',
+  'status',
+  'members',
+  'details',
+];
 
 const SECTION_ICON: Record<ShopSection, IconName> = {
   review: 'document-text',
+  reviews: 'star',
   details: 'storefront',
   status: 'power',
   services: 'cut',

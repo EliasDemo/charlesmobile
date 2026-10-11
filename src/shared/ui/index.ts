@@ -22,6 +22,7 @@ export {
   type ErrorStateProps,
 } from './StateViews';
 export { ScreenTitle } from './ScreenTitle';
+export { StarPicker, Stars } from './StarRating';
 export { ToastHost, showToast } from './Toast';
 export { useSurfaceStyle } from './surface';
 export { Text, type TextProps } from './Text';

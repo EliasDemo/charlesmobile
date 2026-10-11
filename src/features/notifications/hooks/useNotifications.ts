@@ -175,6 +175,7 @@ export type NotificationTarget =
   | { kind: 'ticket'; id: string }
   | { kind: 'support' }
   | { kind: 'shop' }
+  | { kind: 'shopReviews'; shopId: string }
   | { kind: 'inbox' };
 
 /**
@@ -183,6 +184,7 @@ export type NotificationTarget =
  */
 export function notificationTarget(resource: NotificationResource): NotificationTarget {
   if (resource.type === 'booking' && resource.id) return { kind: 'booking', id: resource.id };
+  if (resource.type === 'review' && resource.id) return { kind: 'shopReviews', shopId: resource.id };
   if (resource.type === 'barbershop' || resource.type === 'review') return { kind: 'shop' };
   if (resource.type === 'ticket' && resource.id) return { kind: 'ticket', id: resource.id };
   if (resource.type === 'account' || resource.type === 'ticket') return { kind: 'support' };

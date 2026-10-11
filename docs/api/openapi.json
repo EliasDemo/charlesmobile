@@ -2407,6 +2407,112 @@
         "tags": ["reviews"]
       }
     },
+    "/api/v1/me/barbershops/{id}/reviews": {
+      "get": {
+        "description": "Con el estado de cada una y de su respuesta, y canRespond. El barbero recibe 403.",
+        "operationId": "ReviewsController_listManaged_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": false,
+            "in": "query",
+            "description": "Solo las de este barbero.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "rating",
+            "required": false,
+            "in": "query",
+            "description": "Solo esta puntuación.",
+            "schema": {
+              "minimum": 1,
+              "maximum": 5,
+              "type": "number"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Solo las de este estado (VISIBLE, UNDER_REVIEW u HIDDEN).",
+            "schema": {
+              "$ref": "#/components/schemas/ReviewStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ManagedReviewPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "M9: valoraciones de mi barbería (OWNER o MANAGER), también ocultas o en revisión",
+        "tags": ["reviews"]
+      }
+    },
     "/api/v1/reviews/{id}/response": {
       "put": {
         "operationId": "ReviewsController_respond_v1",
@@ -2676,6 +2782,1379 @@
         ],
         "summary": "RF-FAV-003: mis barberías favoritas (las más recientes primero)",
         "tags": ["favorites"]
+      }
+    },
+    "/api/v1/barbershops/{id}/logo": {
+      "put": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP.",
+        "operationId": "ImagesController_setLogo_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopMediaDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: subir o reemplazar el logo (cuadrado de 512 px)",
+        "tags": ["images"]
+      },
+      "delete": {
+        "operationId": "ImagesController_deleteLogo_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopMediaDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: quitar el logo",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/barbershops/{id}/cover": {
+      "put": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Cumple el requisito PHOTO del envío a revisión.",
+        "operationId": "ImagesController_setCover_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopMediaDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: subir o reemplazar la portada (foto del local; 400 y 1600 px)",
+        "tags": ["images"]
+      },
+      "delete": {
+        "operationId": "ImagesController_deleteCover_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarbershopMediaDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: quitar la portada",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers/{barberId}/photo": {
+      "put": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP.",
+        "operationId": "ImagesController_setBarberPhoto_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberPhotoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: subir o reemplazar la foto del barbero (512 px)",
+        "tags": ["images"]
+      },
+      "delete": {
+        "operationId": "ImagesController_deleteBarberPhoto_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberPhotoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: quitar la foto del barbero",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers/{barberId}/gallery": {
+      "post": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Exige consent=true (consentimiento de la persona fotografiada). Máximo images.gallery_max_per_barber (60) por barbero.",
+        "operationId": "ImagesController_uploadGallery_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/GalleryUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleryImageManageDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: subir una foto a la galería del barbero",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/barbershops/{id}/gallery/{imageId}": {
+      "patch": {
+        "operationId": "ImagesController_updateGallery_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "imageId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGalleryImageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleryImageManageDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: editar una foto (texto, estilos, servicio, destacar)",
+        "tags": ["images"]
+      },
+      "delete": {
+        "operationId": "ImagesController_deleteGallery_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "imageId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: borrar una foto de la galería (también el archivo)",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/me/barbershops/{id}/gallery": {
+      "get": {
+        "description": "OWNER y MANAGER ven todas; el barbero, solo la suya.",
+        "operationId": "ImagesController_manageGallery_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": false,
+            "in": "query",
+            "description": "Solo las fotos de este barbero.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "style",
+            "required": false,
+            "in": "query",
+            "description": "Solo las fotos de este estilo.",
+            "schema": {
+              "example": "fade_low",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleryManagePageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: galería de gestión (incluye ocultas y reportes abiertos)",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/barbershops/{id}/barbers/{barberId}/specialties": {
+      "put": {
+        "operationId": "ImagesController_setSpecialties_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetSpecialtiesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: especialidades del barbero (hasta 5 estilos)",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/barbershops/{id}/gallery": {
+      "get": {
+        "description": "Destacadas aparte en la primera página. Sin fotos retiradas ni ocultas por reportes. Cada foto trae, si aplica, el servicio para \"reservar este estilo\".",
+        "operationId": "ImagesController_publicGallery_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "barberId",
+            "required": false,
+            "in": "query",
+            "description": "Solo las fotos de este barbero.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "style",
+            "required": false,
+            "in": "query",
+            "description": "Solo las fotos de este estilo.",
+            "schema": {
+              "example": "fade_low",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleryPageDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Fase 14: galería pública de la barbería (filtros: barbero y estilo)",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/service-styles": {
+      "get": {
+        "operationId": "ImagesController_listStyles_v1",
+        "parameters": [
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Solo los estilos de esta categoría.",
+            "schema": {
+              "example": "haircut",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceStyleDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Fase 14: estilos activos (para etiquetar fotos y filtrar la búsqueda)",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/gallery/{imageId}/reports": {
+      "post": {
+        "description": "Una vez por persona y foto. Con images.report_hide_threshold (3) reportes abiertos se oculta hasta que soporte la revise.",
+        "operationId": "ImagesController_report_v1",
+        "parameters": [
+          {
+            "name": "imageId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateImageReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: reportar una foto (no es mía, sin consentimiento, inapropiada…)",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/admin/images/reported": {
+      "get": {
+        "operationId": "ImagesAdminController_reported_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ReportStatus"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReportedImagePageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: fotos reportadas (por defecto, con reportes abiertos)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/images/{id}/moderation": {
+      "post": {
+        "operationId": "ImagesAdminController_moderate_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageModerationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReportedImageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 14: mantener, retirar o restaurar una foto reportada",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/service-styles": {
+      "get": {
+        "operationId": "ImagesAdminController_listStyles_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminServiceStyleDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: estilos, incluidos los inactivos",
+        "tags": ["admin"]
+      },
+      "post": {
+        "operationId": "ImagesAdminController_createStyle_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStyleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminServiceStyleDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: crear un estilo",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/service-styles/{id}": {
+      "patch": {
+        "operationId": "ImagesAdminController_updateStyle_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStyleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminServiceStyleDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: editar o desactivar (nunca borrar) un estilo",
+        "tags": ["admin"]
       }
     },
     "/api/v1/barbershops/{id}/members/invitations": {
@@ -3511,6 +4990,16 @@
             "description": "Clave de categoría de servicio.",
             "schema": {
               "example": "haircut",
+              "type": "string"
+            }
+          },
+          {
+            "name": "style",
+            "required": false,
+            "in": "query",
+            "description": "Fase 14: clave de estilo. Barberías con fotos de ese estilo o un barbero con esa especialidad.",
+            "schema": {
+              "example": "fade_low",
               "type": "string"
             }
           },
@@ -4579,6 +6068,42 @@
           }
         ],
         "summary": "RF-RES-004/008: mis reservas (próximas o historial)",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/me/bookings/pending-reviews": {
+      "get": {
+        "description": "Las mismas que tienen canReview = true en BookingDto, las más recientes primero (hasta 20).",
+        "operationId": "BookingsController_pendingReviews_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PendingReviewsDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "M9: reservas que puedo valorar ahora (aviso \"¿Cómo te fue con tu corte?\")",
         "tags": ["bookings"]
       }
     },
@@ -8419,6 +9944,21 @@
           "rating": {
             "$ref": "#/components/schemas/RatingDto"
           },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: logo (cuadrado de 512 px, WebP)."
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada (1600 px de ancho, WebP)."
+          },
+          "coverThumbUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada en miniatura (400 px)."
+          },
           "isFavorite": {
             "type": "boolean",
             "description": "Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false."
@@ -8463,6 +10003,9 @@
           "closure",
           "links",
           "rating",
+          "logoUrl",
+          "coverUrl",
+          "coverThumbUrl",
           "isFavorite",
           "ownerDocument",
           "myRole",
@@ -8608,6 +10151,21 @@
           "rating": {
             "$ref": "#/components/schemas/RatingDto"
           },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: logo (cuadrado de 512 px, WebP)."
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada (1600 px de ancho, WebP)."
+          },
+          "coverThumbUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada en miniatura (400 px)."
+          },
           "isFavorite": {
             "type": "boolean",
             "description": "Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false."
@@ -8661,6 +10219,9 @@
           "closure",
           "links",
           "rating",
+          "logoUrl",
+          "coverUrl",
+          "coverThumbUrl",
           "isFavorite",
           "ownerDocument",
           "myRole",
@@ -8732,6 +10293,21 @@
           "rating": {
             "$ref": "#/components/schemas/RatingDto"
           },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: logo (cuadrado de 512 px, WebP)."
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada (1600 px de ancho, WebP)."
+          },
+          "coverThumbUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada en miniatura (400 px)."
+          },
           "isFavorite": {
             "type": "boolean",
             "description": "Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false."
@@ -8751,6 +10327,9 @@
           "closure",
           "links",
           "rating",
+          "logoUrl",
+          "coverUrl",
+          "coverThumbUrl",
           "isFavorite"
         ]
       },
@@ -8872,6 +10451,21 @@
           "rating": {
             "$ref": "#/components/schemas/RatingDto"
           },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: logo (cuadrado de 512 px, WebP)."
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada (1600 px de ancho, WebP)."
+          },
+          "coverThumbUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada en miniatura (400 px)."
+          },
           "isFavorite": {
             "type": "boolean",
             "description": "Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false."
@@ -8912,6 +10506,9 @@
           "closure",
           "links",
           "rating",
+          "logoUrl",
+          "coverUrl",
+          "coverThumbUrl",
           "isFavorite",
           "ownerDocument",
           "myRole",
@@ -9181,6 +10778,24 @@
         },
         "required": ["items"]
       },
+      "StyleRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "key": {
+            "type": "string",
+            "example": "fade_low"
+          },
+          "name": {
+            "type": "string",
+            "example": "Degradado bajo"
+          }
+        },
+        "required": ["id", "key", "name"]
+      },
       "BarberPublicDto": {
         "type": "object",
         "properties": {
@@ -9205,6 +10820,18 @@
               "type": "string"
             }
           },
+          "yearsExperience": {
+            "type": "number",
+            "nullable": true,
+            "description": "Años de experiencia (Fase 14)."
+          },
+          "specialties": {
+            "description": "Especialidades (hasta 5 estilos), en el orden del catálogo.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
           "rating": {
             "description": "Valoraciones visibles del barbero (Fase 11).",
             "allOf": [
@@ -9214,7 +10841,16 @@
             ]
           }
         },
-        "required": ["id", "displayName", "bio", "photoUrl", "serviceIds", "rating"]
+        "required": [
+          "id",
+          "displayName",
+          "bio",
+          "photoUrl",
+          "serviceIds",
+          "yearsExperience",
+          "specialties",
+          "rating"
+        ]
       },
       "BarberPublicPageDto": {
         "type": "object",
@@ -9269,6 +10905,18 @@
               "type": "string"
             }
           },
+          "yearsExperience": {
+            "type": "number",
+            "nullable": true,
+            "description": "Años de experiencia (Fase 14)."
+          },
+          "specialties": {
+            "description": "Especialidades (hasta 5 estilos), en el orden del catálogo.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
           "rating": {
             "description": "Valoraciones visibles del barbero (Fase 11).",
             "allOf": [
@@ -9300,6 +10948,8 @@
           "bio",
           "photoUrl",
           "serviceIds",
+          "yearsExperience",
+          "specialties",
           "rating",
           "phone",
           "isActive",
@@ -9395,6 +11045,13 @@
           "phone": {
             "type": "string",
             "nullable": true
+          },
+          "yearsExperience": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 0,
+            "maximum": 60,
+            "description": "Años de experiencia (Fase 14). null lo quita."
           },
           "isActive": {
             "type": "boolean",
@@ -9877,6 +11534,110 @@
         },
         "required": ["items", "nextCursor"]
       },
+      "ReviewStatus": {
+        "type": "string",
+        "enum": ["VISIBLE", "HIDDEN", "UNDER_REVIEW"]
+      },
+      "ManagedReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorName": {
+            "type": "string",
+            "example": "Ana R.",
+            "description": "Nombre e inicial del apellido."
+          },
+          "serviceName": {
+            "type": "string",
+            "description": "Servicio tal como se reservó."
+          },
+          "barber": {
+            "$ref": "#/components/schemas/ReviewBarberDto"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "editedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "response": {
+            "nullable": true,
+            "description": "Respuesta de la barbería (null si no hay o la ocultó soporte).",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReviewResponseDto"
+              }
+            ]
+          },
+          "status": {
+            "description": "VISIBLE; UNDER_REVIEW (reportada, sigue visible); HIDDEN (oculta por soporte).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReviewStatus"
+              }
+            ]
+          },
+          "responseStatus": {
+            "nullable": true,
+            "description": "Estado de la respuesta de la barbería; null si no respondió.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReviewStatus"
+              }
+            ]
+          },
+          "canRespond": {
+            "type": "boolean",
+            "description": "Puede responder o editar la respuesta (OWNER o MANAGER)."
+          }
+        },
+        "required": [
+          "id",
+          "rating",
+          "comment",
+          "authorName",
+          "serviceName",
+          "barber",
+          "createdAt",
+          "editedAt",
+          "response",
+          "status",
+          "responseStatus",
+          "canRespond"
+        ]
+      },
+      "ManagedReviewPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagedReviewDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
       "ReviewResponseInputDto": {
         "type": "object",
         "properties": {
@@ -9955,6 +11716,642 @@
           }
         },
         "required": ["items", "nextCursor"]
+      },
+      "ImageUploadDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "JPEG, PNG o WebP (HEIC: convertir en la app), hasta 10 MB."
+          }
+        },
+        "required": ["file"]
+      },
+      "BarbershopMediaDto": {
+        "type": "object",
+        "properties": {
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "coverThumbUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["logoUrl", "coverUrl", "coverThumbUrl"]
+      },
+      "BarberPhotoDto": {
+        "type": "object",
+        "properties": {
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["photoUrl"]
+      },
+      "GalleryUploadDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "JPEG, PNG o WebP (HEIC: convertir en la app), hasta 10 MB."
+          },
+          "consent": {
+            "type": "boolean",
+            "description": "Obligatorio y true: quien sube declara que la persona fotografiada dio su consentimiento."
+          },
+          "caption": {
+            "type": "string",
+            "maxLength": 200,
+            "nullable": true
+          },
+          "styleIds": {
+            "description": "Estilos (hasta 3). En multipart: separados por comas o campo repetido.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "serviceId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Servicio para \"reservar este estilo\" desde la foto (de la misma barbería)."
+          }
+        },
+        "required": ["file", "consent"]
+      },
+      "GalleryServiceDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "durationMinutes": {
+            "type": "number"
+          }
+        },
+        "required": ["id", "name", "price", "durationMinutes"]
+      },
+      "GalleryImageManageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "barberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "thumbUrl": {
+            "type": "string",
+            "description": "Miniatura (400 px de ancho, WebP)."
+          },
+          "largeUrl": {
+            "type": "string",
+            "description": "Grande (hasta 1600 px de ancho, WebP)."
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "styles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
+          "service": {
+            "nullable": true,
+            "description": "Solo si el servicio existe y está disponible: la app ofrece \"reservar este estilo\".",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalleryServiceDto"
+              }
+            ]
+          },
+          "pinned": {
+            "type": "boolean",
+            "description": "Destacada (fijada arriba)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "openReports": {
+            "type": "number",
+            "description": "Reportes abiertos."
+          },
+          "hidden": {
+            "type": "boolean",
+            "description": "Oculta al público: por reportes (images.report_hide_threshold) o retirada por soporte."
+          },
+          "removed": {
+            "type": "boolean",
+            "description": "Retirada por soporte."
+          }
+        },
+        "required": [
+          "id",
+          "barbershopId",
+          "barberId",
+          "barberName",
+          "thumbUrl",
+          "largeUrl",
+          "width",
+          "height",
+          "caption",
+          "styles",
+          "service",
+          "pinned",
+          "createdAt",
+          "openReports",
+          "hidden",
+          "removed"
+        ]
+      },
+      "UpdateGalleryImageDto": {
+        "type": "object",
+        "properties": {
+          "caption": {
+            "type": "string",
+            "maxLength": 200,
+            "nullable": true
+          },
+          "styleIds": {
+            "description": "Reemplaza los estilos (hasta 3).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "serviceId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "pinned": {
+            "type": "boolean",
+            "description": "true la destaca (hasta 6 por barbero, images.pinned_max_per_barber)."
+          }
+        }
+      },
+      "GalleryManagePageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GalleryImageManageDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "SetSpecialtiesDto": {
+        "type": "object",
+        "properties": {
+          "styleIds": {
+            "description": "Estilos (hasta 5).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["styleIds"]
+      },
+      "GalleryImageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "barberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "thumbUrl": {
+            "type": "string",
+            "description": "Miniatura (400 px de ancho, WebP)."
+          },
+          "largeUrl": {
+            "type": "string",
+            "description": "Grande (hasta 1600 px de ancho, WebP)."
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "styles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
+          "service": {
+            "nullable": true,
+            "description": "Solo si el servicio existe y está disponible: la app ofrece \"reservar este estilo\".",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalleryServiceDto"
+              }
+            ]
+          },
+          "pinned": {
+            "type": "boolean",
+            "description": "Destacada (fijada arriba)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "barbershopId",
+          "barberId",
+          "barberName",
+          "thumbUrl",
+          "largeUrl",
+          "width",
+          "height",
+          "caption",
+          "styles",
+          "service",
+          "pinned",
+          "createdAt"
+        ]
+      },
+      "GalleryPageDto": {
+        "type": "object",
+        "properties": {
+          "pinned": {
+            "description": "Destacadas: solo en la primera página (sin cursor). No se repiten en items.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GalleryImageDto"
+            }
+          },
+          "items": {
+            "description": "Resto, las más recientes primero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GalleryImageDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["pinned", "items", "nextCursor"]
+      },
+      "ServiceStyleDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "key": {
+            "type": "string",
+            "example": "fade_low"
+          },
+          "name": {
+            "type": "string",
+            "example": "Degradado bajo"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryKey": {
+            "type": "string",
+            "example": "haircut"
+          },
+          "sortOrder": {
+            "type": "number"
+          }
+        },
+        "required": ["id", "key", "name", "categoryId", "categoryKey", "sortOrder"]
+      },
+      "ImageReportReason": {
+        "type": "string",
+        "enum": ["NOT_MY_PHOTO", "NO_CONSENT", "INAPPROPRIATE", "MISLEADING", "OTHER"]
+      },
+      "CreateImageReportDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImageReportReason"
+              }
+            ]
+          },
+          "details": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": ["reason"]
+      },
+      "ReportStatus": {
+        "type": "string",
+        "enum": ["OPEN", "IN_REVIEW", "RESOLVED"]
+      },
+      "ImageReportViewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImageReportReason"
+              }
+            ]
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ReportStatus"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["id", "reason", "details", "status", "createdAt"]
+      },
+      "AdminReportedImageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "barberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "thumbUrl": {
+            "type": "string",
+            "description": "Miniatura (400 px de ancho, WebP)."
+          },
+          "largeUrl": {
+            "type": "string",
+            "description": "Grande (hasta 1600 px de ancho, WebP)."
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "styles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
+          "service": {
+            "nullable": true,
+            "description": "Solo si el servicio existe y está disponible: la app ofrece \"reservar este estilo\".",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GalleryServiceDto"
+              }
+            ]
+          },
+          "pinned": {
+            "type": "boolean",
+            "description": "Destacada (fijada arriba)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "openReports": {
+            "type": "number",
+            "description": "Reportes abiertos."
+          },
+          "hidden": {
+            "type": "boolean",
+            "description": "Oculta al público: por reportes (images.report_hide_threshold) o retirada por soporte."
+          },
+          "removed": {
+            "type": "boolean",
+            "description": "Retirada por soporte."
+          },
+          "reports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageReportViewDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "barbershopId",
+          "barberId",
+          "barberName",
+          "thumbUrl",
+          "largeUrl",
+          "width",
+          "height",
+          "caption",
+          "styles",
+          "service",
+          "pinned",
+          "createdAt",
+          "openReports",
+          "hidden",
+          "removed",
+          "reports"
+        ]
+      },
+      "AdminReportedImagePageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminReportedImageDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ImageModerationDto": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": ["KEEP", "REMOVE", "RESTORE"],
+            "description": "KEEP: se mantiene y se cierran los reportes. REMOVE: se retira (no se muestra). RESTORE: vuelve a mostrarse."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 500,
+            "description": "Motivo (queda en la auditoría)."
+          }
+        },
+        "required": ["decision", "reason"]
+      },
+      "AdminServiceStyleDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "key": {
+            "type": "string",
+            "example": "fade_low"
+          },
+          "name": {
+            "type": "string",
+            "example": "Degradado bajo"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryKey": {
+            "type": "string",
+            "example": "haircut"
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": ["id", "key", "name", "categoryId", "categoryKey", "sortOrder", "isActive"]
+      },
+      "CreateStyleDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "fade_low"
+          },
+          "name": {
+            "type": "string",
+            "example": "Degradado bajo",
+            "minLength": 2,
+            "maxLength": 60
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sortOrder": {
+            "type": "number"
+          }
+        },
+        "required": ["key", "name", "categoryId"]
+      },
+      "UpdateStyleDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "false lo oculta de la app y de la búsqueda (no se borra)."
+          }
+        }
       },
       "InviteMemberDto": {
         "type": "object",
@@ -10459,6 +12856,16 @@
           "isFavorite": {
             "type": "boolean",
             "description": "Fase 11: si es favorita de la cuenta que consulta. Sin sesión, siempre false."
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: logo (512 px, WebP)."
+          },
+          "coverThumbUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Fase 14: portada en miniatura (400 px)."
           }
         },
         "required": [
@@ -10476,7 +12883,9 @@
           "availableNow",
           "featured",
           "timezone",
-          "isFavorite"
+          "isFavorite",
+          "logoUrl",
+          "coverThumbUrl"
         ]
       },
       "SearchPageDto": {
@@ -10920,6 +13329,25 @@
         },
         "required": ["byRole", "reason"]
       },
+      "BookingOwnReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "canEdit": {
+            "type": "boolean",
+            "description": "Puede editarla (una sola vez, dentro del plazo)."
+          }
+        },
+        "required": ["id", "rating", "canEdit"]
+      },
       "CreatedBookingDto": {
         "type": "object",
         "properties": {
@@ -10995,6 +13423,20 @@
             "format": "date-time",
             "type": "string"
           },
+          "canReview": {
+            "type": "boolean",
+            "description": "Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false."
+          },
+          "review": {
+            "nullable": true,
+            "description": "Solo para el cliente: su valoración de esta reserva, si existe. Para la barbería, null.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingOwnReviewDto"
+              }
+            ]
+          },
           "payment": {
             "$ref": "#/components/schemas/PaymentStartDto"
           }
@@ -11014,6 +13456,8 @@
           "expiresAt",
           "cancellation",
           "createdAt",
+          "canReview",
+          "review",
           "payment"
         ]
       },
@@ -11091,6 +13535,20 @@
           "createdAt": {
             "format": "date-time",
             "type": "string"
+          },
+          "canReview": {
+            "type": "boolean",
+            "description": "Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false."
+          },
+          "review": {
+            "nullable": true,
+            "description": "Solo para el cliente: su valoración de esta reserva, si existe. Para la barbería, null.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingOwnReviewDto"
+              }
+            ]
           }
         },
         "required": [
@@ -11107,7 +13565,9 @@
           "price",
           "expiresAt",
           "cancellation",
-          "createdAt"
+          "createdAt",
+          "canReview",
+          "review"
         ]
       },
       "RefundQuoteDto": {
@@ -11426,6 +13886,20 @@
             "format": "date-time",
             "type": "string"
           },
+          "canReview": {
+            "type": "boolean",
+            "description": "Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false."
+          },
+          "review": {
+            "nullable": true,
+            "description": "Solo para el cliente: su valoración de esta reserva, si existe. Para la barbería, null.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingOwnReviewDto"
+              }
+            ]
+          },
           "refund": {
             "description": "Devolución aplicada.",
             "allOf": [
@@ -11450,6 +13924,8 @@
           "expiresAt",
           "cancellation",
           "createdAt",
+          "canReview",
+          "review",
           "refund"
         ]
       },
@@ -11468,6 +13944,19 @@
           }
         },
         "required": ["items", "nextCursor"]
+      },
+      "PendingReviewsDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "Reservas que el cliente puede valorar ahora (canReview), las más recientes primero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookingDto"
+            }
+          }
+        },
+        "required": ["items"]
       },
       "CreateTicketDto": {
         "type": "object",

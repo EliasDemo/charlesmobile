@@ -130,5 +130,10 @@
   "stepper": {
     "less": "Menos {{label}}",
     "more": "Más {{label}}"
+  },
+  "stars": {
+    "label_one": "{{count}} estrella de 5",
+    "label_other": "{{count}} estrellas de 5",
+    "choose": "Tu puntuación"
   }
 }

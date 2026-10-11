@@ -13,6 +13,7 @@ import shop from './locales/es/shop.json';
 import agenda from './locales/es/agenda.json';
 import notifications from './locales/es/notifications.json';
 import support from './locales/es/support.json';
+import reviews from './locales/es/reviews.json';
 import type devTexts from './locales/es/dev.json';
 
 export const defaultNS = 'common';
@@ -31,6 +32,7 @@ export const resources = {
     agenda,
     notifications,
     support,
+    reviews,
   },
 } as const;
 

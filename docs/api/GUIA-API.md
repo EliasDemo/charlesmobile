@@ -10,7 +10,7 @@ pnpm mobile:openapi
 
 Compila la API, exporta el OpenAPI a `apps/api/openapi.json` y lo copia a `docs/mobile/openapi.json`. Sirve para generar los tipos de la app, por ejemplo con `openapi-typescript`.
 
-Documentos relacionados: [`PAGOS.md`](PAGOS.md) (pagos hoy y con Izipay), [`DATOS-PRUEBA.md`](DATOS-PRUEBA.md) (usuarios y barberías del seed) y [`AJUSTES-BACKEND.md`](AJUSTES-BACKEND.md) (lo que el backend aún debería ajustar para la app).
+Documentos relacionados: [`PAGOS.md`](PAGOS.md) (pagos hoy y con Izipay), [`DATOS-PRUEBA.md`](DATOS-PRUEBA.md) (usuarios y barberías del seed) y [`AJUSTES-BACKEND.md`](AJUSTES-BACKEND.md) (lo que el backend aún debería ajustar para la app) e [`IMAGENES.md`](IMAGENES.md) (subir y mostrar fotos).
 
 ---
 
@@ -20,11 +20,11 @@ Requisitos: Node 24, pnpm 10 y Docker. Desde la carpeta del backend (`charles/`)
 
 ```bash
 pnpm install
-docker compose up -d                      # PostgreSQL 16 + PostGIS (5432) y Redis 7 (6379)
+docker compose up -d                      # PostgreSQL 16 + PostGIS (5432), Redis 7 (6379) e imágenes S3 (9000)
 # apps/api/.env no se versiona: pídeselo a quien mantiene el backend o créalo desde
 # apps/api/.env.example (las claves de cifrado y de JWT se generan; no se comparten).
 pnpm --filter api prisma migrate deploy
-pnpm --filter api seed:reference          # categorías de servicio
+pnpm --filter api seed:reference          # categorías y estilos de servicio
 pnpm --filter api prisma db seed          # usuarios y barberías de prueba (DATOS-PRUEBA.md)
 pnpm --filter api start:dev
 ```
@@ -163,6 +163,10 @@ Todos los errores tienen la misma forma:
 | `ACCOUNT_PENDING_DELETION`              | 403       | Cuenta pendiente de eliminación (login o sesión con `scope: "deletion"`)                  | Pantalla "Tu cuenta se eliminará el …" con "Cancelar eliminación" (ver `CUENTA.md`). |
 | `DELETION_BLOCKED`                      | 409       | No se puede eliminar la cuenta todavía (`details`: bloqueos)                              | Mostrar cada bloqueo (`SOLE_OWNER`, `STAFF_ROLE`).                                   |
 | `REVIEW_REQUIREMENTS_MISSING`           | 409       | Falta algo para enviar la barbería a revisión (`details[].requirement`)                   | Mostrar lo que falta (ver `ALTA.md`).                                                |
+| `INVALID_IMAGE`                         | 400       | El archivo no es JPEG, PNG ni WebP (se mira el contenido, no la extensión)                | "Esa imagen no se puede usar." Convertir HEIC antes de subir (ver `IMAGENES.md`).    |
+| `PAYLOAD_TOO_LARGE`                     | 413       | Imagen de más de 10 MB                                                                    | Comprimir o redimensionar en la app antes de subir.                                  |
+| `IMAGE_LIMIT_REACHED`                   | 409       | Galería llena (60) o máximo de destacadas (6); `details[].limit`                          | "Borra una foto para subir otra." / "Quita una destacada."                           |
+| `STORAGE_UNAVAILABLE`                   | 503       | El almacenamiento de imágenes no responde                                                 | Reintentar más tarde.                                                                |
 | `ACCOUNT_DISABLED` (sesión restringida) | 403       | La sesión de soporte de una cuenta deshabilitada solo sirve para tickets                  | Volver a la pantalla de ayuda.                                                       |
 | `WEBHOOK_MISMATCH` / `WEBHOOK_TOO_OLD`  | 409 / 400 | Solo para la pasarela                                                                     | No aplica a la app.                                                                  |
 | `INVALID_CODE`                          | 400       | Código incorrecto, vencido o usado                                                        | "Código inválido o vencido." Ofrecer reenviar.                                       |
@@ -258,6 +262,8 @@ Las rutas son relativas a `/api/v1`. "Sesión" significa la cabecera `Authorizat
     - Solo reservas propias `ATTENDED`, una vez, dentro de 14 días desde que quedaron atendidas. Si no: 409 `REVIEW_NOT_ALLOWED` o `REVIEW_ALREADY_EXISTS`.
     - Editar **una sola vez** dentro del plazo: `PATCH /reviews/{id}` (si no, 409 `REVIEW_EDIT_NOT_ALLOWED`). Retirar: `DELETE /reviews/{id}`.
     - `GET /me/reviews` trae `status` y `canEdit` (úsalo para mostrar u ocultar "Editar").
+    - **Cuándo mostrar "Valorar":** cada reserva trae `canReview` (no deducirlo) y `review` (`{ id, rating, canEdit }` o `null`) para mostrar "Editar" o "Ver". Para la barbería, siempre `false` y `null`.
+    - **Aviso "¿Cómo te fue?":** `GET /me/bookings/pending-reviews` → `{ items }`, las reservas con `canReview = true`, de la más reciente a la más antigua (hasta 20).
 11. **Opiniones de una barbería:** `GET /barbershops/{id}/reviews?barberId=&rating=` sin sesión. El autor llega como "Ana R."; `response` es la respuesta de la barbería o `null`. El promedio está en `rating` de la barbería y de cada barbero.
 12. **Reportar:** `POST /reviews/{id}/reports` con `{ target: "REVIEW" | "RESPONSE", reason, details? }` (motivos: `OFFENSIVE`, `PERSONAL_DATA`, `FAKE`, `SPAM`, `OTHER`). 204; una vez por contenido (409 `ALREADY_REPORTED`); el propio contenido no se reporta (403).
 
@@ -311,6 +317,7 @@ Las rutas son relativas a `/api/v1`. "Sesión" significa la cabecera `Authorizat
     - listar: `GET /barbershops/{id}/bookings?scope=`;
     - cancelar con motivo obligatorio: `POST /bookings/{id}/cancel` con `{ reason }`. Se devuelve todo y la cancelación queda registrada para revisión.
 11. **Responder valoraciones:** `PUT /reviews/{id}/response` con `{ text }` (hasta 500 caracteres). Una respuesta por valoración, editable con la misma llamada. El barbero no responde.
+    - **Lista de la barbería:** `GET /me/barbershops/{id}/reviews?status=&barberId=&rating=` (OWNER o MANAGER; otro recibe 404). Incluye las ocultas y en revisión, con `status`, `responseStatus` (la respuesta llega aunque soporte la haya ocultado) y `canRespond`.
 
 ### Notificaciones (todos)
 
@@ -382,12 +389,11 @@ Reembolso: `PENDING` (enviado o por enviar a la pasarela), `SUCCEEDED` o `FAILED
 
 ## 7. Qué está disponible hoy y qué no
 
-| Fase            | Estado                                                                                                                                                                                                                                                     | Qué deja preparado la app                                           |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| 1–12 (salvo 8B) | **Disponible**: cuentas, barberías, servicios, barberos, horarios, disponibilidad, búsqueda, reservas, pagos con `FakeGateway`, reembolsos, asistencia, agenda, favoritos, valoraciones, tickets de soporte y notificaciones (push simulado en desarrollo) | —                                                                   |
-| 8B              | **Falta**: pago real con Izipay (SDK, `formToken`)                                                                                                                                                                                                         | Pantalla de pago detrás de un módulo intercambiable; ver `PAGOS.md` |
-| 13              | **Falta**: promociones, cupones, auspiciadores y destacados                                                                                                                                                                                                | Hoy `featured` siempre es `false`; espacio para banners             |
-| 14              | **Falta**: galería e imágenes (logo, portada, fotos de barberos y trabajos)                                                                                                                                                                                | Hoy no hay imágenes: usar marcadores                                |
-| 15–16           | **Falta**: planes de suscripción y membresías                                                                                                                                                                                                              | —                                                                   |
+| Fase                 | Estado                                                                                                                                                                                                                                                                                                                            | Qué deja preparado la app                                           |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 1–12 y 14 (salvo 8B) | **Disponible**: cuentas, barberías, servicios, barberos, horarios, disponibilidad, búsqueda, reservas, pagos con `FakeGateway`, reembolsos, asistencia, agenda, favoritos, valoraciones, tickets de soporte, notificaciones (push simulado en desarrollo) e imágenes (logo, portada, foto de barbero, galería; ver `IMAGENES.md`) | —                                                                   |
+| 8B                   | **Falta**: pago real con Izipay (SDK, `formToken`)                                                                                                                                                                                                                                                                                | Pantalla de pago detrás de un módulo intercambiable; ver `PAGOS.md` |
+| 13                   | **Falta**: promociones, cupones, auspiciadores y destacados                                                                                                                                                                                                                                                                       | Hoy `featured` siempre es `false`; espacio para banners             |
+| 15–16                | **Falta**: planes de suscripción y membresías                                                                                                                                                                                                                                                                                     | —                                                                   |
 
 Estado detallado del proyecto: `docs/ESTADO.md`.

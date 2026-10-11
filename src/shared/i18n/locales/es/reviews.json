@@ -1,0 +1,73 @@
+{
+  "form": {
+    "newTitle": "Valorar",
+    "editTitle": "Editar valoración",
+    "question": "¿Cómo te fue?",
+    "comment": "Comentario (opcional)",
+    "commentHint": "Cuenta tu experiencia. Se publica con tu nombre y la inicial de tu apellido.",
+    "commentShort": "Escribe al menos 3 caracteres, o déjalo vacío.",
+    "send": "Publicar valoración",
+    "save": "Guardar cambios",
+    "editOnce": "Solo puedes editarla una vez.",
+    "delete": "Retirar valoración",
+    "deleteTitle": "¿Retirar tu valoración?",
+    "deleteMessage": "Dejará de verse en la barbería y no podrás volver a valorar esta reserva.",
+    "deleteConfirm": "Sí, retirar",
+    "sent": "¡Gracias por tu valoración!",
+    "updated": "Valoración actualizada",
+    "deleted": "Valoración retirada",
+    "notFound": "No encontramos esa valoración."
+  },
+  "mine": {
+    "title": "Mis valoraciones",
+    "empty": "Aún no has valorado ninguna cita",
+    "emptyMessage": "Después de tu corte podrás contar cómo te fue.",
+    "edit": "Editar",
+    "response": "Respuesta de la barbería"
+  },
+  "status": {
+    "VISIBLE": "Publicada",
+    "UNDER_REVIEW": "En revisión",
+    "HIDDEN": "Oculta"
+  },
+  "prompt": {
+    "title": "¿Cómo te fue con tu {{service}}?",
+    "message": "En {{shop}}. Tu opinión ayuda a otros clientes.",
+    "action": "Valorar"
+  },
+  "booking": {
+    "review": "Valorar esta cita",
+    "yours": "Tu valoración",
+    "edit": "Editar valoración"
+  },
+  "shop": {
+    "title": "Valoraciones",
+    "empty": "Aún no hay valoraciones",
+    "emptyMessage": "Cuando tus clientes valoren sus citas, aparecerán aquí.",
+    "respond": "Responder",
+    "editResponse": "Editar respuesta",
+    "responseTitle": "Responder a {{name}}",
+    "responseMessage": "Tu respuesta se publica debajo de la valoración. Sé amable: la verán todos.",
+    "responseField": "Tu respuesta",
+    "send": "Publicar respuesta",
+    "responded": "Respuesta publicada",
+    "responseHidden": "Soporte ocultó esta respuesta."
+  },
+  "report": {
+    "action": "Reportar",
+    "title": "Reportar valoración",
+    "message": "Soporte la revisará. Quien la escribió no sabrá que la reportaste.",
+    "details": "Detalles (opcional)",
+    "send": "Enviar reporte",
+    "sent": "Reporte enviado",
+    "reasons": {
+      "OFFENSIVE": "Ofensiva",
+      "PERSONAL_DATA": "Datos personales",
+      "FAKE": "Falsa",
+      "SPAM": "Spam",
+      "OTHER": "Otro motivo"
+    }
+  },
+  "by": "{{service}} con {{barber}}",
+  "edited": "editada"
+}

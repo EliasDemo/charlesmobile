@@ -34,7 +34,7 @@ En cualquiera de esos estados el dueño ya puede configurar todo: servicios, bar
 
 2. **Estado de la revisión:** `GET /barbershops/{id}/review` devuelve:
    - `status`;
-   - `missingRequirements`: `OWNER_DOCUMENT` y, cuando se active con la Fase 14, `PHOTO`;
+   - `missingRequirements`: `OWNER_DOCUMENT` y `PHOTO` (la portada; activo en `charles`, ver `IMAGENES.md`);
    - `canSubmit`;
    - `reviewNotes`: el motivo de los cambios pedidos;
    - `submittedAt`;

@@ -143,7 +143,16 @@ export function BarberRow({ barber }: { barber: Barber }) {
   );
 }
 
-export function ReviewItem({ review, timeZone }: { review: Review; timeZone: string }) {
+export function ReviewItem({
+  review,
+  timeZone,
+  footer,
+}: {
+  review: Review;
+  timeZone: string;
+  /** Quiet action under the review (reporting it). */
+  footer?: React.ReactNode;
+}) {
   const theme = useTheme();
   const { t } = useTranslation('barbershop');
   return (
@@ -177,6 +186,7 @@ export function ReviewItem({ review, timeZone }: { review: Review; timeZone: str
           <Text>{review.response.text}</Text>
         </View>
       ) : null}
+      {footer}
     </View>
   );
 }

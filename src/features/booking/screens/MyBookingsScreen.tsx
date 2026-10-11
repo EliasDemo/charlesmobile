@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { PendingReviewPrompt } from '@/features/reviews';
 import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
 import { InfiniteList, SegmentedControl, Text } from '@/shared/ui';
@@ -11,9 +12,12 @@ import { useMyBookings } from '../hooks/useBooking';
 export function MyBookingsScreen({
   onOpenBooking,
   onExplore,
+  onReview,
 }: {
   onOpenBooking: (id: string) => void;
   onExplore: () => void;
+  /** Review a booking waiting for it ("¿Cómo te fue?"). */
+  onReview: (bookingId: string) => void;
 }) {
   const theme = useTheme();
   const { t } = useTranslation('booking');
@@ -23,6 +27,7 @@ export function MyBookingsScreen({
   const header = (
     <View style={styles.header}>
       <Text variant="title">{t('nav.bookings', { ns: 'common' })}</Text>
+      <PendingReviewPrompt onReview={onReview} />
       <SegmentedControl
         label={t('nav.bookings', { ns: 'common' })}
         hideLabel

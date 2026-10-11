@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M9 (valoraciones y soporte) en curso, plan aprobado el 2026-10-11: parte 1 (soporte, reportes, cuenta deshabilitada) terminada; las valoraciones esperan el contrato del backend (`canReview`, `review`, `GET /me/barbershops/{id}/reviews`, `GET /me/bookings/pending-reviews`). Después, **M10 (fotos)**, adelantada porque el backend exige portada para enviar una barbería a revisión. M7 y M8 terminadas, pendientes de la prueba del usuario. M5 espera la Fase 8B del backend (Izipay).
+**Fase actual:** M9 (valoraciones y soporte) terminada, pendiente de la prueba del usuario. Sigue **M10 (fotos)**, adelantada porque el backend exige portada para enviar una barbería a revisión; necesita `expo-image-picker` (compilación nueva). M7 y M8 terminadas, pendientes de la prueba del usuario. M5 espera la Fase 8B del backend (Izipay).
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -258,14 +258,21 @@ Confirmada por el usuario en su teléfono.
 - Pruebas: `src/features/agenda/__tests__` (acciones según la API, sin cancelar, atendida, no-show con confirmación, error de plazo, corrección con motivo, vacío, error, vista de barbero). Maestro: `e2e/agenda-attendance.yaml`.
 - Sin cambios nativos.
 
-## M9 — Valoraciones y soporte (parte 1 terminada; falta la prueba del usuario)
+## M9 — Valoraciones y soporte (código terminado; falta la prueba del usuario)
 
 - **Ayuda** (Perfil → Ayuda, `/support`): mis consultas con su estado; nueva consulta (categoría, asunto 3–120, mensaje hasta 2000), opcionalmente ligada a una reserva ("Necesito ayuda con esta reserva" en el detalle, `/support/new?bookingId=`); conversación estilo chat (`/support/[id]`) con respuesta solo si `canReply`; `TICKET_CLOSED` ofrece abrir otra.
 - **Reportar una barbería** desde su ficha (con sesión): motivo y detalles (hasta 500); `ALREADY_REPORTED` se explica.
 - **Cuenta deshabilitada:** el login con `ACCOUNT_DISABLED` pide `support-access` (scope `support`, token solo en memoria) y abre `/account-disabled`, que solo muestra la ayuda con ese token.
 - Avisos de la bandeja: `ticket` abre la consulta y `account` abre Ayuda.
 - Pruebas: `src/features/support/__tests__`, `auth/__tests__/disabledAccount.test.tsx`.
-- **Parte 2 (pendiente del backend):** valorar una reserva atendida, editar o retirar, "Mis valoraciones", aviso "¿Cómo te fue?", y en Mi barbería las valoraciones con respuesta.
+- **Parte 2 — valoraciones** (contrato sincronizado el 2026-10-11, que trae también los campos de fotos de la Fase 14):
+  - En la reserva: "Valorar esta cita" solo con `canReview`; si ya existe, "Tu valoración" con sus estrellas y "Editar" solo con `review.canEdit`.
+  - Valorar (`/reviews/new?bookingId=`): estrellas 1–5 y comentario opcional de 3 a 500 (vacío no se envía). Editar una vez (`/reviews/[id]`, vacío envía `null`) o retirar con confirmación.
+  - "Mis valoraciones" en Perfil (`/profile/reviews`) con su estado y la respuesta de la barbería.
+  - Aviso "¿Cómo te fue con tu…?" arriba de Reservas (`GET /me/bookings/pending-reviews`, la más reciente).
+  - Mi barbería → mosaico "Valoraciones" (`/shop/[shopId]/reviews`): todas, con su estado; "Responder"/"Editar respuesta" solo con `canRespond` (hasta 500); aviso si soporte ocultó la respuesta.
+  - "Reportar" bajo cada valoración pública (con sesión). El aviso `NEW_REVIEW` abre las valoraciones de esa barbería.
+  - Pruebas: `src/features/reviews/__tests__`.
 
 ## M4.6 — Rediseño visual (código terminado; falta la revisión del usuario con capturas)
 

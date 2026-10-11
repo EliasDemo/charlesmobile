@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { PushPermissionPrompt } from '@/features/notifications';
+import { BookingReviewSection } from '@/features/reviews';
 import { useTranslation } from '@/shared/i18n';
 import { formatDuration, formatLongDate, formatMinutes, formatMoney, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
@@ -15,9 +16,19 @@ export interface BookingScreenProps {
   onOpenBarbershop: (barbershopId: string) => void;
   /** Opens a support ticket about this booking. */
   onHelp: (bookingId: string) => void;
+  onReview: (bookingId: string) => void;
+  onEditReview: (reviewId: string) => void;
 }
 
-export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop, onHelp }: BookingScreenProps) {
+export function BookingScreen({
+  id,
+  onBack,
+  onBookAgain,
+  onOpenBarbershop,
+  onHelp,
+  onReview,
+  onEditReview,
+}: BookingScreenProps) {
   const { t } = useTranslation('booking');
   const data = useBooking(id);
   const notFound = {
@@ -131,6 +142,7 @@ export function BookingScreen({ id, onBack, onBookAgain, onOpenBarbershop, onHel
               </Card>
             ) : null}
 
+            <BookingReviewSection booking={booking} onReview={onReview} onEditReview={onEditReview} />
             <PriceBreakdown price={booking.price} />
 
             <CancelSection

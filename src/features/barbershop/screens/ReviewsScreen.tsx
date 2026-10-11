@@ -7,7 +7,13 @@ import { useReviews } from '../hooks/useBarbershop';
 
 const STAR_FILTERS = [5, 4, 3, 2, 1] as const;
 
-export function ReviewsScreen({ barbershopId }: { barbershopId: string }) {
+export function ReviewsScreen({
+  barbershopId,
+  reviewFooter,
+}: {
+  barbershopId: string;
+  reviewFooter?: (reviewId: string) => React.ReactNode;
+}) {
   const { t } = useTranslation('barbershop');
   const reviews = useReviews(barbershopId);
   const shop = reviews.shop;
@@ -61,7 +67,9 @@ export function ReviewsScreen({ barbershopId }: { barbershopId: string }) {
         error: reviews.query.error ?? shop.error,
       }}
       header={header}
-      renderItem={({ item }) => <ReviewItem review={item} timeZone={timeZone!} />}
+      renderItem={({ item }) => (
+        <ReviewItem review={item} timeZone={timeZone!} footer={reviewFooter?.(item.id)} />
+      )}
       keyExtractor={(item) => item.id}
       empty={{
         title: reviews.hasFilters ? t('reviews.filterEmpty') : t('reviews.empty'),

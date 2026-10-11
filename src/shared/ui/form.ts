@@ -27,7 +27,7 @@ export function applyServerErrors<T extends FieldValues>(
  * Text for a field error: client rules store an i18n key of the given namespace, server errors
  * arrive already translated (applyServerErrors). Unknown keys are shown as they are.
  */
-export function useFieldErrorText(namespace: 'auth' | 'profile' | 'shop' | 'support') {
+export function useFieldErrorText(namespace: 'auth' | 'profile' | 'shop' | 'support' | 'reviews') {
   const { t } = useTranslation(namespace);
   return (message: string | undefined): string | undefined =>
     message ? (t(message as never, { defaultValue: message }) as string) : undefined;

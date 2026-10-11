@@ -38,7 +38,7 @@ describe('notificationTarget', () => {
   it('maps each resource to its screen', () => {
     expect(notificationTarget({ type: 'booking', id: 'b' })).toEqual({ kind: 'booking', id: 'b' });
     expect(notificationTarget({ type: 'barbershop', id: 's' })).toEqual({ kind: 'shop' });
-    expect(notificationTarget({ type: 'review', id: 'r' })).toEqual({ kind: 'shop' });
+    expect(notificationTarget({ type: 'review', id: 's1' })).toEqual({ kind: 'shopReviews', shopId: 's1' });
     expect(notificationTarget({ type: 'ticket', id: 't' })).toEqual({ kind: 'ticket', id: 't' });
     expect(notificationTarget({ type: 'account', id: null })).toEqual({ kind: 'support' });
   });

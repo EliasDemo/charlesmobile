@@ -106,6 +106,8 @@ export const searchResult = (
   overrides: Partial<Schemas['SearchResultDto']> = {},
 ): Schemas['SearchResultDto'] => ({
   id: SHOP_ID,
+  logoUrl: null,
+  coverThumbUrl: null,
   name: 'Barbería Demo Miraflores',
   type: 'BARBERSHOP',
   status: 'OPEN',
@@ -133,6 +135,9 @@ export const barbershop = (
   overrides: Partial<Schemas['BarbershopPublicDto']> = {},
 ): Schemas['BarbershopPublicDto'] => ({
   id: SHOP_ID,
+  logoUrl: null,
+  coverUrl: null,
+  coverThumbUrl: null,
   name: 'Barbería Demo Miraflores',
   description: null,
   address: 'Av. Ejemplo 123, Miraflores, Lima',
@@ -163,6 +168,8 @@ export const service = (
 
 export const barber = (overrides: Partial<Schemas['BarberPublicDto']> = {}): Schemas['BarberPublicDto'] => ({
   id: '01990000-0000-7000-8000-0000000000ca',
+  yearsExperience: null,
+  specialties: [],
   displayName: 'Barbero Demo',
   bio: null,
   photoUrl: null,
@@ -216,6 +223,8 @@ export const categories = (): Schemas['ServiceCategoryListDto'] => ({
 
 export const booking = (overrides: Partial<Schemas['BookingDto']> = {}): Schemas['BookingDto'] => ({
   id: 'bk-1',
+  canReview: false,
+  review: null,
   status: 'PENDING_PAYMENT',
   barbershop: { id: SHOP_ID, name: 'Barbería Demo Miraflores', timezone: 'America/Lima' },
   service: { id: '01990000-0000-7000-8000-00000000012d', name: 'Corte clásico', categoryKey: 'haircut' },

@@ -26,7 +26,8 @@
       "barbers": "Barberos",
       "members": "Responsables",
       "hours": "Horario",
-      "blocks": "Bloqueos"
+      "blocks": "Bloqueos",
+      "reviews": "Valoraciones"
     },
     "asBarber": "Como barbero",
     "myBlocks": "Mis bloqueos en {{name}}",
@@ -42,7 +43,8 @@
       "barbers": "Tu equipo y sus servicios",
       "members": "Quién administra",
       "hours": "Días y horas de atención",
-      "blocks": "Descansos y ausencias"
+      "blocks": "Descansos y ausencias",
+      "reviews": "Lo que dicen tus clientes"
     }
   },
   "status": {

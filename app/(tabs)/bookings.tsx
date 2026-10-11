@@ -17,6 +17,7 @@ export default function BookingsRoute() {
     <MyBookingsScreen
       onOpenBooking={(id) => router.push({ pathname: '/bookings/[id]', params: { id } })}
       onExplore={() => router.navigate('/')}
+      onReview={(bookingId) => router.push({ pathname: '/reviews/new', params: { bookingId } })}
     />
   );
 }

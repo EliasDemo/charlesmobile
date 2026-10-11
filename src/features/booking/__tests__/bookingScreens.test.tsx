@@ -326,6 +326,8 @@ const detailProps = () => ({
   onBookAgain: jest.fn(),
   onOpenBarbershop: jest.fn(),
   onHelp: jest.fn(),
+  onReview: jest.fn(),
+  onEditReview: jest.fn(),
 });
 
 describe('BookingScreen', () => {
@@ -435,7 +437,9 @@ describe('MyBookingsScreen', () => {
       'GET /api/v1/barbershops/{id}': { body: barbershop() },
     });
     const onOpen = jest.fn();
-    await renderWithProviders(<MyBookingsScreen onOpenBooking={onOpen} onExplore={jest.fn()} />);
+    await renderWithProviders(
+      <MyBookingsScreen onOpenBooking={onOpen} onExplore={jest.fn()} onReview={jest.fn()} />,
+    );
     expect(await screen.findByText(/09:00/)).toBeTruthy();
     expect(screen.getByText(texts.status.CONFIRMED)).toBeTruthy();
     await fireEvent.press(screen.getByTestId('booking-bk-1'));
@@ -450,7 +454,9 @@ describe('MyBookingsScreen', () => {
   it('shows the error state', async () => {
     signIn();
     api({ 'GET /api/v1/me/bookings': apiError(500, 'INTERNAL_ERROR') });
-    await renderWithProviders(<MyBookingsScreen onOpenBooking={jest.fn()} onExplore={jest.fn()} />);
+    await renderWithProviders(
+      <MyBookingsScreen onOpenBooking={jest.fn()} onExplore={jest.fn()} onReview={jest.fn()} />,
+    );
     expect(await screen.findByText(common.actions.retry)).toBeTruthy();
   });
 });
