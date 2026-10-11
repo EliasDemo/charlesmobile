@@ -1,5 +1,6 @@
 import { ActivityIndicator, Pressable, StyleSheet, View, type PressableProps } from 'react-native';
 import { sizes, spacing, touchTarget, useTheme, type Theme } from '@/shared/theme';
+import { Icon, type IconName } from './Icon';
 import { Text, type TextProps } from './Text';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
@@ -10,6 +11,8 @@ export interface ButtonProps extends Omit<PressableProps, 'children' | 'style'> 
   /** Shows a spinner and blocks presses (e.g. while a form is submitting). Keeps full contrast. */
   loading?: boolean;
   fullWidth?: boolean;
+  /** Leading icon (decorative: the label already says what it does). */
+  icon?: IconName;
 }
 
 type ButtonState = 'normal' | 'pressed' | 'disabled';
@@ -66,6 +69,7 @@ export function Button({
   variant = 'primary',
   loading = false,
   fullWidth = false,
+  icon,
   disabled,
   ...props
 }: ButtonProps) {
@@ -83,7 +87,7 @@ export function Button({
         const colors = buttonColors(theme, variant, stateFor(pressed));
         return [
           styles.base,
-          { backgroundColor: colors.background, borderColor: colors.border, borderRadius: theme.radius.md },
+          { backgroundColor: colors.background, borderColor: colors.border, borderRadius: theme.radius.pill },
           fullWidth && styles.fullWidth,
         ];
       }}
@@ -94,7 +98,11 @@ export function Button({
         const textColor = theme.colors[colors.text];
         return (
           <View style={styles.content}>
-            {loading ? <ActivityIndicator color={textColor} testID="button-spinner" /> : null}
+            {loading ? (
+              <ActivityIndicator color={textColor} testID="button-spinner" />
+            ) : icon ? (
+              <Icon name={icon} size={sizes.icon} color={textColor} />
+            ) : null}
             <Text variant="bodyStrong" style={{ color: textColor }}>
               {label}
             </Text>
@@ -109,8 +117,8 @@ const styles = StyleSheet.create({
   base: {
     minHeight: touchTarget,
     minWidth: touchTarget,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: sizes.borderWidth,

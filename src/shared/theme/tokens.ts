@@ -1,32 +1,39 @@
 // Design tokens. The brand lives here: change the palette in one place.
 
 const palette = {
-  copper50: '#FBF3EC',
-  copper200: '#EBC6A3',
-  copper300: '#DDA673',
-  copper400: '#C98A4E',
-  copper500: '#B07236',
-  copper600: '#8E5A28',
-  copper700: '#744920',
+  // Renewed copper: warmer and brighter, the brand color.
+  copper50: '#FDF1E8',
+  copper100: '#FBE2D0',
+  copper200: '#F7C4A0',
+  copper300: '#F2A06B',
+  copper400: '#E8823F',
+  copper500: '#C8641F',
+  copper600: '#A5501A',
+  copper700: '#843F15',
+  // Cool neutrals (light) and blue-tinted near-black (dark): cleaner, more modern.
   neutral0: '#FFFFFF',
-  neutral50: '#F7F5F2',
-  neutral100: '#EEEBE6',
-  neutral200: '#DEDAD3',
-  neutral400: '#A39D94',
-  neutral500: '#6E685F',
-  neutral600: '#5C5750',
-  neutral700: '#3A3631',
-  neutral800: '#26231F',
-  neutral850: '#1D1B18',
-  neutral900: '#141210',
-  red300: '#F5A49A',
-  red400: '#F07B6E',
-  red600: '#B3261E',
-  red700: '#8C1D18',
-  green400: '#6FCF8E',
-  green600: '#1E7A3E',
-  amber400: '#F2C14E',
-  amber700: '#8A5A00',
+  neutral25: '#FAFBFC',
+  neutral50: '#F4F6F8',
+  neutral100: '#EAEDF1',
+  neutral200: '#D9DEE5',
+  neutral300: '#C1C8D2',
+  neutral400: '#98A2B3',
+  neutral500: '#667085',
+  neutral600: '#475467',
+  neutral700: '#2B3340',
+  neutral750: '#232933',
+  neutral800: '#1B2029',
+  neutral850: '#151920',
+  neutral900: '#0D1015',
+  ink: '#101828',
+  red300: '#FDA29B',
+  red400: '#F97066',
+  red600: '#C4320A',
+  red700: '#9A2508',
+  green400: '#47CD89',
+  green600: '#067647',
+  amber400: '#FDB022',
+  amber700: '#93370D',
 } as const;
 
 export type ColorScheme = 'light' | 'dark';
@@ -35,6 +42,8 @@ export interface ThemeColors {
   background: string;
   surface: string;
   surfaceElevated: string;
+  /** Subtle surface inside cards (stat tiles, timeline rail, inputs). */
+  surfaceMuted: string;
   border: string;
   textPrimary: string;
   textSecondary: string;
@@ -54,6 +63,8 @@ export interface ThemeColors {
   focus: string;
   /** Dimmed layer behind dialogs. */
   backdrop: string;
+  /** Soft shadow of cards and sheets. */
+  shadow: string;
   /**
    * Status colors (bookings and other states): soft background + text/icon color. Always shown
    * together with a label or icon, never as color alone.
@@ -75,8 +86,9 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     background: palette.neutral50,
     surface: palette.neutral0,
     surfaceElevated: palette.neutral0,
+    surfaceMuted: palette.neutral25,
     border: palette.neutral200,
-    textPrimary: palette.neutral900,
+    textPrimary: palette.ink,
     textSecondary: palette.neutral600,
     textMuted: palette.neutral500,
     primary: palette.copper600,
@@ -91,51 +103,65 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     warning: palette.amber700,
     onStatus: palette.neutral0,
     focus: palette.copper500,
-    backdrop: 'rgba(20, 18, 16, 0.5)',
-    statusPendingBg: '#FFF4D6',
-    statusPendingFg: '#7A4F00',
-    statusSuccessBg: '#E3F4E8',
-    statusSuccessFg: '#1E6B37',
+    backdrop: 'rgba(16, 24, 40, 0.45)',
+    shadow: 'rgba(16, 24, 40, 0.10)',
+    statusPendingBg: '#FFF4E0',
+    statusPendingFg: '#93370D',
+    statusSuccessBg: '#DCFAE6',
+    statusSuccessFg: '#067647',
     statusNeutralBg: palette.neutral100,
-    statusNeutralFg: '#4A453F',
-    statusDangerBg: '#FBE4E2',
-    statusDangerFg: '#A3231C',
+    statusNeutralFg: palette.neutral600,
+    statusDangerBg: '#FEE4E2',
+    statusDangerFg: '#B42318',
   },
   dark: {
     background: palette.neutral900,
     surface: palette.neutral850,
     surfaceElevated: palette.neutral800,
+    surfaceMuted: palette.neutral750,
     border: palette.neutral700,
-    textPrimary: palette.neutral50,
-    textSecondary: palette.neutral200,
+    textPrimary: '#F2F4F7',
+    textSecondary: palette.neutral300,
     textMuted: palette.neutral400,
     primary: palette.copper300,
     primaryPressed: palette.copper200,
     onPrimary: palette.neutral900,
-    primarySoft: palette.neutral800,
+    primarySoft: '#2E1D12',
     danger: palette.red400,
     dangerPressed: palette.red300,
     disabledBackground: palette.neutral700,
-    onDisabled: palette.neutral200,
+    onDisabled: palette.neutral300,
     success: palette.green400,
     warning: palette.amber400,
     onStatus: palette.neutral900,
     focus: palette.copper200,
     backdrop: 'rgba(0, 0, 0, 0.6)',
-    statusPendingBg: '#3A2E12',
+    shadow: 'rgba(0, 0, 0, 0.5)',
+    statusPendingBg: '#3B2A0E',
     statusPendingFg: palette.amber400,
-    statusSuccessBg: '#173322',
+    statusSuccessBg: '#0F2E1F',
     statusSuccessFg: palette.green400,
-    statusNeutralBg: '#2E2B27',
-    statusNeutralFg: '#CFC9C0',
-    statusDangerBg: '#3D1D1A',
+    statusNeutralBg: palette.neutral750,
+    statusNeutralFg: palette.neutral300,
+    statusDangerBg: '#3A1715',
     statusDangerFg: palette.red300,
   },
 };
 
-export const spacing = { xxs: 2, xs: 4, sm: 8, md: 12, lg: 16, xl: 24, xxl: 32, xxxl: 48 } as const;
+/** `gutter`: side margin of every screen. */
+export const spacing = {
+  xxs: 2,
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  gutter: 20,
+  xl: 24,
+  xxl: 32,
+  xxxl: 48,
+} as const;
 
-export const radius = { sm: 6, md: 10, lg: 16, pill: 999 } as const;
+export const radius = { sm: 8, md: 12, lg: 18, xl: 24, pill: 999 } as const;
 
 export const fontFamily = {
   regular: 'Inter_400Regular',

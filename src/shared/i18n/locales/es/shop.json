@@ -33,7 +33,17 @@
     "mySchedule": "Mi horario en {{name}}",
     "agendaSoon": "La agenda llega en la próxima fase.",
     "draft": "Tu barbería aún no es pública. Completa lo que falta y envíala a revisión desde \"Revisión\".",
-    "changesRequested": "Soporte pidió cambios antes de publicarla. Míralos en \"Revisión\"."
+    "changesRequested": "Soporte pidió cambios antes de publicarla. Míralos en \"Revisión\".",
+    "sectionHints": {
+      "review": "Lo que falta para publicarla",
+      "details": "Nombre, dirección y contacto",
+      "status": "Abierta o cerrada temporalmente",
+      "services": "Precios y duración",
+      "barbers": "Tu equipo y sus servicios",
+      "members": "Quién administra",
+      "hours": "Días y horas de atención",
+      "blocks": "Descansos y ausencias"
+    }
   },
   "status": {
     "OPEN": "Abierta",

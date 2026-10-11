@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { sizes, spacing, useTheme } from '@/shared/theme';
+import { sizes, spacing, useTheme, type StatusTone } from '@/shared/theme';
 import { Icon, type IconName } from './Icon';
+import { TONE_COLORS, useSurfaceStyle } from './surface';
 import { Text } from './Text';
 
 export interface InfoItem {
@@ -73,11 +74,7 @@ export function InfoCard({
       </View>
     </>
   );
-  const surface = {
-    backgroundColor: theme.colors.surface,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radius.lg,
-  };
+  const surface = useSurfaceStyle();
   if (!onPress) {
     return (
       <View style={[styles.card, surface]} testID={testID}>
@@ -102,21 +99,22 @@ export function InfoCard({
 }
 
 /** Square tile with a category icon, as the leading visual of a card. */
-export function IconTile({ icon }: { icon: IconName }) {
+export function IconTile({ icon, tone }: { icon: IconName; tone?: StatusTone }) {
   const theme = useTheme();
+  const [bg, fg] = tone ? TONE_COLORS[tone] : (['primarySoft', 'primary'] as const);
   return (
     <View
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
-      style={[styles.tile, { backgroundColor: theme.colors.primarySoft, borderRadius: theme.radius.md }]}
+      style={[styles.tile, { backgroundColor: theme.colors[bg], borderRadius: theme.radius.md }]}
     >
-      <Icon name={icon} color={theme.colors.primary} size={sizes.icon} />
+      <Icon name={icon} color={theme.colors[fg]} size={sizes.icon} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  card: { flexDirection: 'row', gap: spacing.md, padding: spacing.md, borderWidth: sizes.borderWidth },
+  card: { flexDirection: 'row', gap: spacing.md, padding: spacing.lg },
   body: { flex: 1, gap: spacing.xs },
   titleRow: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
   flex: { flex: 1 },

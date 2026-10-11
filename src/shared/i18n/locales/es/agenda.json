@@ -58,5 +58,15 @@
     "confirm": "Sí, cancelar cita",
     "done": "Cita cancelada.",
     "doneRefund": "Cita cancelada. Se devolverán {{amount}} al cliente."
+  },
+  "stats": {
+    "bookings": "Citas",
+    "pending": "Por marcar",
+    "attended": "Atendidas"
+  },
+  "toast": {
+    "attended": "Cita marcada como atendida",
+    "noShow": "Marcada como no asistió",
+    "corrected": "Asistencia corregida"
   }
 }

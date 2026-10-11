@@ -1,6 +1,7 @@
+import type { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { formatMoney, formatTime } from '@/shared/lib';
+import { formatLongDate, formatMoney, formatTime, zonedTimeToIso } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
 import {
   Chip,
@@ -10,12 +11,13 @@ import {
   Notice,
   QueryView,
   Screen,
+  ScreenTitle,
   SegmentedControl,
   Text,
   TextField,
 } from '@/shared/ui';
 import type { Agenda, AgendaBlock, AgendaItem } from '../api/agendaApi';
-import { AgendaBlockCard, AgendaItemCard } from '../components/AgendaParts';
+import { AgendaBlockCard, AgendaItemCard, StatTile } from '../components/AgendaParts';
 import { REASON_MAX, useAgenda } from '../hooks/useAgenda';
 
 type Row = { kind: 'item'; item: AgendaItem } | { kind: 'block'; block: AgendaBlock };
@@ -31,13 +33,13 @@ function timeline(agenda: Agenda): Row[] {
 }
 
 /** Agenda tab of the barbershop mode: the day's bookings and the attendance actions. */
-export function AgendaScreen() {
+export function AgendaScreen({ headerRight }: { headerRight?: ReactNode }) {
   const { t } = useTranslation('agenda');
   const a = useAgenda();
 
   return (
     <Screen edges={['top', 'left', 'right']} onRefresh={a.refresh} refreshing={a.isRefreshing}>
-      <Text variant="title">{t('title')}</Text>
+      <ScreenTitle title={t('title')} right={headerRight} />
       <QueryView query={a.access} skeletonCount={2}>
         {() =>
           !a.hasAccess ? (
@@ -92,9 +94,14 @@ export function AgendaScreen() {
                   ))}
                 </ChipRow>
               ) : null}
-              <Text variant="caption" color="textMuted">
-                {t('timezone', { timezone: a.timeZone })}
-              </Text>
+              <View style={styles.dayHeader}>
+                <Text variant="subtitle" style={styles.capitalize}>
+                  {formatLongDate(zonedTimeToIso(a.date, '12:00', a.timeZone), a.timeZone)}
+                </Text>
+                <Text variant="caption" color="textMuted">
+                  {t('timezone', { timezone: a.timeZone })}
+                </Text>
+              </View>
               {a.actionError ? <Notice tone="danger" message={a.actionError} /> : null}
               {a.cancelled ? (
                 <Notice
@@ -114,33 +121,53 @@ export function AgendaScreen() {
               >
                 {(agenda) => (
                   <View style={styles.list}>
+                    <View style={styles.stats}>
+                      <StatTile icon="calendar" value={agenda.items.length} label={t('stats.bookings')} />
+                      <StatTile
+                        icon="alert-circle"
+                        value={agenda.pendingAttention}
+                        label={t('stats.pending')}
+                        tone={agenda.pendingAttention > 0 ? 'pending' : 'neutral'}
+                      />
+                      <StatTile
+                        icon="checkmark-done"
+                        value={agenda.items.filter((item) => item.status === 'ATTENDED').length}
+                        label={t('stats.attended')}
+                        tone="success"
+                      />
+                    </View>
                     {agenda.pendingAttention > 0 ? (
                       <Notice tone="warning" message={t('pending', { count: agenda.pendingAttention })} />
                     ) : null}
-                    {timeline(agenda).map((row) =>
-                      row.kind === 'item' ? (
-                        <AgendaItemCard
-                          key={row.item.bookingId}
-                          item={row.item}
-                          timeZone={agenda.timezone}
-                          showBarber={a.view === 'shop' && a.barberId === null}
-                          attending={a.attendingId === row.item.bookingId}
-                          onAttended={() => a.markAttended(row.item)}
-                          onNoShow={() => a.askNoShow(row.item)}
-                          onCorrect={() => a.askCorrection(row.item)}
-                          onCancel={() => a.askCancel(row.item)}
-                        />
-                      ) : (
-                        <AgendaBlockCard
-                          key={row.block.id}
-                          block={row.block}
-                          timeZone={agenda.timezone}
-                          barberName={
-                            a.barbers.find((barber) => barber.id === row.block.barberId)?.displayName ?? null
-                          }
-                        />
-                      ),
-                    )}
+                    <View>
+                      {timeline(agenda).map((row, index, rows) =>
+                        row.kind === 'item' ? (
+                          <AgendaItemCard
+                            key={row.item.bookingId}
+                            item={row.item}
+                            timeZone={agenda.timezone}
+                            showBarber={a.view === 'shop' && a.barberId === null}
+                            attending={a.attendingId === row.item.bookingId}
+                            onAttended={() => a.markAttended(row.item)}
+                            onNoShow={() => a.askNoShow(row.item)}
+                            onCorrect={() => a.askCorrection(row.item)}
+                            onCancel={() => a.askCancel(row.item)}
+                            last={index === rows.length - 1}
+                          />
+                        ) : (
+                          <AgendaBlockCard
+                            key={row.block.id}
+                            block={row.block}
+                            timeZone={agenda.timezone}
+                            last={index === rows.length - 1}
+                            barberName={
+                              a.barbers.find((barber) => barber.id === row.block.barberId)?.displayName ??
+                              null
+                            }
+                          />
+                        ),
+                      )}
+                    </View>
                   </View>
                 )}
               </QueryView>
@@ -244,4 +271,7 @@ const styles = StyleSheet.create({
   content: { gap: spacing.md },
   list: { gap: spacing.md },
   chips: { gap: spacing.sm, paddingVertical: spacing.xxs },
+  stats: { flexDirection: 'row', gap: spacing.sm },
+  dayHeader: { gap: spacing.xxs },
+  capitalize: { textTransform: 'capitalize' },
 });

@@ -56,8 +56,8 @@ export function ProfileScreen(props: ProfileScreenProps) {
               <Text variant="label" color="textSecondary">
                 {t('sections.account')}
               </Text>
-              <ListRow title={t('phone')} value={profile.phone ?? t('noPhone')} />
-              <ListRow title={t('edit.title')} onPress={props.onEditProfile} />
+              <ListRow icon="call" title={t('phone')} value={profile.phone ?? t('noPhone')} />
+              <ListRow icon="create" title={t('edit.title')} onPress={props.onEditProfile} />
             </View>
             <View>
               <Text variant="label" color="textSecondary">
@@ -65,21 +65,32 @@ export function ProfileScreen(props: ProfileScreenProps) {
               </Text>
               {props.switchModeTo ? (
                 <ListRow
+                  icon="swap-horizontal"
                   title={t(props.switchModeTo === 'shop' ? 'mode.toShop' : 'mode.toClient', { ns: 'shop' })}
                   onPress={props.onSwitchMode}
                 />
               ) : null}
-              <ListRow title={t('mode.create', { ns: 'shop' })} onPress={props.onCreateShop} />
-              <ListRow title={t('mode.invitations', { ns: 'shop' })} onPress={props.onInvitations} />
+              <ListRow
+                icon="add-circle"
+                title={t('mode.create', { ns: 'shop' })}
+                onPress={props.onCreateShop}
+              />
+              <ListRow
+                icon="mail"
+                title={t('mode.invitations', { ns: 'shop' })}
+                onPress={props.onInvitations}
+              />
             </View>
             <View>
               <Text variant="label" color="textSecondary">
                 {t('sections.settings')}
               </Text>
-              <ListRow title={t('favorites')} onPress={props.onFavorites} />
-              <ListRow title={t('preferences.title')} onPress={props.onPreferences} />
-              <ListRow title={t('welcomeAgain')} onPress={props.onWelcome} />
-              {props.onDesignSystem ? <ListRow title={t('devTools')} onPress={props.onDesignSystem} /> : null}
+              <ListRow icon="heart" title={t('favorites')} onPress={props.onFavorites} />
+              <ListRow icon="settings" title={t('preferences.title')} onPress={props.onPreferences} />
+              <ListRow icon="sparkles" title={t('welcomeAgain')} onPress={props.onWelcome} />
+              {props.onDesignSystem ? (
+                <ListRow icon="construct" title={t('devTools')} onPress={props.onDesignSystem} />
+              ) : null}
             </View>
           </View>
         )}
@@ -102,7 +113,7 @@ export function ProfileScreen(props: ProfileScreenProps) {
           disabled={logout.isLoggingOut}
         />
       </View>
-      <ListRow title={t('deleteAccount')} onPress={props.onDeleteAccount} destructive />
+      <ListRow icon="trash" title={t('deleteAccount')} onPress={props.onDeleteAccount} destructive />
 
       <ConfirmDialog
         visible={logout.confirmingAll}

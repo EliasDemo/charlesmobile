@@ -1,3 +1,4 @@
+export { ActionTile, TileGrid, type ActionTileProps } from './ActionTile';
 export { Button, buttonColors, type ButtonColors, type ButtonProps, type ButtonVariant } from './Button';
 export { Card } from './Card';
 export { ErrorFallback, type ErrorFallbackProps } from './ErrorFallback';
@@ -21,6 +22,8 @@ export {
   type ErrorStateProps,
 } from './StateViews';
 export { ScreenTitle } from './ScreenTitle';
+export { ToastHost, showToast } from './Toast';
+export { useSurfaceStyle } from './surface';
 export { Text, type TextProps } from './Text';
 export { TextField, type TextFieldProps } from './TextField';
 export { Checkbox, type CheckboxProps } from './Checkbox';

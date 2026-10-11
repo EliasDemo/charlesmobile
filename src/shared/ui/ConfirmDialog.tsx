@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import { Button } from './Button';
+import { Icon, type IconName } from './Icon';
 import { Text } from './Text';
 
 export interface ConfirmDialogProps {
@@ -15,12 +17,17 @@ export interface ConfirmDialogProps {
   onCancel: () => void;
   destructive?: boolean;
   loading?: boolean;
+  /** Icon on top; by default a warning for destructive actions and a question otherwise. */
+  icon?: IconName;
   /** Extra content between the message and the buttons (for example, a required reason). */
   children?: ReactNode;
   confirmDisabled?: boolean;
 }
 
-/** Confirmation for irreversible actions (CLAUDE.md §6). Same look on Android and iOS. */
+/**
+ * Confirmation for important actions (CLAUDE.md §6), as a sheet from the bottom: big icon, the
+ * consequence in plain words, and the buttons within thumb reach. Same look on Android and iOS.
+ */
 export function ConfirmDialog({
   visible,
   title,
@@ -30,57 +37,100 @@ export function ConfirmDialog({
   onCancel,
   destructive,
   loading,
+  icon,
   children,
   confirmDisabled,
 }: ConfirmDialogProps) {
   const theme = useTheme();
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
+  const tint = destructive ? theme.colors.danger : theme.colors.primary;
+  const tintSoft = destructive ? theme.colors.statusDangerBg : theme.colors.primarySoft;
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onCancel} statusBarTranslucent>
-      <Pressable
-        style={[styles.backdrop, { backgroundColor: theme.colors.backdrop }]}
-        onPress={loading ? undefined : onCancel}
-        accessibilityLabel={t('actions.cancel')}
-      >
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onCancel} statusBarTranslucent>
+      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Pressable
-          accessibilityRole="alert"
-          style={[
-            styles.dialog,
-            {
-              backgroundColor: theme.colors.surfaceElevated,
-              borderColor: theme.colors.border,
-              borderRadius: theme.radius.lg,
-            },
-          ]}
+          style={[styles.backdrop, { backgroundColor: theme.colors.backdrop }]}
+          onPress={loading ? undefined : onCancel}
+          accessibilityLabel={t('actions.cancel')}
         >
-          <Text variant="subtitle">{title}</Text>
-          <Text color="textSecondary">{message}</Text>
-          {children}
-          <View style={styles.actions}>
-            <Button label={t('actions.cancel')} variant="ghost" onPress={onCancel} disabled={loading} />
-            <Button
-              label={confirmLabel}
-              variant={destructive ? 'danger' : 'primary'}
-              onPress={onConfirm}
-              loading={loading}
-              disabled={confirmDisabled}
+          <Pressable
+            accessibilityRole="alert"
+            style={[
+              styles.sheet,
+              {
+                backgroundColor: theme.colors.surfaceElevated,
+                borderTopLeftRadius: theme.radius.xl,
+                borderTopRightRadius: theme.radius.xl,
+                paddingBottom: spacing.xl + insets.bottom,
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.handle,
+                { backgroundColor: theme.colors.border, borderRadius: theme.radius.pill },
+              ]}
             />
-          </View>
+            <View
+              importantForAccessibility="no-hide-descendants"
+              style={[styles.icon, { backgroundColor: tintSoft, borderRadius: theme.radius.pill }]}
+            >
+              <Icon
+                name={icon ?? (destructive ? 'alert-circle' : 'help-circle')}
+                size={sizes.iconLarge}
+                color={tint}
+              />
+            </View>
+            <Text variant="title" align="center">
+              {title}
+            </Text>
+            <Text color="textSecondary" align="center">
+              {message}
+            </Text>
+            {children}
+            <View style={styles.actions}>
+              <Button
+                label={confirmLabel}
+                variant={destructive ? 'danger' : 'primary'}
+                onPress={onConfirm}
+                loading={loading}
+                disabled={confirmDisabled}
+                fullWidth
+              />
+              <Button
+                label={t('actions.cancel')}
+                variant="ghost"
+                onPress={onCancel}
+                disabled={loading}
+                fullWidth
+              />
+            </View>
+          </Pressable>
         </Pressable>
-      </Pressable>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, justifyContent: 'center', padding: spacing.xl },
-  dialog: {
+  flex: { flex: 1 },
+  backdrop: { flex: 1, justifyContent: 'flex-end' },
+  sheet: {
     gap: spacing.md,
-    padding: spacing.xl,
-    borderWidth: sizes.borderWidth,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.md,
     width: '100%',
     maxWidth: sizes.maxContentWidth,
     alignSelf: 'center',
   },
-  actions: { flexDirection: 'row', justifyContent: 'flex-end', flexWrap: 'wrap', gap: spacing.sm },
+  handle: { alignSelf: 'center', width: spacing.xxxl, height: spacing.xs, marginBottom: spacing.sm },
+  icon: {
+    alignSelf: 'center',
+    width: sizes.iconLarge + spacing.xl,
+    height: sizes.iconLarge + spacing.xl,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actions: { gap: spacing.sm, marginTop: spacing.sm },
 });

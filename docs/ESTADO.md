@@ -258,6 +258,16 @@ Confirmada por el usuario en su teléfono.
 - Pruebas: `src/features/agenda/__tests__` (acciones según la API, sin cancelar, atendida, no-show con confirmación, error de plazo, corrección con motivo, vacío, error, vista de barbero). Maestro: `e2e/agenda-attendance.yaml`.
 - Sin cambios nativos.
 
+## M4.6 — Rediseño visual (código terminado; falta la revisión del usuario con capturas)
+
+- **Cobre renovado** (más vivo) con neutros fríos en tema claro y negro azulado en oscuro; estados más saturados. Contraste mínimo verificado por las pruebas de `shared/theme`.
+- **Distancias:** margen lateral de 20 (`spacing.gutter`), radios 8/12/18/24, botones en forma de píldora con ícono opcional, tarjetas con sombra suave en tema claro y borde fino en oscuro (`useSurfaceStyle`).
+- **Confirmaciones:** `ConfirmDialog` ahora es una hoja que sube desde abajo, con ícono grande. **Mensajes breves** (`showToast` + `ToastHost` en la raíz) para acciones rápidas de la agenda.
+- **Íconos:** filas del perfil (`ListRow icon`), selector de días en mosaicos (día de la semana y número), `IconTile` con tono de estado.
+- **Agenda:** fecha larga del día, resumen en tarjetas (citas, por marcar, atendidas), línea de tiempo con hora a la izquierda y punto de color por estado; bloqueos con borde punteado; campana también en Agenda.
+- **Mi barbería:** tarjeta de cabecera (inicial, nombre, rol, tipo y estado) y secciones en cuadrícula de mosaicos con ícono y descripción (`ActionTile`/`TileGrid`); "Como barbero" también en mosaicos.
+- Sin cambios nativos. La vibración al confirmar (`expo-haptics`) quedó fuera.
+
 ## M8 — Notificaciones (código terminado; falta la prueba del usuario)
 
 - **Bandeja** (`/notifications`, protegida): `GET /me/notifications` con lista infinita; los no leídos con "Nuevo"; al tocar se marca leído (`POST .../{id}/read`) y abre su pantalla: `booking` → la reserva; `barbershop` y `review` → Mi barbería (modo barbería); `ticket` y `account` → la bandeja hasta M9. "Marcar todo como leído".

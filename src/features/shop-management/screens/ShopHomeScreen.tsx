@@ -1,19 +1,23 @@
 import type { ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { spacing } from '@/shared/theme';
+import { sizes, spacing, useTheme } from '@/shared/theme';
 import {
+  ActionTile,
   Button,
+  Card,
   Chip,
   EmptyState,
-  ListRow,
+  Icon,
+  Monogram,
   Notice,
   QueryView,
   Screen,
+  ScreenTitle,
   StatusPill,
   Text,
+  TileGrid,
   type IconName,
-  ScreenTitle,
 } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
 import { useShopHome } from '../hooks/useShopHome';
@@ -44,7 +48,18 @@ const STATUS_STYLE: Record<
   SUSPENDED: { tone: 'danger', icon: 'ban' },
 };
 
-const SECTIONS: ShopSection[] = ['details', 'status', 'services', 'barbers', 'members', 'hours', 'blocks'];
+const SECTIONS: ShopSection[] = ['services', 'barbers', 'hours', 'blocks', 'status', 'members', 'details'];
+
+const SECTION_ICON: Record<ShopSection, IconName> = {
+  review: 'document-text',
+  details: 'storefront',
+  status: 'power',
+  services: 'cut',
+  barbers: 'people',
+  members: 'shield-checkmark',
+  hours: 'time',
+  blocks: 'calendar-clear',
+};
 
 export function ShopHomeScreen({
   onCreate,
@@ -55,6 +70,7 @@ export function ShopHomeScreen({
 }: ShopHomeScreenProps) {
   const { t } = useTranslation('shop');
   const home = useShopHome();
+  const theme = useTheme();
   return (
     <Screen edges={['top', 'left', 'right']}>
       <ScreenTitle title={t('home.title')} right={headerRight} />
@@ -89,19 +105,22 @@ export function ShopHomeScreen({
               <QueryView query={home.shop}>
                 {(shop) => (
                   <View style={styles.content}>
-                    <View style={styles.header}>
-                      <Text variant="subtitle">{shop.name}</Text>
-                      <View style={styles.pills}>
-                        <StatusPill
-                          tone={STATUS_STYLE[shop.status].tone}
-                          icon={STATUS_STYLE[shop.status].icon}
-                          label={t(`status.${shop.status}`)}
-                        />
-                        <Text variant="caption" color="textSecondary">
-                          {t(`home.role.${shop.myRole}`)} · {t(`type.${shop.type}`)}
-                        </Text>
+                    <Card style={styles.header}>
+                      <View style={styles.headerTop}>
+                        <Monogram name={shop.name} size={sizes.avatar} />
+                        <View style={styles.flex}>
+                          <Text variant="title">{shop.name}</Text>
+                          <Text variant="caption" color="textSecondary">
+                            {t(`home.role.${shop.myRole}`)} · {t(`type.${shop.type}`)}
+                          </Text>
+                        </View>
                       </View>
-                    </View>
+                      <StatusPill
+                        tone={STATUS_STYLE[shop.status].tone}
+                        icon={STATUS_STYLE[shop.status].icon}
+                        label={t(`status.${shop.status}`)}
+                      />
+                    </Card>
                     {shop.status === 'PENDING_REVIEW' ? (
                       <Notice tone="info" message={t('home.pendingReview')} />
                     ) : null}
@@ -112,62 +131,72 @@ export function ShopHomeScreen({
                     {shop.status === 'SUSPENDED' ? (
                       <Notice tone="danger" message={t('home.suspended')} />
                     ) : null}
-                    <View>
+                    <TileGrid>
                       {(REVIEW_STATES.includes(shop.status)
                         ? (['review', ...SECTIONS] as ShopSection[])
                         : SECTIONS
                       ).map((section) => (
-                        <ListRow
+                        <ActionTile
                           key={section}
-                          title={t(`home.sections.${section}`)}
+                          icon={SECTION_ICON[section]}
+                          label={t(`home.sections.${section}`)}
+                          hint={t(`home.sectionHints.${section}`)}
+                          tone={section === 'review' ? 'pending' : undefined}
                           onPress={() => onOpen(shop.id, section)}
                         />
                       ))}
-                    </View>
+                    </TileGrid>
                   </View>
                 )}
               </QueryView>
             ) : null}
             {home.barberProfiles.length > 0 ? (
-              <View>
-                <Text variant="label" color="textSecondary">
-                  {t('home.asBarber')}
-                </Text>
-                {home.barberProfiles
-                  .filter((p) => p.isActive)
-                  .flatMap((profile) => [
-                    <ListRow
-                      key={`${profile.barberId}-blocks`}
-                      title={t('home.myBlocks', { name: profile.barbershop.name })}
-                      onPress={() =>
-                        onOpenAsBarber(
-                          profile.barbershop.id,
-                          profile.barberId,
-                          'blocks',
-                          profile.barbershop.timezone,
-                        )
-                      }
-                    />,
-                    <ListRow
-                      key={`${profile.barberId}-hours`}
-                      title={t('home.mySchedule', { name: profile.barbershop.name })}
-                      onPress={() =>
-                        onOpenAsBarber(
-                          profile.barbershop.id,
-                          profile.barberId,
-                          'hours',
-                          profile.barbershop.timezone,
-                        )
-                      }
-                    />,
-                  ])}
+              <View style={styles.section}>
+                <View style={styles.sectionTitle}>
+                  <Icon name="cut" size={sizes.icon} color={theme.colors.primary} />
+                  <Text variant="subtitle">{t('home.asBarber')}</Text>
+                </View>
+                <TileGrid>
+                  {home.barberProfiles
+                    .filter((p) => p.isActive)
+                    .flatMap((profile) => [
+                      <ActionTile
+                        key={`${profile.barberId}-blocks`}
+                        icon="calendar-clear"
+                        label={t('home.sections.blocks')}
+                        hint={profile.barbershop.name}
+                        onPress={() =>
+                          onOpenAsBarber(
+                            profile.barbershop.id,
+                            profile.barberId,
+                            'blocks',
+                            profile.barbershop.timezone,
+                          )
+                        }
+                      />,
+                      <ActionTile
+                        key={`${profile.barberId}-hours`}
+                        icon="time"
+                        label={t('home.sections.hours')}
+                        hint={profile.barbershop.name}
+                        onPress={() =>
+                          onOpenAsBarber(
+                            profile.barbershop.id,
+                            profile.barberId,
+                            'hours',
+                            profile.barbershop.timezone,
+                          )
+                        }
+                      />,
+                    ])}
+                </TileGrid>
               </View>
             ) : null}
             <View style={styles.actions}>
               {home.shops.length > 0 ? (
-                <Button label={t('home.create')} variant="secondary" onPress={onCreate} />
+                <Button label={t('home.create')} variant="secondary" icon="add-circle" onPress={onCreate} />
               ) : null}
-              <Button label={t('home.invitations')} variant="ghost" onPress={onInvitations} />
+              <Button label={t('home.invitations')} variant="ghost" icon="mail" onPress={onInvitations} />
             </View>
           </View>
         )}
@@ -179,7 +208,10 @@ export function ShopHomeScreen({
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },
   chips: { gap: spacing.sm },
-  header: { gap: spacing.xs },
-  pills: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flexWrap: 'wrap' },
+  header: { gap: spacing.md },
+  headerTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  flex: { flex: 1 },
+  section: { gap: spacing.md },
+  sectionTitle: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   actions: { gap: spacing.sm },
 });

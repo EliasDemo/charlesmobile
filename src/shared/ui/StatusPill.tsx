@@ -1,14 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 import { spacing, useTheme, type StatusTone } from '@/shared/theme';
 import { Icon, type IconName } from './Icon';
+import { TONE_COLORS } from './surface';
 import { Text } from './Text';
-
-const TONE_COLORS = {
-  pending: ['statusPendingBg', 'statusPendingFg'],
-  success: ['statusSuccessBg', 'statusSuccessFg'],
-  neutral: ['statusNeutralBg', 'statusNeutralFg'],
-  danger: ['statusDangerBg', 'statusDangerFg'],
-} as const;
 
 export interface StatusPillProps {
   tone: StatusTone;

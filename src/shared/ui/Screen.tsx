@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: sizes.maxContentWidth,
     alignSelf: 'center',
-    padding: spacing.lg,
+    paddingHorizontal: spacing.gutter,
+    paddingVertical: spacing.lg,
     gap: spacing.lg,
   },
 });

@@ -23,6 +23,7 @@ import {
   NavigationThemeRoot,
   OfflineBanner,
   SystemBars,
+  ToastHost,
   useStackScreenOptions,
 } from '@/shared/ui';
 
@@ -77,6 +78,7 @@ function AppStack() {
         <Stack.Screen name="welcome" options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="+not-found" options={{ title: t('notFound.title') }} />
       </Stack>
+      <ToastHost />
     </>
   );
 }

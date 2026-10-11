@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Switch, View } from 'react-native';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
+import { Icon, type IconName } from './Icon';
 import { Text } from './Text';
 
 export interface ListRowProps {
@@ -10,13 +11,33 @@ export interface ListRowProps {
   value?: string;
   onPress?: () => void;
   destructive?: boolean;
+  /** Leading icon, in a small tile. */
+  icon?: IconName;
 }
 
 /** A row in a settings-like list. Pressable rows show a chevron. */
-export function ListRow({ title, subtitle, value, onPress, destructive }: ListRowProps) {
+export function ListRow({ title, subtitle, value, onPress, destructive, icon }: ListRowProps) {
   const theme = useTheme();
   const content = (
     <>
+      {icon ? (
+        <View
+          importantForAccessibility="no-hide-descendants"
+          style={[
+            styles.icon,
+            {
+              backgroundColor: destructive ? theme.colors.statusDangerBg : theme.colors.primarySoft,
+              borderRadius: theme.radius.sm,
+            },
+          ]}
+        >
+          <Icon
+            name={icon}
+            size={sizes.icon}
+            color={destructive ? theme.colors.danger : theme.colors.primary}
+          />
+        </View>
+      ) : null}
       <View style={styles.texts}>
         <Text color={destructive ? 'danger' : 'textPrimary'}>{title}</Text>
         {subtitle ? (
@@ -27,9 +48,9 @@ export function ListRow({ title, subtitle, value, onPress, destructive }: ListRo
       </View>
       {value ? <Text color="textSecondary">{value}</Text> : null}
       {onPress ? (
-        <Text color="textMuted" importantForAccessibility="no">
-          ›
-        </Text>
+        <View importantForAccessibility="no-hide-descendants">
+          <Icon name="chevron-forward" size={sizes.icon} color={theme.colors.textMuted} />
+        </View>
       ) : null}
     </>
   );
@@ -100,4 +121,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: sizes.borderWidth,
   },
   texts: { flex: 1, gap: spacing.xxs },
+  icon: {
+    width: touchTarget - spacing.sm,
+    height: touchTarget - spacing.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

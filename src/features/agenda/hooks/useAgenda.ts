@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { useBarbersList, useShopHome } from '@/features/shop-management';
 import { translateError } from '@/shared/api';
+import { i18n } from '@/shared/i18n';
+import { showToast } from '@/shared/ui';
 import { env } from '@/shared/config';
 import { daysAround, toLocalDate } from '@/shared/lib';
 import {
@@ -72,7 +74,10 @@ export function useAgenda() {
   const attended = useMutation({
     mutationFn: (item: AgendaItem) => markAttended(item.bookingId),
     onMutate: () => setActionError(null),
-    onSuccess: refresh,
+    onSuccess: () => {
+      showToast(i18n.t('agenda:toast.attended'));
+      refresh();
+    },
     onError,
   });
 
@@ -83,6 +88,7 @@ export function useAgenda() {
     onMutate: () => setActionError(null),
     onSuccess: () => {
       setNoShowItem(null);
+      showToast(i18n.t('agenda:toast.noShow'));
       refresh();
     },
     onError: (error) => {
@@ -104,6 +110,7 @@ export function useAgenda() {
     onSuccess: () => {
       setCorrecting(null);
       setReason('');
+      showToast(i18n.t('agenda:toast.corrected'));
       refresh();
     },
     onError: (error) => {

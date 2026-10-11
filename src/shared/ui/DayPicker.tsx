@@ -1,8 +1,8 @@
 import { useRef } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { spacing } from '@/shared/theme';
-import { Chip } from './Chip';
+import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
+import { Text } from './Text';
 
 export interface DayOption {
   /** Calendar day as the API expects it (YYYY-MM-DD). */
@@ -26,10 +26,12 @@ export interface DayPickerProps {
 
 /**
  * Horizontal list of days (no native date picker: it would need a new native module).
- * Tapping the selected day clears it.
+ * Each day is a tile: weekday (or Hoy/Mañana/Ayer) on top, the day number big. Tapping the
+ * selected day clears it, unless `required`.
  */
 export function DayPicker({ days, selected, onSelect, label, today, required = false }: DayPickerProps) {
   const { t } = useTranslation();
+  const theme = useTheme();
   const shortNames = t('daysShort', { returnObjects: true }) as readonly string[];
   // With past days first, open showing the selected day (once), not the start of the list.
   const scroll = useRef<ScrollView>(null);
@@ -45,19 +47,22 @@ export function DayPicker({ days, selected, onSelect, label, today, required = f
     >
       {days.map((day, index) => {
         const relative = index - offset;
-        const name =
+        const isSelected = selected === day.date;
+        const relativeName =
           relative === 0
             ? t('date.today')
             : relative === 1
               ? t('date.tomorrow')
               : relative === -1 && today
                 ? t('date.yesterday')
-                : `${shortNames[day.dayOfWeek] ?? ''} ${day.dayOfMonth}`;
+                : null;
+        const weekday = shortNames[day.dayOfWeek] ?? '';
+        const name = relativeName ?? `${weekday} ${day.dayOfMonth}`;
         return (
           <View
             key={day.date}
             onLayout={
-              selected === day.date && offset > 0
+              isSelected && offset > 0
                 ? (e) => {
                     if (scrolled.current) return;
                     scrolled.current = true;
@@ -69,11 +74,38 @@ export function DayPicker({ days, selected, onSelect, label, today, required = f
                 : undefined
             }
           >
-            <Chip
-              label={name}
-              selected={selected === day.date}
-              onPress={() => onSelect(selected === day.date && !required ? null : day.date)}
-            />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={name}
+              accessibilityState={{ selected: isSelected }}
+              onPress={() => onSelect(isSelected && !required ? null : day.date)}
+              style={({ pressed }) => [
+                styles.day,
+                {
+                  borderRadius: theme.radius.md,
+                  backgroundColor: isSelected
+                    ? theme.colors.primary
+                    : pressed
+                      ? theme.colors.primarySoft
+                      : theme.colors.surface,
+                  borderColor: isSelected ? theme.colors.primary : theme.colors.border,
+                },
+              ]}
+            >
+              <Text
+                variant="caption"
+                style={{ color: isSelected ? theme.colors.onPrimary : theme.colors.textSecondary }}
+                numberOfLines={1}
+              >
+                {relativeName ?? weekday}
+              </Text>
+              <Text
+                variant="subtitle"
+                style={{ color: isSelected ? theme.colors.onPrimary : theme.colors.textPrimary }}
+              >
+                {String(day.dayOfMonth)}
+              </Text>
+            </Pressable>
           </View>
         );
       })}
@@ -83,4 +115,13 @@ export function DayPicker({ days, selected, onSelect, label, today, required = f
 
 const styles = StyleSheet.create({
   row: { gap: spacing.sm, paddingVertical: spacing.xxs },
+  day: {
+    minWidth: touchTarget + spacing.md,
+    minHeight: touchTarget + spacing.lg,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: sizes.borderWidth,
+  },
 });
