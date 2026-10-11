@@ -296,11 +296,6 @@ Confirmada por el usuario en su teléfono.
 - Pruebas: `src/features/notifications/__tests__`. `expo-notifications` simulado en `jest.setup.tsx`.
 - **Push real en Android: pendiente de Firebase (FCM)** en la compilación final (ver cambios nativos pendientes). En desarrollo el backend usa `PUSH_DRIVER=fake`.
 
-- **Comprobación de red en desarrollo:**
-  -  ejecuta primero . El script compara la IPv4 del wifi (ignora adaptadores virtuales, VPN y los que no tienen puerta de enlace) con la de , ofrece actualizar  y comprueba .
-  - Nunca impide arrancar. Para saltarlo existe .
-  - En la app, solo con  y la variante de desarrollo, un error de red muestra la URL configurada y el consejo del wifi. Sus textos están en  y se cargan solo en desarrollo. Se comprobó que el paquete de producción no los contiene.
-
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
