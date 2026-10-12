@@ -1,0 +1,20 @@
+{
+  "skip": "Skip",
+  "next": "Next",
+  "start": "Get started",
+  "page": "Page {{current}} of {{total}}",
+  "pages": {
+    "find": {
+      "title": "Find your barbershop",
+      "text": "Near you or by the service you want, with prices and reviews."
+    },
+    "book": {
+      "title": "Book in seconds",
+      "text": "Choose barber, day and time. No calls, no waiting."
+    },
+    "manage": {
+      "title": "Everything in one place",
+      "text": "Your appointments, your reminders and your favorite barbershops."
+    }
+  }
+}

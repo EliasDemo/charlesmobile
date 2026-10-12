@@ -1,3 +1,4 @@
+import { displayLanguage } from '@/shared/lib/locale';
 import { ApiError, NetworkError, apiErrorFromResponse, retryAfterSeconds } from './errors';
 
 export interface ApiFetchDeps {
@@ -74,7 +75,7 @@ export function createApiFetch(deps: ApiFetchDeps) {
   function withHeaders(request: Request, accessToken: string | null): Request {
     const next = new Request(request.clone());
     next.headers.set('Accept', 'application/json');
-    next.headers.set('Accept-Language', 'es');
+    next.headers.set('Accept-Language', displayLanguage());
     next.headers.set('X-App-Version', deps.appVersion);
     next.headers.set('X-App-Platform', deps.platform);
     // A request that brings its own token (restricted support/deletion access) keeps it.

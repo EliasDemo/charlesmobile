@@ -1,0 +1,12 @@
+{
+  "connection": {
+    "title": "Development: couldn't connect",
+    "url": "Configured server: {{url}}",
+    "hint": "Check that the phone and the computer are on the same wifi, the backend is running and the IP in .env is the current one (pnpm start checks it)."
+  },
+  "booking": {
+    "title": "Development: booking ID",
+    "hint": "Use it with dev:pay from ..\\charles to confirm the payment.",
+    "share": "Share or copy the ID"
+  }
+}

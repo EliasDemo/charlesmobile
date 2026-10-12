@@ -16,7 +16,7 @@ import { loadAppMode, useAppMode } from '@/features/shop-management';
 import { loadWelcomeSeen, useWelcomeStore } from '@/features/onboarding';
 import { bootstrapSession, queryClient, startQueryListeners } from '@/shared/api';
 import { env } from '@/shared/config';
-import { useTranslation } from '@/shared/i18n';
+import { loadLanguagePreference, useTranslation } from '@/shared/i18n';
 import { ThemeProvider, loadThemePreference } from '@/shared/theme';
 import {
   BrandSplash,
@@ -100,9 +100,13 @@ export default function RootLayout() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    void Promise.all([bootstrapSession(), loadThemePreference(), loadWelcomeSeen(), loadAppMode()]).finally(
-      () => setSessionReady(true),
-    );
+    void Promise.all([
+      bootstrapSession(),
+      loadThemePreference(),
+      loadLanguagePreference(),
+      loadWelcomeSeen(),
+      loadAppMode(),
+    ]).finally(() => setSessionReady(true));
   }, []);
 
   // Without the fonts the app still works with the system font.

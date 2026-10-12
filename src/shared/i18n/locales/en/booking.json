@@ -1,0 +1,124 @@
+{
+  "book": {
+    "title": "Book",
+    "service": "Service",
+    "chooseService": "Choose a service",
+    "barber": "Barber",
+    "anyBarber": "Anyone available",
+    "day": "Day",
+    "slots": "Available times",
+    "slotsTimezone": "Barbershop hours ({{timezone}})",
+    "noSlots": "No slots this day. Try another day or another barber.",
+    "alternativesTitle": "Other barbershops with slots that day",
+    "slotTaken": "That time was just taken. Choose another: we kept your service, barber and day.",
+    "continue": "Continue",
+    "parts": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    }
+  },
+  "summary": {
+    "title": "Review your booking",
+    "barbershop": "Barbershop",
+    "service": "Service",
+    "barber": "Barber",
+    "firstAvailable": "First available",
+    "when": "Date and time",
+    "duration": "Duration",
+    "servicePrice": "Service price",
+    "priceNote": "This is the service price. The final total, with the breakdown the barbershop calculates, shows up when you confirm.",
+    "confirm": "Confirm booking",
+    "loginNote": "We'll ask you to sign in or create your account to confirm. You won't lose what you chose.",
+    "incomplete": "Choose a time first.",
+    "back": "Choose another time",
+    "seeBookings": "See my bookings"
+  },
+  "status": {
+    "PENDING_PAYMENT": "Pending payment",
+    "CONFIRMED": "Confirmed",
+    "ATTENDED": "Attended",
+    "CANCELLED": "Cancelled",
+    "NO_SHOW": "You didn't show up",
+    "EXPIRED": "Expired"
+  },
+  "detail": {
+    "title": "Your booking",
+    "pendingTitle": "Pay to confirm your slot",
+    "pendingCountdown": "You have {{time}} to pay.",
+    "pendingExplain": "If it isn't paid in time, the booking expires and the slot is released for someone else.",
+    "checkingExpiry": "Checking your booking status…",
+    "pay": "Pay",
+    "expiredTitle": "The booking expired",
+    "expiredMessage": "It wasn't paid in time and the slot was released. You can book again.",
+    "bookAgain": "Book again",
+    "confirmedTitle": "Booking confirmed!",
+    "price": "Price breakdown",
+    "total": "Total",
+    "cancelledBy": {
+      "CLIENT": "You cancelled this booking.",
+      "BARBERSHOP": "The barbershop cancelled this booking.",
+      "SYSTEM": "This booking was cancelled automatically.",
+      "SUPPORT": "Support cancelled this booking."
+    },
+    "cancelReason": "Reason: {{reason}}",
+    "refunds": "Refunds",
+    "refundLine": "{{amount}} · {{status}}",
+    "refundStatus": {
+      "PENDING": "in process",
+      "SUCCEEDED": "refunded",
+      "FAILED": "with problems: write to support"
+    },
+    "barber": "with {{barber}}",
+    "openBarbershop": "See barbershop",
+    "help": "I need help with this booking"
+  },
+  "cancel": {
+    "action": "Cancel booking",
+    "title": "Cancel the booking?",
+    "refund": "You'll get back {{amount}} ({{percent}} %).",
+    "rules": {
+      "NO_PAYMENT": "You haven't paid yet, so there's nothing to refund.",
+      "CLIENT_FULL": "You cancel 5 or more hours ahead: full refund.",
+      "CLIENT_PARTIAL": "You cancel less than 5 hours ahead: partial refund.",
+      "CLIENT_NONE": "You cancel too close to the time: no refund.",
+      "BARBERSHOP_CANCELLATION": "Full refund.",
+      "SUPPORT_CANCELLATION": "Full refund."
+    },
+    "notAllowed": {
+      "ALREADY_CANCELLED": "This booking was already cancelled.",
+      "NOT_CANCELLABLE": "This booking can no longer be cancelled.",
+      "ALREADY_STARTED": "The slot already started: it can no longer be cancelled."
+    },
+    "confirm": "Yes, cancel",
+    "done": "Booking cancelled.",
+    "doneRefund": "Booking cancelled. You'll get back {{amount}}."
+  },
+  "list": {
+    "upcoming": "Upcoming",
+    "history": "History",
+    "emptyUpcoming": {
+      "title": "No upcoming bookings",
+      "message": "Find a barbershop and book your slot."
+    },
+    "emptyHistory": {
+      "title": "No past bookings yet"
+    },
+    "explore": "Explore barbershops"
+  },
+  "payment": {
+    "pay": "Pay {{amount}}",
+    "retry": "Retry the payment",
+    "confirming": "Confirming your payment… In a few seconds you'll see your booking confirmed.",
+    "waiting": "Waiting for the payment confirmation.",
+    "pendingTitle": "Your payment is in process",
+    "pending": "We'll let you know when it's confirmed. If it's confirmed after the deadline, we'll refund your money.",
+    "failedTitle": "The payment didn't go through",
+    "failed": "Nothing was charged. You can try again while your booking is still valid.",
+    "expired": "The booking expired or was already paid. We updated its status.",
+    "unavailable": "We couldn't open the payment right now. Try again in a moment."
+  },
+  "calendar": {
+    "title": "{{service}} at {{shop}}"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "title": "Notifications",
+  "bell": "Notifications",
+  "bellUnread_one": "Notifications: {{count}} unread",
+  "bellUnread_other": "Notifications: {{count}} unread",
+  "unread": "New",
+  "when": "{{date}} · {{time}}",
+  "empty": "No notifications",
+  "emptyMessage": "Here you'll see confirmations, reminders and news about your appointments.",
+  "readAll": "Mark all as read",
+  "prompt": {
+    "title": "Shall we remind you of your appointments?",
+    "message": "We'll send a reminder before your appointment and let you know about changes. We never show personal data or amounts in the notification.",
+    "accept": "Yes, notify me"
+  },
+  "blocked": "Notifications are turned off for Charles on your phone. You'll still see everything in Notifications.",
+  "openSettings": "Open settings"
+}

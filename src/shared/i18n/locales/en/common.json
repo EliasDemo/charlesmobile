@@ -1,0 +1,169 @@
+{
+  "appName": "Charles",
+  "actions": {
+    "retry": "Try again",
+    "back": "Back",
+    "goHome": "Go home",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "save": "Save"
+  },
+  "states": {
+    "loading": "Loading…",
+    "emptyTitle": "Nothing here yet",
+    "errorTitle": "Something went wrong"
+  },
+  "offline": {
+    "banner": "You are offline. Showing what we loaded last.",
+    "retry": "Retry connection"
+  },
+  "crash": {
+    "title": "This screen had a problem",
+    "message": "You didn't lose anything. You can try again."
+  },
+  "notFound": {
+    "title": "This screen doesn't exist"
+  },
+  "nav": {
+    "explore": "Explore",
+    "bookings": "Bookings",
+    "profile": "Profile",
+    "agenda": "Schedule",
+    "shop": "My barbershop",
+    "login": "Sign in",
+    "register": "Create account",
+    "verifyEmail": "Verify email",
+    "forgotPassword": "Recover password",
+    "resetPassword": "New password",
+    "editProfile": "Edit profile",
+    "preferences": "Preferences",
+    "filters": "Filters",
+    "barbershop": "Barbershop",
+    "service": "Service",
+    "reviews": "Reviews",
+    "favorites": "My favorites",
+    "book": "Book",
+    "summary": "Summary",
+    "booking": "Your booking",
+    "deleteAccount": "Delete my account",
+    "notifications": "Notifications"
+  },
+  "placeholder": {
+    "comingSoon": "Available in an upcoming version."
+  },
+  "home": {
+    "title": "Charles",
+    "subtitle": "Book your barbershop in minutes.",
+    "serverTitle": "Server status",
+    "serverOk": "Connected",
+    "serverDegraded": "The server is having problems.",
+    "serverChecks": "Database: {{database}} · Cache: {{cache}}",
+    "designSystem": "View design system (development)",
+    "component": {
+      "up": "online",
+      "down": "down"
+    },
+    "apiUrl": "Server: {{url}}",
+    "sections": {
+      "client": "Client mode",
+      "staff": "Barbershop mode",
+      "auth": "Account"
+    }
+  },
+  "designSystem": {
+    "title": "Design system",
+    "typography": "Typography",
+    "buttons": "Buttons",
+    "fields": "Fields",
+    "states": "States",
+    "money": "Money and dates",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "ghost": "Subtle",
+    "danger": "Danger",
+    "loading": "Sending",
+    "disabled": "Disabled",
+    "fieldLabel": "Email",
+    "fieldPlaceholder": "ana@example.com",
+    "fieldHint": "We'll send you a code.",
+    "fieldError": "Enter a valid email.",
+    "emptyMessage": "When you book, your appointments will show up here.",
+    "sampleText": "The quick brown fox jumps over the lazy dog."
+  },
+  "config": {
+    "title": "The app is not configured correctly",
+    "invalidUrl": "EXPO_PUBLIC_API_URL is missing or not a valid URL.",
+    "originOnly": "EXPO_PUBLIC_API_URL must be only the origin, without /api/v1 (for example http://192.168.1.50:3000).",
+    "httpsRequired": "EXPO_PUBLIC_API_URL must use HTTPS outside development."
+  },
+  "form": {
+    "show": "Show",
+    "hide": "Hide",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "optional": "(optional)",
+    "saved": "Changes saved."
+  },
+  "search": {
+    "clear": "Clear search"
+  },
+  "rating": {
+    "none": "No reviews",
+    "a11y": "{{average}} out of 5 stars, {{count}} reviews"
+  },
+  "list": {
+    "searchMore": "Search for more results",
+    "searchMoreHint": "No matches yet, but there may be more."
+  },
+  "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  "daysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  "date": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "yesterday": "Yesterday"
+  },
+  "illustrative": "Illustrative image",
+  "time": {
+    "earlier": "{{label}}: {{step}} minutes earlier",
+    "later": "{{label}}: {{step}} minutes later"
+  },
+  "stepper": {
+    "less": "Less {{label}}",
+    "more": "More {{label}}"
+  },
+  "stars": {
+    "label_one": "{{count}} star out of 5",
+    "label_other": "{{count}} stars out of 5",
+    "choose": "Your rating"
+  },
+  "payment": {
+    "title": "Secure payment",
+    "close": "Close the payment"
+  },
+  "calendar": {
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "monthsShort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "showMonth": "Show calendar",
+    "showDays": "Show days",
+    "addToCalendar": "Add to my calendar",
+    "added": "Appointment added to your calendar",
+    "addFailed": "We couldn't add it. Check the calendar permission."
+  },
+  "emoji": {
+    "open": "Add an emoji",
+    "add": "Add to the text"
+  }
+}

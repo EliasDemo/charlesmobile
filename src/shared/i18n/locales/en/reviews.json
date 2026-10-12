@@ -1,0 +1,73 @@
+{
+  "form": {
+    "newTitle": "Review",
+    "editTitle": "Edit review",
+    "question": "How did it go?",
+    "comment": "Comment (optional)",
+    "commentHint": "Share your experience. It's published with your first name and last initial.",
+    "commentShort": "Enter at least 3 characters, or leave it empty.",
+    "send": "Publish review",
+    "save": "Save changes",
+    "editOnce": "You can only edit it once.",
+    "delete": "Withdraw review",
+    "deleteTitle": "Withdraw your review?",
+    "deleteMessage": "It will no longer show at the barbershop and you won't be able to review this booking again.",
+    "deleteConfirm": "Yes, withdraw",
+    "sent": "Thanks for your review!",
+    "updated": "Review updated",
+    "deleted": "Review withdrawn",
+    "notFound": "We couldn't find that review."
+  },
+  "mine": {
+    "title": "My reviews",
+    "empty": "You haven't reviewed any appointment yet",
+    "emptyMessage": "After your cut you can share how it went.",
+    "edit": "Edit",
+    "response": "Barbershop's response"
+  },
+  "status": {
+    "VISIBLE": "Published",
+    "UNDER_REVIEW": "Under review",
+    "HIDDEN": "Hidden"
+  },
+  "prompt": {
+    "title": "How did your {{service}} go?",
+    "message": "At {{shop}}. Your opinion helps other clients.",
+    "action": "Review"
+  },
+  "booking": {
+    "review": "Review this appointment",
+    "yours": "Your review",
+    "edit": "Edit review"
+  },
+  "shop": {
+    "title": "Reviews",
+    "empty": "No reviews yet",
+    "emptyMessage": "When your clients review their appointments, they'll show up here.",
+    "respond": "Reply",
+    "editResponse": "Edit reply",
+    "responseTitle": "Reply to {{name}}",
+    "responseMessage": "Your reply is published under the review. Be kind: everyone will see it.",
+    "responseField": "Your reply",
+    "send": "Publish reply",
+    "responded": "Reply published",
+    "responseHidden": "Support hid this reply."
+  },
+  "report": {
+    "action": "Report",
+    "title": "Report review",
+    "message": "Support will review it. The author won't know you reported it.",
+    "details": "Details (optional)",
+    "send": "Send report",
+    "sent": "Report sent",
+    "reasons": {
+      "OFFENSIVE": "Offensive",
+      "PERSONAL_DATA": "Personal data",
+      "FAKE": "Fake",
+      "SPAM": "Spam",
+      "OTHER": "Other reason"
+    }
+  },
+  "by": "{{service}} with {{barber}}",
+  "edited": "edited"
+}

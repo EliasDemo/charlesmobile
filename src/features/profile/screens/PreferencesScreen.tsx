@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { PushPermissionNotice } from '@/features/notifications';
-import { useTranslation } from '@/shared/i18n';
+import { useLanguage, useTranslation } from '@/shared/i18n';
 import { spacing } from '@/shared/theme';
 import { Notice, QueryView, Screen, SegmentedControl, SwitchRow, Text } from '@/shared/ui';
 import { NOTIFICATION_CHANNELS, usePreferences } from '../hooks/usePreferences';
@@ -9,6 +9,8 @@ export function PreferencesScreen() {
   const { t } = useTranslation('profile');
   const { query, channels, toggleChannel, isSaving, saveError, themePreference, setThemePreference } =
     usePreferences();
+  const language = useLanguage((st) => st.preference);
+  const setLanguage = useLanguage((st) => st.setPreference);
   return (
     <Screen>
       <PushPermissionNotice />
@@ -20,6 +22,16 @@ export function PreferencesScreen() {
           { value: 'system', label: t('preferences.themeSystem') },
           { value: 'light', label: t('preferences.themeLight') },
           { value: 'dark', label: t('preferences.themeDark') },
+        ]}
+      />
+      <SegmentedControl
+        label={t('preferences.language')}
+        value={language}
+        onChange={setLanguage}
+        options={[
+          { value: 'system', label: t('preferences.languageSystem') },
+          { value: 'es', label: 'Español' },
+          { value: 'en', label: 'English' },
         ]}
       />
       <View style={styles.section}>

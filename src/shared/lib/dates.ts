@@ -1,10 +1,9 @@
+import { displayLocale } from './locale';
 // Instants arrive in UTC (ISO 8601). They are always shown in the barbershop's time zone,
 // never in the phone's.
 
-const LOCALE = 'es-PE';
-
 function format(iso: string, timeZone: string, options: Intl.DateTimeFormatOptions): string {
-  return new Intl.DateTimeFormat(LOCALE, { timeZone, ...options }).format(new Date(iso));
+  return new Intl.DateTimeFormat(displayLocale(), { timeZone, ...options }).format(new Date(iso));
 }
 
 /** "14:30" */

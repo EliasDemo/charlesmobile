@@ -1,11 +1,10 @@
+import { displayLocale } from './locale';
 // Display-only formatters: they turn API values into text and never compute business data.
-
-const LOCALE = 'es-PE';
 
 /** "350 m" or "1,2 km" from `distanceMeters` as the API sends it. */
 export function formatDistance(meters: number): string {
   if (meters < 1000) return `${Math.round(meters)} m`;
-  return `${new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }).format(meters / 1000)} km`;
+  return `${new Intl.NumberFormat(displayLocale(), { maximumFractionDigits: 1 }).format(meters / 1000)} km`;
 }
 
 /** "45 min" or "1 h 15 min" from `durationMinutes`. */
@@ -18,9 +17,10 @@ export function formatMinutes(total: number): string {
 
 /** "4,5" from a rating average. */
 export function formatRating(average: number): string {
-  return new Intl.NumberFormat(LOCALE, { minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(
-    average,
-  );
+  return new Intl.NumberFormat(displayLocale(), {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(average);
 }
 
 /** Initials for placeholders until the gallery exists ("Barbería Demo" → "BD"). */

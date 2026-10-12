@@ -1,0 +1,72 @@
+{
+  "title": "Profile",
+  "email": "Email",
+  "phone": "Phone",
+  "noPhone": "No phone",
+  "unverified": {
+    "title": "Your email is not verified",
+    "message": "Verify it to be able to book.",
+    "action": "Verify now"
+  },
+  "sections": {
+    "account": "Account",
+    "settings": "Settings",
+    "session": "Session",
+    "shop": "Barbershop"
+  },
+  "edit": {
+    "title": "Edit profile",
+    "submit": "Save changes",
+    "emailLocked": "The email can't be changed for now.",
+    "phoneHint": "Peruvian mobile. Leave it empty to remove it."
+  },
+  "preferences": {
+    "title": "Preferences",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "notifications": "Notifications",
+    "notificationsSoon": "Notifications will be turned on soon. You can choose now how you want to get them.",
+    "channels": {
+      "PUSH": "Phone notifications",
+      "EMAIL": "Email",
+      "IN_APP": "Inside the app"
+    },
+    "language": "Language",
+    "languageSystem": "Phone"
+  },
+  "favorites": "My favorites",
+  "devTools": "Design system (development)",
+  "welcomeAgain": "See the welcome again",
+  "deleteAccount": "Delete my account",
+  "deletion": {
+    "title": "Delete my account",
+    "intro": "Before confirming, review what will happen.",
+    "consequencesTitle": "What will happen",
+    "consequences": {
+      "sessions": "You'll be signed out on all your devices.",
+      "bookings": "Your active bookings will be cancelled with the refund that applies. They won't come back even if you change your mind.",
+      "grace": "Your account will stay pending for {{days}} days. If you don't cancel the deletion before {{date}}, your personal data will be erased. This can't be undone.",
+      "undo": "Until that date you can change your mind: sign in and choose \"Cancel deletion\".",
+      "kept": "By law we keep, without data that identifies you, your bookings, payments and the score of your reviews.",
+      "email": "We'll send you a confirmation email and a reminder 3 days before."
+    },
+    "bookingsTitle": "Bookings that will be cancelled",
+    "bookingLine": "{{date}} · {{time}}",
+    "refund": "Refund: {{amount}} ({{percent}} %)",
+    "noRefund": "No refund",
+    "blockedTitle": "You can't delete your account yet",
+    "blockers": {
+      "SOLE_OWNER": "You are the only owner of \"{{name}}\". Transfer the ownership or delete the barbershop first.",
+      "STAFF_ROLE": "Your account has a support or admin role. Ask for it to be removed first."
+    },
+    "alreadyPending": "You already asked to delete your account. It will be deleted on {{date}}.",
+    "password": "Enter your password to confirm",
+    "confirm": "Delete my account",
+    "wrongPassword": "The password is not correct.",
+    "doneTitle": "You asked to delete your account",
+    "doneMessage": "Your account will be deleted on {{date}}. We sent you an email. If you change your mind, sign in before that date and cancel the deletion.",
+    "goHome": "Go home"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "notFound": {
+    "title": "We couldn't find this barbershop",
+    "message": "It may no longer be available.",
+    "action": "Back"
+  },
+  "independent": "Independent barber",
+  "barbershop": "Barbershop",
+  "temporarilyClosed": "Temporarily closed",
+  "reopensAt": "Reopens on {{date}}.",
+  "directions": "Directions",
+  "call": "Call",
+  "links": {
+    "website": "Website",
+    "instagram": "Instagram",
+    "facebook": "Facebook"
+  },
+  "book": "Book",
+  "bookSoon": "Available soon",
+  "sections": {
+    "about": "About",
+    "hours": "Hours",
+    "services": "Services",
+    "barbers": "Barbers",
+    "reviews": "Reviews"
+  },
+  "hours": {
+    "openNow": "Open now",
+    "closedNow": "Closed now",
+    "closedDay": "Closed",
+    "today": "Today",
+    "window": "{{start}}–{{end}}",
+    "timezone": "Barbershop hours ({{timezone}})"
+  },
+  "services": {
+    "empty": "This barbershop hasn't published services yet.",
+    "duration": "{{duration}}",
+    "a11y": "{{name}}, {{price}}, {{duration}}"
+  },
+  "barbers": {
+    "empty": "This barbershop has no visible barbers yet.",
+    "experience_one": "{{count}} year of experience",
+    "experience_other": "{{count}} years of experience"
+  },
+  "reviews": {
+    "empty": "No reviews yet.",
+    "seeAll": "See all reviews",
+    "title": "Reviews",
+    "allStars": "All",
+    "stars_one": "{{count}} star",
+    "stars_other": "{{count}} stars",
+    "allBarbers": "All barbers",
+    "filterEmpty": "No reviews with these filters.",
+    "service": "{{service}} with {{barber}}",
+    "edited": "Edited",
+    "response": "Barbershop's response"
+  },
+  "service": {
+    "nextSlot": "Next slot",
+    "nextSlotAt": "{{date}} at {{time}}",
+    "noSlot": "No slots available for now.",
+    "alternativesTitle": "Other barbershops with slots",
+    "alternativesEmpty": "We didn't find nearby slots at other barbershops either.",
+    "alternativeSlot": "{{service}} · {{price}} · {{time}}",
+    "loadingSlot": "Looking for the next slot…"
+  },
+  "favorite": {
+    "add": "Add to favorites",
+    "remove": "Remove from favorites",
+    "error": "We couldn't save the change. Please try again."
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "title": "Schedule",
+  "view": {
+    "label": "View",
+    "shop": "Whole barbershop",
+    "mine": "My schedule"
+  },
+  "shopLabel": "Barbershop",
+  "day": "Day",
+  "barberLabel": "Barber",
+  "allBarbers": "All",
+  "timezone": "Barbershop hours ({{timezone}})",
+  "pending_one": "{{count}} appointment already started and isn't marked yet.",
+  "pending_other": "{{count}} appointments already started and aren't marked yet.",
+  "empty": "No appointments this day.",
+  "noAccess": "You'll see your schedule here when you manage a barbershop or are an active barber at one.",
+  "noProfile": "You don't have an active barber profile.",
+  "range": "{{from}}–{{to}}",
+  "client": "Client: {{name}}",
+  "barber": "Barber: {{name}}",
+  "status": {
+    "PENDING_PAYMENT": "Awaiting payment",
+    "CONFIRMED": "Confirmed",
+    "ATTENDED": "Attended",
+    "NO_SHOW": "No-show",
+    "CANCELLED": "Cancelled",
+    "EXPIRED": "Expired",
+    "pendingAttention": "To mark"
+  },
+  "blockFor": {
+    "shop": "Whole barbershop",
+    "barber": "Block"
+  },
+  "actions": {
+    "attended": "Attended",
+    "noShow": "No-show",
+    "correct": "Correct",
+    "cancel": "Cancel appointment"
+  },
+  "noShowDialog": {
+    "title": "Mark as no-show?",
+    "message": "{{client}} didn't come to the {{time}} appointment. The client loses what they paid: there's no refund. You can correct it within 48 hours.",
+    "confirm": "Yes, no-show"
+  },
+  "correctionDialog": {
+    "title": "Correct attendance",
+    "toNoShow": "{{client}}'s appointment will change from \"Attended\" to \"No-show\". The client won't get a refund.",
+    "toAttended": "{{client}}'s appointment will change from \"No-show\" to \"Attended\".",
+    "reason": "Reason (required)",
+    "reasonHint": "3 to 300 characters. It's kept in the history.",
+    "confirm": "Save correction"
+  },
+  "cancelDialog": {
+    "title": "Cancel this appointment?",
+    "message": "{{client}}'s {{time}} appointment will be cancelled and everything they paid will be refunded. The cancellation is recorded for review.",
+    "reason": "Reason (required)",
+    "reasonHint": "3 to 300 characters. The client will see it.",
+    "confirm": "Yes, cancel appointment",
+    "done": "Appointment cancelled.",
+    "doneRefund": "Appointment cancelled. {{amount}} will be refunded to the client."
+  },
+  "stats": {
+    "bookings": "Appointments",
+    "pending": "To mark",
+    "attended": "Attended"
+  },
+  "toast": {
+    "attended": "Appointment marked as attended",
+    "noShow": "Marked as no-show",
+    "corrected": "Attendance corrected"
+  }
+}

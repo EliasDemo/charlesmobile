@@ -1,0 +1,25 @@
+{
+  "title": "Work",
+  "seeAll": "See all work",
+  "more": "See more",
+  "empty": "No work photos yet",
+  "photo": "Photo of a cut",
+  "by": "By {{name}}",
+  "close": "Close",
+  "bookStyle": "Book this style · {{service}} · {{price}}",
+  "report": {
+    "action": "Report this photo",
+    "title": "Report photo",
+    "message": "Support will review it. With several reports, the photo is hidden until it's reviewed.",
+    "details": "Details (optional)",
+    "send": "Send report",
+    "sent": "Report sent",
+    "reasons": {
+      "NOT_MY_PHOTO": "It's me and I don't want to appear",
+      "NO_CONSENT": "No consent",
+      "INAPPROPRIATE": "Inappropriate",
+      "MISLEADING": "Misleading",
+      "OTHER": "Other reason"
+    }
+  }
+}

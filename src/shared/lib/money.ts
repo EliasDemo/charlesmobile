@@ -1,8 +1,8 @@
 import type { components } from '@/shared/api/generated/schema';
+import { displayLocale } from './locale';
 
 export type Money = components['schemas']['MoneyDto'];
 
-const LOCALE = 'es-PE';
 const formatters = new Map<string, Intl.NumberFormat>();
 
 interface MoneyFormatOptions {
@@ -16,12 +16,13 @@ function formatterFor(
   currency: string,
   { compact = false, symbol = true }: MoneyFormatOptions,
 ): Intl.NumberFormat {
-  const key = `${currency}:${compact}:${symbol}`;
+  const locale = displayLocale();
+  const key = `${locale}:${currency}:${compact}:${symbol}`;
   let formatter = formatters.get(key);
   if (!formatter) {
-    const digits = new Intl.NumberFormat(LOCALE, { style: 'currency', currency }).resolvedOptions()
+    const digits = new Intl.NumberFormat(locale, { style: 'currency', currency }).resolvedOptions()
       .maximumFractionDigits;
-    formatter = new Intl.NumberFormat(LOCALE, {
+    formatter = new Intl.NumberFormat(locale, {
       ...(symbol ? { style: 'currency', currency } : { style: 'decimal', maximumFractionDigits: digits }),
       minimumFractionDigits: compact ? 0 : digits,
     });

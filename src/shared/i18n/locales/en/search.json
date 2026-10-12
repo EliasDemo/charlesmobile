@@ -1,0 +1,80 @@
+{
+  "title": "Explore",
+  "placeholder": "Barbershop or service",
+  "fieldLabel": "Search barbershops",
+  "minChars": "Type at least 2 letters to search.",
+  "nearMe": "Near me",
+  "nearMeActive": "Near you",
+  "nearMeOff": "Remove location",
+  "allCategories": "All",
+  "filters": "Filters",
+  "filtersActive_one": "Filters ({{count}})",
+  "filtersActive_other": "Filters ({{count}})",
+  "filtersHint_one": "{{count}} active filter",
+  "filtersHint_other": "{{count}} active filters",
+  "viewList": "List",
+  "viewMap": "Map",
+  "topRated": "Top rated",
+  "empty": {
+    "title": "We didn't find barbershops",
+    "message": "Try other words or remove some filters."
+  },
+  "card": {
+    "independent": "Independent",
+    "openNow": "Open now",
+    "closed": "Closed",
+    "temporarilyClosed": "Temporarily closed",
+    "availableNow": "Slot available now",
+    "priceFrom": "From {{price}}",
+    "favorite": "In your favorites"
+  },
+  "sort": {
+    "label": "Sort by",
+    "distance": "Distance",
+    "rating": "Rating",
+    "price": "Price"
+  },
+  "filtersScreen": {
+    "category": "Category",
+    "price": "Price",
+    "rating": "Minimum rating",
+    "ratingAtLeast": "{{rating}} or more",
+    "type": "Type",
+    "typeAll": "All",
+    "typeBarbershop": "Barbershops",
+    "typeIndependent": "Independent",
+    "availability": "Availability",
+    "openNow": "Open now",
+    "availableNow": "With a slot available now",
+    "date": "With a slot available on",
+    "radius": "Maximum distance",
+    "radiusKm": "{{km}} km",
+    "radiusNeedsLocation": "Turn on \"Near me\" to choose the distance and sort by proximity.",
+    "apply": "See results",
+    "clear": "Clear filters"
+  },
+  "pricePresets": {
+    "upTo": "Up to {{max}}",
+    "between": "{{min}}–{{max}}",
+    "over": "Over {{min}}"
+  },
+  "location": {
+    "explainTitle": "Barbershops near you",
+    "explainMessage": "We'll use your location only to show nearby barbershops and the distance to each one. We don't store it.",
+    "explainContinue": "Continue",
+    "denied": "No location permission. You can keep searching by name or service.",
+    "blocked": "Location is turned off for Charles. You can turn it on in the phone settings.",
+    "openSettings": "Open settings",
+    "unavailable": "We couldn't get your location. Try again or search by name.",
+    "outsidePeru": "For now we only search in Peru. Showing results without location."
+  },
+  "map": {
+    "unavailableTitle": "The map arrives with the next update",
+    "unavailableMessage": "Meanwhile, use the list. Each barbershop has \"Directions\".",
+    "backToList": "See the list",
+    "searchHere": "Search this area",
+    "empty": "No barbershops in this area with these filters.",
+    "openDetail": "See barbershop"
+  },
+  "allBarbershops": "Barbershops"
+}

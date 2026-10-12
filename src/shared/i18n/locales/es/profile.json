@@ -32,7 +32,9 @@
       "PUSH": "Notificaciones en el teléfono",
       "EMAIL": "Correo electrónico",
       "IN_APP": "Dentro de la aplicación"
-    }
+    },
+    "language": "Idioma",
+    "languageSystem": "Del teléfono"
   },
   "favorites": "Mis favoritas",
   "devTools": "Sistema de diseño (desarrollo)",

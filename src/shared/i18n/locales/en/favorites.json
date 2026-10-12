@@ -1,0 +1,8 @@
+{
+  "title": "My favorites",
+  "empty": {
+    "title": "No favorites yet",
+    "message": "Tap the heart on a barbershop to save it here."
+  },
+  "remove": "Remove {{name}} from favorites"
+}

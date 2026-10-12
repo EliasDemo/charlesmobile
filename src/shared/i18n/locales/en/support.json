@@ -1,0 +1,69 @@
+{
+  "title": "Help",
+  "list": {
+    "new": "New request",
+    "empty": "No requests yet",
+    "emptyMessage": "If something went wrong with a booking, a payment or the app, write to us."
+  },
+  "status": {
+    "OPEN": "Open",
+    "IN_PROGRESS": "In progress",
+    "RESOLVED": "Resolved",
+    "CLOSED": "Closed"
+  },
+  "category": {
+    "ACCOUNT": "My account",
+    "BOOKING": "A booking",
+    "PAYMENT": "A payment",
+    "BARBERSHOP": "A barbershop",
+    "REVIEW": "A review",
+    "APP": "The app",
+    "OTHER": "Something else"
+  },
+  "new": {
+    "title": "New request",
+    "aboutBooking": "Your request will be linked to this booking, so support sees it directly.",
+    "category": "What is it about?",
+    "subject": "Subject",
+    "message": "Tell us what happened",
+    "messageHint": "Don't write card details or passwords.",
+    "send": "Send request",
+    "sent": "Request sent"
+  },
+  "ticket": {
+    "title": "Request",
+    "you": "You",
+    "support": "Support",
+    "reply": "Your reply",
+    "send": "Reply",
+    "closed": "This request is closed. If you need more help, open a new one."
+  },
+  "form": {
+    "required": "This is required.",
+    "subjectShort": "Enter at least 3 characters."
+  },
+  "report": {
+    "action": "Report this barbershop",
+    "title": "Report barbershop",
+    "message": "Tell us what's going on. Support will review it; the barbershop won't know who reported it.",
+    "details": "Details (optional)",
+    "send": "Send report",
+    "sent": "Report sent. Thanks for letting us know.",
+    "reasons": {
+      "FRAUD": "Fraud or scam",
+      "MISLEADING_INFO": "Misleading information",
+      "INAPPROPRIATE": "Inappropriate content",
+      "NOT_OPERATING": "No longer operating",
+      "SAFETY": "Safety",
+      "OTHER": "Other reason"
+    }
+  },
+  "disabled": {
+    "title": "Your account is disabled",
+    "message": "For now you can only write to support to find out what happened or ask for help. This access lasts 15 minutes.",
+    "leave": "Leave"
+  },
+  "help": {
+    "booking": "I need help with this booking"
+  }
+}
