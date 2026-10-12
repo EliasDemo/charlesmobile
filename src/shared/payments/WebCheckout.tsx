@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   BackHandler,
+  KeyboardAvoidingView,
   Linking,
   Modal,
   Pressable,
@@ -112,7 +113,10 @@ export function WebCheckout({
 
   return (
     <Modal visible animationType="slide" onRequestClose={() => finish('closed')} statusBarTranslucent>
-      <View style={[styles.root, { backgroundColor: theme.colors.background, paddingTop: insets.top }]}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        style={[styles.root, { backgroundColor: theme.colors.background, paddingTop: insets.top }]}
+      >
         <View style={[styles.bar, { borderBottomColor: theme.colors.border }]}>
           <Icon name="lock-closed" size={theme.typography.label.fontSize} color={theme.colors.success} />
           <Text variant="bodyStrong" style={styles.flex}>
@@ -154,6 +158,7 @@ export function WebCheckout({
               <ActivityIndicator color={theme.colors.primary} size="large" />
             </View>
           )}
+          // The keyboard pushes the page up (a translucent modal does not resize by itself).
           // Login, 3-D Secure and wallets need cookies, storage and same-window popups.
           javaScriptEnabled
           domStorageEnabled
@@ -176,7 +181,7 @@ export function WebCheckout({
           style={[styles.flex, failed ? styles.hidden : null, { marginBottom: insets.bottom }]}
           testID="checkout-webview"
         />
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
