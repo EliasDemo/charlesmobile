@@ -4,11 +4,12 @@ import { ApiError, isErrorBody } from './errors';
 import type { paths } from './generated/schema';
 import { createApiFetch } from './http';
 import { configureRefresh, refreshSession, useSession } from './session';
+import { uploadAwareFetch } from './uploadFetch';
 
 const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 const apiFetch = createApiFetch({
-  fetchImpl: (request) => fetch(request),
+  fetchImpl: uploadAwareFetch,
   sleep,
   getAccessToken: () => useSession.getState().accessToken,
   refresh: refreshSession,
