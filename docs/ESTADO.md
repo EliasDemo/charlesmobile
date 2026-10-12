@@ -345,6 +345,7 @@ Confirmada por el usuario en su teléfono.
 - Eliminar la cuenta: no hay endpoint (pendientes de publicación #10).
 - **Backend:** `GET /me/barber` (ya en el contrato; se usará en M7) (antes de los bloqueos del barbero) y el resto de `docs/api/AJUSTES-BACKEND.md`.
 - Pendientes de publicación: `docs/pendientes-publicacion.md`.
+- **Pago con Mercado Pago (2026-10-12):** con la compilación nueva el formulario se llena bien (el teclado ya no tapa los campos), pero Mercado Pago responde "No pudimos procesar tu pago" con APRO. Revisar el e-mail del pagador (usar `test_user_charles@testuser.com`, no uno real ni del vendedor) y, si sigue, las credenciales de prueba del backend.
 
 ## Compilación instalada y cambios nativos pendientes de compilar
 
