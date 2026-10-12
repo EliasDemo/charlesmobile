@@ -139,5 +139,27 @@
   "payment": {
     "title": "Pago seguro",
     "close": "Cerrar el pago"
+  },
+  "calendar": {
+    "months": [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre"
+    ],
+    "monthsShort": ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sept", "oct", "nov", "dic"],
+    "showMonth": "Ver calendario",
+    "showDays": "Ver días",
+    "addToCalendar": "Agregar a mi calendario",
+    "added": "Cita agregada a tu calendario",
+    "addFailed": "No pudimos agregarla. Revisa el permiso del calendario."
   }
 }

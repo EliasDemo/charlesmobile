@@ -3,7 +3,7 @@ import { ResultCard } from '@/features/search';
 import { useTranslation } from '@/shared/i18n';
 import { formatMinutes, formatMoney, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
-import { Button, Chip, DayPicker, Notice, QueryView, Screen, Text } from '@/shared/ui';
+import { Button, Chip, DateSelector, Notice, QueryView, Screen, Text } from '@/shared/ui';
 import { useBookingSetup } from '../hooks/useBookingSetup';
 
 export interface BookScreenProps {
@@ -79,7 +79,7 @@ export function BookScreen({
                 </Section>
 
                 <Section title={t('book.day')}>
-                  <DayPicker
+                  <DateSelector
                     days={setup.days}
                     selected={draft.date}
                     onSelect={(date) => date && draft.setDate(date)}

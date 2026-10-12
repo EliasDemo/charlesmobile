@@ -6,7 +6,7 @@ import { spacing } from '@/shared/theme';
 import {
   Chip,
   ConfirmDialog,
-  DayPicker,
+  DateSelector,
   EmptyState,
   Notice,
   QueryView,
@@ -70,7 +70,7 @@ export function AgendaScreen({ headerRight }: { headerRight?: ReactNode }) {
                   ))}
                 </ChipRow>
               ) : null}
-              <DayPicker
+              <DateSelector
                 label={t('day')}
                 days={a.days}
                 today={a.today}

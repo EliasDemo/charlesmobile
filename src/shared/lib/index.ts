@@ -10,6 +10,7 @@ export {
   zonedTimeToIso,
 } from './dates';
 export { deviceModelName } from './device';
+export { addToCalendar, type CalendarEventInput } from './calendar';
 export { haptic, type HapticKind } from './haptics';
 export { formatDuration, useCountdown } from './useCountdown';
 export { paramString, safeReturnTo } from './routeParams';

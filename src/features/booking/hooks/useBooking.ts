@@ -3,7 +3,8 @@ import { useIsFocused } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { nextPageParam, translateError } from '@/shared/api';
 import { i18n } from '@/shared/i18n';
-import { useCountdown } from '@/shared/lib';
+import { addToCalendar, useCountdown } from '@/shared/lib';
+import { showToast } from '@/shared/ui';
 import { checkoutFor, type Checkout, type CheckoutOutcome } from '@/shared/payments';
 import {
   bookingKeys,
@@ -126,6 +127,21 @@ export function useBooking(id: string) {
     preview,
     canCancel: preview.data?.allowed === true,
     payment,
+    /** Opens the system dialog to add a confirmed booking to the phone calendar. */
+    addToCalendar: () => {
+      if (!booking) return;
+      void addToCalendar({
+        title: i18n.t('booking:calendar.title', {
+          service: booking.service.name ?? '',
+          shop: booking.barbershop.name ?? '',
+        }),
+        startAt: booking.startAt,
+        endAt: booking.endAt,
+        location: booking.barbershop.name ?? undefined,
+      })
+        .then((saved) => saved && showToast(i18n.t('common:calendar.added')))
+        .catch(() => showToast(i18n.t('common:calendar.addFailed'), 'danger'));
+    },
     /** Paying only makes sense for a pending booking that has not expired on screen. */
     canPay: booking?.status === 'PENDING_PAYMENT' && countdown.secondsLeft > 0,
     pay: () => pay.mutate(),

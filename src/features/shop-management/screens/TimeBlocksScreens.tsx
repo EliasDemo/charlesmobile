@@ -6,7 +6,7 @@ import {
   Button,
   Chip,
   ConfirmDialog,
-  DayPicker,
+  DateSelector,
   IconTile,
   InfoCard,
   Notice,
@@ -180,7 +180,7 @@ function BlockForm({
         <Text variant="label" color="textSecondary">
           {t('blocks.day')}
         </Text>
-        <DayPicker
+        <DateSelector
           label={t('blocks.day')}
           days={f.days}
           selected={f.date}

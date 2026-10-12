@@ -22,6 +22,8 @@ export {
   type ErrorStateProps,
 } from './StateViews';
 export { ScreenTitle } from './ScreenTitle';
+export { MonthCalendar, type MonthCalendarProps } from './MonthCalendar';
+export { DateSelector, type DateSelectorProps } from './DateSelector';
 export { StarPicker, Stars } from './StarRating';
 export { ToastHost, showToast } from './Toast';
 export { useSurfaceStyle } from './surface';

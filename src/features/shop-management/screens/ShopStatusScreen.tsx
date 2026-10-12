@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { spacing } from '@/shared/theme';
-import { Button, DayPicker, Notice, QueryView, Screen, SegmentedControl, TextField } from '@/shared/ui';
+import { Button, DateSelector, Notice, QueryView, Screen, SegmentedControl, TextField } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
 import { useManagedShop } from '../hooks/useManagedShop';
 import { LIMITS } from '../schemas/limits';
@@ -41,7 +41,7 @@ function StatusForm({ shop, onSaved }: { shop: ManagedShop; onSaved: () => void 
             maxLength={LIMITS.closureReason.max}
             error={s.reasonError ? t(s.reasonError) : undefined}
           />
-          <DayPicker
+          <DateSelector
             label={t('statusForm.reopen')}
             days={s.days}
             selected={s.reopenDate}

@@ -120,7 +120,14 @@ export function BookingScreen({
             {booking.status === 'PENDING_PAYMENT' ? <DevBookingId bookingId={booking.id} /> : null}
             {booking.status === 'CONFIRMED' ? <SuccessCheck /> : null}
             {booking.status === 'CONFIRMED' ? (
-              <Notice tone="success" message={t('detail.confirmedTitle')} />
+              <Notice tone="success" message={t('detail.confirmedTitle')}>
+                <Button
+                  label={t('calendar.addToCalendar', { ns: 'common' })}
+                  variant="secondary"
+                  icon="calendar"
+                  onPress={data.addToCalendar}
+                />
+              </Notice>
             ) : null}
             <PushPermissionPrompt when={booking.status === 'CONFIRMED'} />
             {booking.status === 'EXPIRED' ? (

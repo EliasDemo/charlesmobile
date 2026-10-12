@@ -117,5 +117,8 @@
     "failed": "No se hizo ningún cobro. Puedes intentarlo de nuevo mientras tu reserva siga vigente.",
     "expired": "La reserva venció o ya estaba pagada. Actualizamos su estado.",
     "unavailable": "No pudimos abrir el pago ahora. Inténtalo de nuevo en un momento."
+  },
+  "calendar": {
+    "title": "{{service}} en {{shop}}"
   }
 }
