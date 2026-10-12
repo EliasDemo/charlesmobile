@@ -11,6 +11,6 @@ describe('paymentProviderFor', () => {
   });
 
   it('has no Izipay adapter until M5', () => {
-    expect(paymentProviderFor({ type: 'IZIPAY_SDK', data: {} })).toBeNull();
+    expect(paymentProviderFor({ type: 'IZIPAY_WEB', data: {} })).toBeNull();
   });
 });

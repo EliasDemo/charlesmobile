@@ -2901,6 +2901,14 @@ export type components = {
              */
             timezone: string;
         };
+        BookingCommissionDto: {
+            amount: components["schemas"]["MoneyDto"];
+            /**
+             * @description BARBERSHOP: se descuenta de lo que recibe la barbería. CLIENT: la pagó el cliente.
+             * @enum {string}
+             */
+            payer: "CLIENT" | "BARBERSHOP";
+        };
         BookingDto: {
             barber: components["schemas"]["NamedRefDto"];
             barberChosenByClient: boolean;
@@ -2910,6 +2918,8 @@ export type components = {
             canReview: boolean;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
+            /** @description Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null. */
+            commission: components["schemas"]["BookingCommissionDto"] | null;
             /** Format: date-time */
             createdAt: string;
             /** @description Duración copiada del servicio al reservar. */
@@ -3010,6 +3020,8 @@ export type components = {
             canReview: boolean;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
+            /** @description Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null. */
+            commission: components["schemas"]["BookingCommissionDto"] | null;
             /** Format: date-time */
             createdAt: string;
             /** @description Duración copiada del servicio al reservar. */
@@ -3038,11 +3050,15 @@ export type components = {
             role: components["schemas"]["BarbershopMemberRole"];
         };
         ClientPaymentActionDto: {
+            /** @description FAKE: { paymentId }. IZIPAY_WEB y MERCADOPAGO_WEB: { paymentUrl, doneUrlPrefix }. */
             data: {
                 [key: string]: string;
             };
-            /** @enum {string} */
-            type: "FAKE" | "IZIPAY_SDK";
+            /**
+             * @description FAKE: pasarela simulada (desarrollo; pagar con dev:pay). IZIPAY_WEB y MERCADOPAGO_WEB: abrir data.paymentUrl (formulario de la pasarela, con tarjeta y Yape) en un WebView; el pago termina cuando la página navega a una URL que empieza con data.doneUrlPrefix.
+             * @enum {string}
+             */
+            type: "FAKE" | "IZIPAY_WEB" | "MERCADOPAGO_WEB";
         };
         ClosureDto: {
             /** Format: date-time */
@@ -3176,6 +3192,8 @@ export type components = {
             canReview: boolean;
             /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
             client: components["schemas"]["NamedRefDto"] | null;
+            /** @description Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null. */
+            commission: components["schemas"]["BookingCommissionDto"] | null;
             /** Format: date-time */
             createdAt: string;
             /** @description Duración copiada del servicio al reservar. */

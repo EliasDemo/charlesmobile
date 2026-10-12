@@ -12996,13 +12996,15 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["FAKE", "IZIPAY_SDK"]
+            "enum": ["FAKE", "IZIPAY_WEB", "MERCADOPAGO_WEB"],
+            "description": "FAKE: pasarela simulada (desarrollo; pagar con dev:pay). IZIPAY_WEB y MERCADOPAGO_WEB: abrir data.paymentUrl (formulario de la pasarela, con tarjeta y Yape) en un WebView; el pago termina cuando la página navega a una URL que empieza con data.doneUrlPrefix."
           },
           "data": {
             "type": "object",
             "additionalProperties": {
               "type": "string"
-            }
+            },
+            "description": "FAKE: { paymentId }. IZIPAY_WEB y MERCADOPAGO_WEB: { paymentUrl, doneUrlPrefix }."
           }
         },
         "required": ["type", "data"]
@@ -13329,6 +13331,20 @@
         },
         "required": ["byRole", "reason"]
       },
+      "BookingCommissionDto": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "payer": {
+            "type": "string",
+            "enum": ["CLIENT", "BARBERSHOP"],
+            "description": "BARBERSHOP: se descuenta de lo que recibe la barbería. CLIENT: la pagó el cliente."
+          }
+        },
+        "required": ["amount", "payer"]
+      },
       "BookingOwnReviewDto": {
         "type": "object",
         "properties": {
@@ -13423,6 +13439,16 @@
             "format": "date-time",
             "type": "string"
           },
+          "commission": {
+            "nullable": true,
+            "description": "Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingCommissionDto"
+              }
+            ]
+          },
           "canReview": {
             "type": "boolean",
             "description": "Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false."
@@ -13456,6 +13482,7 @@
           "expiresAt",
           "cancellation",
           "createdAt",
+          "commission",
           "canReview",
           "review",
           "payment"
@@ -13536,6 +13563,16 @@
             "format": "date-time",
             "type": "string"
           },
+          "commission": {
+            "nullable": true,
+            "description": "Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingCommissionDto"
+              }
+            ]
+          },
           "canReview": {
             "type": "boolean",
             "description": "Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false."
@@ -13566,6 +13603,7 @@
           "expiresAt",
           "cancellation",
           "createdAt",
+          "commission",
           "canReview",
           "review"
         ]
@@ -13886,6 +13924,16 @@
             "format": "date-time",
             "type": "string"
           },
+          "commission": {
+            "nullable": true,
+            "description": "Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BookingCommissionDto"
+              }
+            ]
+          },
           "canReview": {
             "type": "boolean",
             "description": "Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false."
@@ -13924,6 +13972,7 @@
           "expiresAt",
           "cancellation",
           "createdAt",
+          "commission",
           "canReview",
           "review",
           "refund"

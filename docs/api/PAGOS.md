@@ -1,6 +1,6 @@
 # Pagos en la app móvil
 
-Para quien construye la app. Estado al cierre de la Fase 9: el sistema de pagos está completo con la pasarela simulada (`FakeGateway`, Fase 8A). El adaptador real de Izipay es la Fase 8B, **aún no implementada**. Referencias del backend: `docs/pagos-izipay.md` y `docs/izipay/referencia.md`.
+Para quien construye la app. **Pasarela para pruebas reales: Mercado Pago** (`MERCADOPAGO_WEB`, ver abajo). Estado al cierre de la Fase 8B: el sistema de pagos funciona con la pasarela simulada (`FakeGateway`, desarrollo) y con **Izipay** (formulario web con tarjeta y Yape, abierto en un WebView). Izipay está probado con un simulador: falta una cuenta real (ver `docs/pendientes-produccion.md`). Referencia del backend: `docs/izipay/referencia.md`.
 
 ## Principio que no cambia
 
@@ -39,35 +39,69 @@ Para quien construye la app. Estado al cierre de la Fase 9: el sistema de pagos 
   - Falla con `NODE_ENV=production` y si `payments.provider` no es `FAKE`.
   - Queda en `audit_log` (`dev.payment_simulated`).
 
-## Con Izipay (Fase 8B, plataforma micuentaweb)
+## Con Izipay (Fase 8B): formulario web en un WebView
 
-1. **El backend crea el pago** con `Charge/CreatePayment` y devuelve en `clientAction`:
+Sin módulos nativos: funciona en **Expo Go** con `react-native-webview`.
+
+1. `clientAction` llega así:
 
    ```json
    {
-     "type": "IZIPAY_SDK",
-     "data": { "formToken": "…", "publicKey": "…", "apiServerName": "https://api.micuentaweb.pe" }
+     "type": "IZIPAY_WEB",
+     "data": {
+       "paymentUrl": "https://…/api/v1/payments/izipay/checkout/{paymentId}?e=…&s=…",
+       "doneUrlPrefix": "https://…/api/v1/payments/done"
+     }
    }
    ```
 
-   La clave pública no es secreta, pero viene del backend: **no la escribas en el código de la app**.
+2. **Abre `paymentUrl` en un `WebView`** a pantalla completa. Es la página de pago de Charles, que carga el formulario oficial de Izipay: tarjeta (Visa, Mastercard, Amex, Diners) y **Yape** (número + código de aprobación de la app de Yape, hasta S/ 2000). Los datos de la tarjeta nunca pasan por Charles ni por la app.
+   - El enlace es personal y vence a los 30 minutos (la reserva vence antes, a los 10). Si vence, llama a `POST /bookings/{id}/payment` para obtener uno nuevo.
+3. **Detecta el final** con `onNavigationStateChange` (o `onShouldStartLoadWithRequest`): cuando la URL **empieza con `doneUrlPrefix`**, cierra el WebView. Esa URL trae `status` (`success`, `pending`, `error`, `cancel` o `expired`), `paymentId` y `bookingId`.
+   - `success`: muestra "Confirmando tu pago…" y consulta `GET /bookings/{id}` hasta ver `CONFIRMED` (el servidor ya consultó a Izipay; la notificación también llega).
+   - `error`: "El pago no se completó". La reserva **sigue pendiente**: ofrece reintentar (vuelve a abrir el formulario) mientras no venza.
+   - `cancel`: el cliente cerró el formulario; igual que `error`, sin cobro.
+   - `expired`: la reserva venció o ya estaba pagada; recarga la reserva.
+4. Si el usuario cierra el WebView a mano, haz lo mismo que con `success`: consulta la reserva (puede haber pagado).
+5. **No hace falta** `POST /bookings/{id}/payment/verify` con Izipay: el backend recibe el resultado directamente.
 
-2. **La app usa el SDK oficial `@lyracom/react-native-sdk-payment-module`:**
-   - llama a `initialize(publicKey, { apiServerName })`;
-   - luego a `process(formToken, options)`. `paymentMethodType` admite `PaymentMethods.ALL` (por defecto) o `PaymentMethods.CARD`.
-   - El SDK **ignora llamadas simultáneas** sin error ni callback: deshabilita el botón mientras procesa.
-3. **Al terminar,** el SDK devuelve la respuesta con `kr-answer`, `kr-hash`, `kr-hash-algorithm` y `kr-hash-key`. La app la envía **sin modificar** a `POST /bookings/{id}/payment/verify`, que nunca confirma por sí solo.
-4. **La confirmación real** llega al servidor por la IPN de Izipay.
+Ejemplo mínimo:
 
-### Requisitos del SDK para la app
+```tsx
+<WebView
+  source={{ uri: action.data.paymentUrl }}
+  onShouldStartLoadWithRequest={(req) => {
+    if (req.url.startsWith(action.data.doneUrlPrefix)) {
+      const status = new URL(req.url).searchParams.get('status');
+      onFinish(status); // cierra y consulta la reserva
+      return false;
+    }
+    return true;
+  }}
+/>
+```
 
-- Desde la versión 2.0.0 es un **TurboModule**: exige la **nueva arquitectura** y **React Native 0.77 o superior**.
-- **No funciona con Expo Go.** Hace falta una **compilación de desarrollo** (`expo-dev-client`, con EAS Build o `expo run:android` / `expo run:ios`).
-- **En iOS** requiere un _config plugin_ que configure en el Podfile los frameworks dinámicos `LyraPaymentSDK`, `LyraMotion`, `LyraMaterial` y `SnapKit`.
+### Comisión de Charles
 
-### Por confirmar (8B)
+- La configura ADMIN (`fees.*`). Si la paga el **cliente**, la reserva trae una línea `FEE` con monto y el total la incluye: muéstrala en el resumen antes de pagar. Si la asume la **barbería** (por defecto), el cliente no la ve.
+- La barbería ve en cada reserva `commission: { amount, payer }` (para el cliente siempre `null`).
 
-- Disponibilidad de Yape, Plin y QR en el SDK.
-- Tarjetas de prueba de la tienda de demostración.
+### En el modo de pruebas
 
-Hasta que la 8B esté lista, encapsula el pago en un módulo con dos implementaciones: `FAKE`, que no hace nada y espera la confirmación del servidor, e `IZIPAY_SDK`. Elige según `clientAction.type`.
+La página muestra "Modo de pruebas: no se cobra dinero real". Las tarjetas de prueba las da Izipay con la cuenta de pruebas.
+
+## Con Mercado Pago (Checkout Pro): `MERCADOPAGO_WEB`
+
+Mismo patrón que Izipay: `clientAction = { type: "MERCADOPAGO_WEB", data: { paymentUrl, doneUrlPrefix } }`.
+
+1. Abre `paymentUrl` (checkout de Mercado Pago: tarjeta, cuenta de Mercado Pago y **Yape**) en un WebView.
+2. Cierra al llegar a `doneUrlPrefix` y lee `status`:
+   - `success`: "Confirmando tu pago…" y consulta la reserva hasta `CONFIRMED`.
+   - `pending`: el pago quedó **pendiente** (por ejemplo, Yape). Muestra "Tu pago está en proceso" y consulta la reserva; se confirma cuando Mercado Pago lo apruebe. Si llega después del vencimiento, el servidor devuelve el dinero.
+   - `error`: rechazado; la reserva sigue pendiente, ofrece reintentar.
+3. Para reintentar o si el enlace venció: `POST /bookings/{id}/payment` (nuevo `paymentUrl`).
+4. **Prueba real (modo de prueba):** inicia sesión en el checkout con el **comprador de prueba** y usa las tarjetas de prueba (titular `APRO` = aprobado, `OTHE` = rechazado, `CONT` = pendiente). Ver `docs/mercadopago/referencia.md`.
+
+Mercado Pago sugiere `expo-web-browser` (Custom Tabs) en su guía de Expo Go; si el WebView diera problemas con su login, se puede usar ese navegador, que también terminará en `doneUrlPrefix`.
+
+Encapsula el pago en un módulo que elija según `clientAction.type`: `FAKE` (espera la confirmación; en desarrollo se paga con `dev:pay`), `IZIPAY_WEB` o `MERCADOPAGO_WEB` (los dos con WebView).
