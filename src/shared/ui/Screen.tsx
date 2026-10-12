@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { sizes, spacing, useTheme } from '@/shared/theme';
+import { useTabBarSpace } from './tabBarSpace';
 
 export interface ScreenProps {
   children: ReactNode;
@@ -21,7 +22,10 @@ export function Screen({
   onRefresh,
 }: ScreenProps) {
   const theme = useTheme();
-  const content = <View style={styles.content}>{children}</View>;
+  const tabBar = useTabBarSpace();
+  const content = (
+    <View style={[styles.content, tabBar ? { paddingBottom: spacing.lg + tabBar } : null]}>{children}</View>
+  );
   return (
     <SafeAreaView edges={edges} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       {scroll ? (

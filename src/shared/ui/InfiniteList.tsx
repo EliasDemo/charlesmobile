@@ -12,6 +12,7 @@ import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import { Button } from './Button';
 import { FadeIn } from './motion';
+import { useTabBarSpace } from './tabBarSpace';
 import type { IconName } from './Icon';
 import { SkeletonList } from './Skeleton';
 import { EmptyState, ErrorState } from './StateViews';
@@ -59,6 +60,7 @@ export function InfiniteList<T>({
   header,
   canSearchMoreWhenEmpty = false,
 }: InfiniteListProps<T>) {
+  const tabBar = useTabBarSpace();
   const theme = useTheme();
   const { t } = useTranslation();
   const items = query.items ?? [];
@@ -121,7 +123,7 @@ export function InfiniteList<T>({
           colors={[theme.colors.primary]}
         />
       }
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, tabBar ? { paddingBottom: spacing.lg + tabBar } : null]}
       keyboardShouldPersistTaps="handled"
       style={{ backgroundColor: theme.colors.background }}
     />

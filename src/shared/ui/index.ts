@@ -27,6 +27,8 @@ export { DateSelector, type DateSelectorProps } from './DateSelector';
 export { SwipeRow, type SwipeAction } from './SwipeRow';
 export { ZoomableImage } from './ZoomableImage';
 export { Celebration } from './Celebration';
+export { BottomFade, GlassBackground } from './Glass';
+export { useTabBarSpace } from './tabBarSpace';
 export { EmojiTextField, type EmojiTextFieldProps } from './EmojiTextField';
 export { StarPicker, Stars } from './StarRating';
 export { ToastHost, showToast } from './Toast';

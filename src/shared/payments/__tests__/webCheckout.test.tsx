@@ -21,6 +21,13 @@ jest.mock('react-native-webview', () => {
   };
 });
 
+// The Modal shows its content right away (no native presentation delay under load).
+jest.mock('react-native/Libraries/Modal/Modal', () => ({
+  __esModule: true,
+  default: ({ children, visible }: { children: React.ReactNode; visible: boolean }) =>
+    visible ? children : null,
+}));
+
 const mockOpenAuth = jest.fn();
 jest.mock('expo-web-browser', () => ({ openAuthSessionAsync: (...a: unknown[]) => mockOpenAuth(...a) }));
 
@@ -54,7 +61,7 @@ describe('WebCheckout with the in-app browser', () => {
     withWebView(true);
     const onFinish = jest.fn();
     await renderCheckout(onFinish);
-    expect(await screen.findByTestId('webview', {}, { timeout: 5000 })).toBeTruthy();
+    expect(await screen.findByTestId('webview')).toBeTruthy();
     expect(mockNavigate.current!('https://pay.example/1/step2')).toBe(true);
     expect(mockNavigate.current!(`${DONE}?status=success&paymentId=p&bookingId=b`)).toBe(false);
     expect(onFinish).toHaveBeenCalledWith('success');
@@ -67,7 +74,7 @@ describe('WebCheckout with the in-app browser', () => {
     withWebView(true);
     const onFinish = jest.fn();
     await renderCheckout(onFinish);
-    await fireEvent.press(await screen.findByTestId('checkout-close', {}, { timeout: 5000 }));
+    await fireEvent.press(await screen.findByTestId('checkout-close'));
     expect(onFinish).toHaveBeenCalledWith('closed');
   });
 });

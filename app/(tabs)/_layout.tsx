@@ -3,7 +3,14 @@ import { Animated, StyleSheet, type ColorValue } from 'react-native';
 import { useEffectiveMode } from '@/features/shop-management';
 import { useTranslation } from '@/shared/i18n';
 import { fontFamily, useTheme } from '@/shared/theme';
-import { Icon, useFadeOnChange, usePopWhen, useTabAnimation, type IconName } from '@/shared/ui';
+import {
+  GlassBackground,
+  Icon,
+  useFadeOnChange,
+  usePopWhen,
+  useTabAnimation,
+  type IconName,
+} from '@/shared/ui';
 
 function PoppingIcon({
   name,
@@ -52,7 +59,14 @@ export default function TabsLayout() {
           animation,
           tabBarActiveTintColor: theme.colors.primary,
           tabBarInactiveTintColor: theme.colors.textSecondary,
-          tabBarStyle: { backgroundColor: theme.colors.surface, borderTopColor: theme.colors.border },
+          // Floating, translucent bar (glass): content scrolls behind it, with space at the end.
+          tabBarStyle: {
+            position: 'absolute',
+            backgroundColor: 'transparent',
+            borderTopColor: theme.colors.border,
+            elevation: 0,
+          },
+          tabBarBackground: () => <GlassBackground />,
           tabBarLabelStyle: { fontFamily: fontFamily.medium },
         }}
       >

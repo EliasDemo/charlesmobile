@@ -4,6 +4,7 @@ import { mediaUrl } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
 import { brandImages } from './brandImages.generated';
+import { BottomFade } from './Glass';
 import { Icon, type IconName } from './Icon';
 import { Text } from './Text';
 
@@ -69,6 +70,8 @@ export function BrandImage({
       )}
       {veil && source ? (
         <View style={[StyleSheet.absoluteFill, { backgroundColor: theme.colors.backdrop }]} />
+      ) : source ? (
+        <BottomFade />
       ) : null}
       {labeled ? (
         <View
