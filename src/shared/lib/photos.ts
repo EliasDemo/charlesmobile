@@ -1,3 +1,5 @@
+import * as manipulator from 'expo-image-manipulator';
+import * as picker from 'expo-image-picker';
 import { requireOptionalNativeModule } from 'expo';
 
 /**
@@ -32,11 +34,6 @@ const QUALITY = 0.85;
  */
 export async function pickPhoto(source: PhotoSource, aspect?: [number, number]): Promise<PickResult> {
   if (!photosAvailable()) return { status: 'unavailable' };
-  // Loaded only when the native modules exist (the installed build may not have them yet).
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const picker = require('expo-image-picker') as typeof import('expo-image-picker');
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const manipulator = require('expo-image-manipulator') as typeof import('expo-image-manipulator');
 
   const permission =
     source === 'camera'

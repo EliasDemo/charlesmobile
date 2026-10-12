@@ -1,3 +1,5 @@
+import * as WebBrowser from 'expo-web-browser';
+import { WebView } from 'react-native-webview';
 import { requireOptionalNativeModule } from 'expo';
 import { useEffect, useRef } from 'react';
 import { ActivityIndicator, Modal, Pressable, StyleSheet, TurboModuleRegistry, View } from 'react-native';
@@ -43,8 +45,6 @@ export function WebCheckout({
   const useBrowser = !webViewAvailable() && browserAvailable();
   useEffect(() => {
     if (!useBrowser) return;
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const WebBrowser = require('expo-web-browser') as typeof import('expo-web-browser');
     void WebBrowser.openAuthSessionAsync(paymentUrl, doneUrlPrefix).then((result) =>
       finish(result.type === 'success' ? outcomeFromDoneUrl(result.url) : 'closed'),
     );
@@ -53,8 +53,6 @@ export function WebCheckout({
   }, []);
   if (useBrowser) return null;
 
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { WebView } = require('react-native-webview') as typeof import('react-native-webview');
   return (
     <Modal visible animationType="slide" onRequestClose={() => finish('closed')} statusBarTranslucent>
       <View style={[styles.root, { backgroundColor: theme.colors.background, paddingTop: insets.top }]}>

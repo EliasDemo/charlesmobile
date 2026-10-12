@@ -44,3 +44,9 @@ jest.mock('expo-notifications', () => ({
   getLastNotificationResponseAsync: jest.fn(async () => null),
   addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
 }));
+
+// react-native-webview registers its native module on import: tests use a plain view instead.
+jest.mock('react-native-webview', () => {
+  const { View } = jest.requireActual('react-native');
+  return { WebView: (props: object) => <View testID="webview" {...props} /> };
+});

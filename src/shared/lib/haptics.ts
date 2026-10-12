@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics';
 import { requireOptionalNativeModule } from 'expo';
 
 export type HapticKind = 'success' | 'warning' | 'light';
@@ -8,8 +9,6 @@ export type HapticKind = 'success' | 'warning' | 'light';
  */
 export function haptic(kind: HapticKind = 'light') {
   if (!requireOptionalNativeModule('ExpoHaptics')) return;
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const Haptics = require('expo-haptics') as typeof import('expo-haptics');
   const run =
     kind === 'light'
       ? Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
