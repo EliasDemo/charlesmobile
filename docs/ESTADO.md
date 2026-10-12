@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M5 (pagos web) y M10 (fotos) — código terminado; el checkout y la subida de fotos se prueban con la **compilación única** (guía al final), que el usuario lanza. M7, M8 y M9 terminadas, pendientes de la prueba del usuario. Después: M11 (publicación).
+**Fase actual:** compilación única lista (falta probarla en el teléfono). Hechos además: calendario mensual, emojis, español/inglés, gestos, celebración, glassmorphism, esqueletos con forma, estados inteligentes y arreglos del pago web. M5, M7–M10 pendientes de la prueba del usuario. Después: M11 (publicación).
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -348,7 +348,7 @@ Confirmada por el usuario en su teléfono.
 
 ## Compilación instalada y cambios nativos pendientes de compilar
 
-**Compilación de desarrollo instalada en el teléfono del usuario:** la de M1 (commit `cbce85b`).
+**Compilación de desarrollo:** la del 2026-10-12 (EAS build 93f04a0d, APK en expo.dev), con todos los módulos de la compilación única **salvo la clave de Google Maps y Firebase** (no había variables en EAS): mapa y push reales quedan para una compilación siguiente cuando se carguen. La anterior era la de M1 (commit `cbce85b`).
 
 Cambios nativos aprobados que todavía **no están** en esa compilación. Se aplicarán en la próxima, que el usuario decide cuándo lanzar:
 
