@@ -87,7 +87,7 @@ Cabecera en cada petición autenticada: `Authorization: Bearer <accessToken>`.
 7. **Recuperar la contraseña:**
    - pedir el código: `POST /auth/password-reset/request` con `{ email }` (respuesta idéntica exista o no la cuenta);
    - confirmar: `POST /auth/password-reset/confirm` con `{ email, code, newPassword }`, que **cierra todas las sesiones**.
-8. **Perfil:** `GET /users/me` y `PATCH /users/me`, para nombre, teléfono y preferencias. El correo no se cambia en el MVP.
+8. **Perfil:** `GET /users/me` y `PATCH /users/me`, para nombre, teléfono, preferencias, fecha de nacimiento y género; foto con `PUT`/`DELETE /users/me/photo`; contraseña con `POST /users/me/password`. El correo no se cambia en el MVP. Detalle en [`PERFIL.md`](PERFIL.md).
 
 ### Qué hacer ante un 401
 
@@ -176,6 +176,7 @@ Todos los errores tienen la misma forma:
 | `IDEMPOTENCY_KEY_REQUIRED`              | 400       | Falta la cabecera `Idempotency-Key` (UUID)                                                | Error de la app.                                                                     |
 | `PAYLOAD_TOO_LARGE`                     | 413       | Cuerpo demasiado grande                                                                   | Error de la app.                                                                     |
 | `UNSUPPORTED_MEDIA_TYPE`                | 415       | Tipo de contenido no soportado                                                            | Error de la app (usar JSON).                                                         |
+| `WRONG_PASSWORD`                        | 400       | Cambio de contraseña: la actual no es correcta (no cierra la sesión)                      | Marcar el campo "Contraseña actual".                                                 |
 | `ACCOUNT_LOCKED`                        | 429       | Demasiados intentos fallidos de acceso                                                    | "Espera unos minutos." `details[0].retryAfterSeconds` indica cuánto.                 |
 | `TOO_MANY_REQUESTS`                     | 429       | Límite de peticiones                                                                      | Esperar y reintentar con espera creciente.                                           |
 | `INTERNAL_ERROR`                        | 500       | Error inesperado                                                                          | Mensaje genérico; reportar con `requestId`.                                          |

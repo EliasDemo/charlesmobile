@@ -60,7 +60,8 @@
     "DELETION_BLOCKED": "Todavía no se puede eliminar tu cuenta.",
     "INVALID_IMAGE": "Esa imagen no se puede usar. Elige una foto JPEG, PNG o WebP.",
     "IMAGE_LIMIT_REACHED": "Llegaste al límite de fotos. Borra alguna para subir otra.",
-    "STORAGE_UNAVAILABLE": "No pudimos guardar la foto ahora. Inténtalo en un momento."
+    "STORAGE_UNAVAILABLE": "No pudimos guardar la foto ahora. Inténtalo en un momento.",
+    "WRONG_PASSWORD": "La contraseña actual no es correcta."
   },
   "fields": {
     "required": "Este campo es obligatorio.",
@@ -73,6 +74,9 @@
     "phone": "Ingresa un teléfono válido.",
     "date": "Ingresa una fecha válida.",
     "weakPassword": "Esa contraseña es muy común. Elige otra.",
-    "mustBeTrue": "Debes aceptar para continuar."
+    "mustBeTrue": "Debes aceptar para continuar.",
+    "dateNotReal": "Esa fecha no existe.",
+    "minimumAge": "Debes tener al menos 18 años.",
+    "differentFromCurrent": "La nueva contraseña debe ser distinta de la actual."
   }
 }

@@ -21,6 +21,7 @@ const profileProps = () => ({
   onRegister: jest.fn(),
   onVerifyEmail: jest.fn(),
   onEditProfile: jest.fn(),
+  onChangePassword: jest.fn(),
   onPreferences: jest.fn(),
   onFavorites: jest.fn(),
   onHelp: jest.fn(),
@@ -128,6 +129,8 @@ describe('EditProfileScreen', () => {
     expect(api.callsTo('PATCH', '/api/v1/users/me')[0]!.body).toEqual({
       fullName: 'Ana María Pérez',
       phone: '+51 987 654 321',
+      birthDate: null,
+      gender: null,
     });
     expect(useSession.getState().user?.fullName).toBe('Ana María Pérez');
   });
@@ -152,7 +155,12 @@ describe('EditProfileScreen', () => {
     await fireEvent.press(screen.getByRole('button', { name: texts.edit.submit }));
     await waitFor(() => expect(onSaved).toHaveBeenCalled());
     // Empty removes the phone.
-    expect(api.callsTo('PATCH', '/api/v1/users/me')[0]!.body).toEqual({ fullName: 'Ana Pérez', phone: null });
+    expect(api.callsTo('PATCH', '/api/v1/users/me')[0]!.body).toEqual({
+      fullName: 'Ana Pérez',
+      phone: null,
+      birthDate: null,
+      gender: null,
+    });
   });
 
   it('requires a name and shows server errors', async () => {

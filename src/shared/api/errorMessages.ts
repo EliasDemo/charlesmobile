@@ -42,6 +42,9 @@ const CONSTRAINT_MESSAGES: Record<string, string> = {
   isISO8601: 'errors:fields.date',
   isNotCommonPassword: 'errors:fields.weakPassword',
   equals: 'errors:fields.mustBeTrue',
+  validDate: 'errors:fields.dateNotReal',
+  minimumAge: 'errors:fields.minimumAge',
+  differentFromCurrent: 'errors:fields.differentFromCurrent',
 };
 
 /** Turns `VALIDATION_ERROR` details (`[{ field, constraints }]`) into one message per field. */

@@ -7,6 +7,7 @@ import {
   Button,
   Icon,
   IconTile,
+  Monogram,
   StatusPill,
   SwipeRow,
   Text,
@@ -165,7 +166,16 @@ export function AgendaItemCard({
               </View>
             </View>
             <StatusPill tone={style.tone} icon={style.icon} label={style.label} />
-            <Detail icon="person" text={t('client', { name: item.client.name })} />
+            <View style={styles.detail}>
+              <Monogram
+                name={item.client.name ?? ''}
+                size={sizes.avatarSmall}
+                imageUrl={item.client.photoUrl}
+              />
+              <Text variant="label" color="textSecondary" style={styles.flex}>
+                {t('client', { name: item.client.name })}
+              </Text>
+            </View>
             {showBarber ? <Detail icon="cut" text={t('barber', { name: item.barber.name })} /> : null}
             {hasActions ? (
               <View style={styles.actions}>

@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 import { SignInPrompt, useLogout } from '@/features/auth';
 import { useTranslation } from '@/shared/i18n';
-import { spacing } from '@/shared/theme';
-import { Button, Card, ConfirmDialog, ListRow, Notice, QueryView, Screen, Text } from '@/shared/ui';
+import { sizes, spacing } from '@/shared/theme';
+import { Button, Card, ConfirmDialog, ListRow, Monogram, Notice, QueryView, Screen, Text } from '@/shared/ui';
 import { useProfile } from '../hooks/useProfile';
 
 export interface ProfileScreenProps {
@@ -10,6 +10,7 @@ export interface ProfileScreenProps {
   onRegister: () => void;
   onVerifyEmail: (email: string) => void;
   onEditProfile: () => void;
+  onChangePassword: () => void;
   onPreferences: () => void;
   onFavorites: () => void;
   onHelp: () => void;
@@ -40,10 +41,15 @@ export function ProfileScreen(props: ProfileScreenProps) {
         {(profile) => (
           <View style={styles.sections}>
             <Card>
-              <Text variant="subtitle">{profile.fullName}</Text>
-              <Text color="textSecondary" selectable>
-                {profile.email}
-              </Text>
+              <View style={styles.identity}>
+                <Monogram name={profile.fullName} size={sizes.avatar} imageUrl={profile.photoUrl} />
+                <View style={styles.flex}>
+                  <Text variant="subtitle">{profile.fullName}</Text>
+                  <Text color="textSecondary" selectable>
+                    {profile.email}
+                  </Text>
+                </View>
+              </View>
             </Card>
             {!emailVerified ? (
               <Notice tone="warning" title={t('unverified.title')} message={t('unverified.message')}>
@@ -60,6 +66,7 @@ export function ProfileScreen(props: ProfileScreenProps) {
               </Text>
               <ListRow icon="call" title={t('phone')} value={profile.phone ?? t('noPhone')} />
               <ListRow icon="create" title={t('edit.title')} onPress={props.onEditProfile} />
+              <ListRow icon="key" title={t('password.title')} onPress={props.onChangePassword} />
             </View>
             <View>
               <Text variant="label" color="textSecondary">
@@ -135,5 +142,7 @@ export function ProfileScreen(props: ProfileScreenProps) {
 
 const styles = StyleSheet.create({
   sections: { gap: spacing.lg },
+  identity: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  flex: { flex: 1 },
   session: { gap: spacing.sm },
 });

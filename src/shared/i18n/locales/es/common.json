@@ -47,7 +47,8 @@
     "summary": "Resumen",
     "booking": "Tu reserva",
     "deleteAccount": "Eliminar mi cuenta",
-    "notifications": "Avisos"
+    "notifications": "Avisos",
+    "changePassword": "Cambiar contraseña"
   },
   "placeholder": {
     "comingSoon": "Disponible en una próxima versión."

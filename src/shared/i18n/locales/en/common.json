@@ -47,7 +47,8 @@
     "summary": "Summary",
     "booking": "Your booking",
     "deleteAccount": "Delete my account",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "changePassword": "Change password"
   },
   "placeholder": {
     "comingSoon": "Available in an upcoming version."

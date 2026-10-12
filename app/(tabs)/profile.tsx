@@ -13,6 +13,7 @@ export default function ProfileRoute() {
       onRegister={() => router.push('/register')}
       onVerifyEmail={(email) => router.push({ pathname: '/verify-email', params: { email } })}
       onEditProfile={() => router.push('/profile/edit')}
+      onChangePassword={() => router.push('/profile/password')}
       onPreferences={() => router.push('/profile/preferences')}
       onFavorites={() => router.push('/profile/favorites')}
       onHelp={() => router.push('/support')}

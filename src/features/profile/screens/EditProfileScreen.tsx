@@ -1,7 +1,12 @@
 import { Controller } from 'react-hook-form';
+import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { Button, Notice, QueryView, Screen, TextField, useFieldErrorText } from '@/shared/ui';
+import { spacing } from '@/shared/theme';
+import { Button, Chip, Notice, QueryView, Screen, Text, TextField, useFieldErrorText } from '@/shared/ui';
+import { ProfilePhoto } from '../components/ProfilePhoto';
 import { useEditProfile } from '../hooks/useEditProfile';
+
+const GENDERS = ['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY'] as const;
 
 export function EditProfileScreen({ onSaved }: { onSaved: () => void }) {
   const { t } = useTranslation('profile');
@@ -12,6 +17,7 @@ export function EditProfileScreen({ onSaved }: { onSaved: () => void }) {
       <QueryView query={query}>
         {(profile) => (
           <>
+            <ProfilePhoto name={profile.fullName} photoUrl={profile.photoUrl} />
             {generalError ? <Notice tone="danger" message={generalError} /> : null}
             <Controller
               control={form.control}
@@ -55,6 +61,47 @@ export function EditProfileScreen({ onSaved }: { onSaved: () => void }) {
                 />
               )}
             />
+            <Notice tone="info" message={t('privacy')} />
+            <Controller
+              control={form.control}
+              name="birthDate"
+              render={({ field, fieldState }) => (
+                <TextField
+                  label={t('birthDate')}
+                  placeholder={t('birthDatePlaceholder')}
+                  keyboardType="numbers-and-punctuation"
+                  autoComplete="birthdate-full"
+                  maxLength={10}
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                  error={errorText(fieldState.error?.message)}
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <View style={styles.group} accessibilityRole="radiogroup" accessibilityLabel={t('gender')}>
+                  <Text variant="label" color="textSecondary">
+                    {t('gender')}
+                  </Text>
+                  <View style={styles.chips}>
+                    {GENDERS.map((gender) => (
+                      <Chip
+                        key={gender}
+                        label={t(`genders.${gender}`)}
+                        selected={field.value === gender}
+                        // Tapping the chosen one again clears it.
+                        onPress={() => field.onChange(field.value === gender ? '' : gender)}
+                      />
+                    ))}
+                  </View>
+                </View>
+              )}
+            />
             <Button label={t('edit.submit')} onPress={() => void submit()} loading={isSubmitting} fullWidth />
           </>
         )}
@@ -62,3 +109,8 @@ export function EditProfileScreen({ onSaved }: { onSaved: () => void }) {
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  group: { gap: spacing.sm },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+});

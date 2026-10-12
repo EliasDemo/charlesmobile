@@ -193,6 +193,8 @@ export const sizes = {
   borderWidth: 1,
   avatar: 56,
   avatarSmall: 40,
+  /** Own photo on the profile. */
+  avatarLarge: 96,
   cover: 160,
   mapPreview: 320,
   illustration: 120,

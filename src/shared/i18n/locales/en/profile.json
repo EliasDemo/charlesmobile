@@ -68,5 +68,36 @@
     "doneTitle": "You asked to delete your account",
     "doneMessage": "Your account will be deleted on {{date}}. We sent you an email. If you change your mind, sign in before that date and cancel the deletion.",
     "goHome": "Go home"
+  },
+  "photo": {
+    "title": "Profile photo",
+    "choose": "Choose photo",
+    "take": "Take photo",
+    "remove": "Remove photo",
+    "uploaded": "Photo updated",
+    "removed": "Photo removed",
+    "denied": "We need permission to use your photos. Turn it on in your phone settings.",
+    "unavailable": "To upload photos you need the latest version of the app.",
+    "hint": "Barbershops where you book can see it."
+  },
+  "birthDate": "Date of birth (optional)",
+  "birthDatePlaceholder": "DD/MM/YYYY",
+  "gender": "Gender (optional)",
+  "genders": {
+    "MALE": "Male",
+    "FEMALE": "Female",
+    "OTHER": "Other",
+    "PREFER_NOT_TO_SAY": "Prefer not to say"
+  },
+  "privacy": "Your date of birth and gender are optional and barbershops never see them.",
+  "birthDateInvalid": "Write the date as day/month/year, for example 23/04/1995.",
+  "password": {
+    "title": "Change password",
+    "current": "Current password",
+    "new": "New password",
+    "newHint": "10 to 128 characters. Avoid common passwords.",
+    "submit": "Change password",
+    "done": "Password changed. We signed you out on your other devices.",
+    "required": "Enter your current password."
   }
 }

@@ -15,6 +15,7 @@ export default function ClientLayout() {
   return (
     <Stack screenOptions={screenOptions}>
       <Stack.Screen name="profile/edit" options={{ title: t('nav.editProfile') }} />
+      <Stack.Screen name="profile/password" options={{ title: t('nav.changePassword') }} />
       <Stack.Screen name="profile/preferences" options={{ title: t('nav.preferences') }} />
       <Stack.Screen name="profile/favorites" options={{ title: t('nav.favorites') }} />
       <Stack.Screen name="profile/delete-account" options={{ title: t('nav.deleteAccount') }} />

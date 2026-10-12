@@ -60,7 +60,8 @@
     "DELETION_BLOCKED": "Your account can't be deleted yet.",
     "INVALID_IMAGE": "That image can't be used. Choose a JPEG, PNG or WebP photo.",
     "IMAGE_LIMIT_REACHED": "You reached the photo limit. Delete one to upload another.",
-    "STORAGE_UNAVAILABLE": "We couldn't save the photo right now. Try again in a moment."
+    "STORAGE_UNAVAILABLE": "We couldn't save the photo right now. Try again in a moment.",
+    "WRONG_PASSWORD": "The current password is not correct."
   },
   "fields": {
     "required": "This field is required.",
@@ -73,6 +74,9 @@
     "phone": "Enter a valid phone number.",
     "date": "Enter a valid date.",
     "weakPassword": "That password is too common. Choose another one.",
-    "mustBeTrue": "You must accept to continue."
+    "mustBeTrue": "You must accept to continue.",
+    "dateNotReal": "That date doesn't exist.",
+    "minimumAge": "You must be at least 18 years old.",
+    "differentFromCurrent": "The new password must be different from the current one."
   }
 }

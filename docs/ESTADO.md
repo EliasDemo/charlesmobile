@@ -347,6 +347,8 @@ Confirmada por el usuario en su teléfono.
 - Pendientes de publicación: `docs/pendientes-publicacion.md`.
 - **Pago con Mercado Pago (2026-10-12):** con la compilación nueva el formulario se llena bien (el teclado ya no tapa los campos), pero Mercado Pago responde "No pudimos procesar tu pago" con APRO. Revisar el e-mail del pagador (usar `test_user_charles@testuser.com`, no uno real ni del vendedor) y, si sigue, las credenciales de prueba del backend.
 - **Subir fotos (2026-10-12):** el `fetch` de Expo (global por defecto) no envía archivos `{ uri }` en FormData y la subida fallaba como "sin conexión". Las peticiones multipart van por `XMLHttpRequest` de React Native (`shared/api/uploadFetch.ts`); el resto sigue con `fetch`. Probado contra el backend con curl: logo, portada y galería responden 200.
+- **Perfil completo (2026-10-12, contrato `PERFIL.md`):** foto de la cuenta (`PUT/DELETE /users/me/photo`, recorte cuadrado), fecha de nacimiento (DD/MM/AAAA → ISO; la edad mínima la valida el backend) y género opcionales con aviso de privacidad, cambio de contraseña (`POST /users/me/password`, `WRONG_PASSWORD` sin cerrar sesión) y foto del cliente en la agenda (`client.photoUrl`). Falta la prueba en el teléfono.
+- **Interfaz del barbero:** plan presentado (pestaña propia para cuentas solo BARBER); espera aprobación.
 
 ## Compilación instalada y cambios nativos pendientes de compilar
 

@@ -215,6 +215,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Web de administración: contadores de la portada */
+        get: operations["AdminOverviewController_dashboard_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/images/{id}/moderation": {
         parameters: {
             query?: never;
@@ -241,6 +258,23 @@ export type paths = {
         };
         /** Fase 14: fotos reportadas (por defecto, con reportes abiertos) */
         get: operations["ImagesAdminController_reported_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Web de administración: quién soy, mis roles y mis secciones */
+        get: operations["AdminOverviewController_me_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -601,6 +635,26 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/users/{id}/mfa/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Solo ADMIN: reiniciar la verificación en dos pasos (teléfono perdido)
+         * @description Borra el segundo factor y cierra sus sesiones. Nunca sobre la propia cuenta.
+         */
+        post: operations["AdminUsersController_resetMfa_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/users/{id}/roles/{role}": {
         parameters: {
             query?: never;
@@ -684,6 +738,100 @@ export type paths = {
         put?: never;
         /** RF-AUT-003: cerrar sesión (este dispositivo o todos) */
         post: operations["AuthController_logout_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Estado de la verificación en dos pasos de mi cuenta */
+        get: operations["MfaController_status_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Personal: activar con el primer código de la app
+         * @description Devuelve los códigos de recuperación (se muestran una sola vez) y una sesión de personal.
+         */
+        post: operations["MfaController_enable_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa/recovery-codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Personal: códigos de recuperación nuevos (invalida los anteriores) */
+        post: operations["MfaController_recoveryCodes_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa/setup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Personal: generar el código QR para activar la verificación en dos pasos
+         * @description Escanéalo con Google Authenticator (o similar) y confirma con /auth/mfa/enable.
+         */
+        post: operations["MfaController_setup_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/mfa/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Personal: segundo factor para entrar a la administración
+         * @description Con el código de la app (o uno de recuperación) devuelve una sesión de personal: dura 12 h como máximo y se cierra tras 30 min sin renovarse. 5 códigos incorrectos bloquean 15 min (MFA_LOCKED).
+         */
+        post: operations["MfaController_verify_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -789,6 +937,97 @@ export type paths = {
         get: operations["AuthController_terms_v1"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/web/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Web: iniciar sesión (tokens en cookies)
+         * @description El personal debe completar después el segundo factor (/auth/web/mfa/verify) para /admin.
+         */
+        post: operations["WebAuthController_login_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/web/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Web: cerrar sesión (revoca y borra las cookies) */
+        post: operations["WebAuthController_logout_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/web/mfa/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Web, personal: activar el segundo factor (tras /auth/mfa/setup) y entrar */
+        post: operations["WebAuthController_enableMfa_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/web/mfa/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Web, personal: segundo factor para entrar a la administración
+         * @description Reemplaza la sesión de la web por una de personal (12 h máx., 30 min inactiva).
+         */
+        post: operations["WebAuthController_verifyMfa_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/web/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Web: renovar la sesión (lee la cookie; exige X-CSRF-Token) */
+        post: operations["WebAuthController_refresh_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2309,6 +2548,47 @@ export type paths = {
         patch: operations["UsersController_update_v1"];
         trace?: never;
     };
+    "/api/v1/users/me/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cambiar mi contraseña
+         * @description Exige la contraseña actual (WRONG_PASSWORD si no coincide; los fallos cuentan para el bloqueo temporal). Cierra las demás sesiones, mantiene la actual y avisa por correo.
+         */
+        post: operations["PasswordChangeController_changePassword_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/photo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Subir o reemplazar mi foto de perfil (cuadrado de 512 px)
+         * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. La ven solo la propia cuenta y las barberías donde tiene reservas.
+         */
+        put: operations["ImagesController_setMyPhoto_v1"];
+        post?: never;
+        /** Quitar mi foto de perfil (idempotente) */
+        delete: operations["ImagesController_deleteMyPhoto_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 };
 export type webhooks = Record<string, never>;
 export type components = {
@@ -2469,6 +2749,26 @@ export type components = {
             servicesCount: number;
             sortOrder: number;
         };
+        AdminDashboardDto: {
+            /** @description Reportes de barberías abiertos. */
+            barbershopReportsOpen: number;
+            /** @description Barberías esperando revisión (alta o marcadas). */
+            barbershopsPendingReview: number;
+            /** @description Reservas de hoy (hora de Lima), sin canceladas ni vencidas. */
+            bookingsToday: number;
+            /** @description Cancelaciones de barberías por revisar. */
+            cancellationReviewsPending: number;
+            /** Format: date-time */
+            generatedAt: string;
+            /** @description Fotos con reportes abiertos. */
+            imagesReported: number;
+            /** @description Reembolsos fallidos. */
+            refundsFailed: number;
+            /** @description Valoraciones o respuestas en revisión por reportes. */
+            reviewsReported: number;
+            /** @description Tickets abiertos o en proceso. */
+            ticketsOpen: number;
+        };
         AdminFailedRefundDto: {
             amount: number;
             /** Format: uuid */
@@ -2492,6 +2792,25 @@ export type components = {
             from: string | null;
             reason: string | null;
             to: string;
+        };
+        AdminMeDto: {
+            fullName: string;
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description Rol con el que actúa.
+             * @enum {string}
+             */
+            role: "ADMIN" | "SUPPORT";
+            /**
+             * @example [
+             *       "SUPPORT",
+             *       "ADMIN"
+             *     ]
+             */
+            roles: string[];
+            /** @description Secciones que puede ver: dashboard, users, barbershops, bookings, refunds, cancellation-reviews, moderation, tickets; solo ADMIN: roles, settings, catalog. */
+            sections: string[];
         };
         AdminPaymentDto: {
             amount: number;
@@ -2651,8 +2970,8 @@ export type components = {
             barber: components["schemas"]["NamedRefDto"];
             /** Format: uuid */
             bookingId: string;
-            /** @description Solo el nombre (sin teléfono, correo ni documento). */
-            client: components["schemas"]["NamedRefDto"];
+            /** @description Nombre y foto de perfil (sin teléfono, correo ni documento). */
+            client: components["schemas"]["ClientRefDto"];
             /** Format: date-time */
             endAt: string;
             /** @description CONFIRMED que ya empezó y sigue sin marcar (RF-ATE-001). */
@@ -2916,8 +3235,8 @@ export type components = {
             cancellation: components["schemas"]["CancellationDto"] | null;
             /** @description Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false. */
             canReview: boolean;
-            /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
-            client: components["schemas"]["NamedRefDto"] | null;
+            /** @description Solo para la barbería y el barbero: nombre y foto del cliente (sin contacto). */
+            client: components["schemas"]["ClientRefDto"] | null;
             /** @description Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null. */
             commission: components["schemas"]["BookingCommissionDto"] | null;
             /** Format: date-time */
@@ -3018,8 +3337,8 @@ export type components = {
             cancellation: components["schemas"]["CancellationDto"] | null;
             /** @description Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false. */
             canReview: boolean;
-            /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
-            client: components["schemas"]["NamedRefDto"] | null;
+            /** @description Solo para la barbería y el barbero: nombre y foto del cliente (sin contacto). */
+            client: components["schemas"]["ClientRefDto"] | null;
             /** @description Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null. */
             commission: components["schemas"]["BookingCommissionDto"] | null;
             /** Format: date-time */
@@ -3049,6 +3368,11 @@ export type components = {
         ChangeMemberRoleDto: {
             role: components["schemas"]["BarbershopMemberRole"];
         };
+        ChangePasswordDto: {
+            currentPassword: string;
+            /** @description Misma política que el registro; debe ser distinta de la actual. */
+            newPassword: string;
+        };
         ClientPaymentActionDto: {
             /** @description FAKE: { paymentId }. IZIPAY_WEB y MERCADOPAGO_WEB: { paymentUrl, doneUrlPrefix }. */
             data: {
@@ -3059,6 +3383,13 @@ export type components = {
              * @enum {string}
              */
             type: "FAKE" | "IZIPAY_WEB" | "MERCADOPAGO_WEB";
+        };
+        ClientRefDto: {
+            /** Format: uuid */
+            id: string;
+            name: string | null;
+            /** @description Foto de perfil; null si no tiene. */
+            photoUrl: string | null;
         };
         ClosureDto: {
             /** Format: date-time */
@@ -3190,8 +3521,8 @@ export type components = {
             cancellation: components["schemas"]["CancellationDto"] | null;
             /** @description Solo para el cliente: puede valorar ahora (ATTENDED, sin valoración y dentro de reviews.window_days desde que quedó atendida). Para la barbería, siempre false. */
             canReview: boolean;
-            /** @description Solo para la barbería y el barbero: nombre del cliente (sin contacto). */
-            client: components["schemas"]["NamedRefDto"] | null;
+            /** @description Solo para la barbería y el barbero: nombre y foto del cliente (sin contacto). */
+            client: components["schemas"]["ClientRefDto"] | null;
             /** @description Solo para la barbería: comisión de Charles de esta reserva y quién la paga. Para el cliente, null. */
             commission: components["schemas"]["BookingCommissionDto"] | null;
             /** Format: date-time */
@@ -3543,6 +3874,8 @@ export type components = {
             /** @description Estilos (hasta 3). En multipart: separados por comas o campo repetido. */
             styleIds?: string[];
         };
+        /** @enum {string} */
+        Gender: "MALE" | "FEMALE" | "OTHER" | "PREFER_NOT_TO_SAY";
         HealthChecksDto: {
             database: components["schemas"]["ComponentStatus"];
             redis: components["schemas"]["ComponentStatus"];
@@ -3695,6 +4028,43 @@ export type components = {
         MemberPageDto: {
             items: components["schemas"]["MemberDto"][];
             nextCursor: string | null;
+        };
+        MfaCodeDto: {
+            /** @example 123456 */
+            code: string;
+        };
+        MfaEnabledDto: {
+            /** @description Códigos de recuperación (un solo uso). Se muestran **una sola vez**: hay que guardarlos. */
+            recoveryCodes: string[];
+            /** @description Sesión de personal (con segundo factor). */
+            tokens: components["schemas"]["AuthTokensDto"];
+        };
+        MfaRecoveryCodesDto: {
+            recoveryCodes: string[];
+        };
+        MfaSetupDto: {
+            /** @description URI `otpauth://totp/…` para mostrar como código QR. */
+            otpauthUri: string;
+            /** @description Secreto en base32, para escribirlo a mano si no se puede escanear el QR. */
+            secret: string;
+        };
+        MfaStatusDto: {
+            /** @description La verificación en dos pasos está activa. */
+            enabled: boolean;
+            recoveryCodesRemaining: number;
+            /** @description Es personal (SUPPORT o ADMIN): la necesita para la administración. */
+            required: boolean;
+            /** @description Esta sesión ya pasó el segundo factor (sesión de personal). */
+            sessionVerified: boolean;
+        };
+        MfaVerifyDto: {
+            /** @example 123456 */
+            code?: string;
+            /**
+             * @description Código de recuperación (un solo uso), si no se tiene el teléfono.
+             * @example ABCD-EFGH
+             */
+            recoveryCode?: string;
         };
         ModerationResultDto: {
             resolvedReports: number;
@@ -3910,17 +4280,28 @@ export type components = {
         /** @enum {string} */
         PriceLineType: "SERVICE" | "DISCOUNT" | "FEE" | "TAX";
         ProfileDto: {
+            /**
+             * Format: date
+             * @example 1995-04-23
+             */
+            birthDate: string | null;
             /** Format: date-time */
             createdAt: string;
             /** Format: email */
             email: string;
             emailVerified: boolean;
             fullName: string;
+            gender: components["schemas"]["Gender"] | null;
             /** Format: uuid */
             id: string;
             phone: string | null;
+            /** @description Foto de perfil (cuadrado de 512 px, WebP). null si no tiene. */
+            photoUrl: string | null;
             preferences: components["schemas"]["NotificationPreferencesDto"];
             roles: components["schemas"]["Role"][];
+        };
+        ProfilePhotoDto: {
+            photoUrl: string | null;
         };
         PublicReviewDto: {
             /**
@@ -4497,8 +4878,16 @@ export type components = {
             styleIds?: string[];
         };
         UpdateProfileDto: {
+            /**
+             * Format: date
+             * @description YYYY-MM-DD; fecha real, desde 1900 y con 18 años cumplidos (la app es para mayores de edad). null la elimina. Se guarda cifrada y nunca la ven las barberías.
+             * @example 1995-04-23
+             */
+            birthDate?: string | null;
             /** @example Ana Pérez */
             fullName?: string;
+            /** @description null lo elimina. Solo para sugerir estilos; nunca lo ven las barberías. */
+            gender?: components["schemas"]["Gender"] | null;
             /**
              * @description null lo elimina
              * @example +51 987 654 321
@@ -4562,6 +4951,25 @@ export type components = {
             /** @description true si el evento ya se había recibido (no se aplica de nuevo). */
             duplicate: boolean;
             received: boolean;
+        };
+        WebMfaEnabledDto: {
+            /** @description Se muestran una sola vez: hay que guardarlos. */
+            recoveryCodes: string[];
+            session: components["schemas"]["WebSessionDto"];
+        };
+        WebSessionDto: {
+            /** Format: date-time */
+            accessTokenExpiresAt: string;
+            /** @description Token CSRF (también en la cookie legible `charles_csrf`): enviarlo en la cabecera `X-CSRF-Token` en toda petición que cambie datos. */
+            csrfToken: string;
+            /** @description Sesión de personal (con segundo factor): puede entrar a /admin. */
+            mfa: boolean;
+            /**
+             * Format: date-time
+             * @description Fin de la sesión. Personal: 30 min sin actividad y 12 h como máximo.
+             */
+            refreshTokenExpiresAt: string;
+            user: components["schemas"]["SessionUserDto"];
         };
         WeeklyScheduleDto: {
             days: components["schemas"]["DayScheduleDto"][];
@@ -5118,6 +5526,33 @@ export interface operations {
             };
         };
     };
+    AdminOverviewController_dashboard_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminDashboardDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     ImagesAdminController_moderate_v1: {
         parameters: {
             query?: never;
@@ -5198,6 +5633,33 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AdminOverviewController_me_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminMeDto"];
+                };
+            };
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6199,6 +6661,55 @@ export interface operations {
             };
         };
     };
+    AdminUsersController_resetMfa_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReasonDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StaffUserDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     AdminUsersController_grant_v1: {
         parameters: {
             query?: never;
@@ -6448,6 +6959,241 @@ export interface operations {
             };
         };
     };
+    MfaController_status_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MfaStatusDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MfaController_enable_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaCodeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MfaEnabledDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MfaController_recoveryCodes_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaCodeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MfaRecoveryCodesDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MfaController_setup_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MfaSetupDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MfaController_verify_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaVerifyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuthTokensDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     AuthController_confirmPasswordReset_v1: {
         parameters: {
             query?: never;
@@ -6656,6 +7402,215 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TermsDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    WebAuthController_login_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebSessionDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    WebAuthController_logout_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    WebAuthController_enableMfa_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaCodeDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebMfaEnabledDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    WebAuthController_verifyMfa_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MfaVerifyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebSessionDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    WebAuthController_refresh_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebSessionDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
             429: {
@@ -10479,6 +11434,133 @@ export interface operations {
                 };
             };
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PasswordChangeController_changePassword_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangePasswordDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_setMyPhoto_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["ImageUploadDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfilePhotoDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ImagesController_deleteMyPhoto_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfilePhotoDto"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -574,6 +574,628 @@
         "tags": ["auth"]
       }
     },
+    "/api/v1/users/me/password": {
+      "post": {
+        "description": "Exige la contraseña actual (WRONG_PASSWORD si no coincide; los fallos cuentan para el bloqueo temporal). Cierra las demás sesiones, mantiene la actual y avisa por correo.",
+        "operationId": "PasswordChangeController_changePassword_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cambiar mi contraseña",
+        "tags": ["users"]
+      }
+    },
+    "/api/v1/auth/mfa": {
+      "get": {
+        "operationId": "MfaController_status_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MfaStatusDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Estado de la verificación en dos pasos de mi cuenta",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/mfa/setup": {
+      "post": {
+        "description": "Escanéalo con Google Authenticator (o similar) y confirma con /auth/mfa/enable.",
+        "operationId": "MfaController_setup_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MfaSetupDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Personal: generar el código QR para activar la verificación en dos pasos",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/mfa/enable": {
+      "post": {
+        "description": "Devuelve los códigos de recuperación (se muestran una sola vez) y una sesión de personal.",
+        "operationId": "MfaController_enable_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MfaCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MfaEnabledDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Personal: activar con el primer código de la app",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/mfa/verify": {
+      "post": {
+        "description": "Con el código de la app (o uno de recuperación) devuelve una sesión de personal: dura 12 h como máximo y se cierra tras 30 min sin renovarse. 5 códigos incorrectos bloquean 15 min (MFA_LOCKED).",
+        "operationId": "MfaController_verify_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MfaVerifyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokensDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Personal: segundo factor para entrar a la administración",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/mfa/recovery-codes": {
+      "post": {
+        "operationId": "MfaController_recoveryCodes_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MfaCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MfaRecoveryCodesDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Personal: códigos de recuperación nuevos (invalida los anteriores)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/web/login": {
+      "post": {
+        "description": "El personal debe completar después el segundo factor (/auth/web/mfa/verify) para /admin.",
+        "operationId": "WebAuthController_login_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebSessionDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Web: iniciar sesión (tokens en cookies)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/web/refresh": {
+      "post": {
+        "operationId": "WebAuthController_refresh_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebSessionDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Web: renovar la sesión (lee la cookie; exige X-CSRF-Token)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/web/logout": {
+      "post": {
+        "operationId": "WebAuthController_logout_v1",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Web: cerrar sesión (revoca y borra las cookies)",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/web/mfa/enable": {
+      "post": {
+        "operationId": "WebAuthController_enableMfa_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MfaCodeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebMfaEnabledDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Web, personal: activar el segundo factor (tras /auth/mfa/setup) y entrar",
+        "tags": ["auth"]
+      }
+    },
+    "/api/v1/auth/web/mfa/verify": {
+      "post": {
+        "description": "Reemplaza la sesión de la web por una de personal (12 h máx., 30 min inactiva).",
+        "operationId": "WebAuthController_verifyMfa_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MfaVerifyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebSessionDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Web, personal: segundo factor para entrar a la administración",
+        "tags": ["auth"]
+      }
+    },
     "/api/v1/barbershops": {
       "post": {
         "operationId": "BarbershopsController_create_v1",
@@ -3055,6 +3677,125 @@
           }
         ],
         "summary": "Fase 14: quitar la portada",
+        "tags": ["images"]
+      }
+    },
+    "/api/v1/users/me/photo": {
+      "put": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. La ven solo la propia cuenta y las barberías donde tiene reservas.",
+        "operationId": "ImagesController_setMyPhoto_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePhotoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Subir o reemplazar mi foto de perfil (cuadrado de 512 px)",
+        "tags": ["images"]
+      },
+      "delete": {
+        "operationId": "ImagesController_deleteMyPhoto_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePhotoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar mi foto de perfil (idempotente)",
         "tags": ["images"]
       }
     },
@@ -7264,6 +8005,81 @@
         "tags": ["admin"]
       }
     },
+    "/api/v1/admin/users/{id}/mfa/reset": {
+      "post": {
+        "description": "Borra el segundo factor y cierra sus sesiones. Nunca sobre la propia cuenta.",
+        "operationId": "AdminUsersController_resetMfa_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: reiniciar la verificación en dos pasos (teléfono perdido)",
+        "tags": ["admin"]
+      }
+    },
     "/api/v1/admin/users/{id}/roles/{role}": {
       "post": {
         "operationId": "AdminUsersController_grant_v1",
@@ -8905,6 +9721,76 @@
         "tags": ["admin"]
       }
     },
+    "/api/v1/admin/me": {
+      "get": {
+        "operationId": "AdminOverviewController_me_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminMeDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Web de administración: quién soy, mis roles y mis secciones",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/dashboard": {
+      "get": {
+        "operationId": "AdminOverviewController_dashboard_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminDashboardDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Web de administración: contadores de la portada",
+        "tags": ["admin"]
+      }
+    },
     "/api/v1/me/devices": {
       "put": {
         "description": "El token de Expo va en el cuerpo (nunca en la URL). Idempotente por token. Queda ligado a la sesión: al cerrarla se borra. Máximo 10 por cuenta (se borran los menos usados).",
@@ -9399,6 +10285,10 @@
         },
         "required": ["notificationChannels"]
       },
+      "Gender": {
+        "type": "string",
+        "enum": ["MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY"]
+      },
       "ProfileDto": {
         "type": "object",
         "properties": {
@@ -9429,6 +10319,25 @@
           "preferences": {
             "$ref": "#/components/schemas/NotificationPreferencesDto"
           },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "example": "1995-04-23"
+          },
+          "gender": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Gender"
+              }
+            ]
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Foto de perfil (cuadrado de 512 px, WebP). null si no tiene."
+          },
           "createdAt": {
             "format": "date-time",
             "type": "string"
@@ -9442,6 +10351,9 @@
           "phone",
           "roles",
           "preferences",
+          "birthDate",
+          "gender",
+          "photoUrl",
           "createdAt"
         ]
       },
@@ -9462,6 +10374,22 @@
           },
           "preferences": {
             "$ref": "#/components/schemas/NotificationPreferencesDto"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date",
+            "example": "1995-04-23",
+            "nullable": true,
+            "description": "YYYY-MM-DD; fecha real, desde 1900 y con 18 años cumplidos (la app es para mayores de edad). null la elimina. Se guarda cifrada y nunca la ven las barberías."
+          },
+          "gender": {
+            "nullable": true,
+            "description": "null lo elimina. Solo para sugerir estilos; nunca lo ven las barberías.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Gender"
+              }
+            ]
           }
         }
       },
@@ -9706,6 +10634,163 @@
           }
         },
         "required": ["code"]
+      },
+      "ChangePasswordDto": {
+        "type": "object",
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 128,
+            "description": "Misma política que el registro; debe ser distinta de la actual."
+          }
+        },
+        "required": ["currentPassword", "newPassword"]
+      },
+      "MfaStatusDto": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "La verificación en dos pasos está activa."
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Es personal (SUPPORT o ADMIN): la necesita para la administración."
+          },
+          "sessionVerified": {
+            "type": "boolean",
+            "description": "Esta sesión ya pasó el segundo factor (sesión de personal)."
+          },
+          "recoveryCodesRemaining": {
+            "type": "number"
+          }
+        },
+        "required": ["enabled", "required", "sessionVerified", "recoveryCodesRemaining"]
+      },
+      "MfaSetupDto": {
+        "type": "object",
+        "properties": {
+          "secret": {
+            "type": "string",
+            "description": "Secreto en base32, para escribirlo a mano si no se puede escanear el QR."
+          },
+          "otpauthUri": {
+            "type": "string",
+            "description": "URI `otpauth://totp/…` para mostrar como código QR."
+          }
+        },
+        "required": ["secret", "otpauthUri"]
+      },
+      "MfaCodeDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 6,
+            "example": "123456"
+          }
+        },
+        "required": ["code"]
+      },
+      "MfaEnabledDto": {
+        "type": "object",
+        "properties": {
+          "recoveryCodes": {
+            "description": "Códigos de recuperación (un solo uso). Se muestran **una sola vez**: hay que guardarlos.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tokens": {
+            "description": "Sesión de personal (con segundo factor).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AuthTokensDto"
+              }
+            ]
+          }
+        },
+        "required": ["recoveryCodes", "tokens"]
+      },
+      "MfaVerifyDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 6,
+            "example": "123456"
+          },
+          "recoveryCode": {
+            "type": "string",
+            "example": "ABCD-EFGH",
+            "description": "Código de recuperación (un solo uso), si no se tiene el teléfono.",
+            "minLength": 8,
+            "maxLength": 12
+          }
+        }
+      },
+      "MfaRecoveryCodesDto": {
+        "type": "object",
+        "properties": {
+          "recoveryCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["recoveryCodes"]
+      },
+      "WebSessionDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/SessionUserDto"
+          },
+          "mfa": {
+            "type": "boolean",
+            "description": "Sesión de personal (con segundo factor): puede entrar a /admin."
+          },
+          "accessTokenExpiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "refreshTokenExpiresAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Fin de la sesión. Personal: 30 min sin actividad y 12 h como máximo."
+          },
+          "csrfToken": {
+            "type": "string",
+            "description": "Token CSRF (también en la cookie legible `charles_csrf`): enviarlo en la cabecera `X-CSRF-Token` en toda petición que cambie datos."
+          }
+        },
+        "required": ["user", "mfa", "accessTokenExpiresAt", "refreshTokenExpiresAt", "csrfToken"]
+      },
+      "WebMfaEnabledDto": {
+        "type": "object",
+        "properties": {
+          "recoveryCodes": {
+            "description": "Se muestran una sola vez: hay que guardarlos.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "session": {
+            "$ref": "#/components/schemas/WebSessionDto"
+          }
+        },
+        "required": ["recoveryCodes", "session"]
       },
       "OwnerDocumentType": {
         "type": "string",
@@ -11746,6 +12831,16 @@
         },
         "required": ["logoUrl", "coverUrl", "coverThumbUrl"]
       },
+      "ProfilePhotoDto": {
+        "type": "object",
+        "properties": {
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["photoUrl"]
+      },
       "BarberPhotoDto": {
         "type": "object",
         "properties": {
@@ -13265,6 +14360,25 @@
         },
         "required": ["id", "name"]
       },
+      "ClientRefDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Foto de perfil; null si no tiene."
+          }
+        },
+        "required": ["id", "name", "photoUrl"]
+      },
       "PriceLineType": {
         "type": "string",
         "enum": ["SERVICE", "DISCOUNT", "FEE", "TAX"]
@@ -13397,11 +14511,11 @@
           },
           "client": {
             "nullable": true,
-            "description": "Solo para la barbería y el barbero: nombre del cliente (sin contacto).",
+            "description": "Solo para la barbería y el barbero: nombre y foto del cliente (sin contacto).",
             "type": "object",
             "allOf": [
               {
-                "$ref": "#/components/schemas/NamedRefDto"
+                "$ref": "#/components/schemas/ClientRefDto"
               }
             ]
           },
@@ -13521,11 +14635,11 @@
           },
           "client": {
             "nullable": true,
-            "description": "Solo para la barbería y el barbero: nombre del cliente (sin contacto).",
+            "description": "Solo para la barbería y el barbero: nombre y foto del cliente (sin contacto).",
             "type": "object",
             "allOf": [
               {
-                "$ref": "#/components/schemas/NamedRefDto"
+                "$ref": "#/components/schemas/ClientRefDto"
               }
             ]
           },
@@ -13732,10 +14846,10 @@
             "$ref": "#/components/schemas/NamedRefDto"
           },
           "client": {
-            "description": "Solo el nombre (sin teléfono, correo ni documento).",
+            "description": "Nombre y foto de perfil (sin teléfono, correo ni documento).",
             "allOf": [
               {
-                "$ref": "#/components/schemas/NamedRefDto"
+                "$ref": "#/components/schemas/ClientRefDto"
               }
             ]
           },
@@ -13882,11 +14996,11 @@
           },
           "client": {
             "nullable": true,
-            "description": "Solo para la barbería y el barbero: nombre del cliente (sin contacto).",
+            "description": "Solo para la barbería y el barbero: nombre y foto del cliente (sin contacto).",
             "type": "object",
             "allOf": [
               {
-                "$ref": "#/components/schemas/NamedRefDto"
+                "$ref": "#/components/schemas/ClientRefDto"
               }
             ]
           },
@@ -15522,6 +16636,90 @@
             "description": "false la desactiva (nunca se borra)."
           }
         }
+      },
+      "AdminMeDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "roles": {
+            "example": ["SUPPORT", "ADMIN"],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "role": {
+            "type": "string",
+            "enum": ["ADMIN", "SUPPORT"],
+            "description": "Rol con el que actúa."
+          },
+          "sections": {
+            "description": "Secciones que puede ver: dashboard, users, barbershops, bookings, refunds, cancellation-reviews, moderation, tickets; solo ADMIN: roles, settings, catalog.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "fullName", "roles", "role", "sections"]
+      },
+      "AdminDashboardDto": {
+        "type": "object",
+        "properties": {
+          "barbershopsPendingReview": {
+            "type": "number",
+            "description": "Barberías esperando revisión (alta o marcadas)."
+          },
+          "ticketsOpen": {
+            "type": "number",
+            "description": "Tickets abiertos o en proceso."
+          },
+          "reviewsReported": {
+            "type": "number",
+            "description": "Valoraciones o respuestas en revisión por reportes."
+          },
+          "imagesReported": {
+            "type": "number",
+            "description": "Fotos con reportes abiertos."
+          },
+          "barbershopReportsOpen": {
+            "type": "number",
+            "description": "Reportes de barberías abiertos."
+          },
+          "cancellationReviewsPending": {
+            "type": "number",
+            "description": "Cancelaciones de barberías por revisar."
+          },
+          "refundsFailed": {
+            "type": "number",
+            "description": "Reembolsos fallidos."
+          },
+          "bookingsToday": {
+            "type": "number",
+            "description": "Reservas de hoy (hora de Lima), sin canceladas ni vencidas."
+          },
+          "generatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "barbershopsPendingReview",
+          "ticketsOpen",
+          "reviewsReported",
+          "imagesReported",
+          "barbershopReportsOpen",
+          "cancellationReviewsPending",
+          "refundsFailed",
+          "bookingsToday",
+          "generatedAt"
+        ]
       },
       "RegisterDeviceDto": {
         "type": "object",

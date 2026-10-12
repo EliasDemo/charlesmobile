@@ -68,5 +68,36 @@
     "doneTitle": "Pediste eliminar tu cuenta",
     "doneMessage": "Tu cuenta se eliminará el {{date}}. Te enviamos un correo. Si cambias de opinión, inicia sesión antes de esa fecha y cancela la eliminación.",
     "goHome": "Ir al inicio"
+  },
+  "photo": {
+    "title": "Foto de perfil",
+    "choose": "Elegir foto",
+    "take": "Tomar foto",
+    "remove": "Quitar foto",
+    "uploaded": "Foto actualizada",
+    "removed": "Foto quitada",
+    "denied": "Necesitamos permiso para usar tus fotos. Actívalo en los ajustes del teléfono.",
+    "unavailable": "Para subir fotos necesitas la versión más reciente de la app.",
+    "hint": "La ven las barberías donde reservas."
+  },
+  "birthDate": "Fecha de nacimiento (opcional)",
+  "birthDatePlaceholder": "DD/MM/AAAA",
+  "gender": "Género (opcional)",
+  "genders": {
+    "MALE": "Masculino",
+    "FEMALE": "Femenino",
+    "OTHER": "Otro",
+    "PREFER_NOT_TO_SAY": "Prefiero no decirlo"
+  },
+  "privacy": "Tu fecha de nacimiento y tu género son opcionales y las barberías nunca los ven.",
+  "birthDateInvalid": "Escribe la fecha como día/mes/año, por ejemplo 23/04/1995.",
+  "password": {
+    "title": "Cambiar contraseña",
+    "current": "Contraseña actual",
+    "new": "Nueva contraseña",
+    "newHint": "De 10 a 128 caracteres. Evita contraseñas comunes.",
+    "submit": "Cambiar contraseña",
+    "done": "Contraseña cambiada. Cerramos tu sesión en los demás dispositivos.",
+    "required": "Escribe tu contraseña actual."
   }
 }
