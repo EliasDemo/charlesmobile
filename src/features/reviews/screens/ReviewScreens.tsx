@@ -16,8 +16,8 @@ import {
   StarPicker,
   Stars,
   StatusPill,
+  EmojiTextField,
   Text,
-  TextField,
   useFieldErrorText,
   type IconName,
 } from '@/shared/ui';
@@ -31,6 +31,9 @@ import {
   useReviewForm,
   useShopReviews,
 } from '../hooks/useReviews';
+
+/** Quick reactions for the comment: they only add the emoji to the text. */
+const REACTIONS = ['😍', '🔥', '👍', '😐', '👎'] as const;
 
 const STATUS_STYLE: Record<ReviewStatus, { tone: StatusTone; icon: IconName }> = {
   VISIBLE: { tone: 'success', icon: 'eye' },
@@ -86,8 +89,9 @@ function ReviewForm({
       <View style={styles.center}>
         <StarPicker value={f.rating} onChange={f.setRating} />
       </View>
-      <TextField
+      <EmojiTextField
         label={t('form.comment')}
+        reactions={REACTIONS}
         hint={t('form.commentHint')}
         value={f.comment}
         onChangeText={f.setComment}
@@ -192,7 +196,7 @@ export function ShopReviewsScreen({ shopId }: { shopId: string }) {
         confirmDisabled={!r.canSend}
         icon="chatbubbles"
       >
-        <TextField
+        <EmojiTextField
           label={t('shop.responseField')}
           value={r.text}
           onChangeText={r.setText}

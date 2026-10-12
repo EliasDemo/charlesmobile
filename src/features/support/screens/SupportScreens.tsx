@@ -15,6 +15,7 @@ import {
   QueryView,
   Screen,
   StatusPill,
+  EmojiTextField,
   Text,
   TextField,
   useFieldErrorText,
@@ -154,7 +155,7 @@ export function NewTicketScreen({
         control={f.form.control}
         name="message"
         render={({ field, fieldState }) => (
-          <TextField
+          <EmojiTextField
             label={t('new.message')}
             hint={t('new.messageHint')}
             value={field.value}
@@ -214,7 +215,7 @@ export function TicketScreen({
             {c.error ? <Notice tone="danger" message={c.error} /> : null}
             {ticket.canReply && !c.closed ? (
               <View style={styles.reply}>
-                <TextField
+                <EmojiTextField
                   label={t('ticket.reply')}
                   value={c.message}
                   onChangeText={c.setMessage}

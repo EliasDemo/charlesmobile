@@ -161,5 +161,9 @@
     "addToCalendar": "Agregar a mi calendario",
     "added": "Cita agregada a tu calendario",
     "addFailed": "No pudimos agregarla. Revisa el permiso del calendario."
+  },
+  "emoji": {
+    "open": "Agregar un emoji",
+    "add": "Agregar al texto"
   }
 }
