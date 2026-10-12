@@ -331,7 +331,7 @@ const detailProps = () => ({
 });
 
 describe('BookingScreen', () => {
-  it('shows a pending booking: countdown, price from the API, pay coming soon and the dev id', async () => {
+  it('shows a pending booking: countdown, price from the API, pay and the dev id', async () => {
     signIn();
     api(detailRoutes());
     await renderWithProviders(<BookingScreen {...detailProps()} />);
@@ -340,7 +340,7 @@ describe('BookingScreen', () => {
       /Tienes \d+:\d{2} para pagar/,
     );
     expect(screen.getByText(texts.detail.pendingExplain)).toBeTruthy();
-    expect(screen.getByRole('button', { name: texts.detail.pay })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Pagar S\/\s?25[.,]00/ })).toBeEnabled();
     expect(screen.getByTestId('booking-total').props.children).toMatch(/25[.,]00/);
     expect(screen.getByText(/lunes, 7 de enero de 2030 · 09:00/)).toBeTruthy();
     expect(screen.getByTestId('dev-booking-id')).toBeTruthy();

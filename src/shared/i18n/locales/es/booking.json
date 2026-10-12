@@ -49,7 +49,6 @@
     "pendingExplain": "Si no se paga a tiempo, la reserva vence y el turno se libera para otra persona.",
     "checkingExpiry": "Comprobando el estado de tu reserva…",
     "pay": "Pagar",
-    "paySoon": "Disponible pronto",
     "expiredTitle": "La reserva venció",
     "expiredMessage": "No se pagó a tiempo y el turno se liberó. Puedes reservar de nuevo.",
     "bookAgain": "Reservar de nuevo",
@@ -106,5 +105,17 @@
       "title": "Aún no hay reservas pasadas"
     },
     "explore": "Explorar barberías"
+  },
+  "payment": {
+    "pay": "Pagar {{amount}}",
+    "retry": "Reintentar el pago",
+    "confirming": "Confirmando tu pago… En unos segundos verás tu reserva confirmada.",
+    "waiting": "Esperando la confirmación del pago.",
+    "pendingTitle": "Tu pago está en proceso",
+    "pending": "Te avisaremos cuando se confirme. Si se confirma después de que venza el plazo, te devolveremos el dinero.",
+    "failedTitle": "El pago no se completó",
+    "failed": "No se hizo ningún cobro. Puedes intentarlo de nuevo mientras tu reserva siga vigente.",
+    "expired": "La reserva venció o ya estaba pagada. Actualizamos su estado.",
+    "unavailable": "No pudimos abrir el pago ahora. Inténtalo de nuevo en un momento."
   }
 }

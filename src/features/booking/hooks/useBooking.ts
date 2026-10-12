@@ -2,7 +2,9 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import { useIsFocused } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { nextPageParam, translateError } from '@/shared/api';
+import { i18n } from '@/shared/i18n';
 import { useCountdown } from '@/shared/lib';
+import { checkoutFor, type Checkout, type CheckoutOutcome } from '@/shared/payments';
 import {
   bookingKeys,
   cancelBooking,
@@ -10,6 +12,7 @@ import {
   fetchCancellationPreview,
   fetchMyBookings,
   fetchPayment,
+  startPayment,
   type Booking,
   type BookingPage,
   type BookingScope,
@@ -18,10 +21,17 @@ import {
 
 /** While a booking waits for payment, its real state is read this often (only on screen). */
 export const PENDING_POLL_MS = 10_000;
+/** Right after a checkout finished, the confirmation is read more often. */
+export const CONFIRMING_POLL_MS = 3_000;
 
 /** Poll only a pending booking, only while its screen is visible; final states stop it. */
-export function pollInterval(status: Booking['status'] | undefined, screenVisible: boolean): number | false {
-  return status === 'PENDING_PAYMENT' && screenVisible ? PENDING_POLL_MS : false;
+export function pollInterval(
+  status: Booking['status'] | undefined,
+  screenVisible: boolean,
+  confirming = false,
+): number | false {
+  if (status !== 'PENDING_PAYMENT' || !screenVisible) return false;
+  return confirming ? CONFIRMING_POLL_MS : PENDING_POLL_MS;
 }
 
 /**
@@ -32,11 +42,14 @@ export function pollInterval(status: Booking['status'] | undefined, screenVisibl
 export function useBooking(id: string) {
   const queryClient = useQueryClient();
   const isFocused = useIsFocused();
+  const [outcome, setOutcome] = useState<CheckoutOutcome | 'waiting' | null>(null);
+  const confirming =
+    outcome === 'success' || outcome === 'pending' || outcome === 'closed' || outcome === 'waiting';
   const query = useQuery({
     queryKey: bookingKeys.detail(id),
     queryFn: () => fetchBooking(id),
     staleTime: 0,
-    refetchInterval: (q) => pollInterval(q.state.data?.status, isFocused),
+    refetchInterval: (q) => pollInterval(q.state.data?.status, isFocused, confirming),
   });
   const booking = query.data;
 
@@ -67,6 +80,28 @@ export function useBooking(id: string) {
     enabled: booking?.status === 'CANCELLED',
   });
 
+  // Pay: the backend starts the payment and says how to present it (clientAction). Whatever the
+  // checkout page reports, the booking is read again: only its status confirms the payment.
+  const [checkout, setCheckout] = useState<Checkout | null>(null);
+  const pay = useMutation({
+    mutationFn: async () => {
+      const start = await startPayment(id);
+      const next = checkoutFor(start.clientAction);
+      if (!next) throw new PaymentUnavailableError();
+      return next;
+    },
+    onMutate: () => setOutcome(null),
+    onSuccess: (next) => {
+      if (next.kind === 'wait') setOutcome('waiting');
+      else setCheckout(next);
+    },
+  });
+  const finishCheckout = (result: CheckoutOutcome) => {
+    setCheckout(null);
+    setOutcome(result);
+    void queryClient.invalidateQueries({ queryKey: bookingKeys.all });
+  };
+
   const [confirmingCancel, setConfirmingCancel] = useState(false);
   const [cancelled, setCancelled] = useState<CancelledBooking | null>(null);
   const cancel = useMutation({
@@ -91,6 +126,19 @@ export function useBooking(id: string) {
     preview,
     canCancel: preview.data?.allowed === true,
     payment,
+    /** Paying only makes sense for a pending booking that has not expired on screen. */
+    canPay: booking?.status === 'PENDING_PAYMENT' && countdown.secondsLeft > 0,
+    pay: () => pay.mutate(),
+    isStartingPayment: pay.isPending,
+    payError: pay.error
+      ? pay.error instanceof PaymentUnavailableError
+        ? i18n.t('booking:payment.unavailable')
+        : translateError(pay.error).message
+      : null,
+    checkout,
+    finishCheckout,
+    /** What the last checkout reported (shown while the backend confirms), or null. */
+    outcome: booking?.status === 'PENDING_PAYMENT' ? outcome : null,
     confirmingCancel,
     askCancel: () => {
       cancel.reset();
@@ -104,6 +152,9 @@ export function useBooking(id: string) {
     cancelled,
   };
 }
+
+/** The gateway did not answer (clientAction null) or sent something the app cannot show. */
+class PaymentUnavailableError extends Error {}
 
 /** "Mis reservas": upcoming or history, cursor paginated. */
 export function useMyBookings(scope: BookingScope) {

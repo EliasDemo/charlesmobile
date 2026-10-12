@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { PushPermissionPrompt } from '@/features/notifications';
 import { BookingReviewSection } from '@/features/reviews';
+import { WebCheckout, type CheckoutOutcome } from '@/shared/payments';
 import { useTranslation } from '@/shared/i18n';
 import { formatDuration, formatLongDate, formatMinutes, formatMoney, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
@@ -74,10 +75,24 @@ export function BookingScreen({
                 ) : (
                   <Text color="textSecondary">{t('detail.checkingExpiry')}</Text>
                 )}
-                <Button label={t('detail.pay')} disabled fullWidth />
-                <Text variant="caption" color="textSecondary" align="center">
-                  {t('detail.paySoon')}
-                </Text>
+                {data.outcome ? <PaymentOutcome outcome={data.outcome} /> : null}
+                {data.payError ? <Notice tone="danger" message={data.payError} /> : null}
+                {data.canPay ? (
+                  <Button
+                    label={
+                      data.outcome === 'error' || data.outcome === 'cancel'
+                        ? t('payment.retry')
+                        : t('payment.pay', { amount: formatMoney(booking.price.total) })
+                    }
+                    icon="card"
+                    onPress={data.pay}
+                    loading={data.isStartingPayment}
+                    disabled={
+                      data.outcome === 'success' || data.outcome === 'pending' || data.outcome === 'waiting'
+                    }
+                    fullWidth
+                  />
+                ) : null}
                 <Text variant="caption" color="textSecondary">
                   {t('detail.pendingExplain')}
                 </Text>
@@ -142,6 +157,13 @@ export function BookingScreen({
               </Card>
             ) : null}
 
+            {data.checkout?.kind === 'web' ? (
+              <WebCheckout
+                paymentUrl={data.checkout.paymentUrl}
+                doneUrlPrefix={data.checkout.doneUrlPrefix}
+                onFinish={data.finishCheckout}
+              />
+            ) : null}
             <BookingReviewSection booking={booking} onReview={onReview} onEditReview={onEditReview} />
             <PriceBreakdown price={booking.price} />
 
@@ -233,3 +255,17 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   flex: { flex: 1 },
 });
+
+/** What the checkout page reported, while the backend confirms (it alone decides the state). */
+function PaymentOutcome({ outcome }: { outcome: CheckoutOutcome | 'waiting' }) {
+  const { t } = useTranslation('booking');
+  if (outcome === 'error' || outcome === 'cancel') {
+    return <Notice tone="danger" title={t('payment.failedTitle')} message={t('payment.failed')} />;
+  }
+  if (outcome === 'pending')
+    return <Notice tone="info" title={t('payment.pendingTitle')} message={t('payment.pending')} />;
+  if (outcome === 'expired') return <Notice tone="warning" message={t('payment.expired')} />;
+  return (
+    <Notice tone="info" message={outcome === 'waiting' ? t('payment.waiting') : t('payment.confirming')} />
+  );
+}

@@ -1,16 +1,34 @@
-import { paymentProviderFor } from '..';
+import { checkoutFor, outcomeFromDoneUrl } from '..';
 
-describe('paymentProviderFor', () => {
-  it('uses the FAKE adapter, which only waits for the backend confirmation', async () => {
-    const provider = paymentProviderFor({ type: 'FAKE', data: { paymentId: 'p1' } });
-    expect(provider?.type).toBe('FAKE');
-    await expect(provider?.present({ type: 'FAKE', data: { paymentId: 'p1' } })).resolves.toEqual({
-      kind: 'submitted',
-      payload: null,
-    });
+describe('checkoutFor', () => {
+  it('waits for the backend with the development gateway', () => {
+    expect(checkoutFor({ type: 'FAKE', data: {} })).toEqual({ kind: 'wait' });
   });
 
-  it('has no Izipay adapter until M5', () => {
-    expect(paymentProviderFor({ type: 'IZIPAY_WEB', data: {} })).toBeNull();
+  it('opens the checkout page of any web gateway with what the backend sends', () => {
+    const data = {
+      paymentUrl: 'https://pay.example/x',
+      doneUrlPrefix: 'https://api.example/api/v1/payments/done',
+    };
+    expect(checkoutFor({ type: 'MERCADOPAGO_WEB', data })).toEqual({ kind: 'web', ...data });
+    expect(checkoutFor({ type: 'IZIPAY_WEB', data })).toEqual({ kind: 'web', ...data });
+  });
+
+  it('returns null without an action or without its data', () => {
+    expect(checkoutFor(null)).toBeNull();
+    expect(checkoutFor({ type: 'MERCADOPAGO_WEB', data: {} })).toBeNull();
+  });
+});
+
+describe('outcomeFromDoneUrl', () => {
+  it.each(['success', 'pending', 'error', 'cancel', 'expired'] as const)('reads %s', (status) => {
+    expect(
+      outcomeFromDoneUrl(`https://api.example/api/v1/payments/done?status=${status}&paymentId=p&bookingId=b`),
+    ).toBe(status);
+  });
+
+  it('treats an unknown or missing status as closed', () => {
+    expect(outcomeFromDoneUrl('https://api.example/api/v1/payments/done?status=weird')).toBe('closed');
+    expect(outcomeFromDoneUrl('https://api.example/api/v1/payments/done')).toBe('closed');
   });
 });

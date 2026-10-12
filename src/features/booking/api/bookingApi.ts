@@ -82,6 +82,13 @@ export const fetchCancellationPreview = (id: string): Promise<CancellationPrevie
 export const cancelBooking = (id: string): Promise<CancelledBooking> =>
   unwrap(api.POST('/api/v1/bookings/{id}/cancel', { params: { path: { id } }, body: {} }));
 
+/**
+ * Starts (or retries) the payment of a pending booking. Idempotent: it also gives a new checkout
+ * link when the previous one expired. `clientAction` may be null if the gateway did not answer.
+ */
+export const startPayment = (id: string) =>
+  unwrap(api.POST('/api/v1/bookings/{id}/payment', { params: { path: { id } } }));
+
 /** Payment and refunds of a booking (e.g. the refund of a cancelled one). */
 export const fetchPayment = (id: string): Promise<PaymentStatusView> =>
   unwrap(api.GET('/api/v1/bookings/{id}/payment', { params: { path: { id } } }));

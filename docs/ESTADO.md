@@ -2,7 +2,7 @@
 
 Léelo primero al empezar una conversación nueva.
 
-**Fase actual:** M10 (fotos) — código terminado; la subida de fotos se prueba con la **compilación única** (ver la guía al final), que el usuario lanza. M7, M8 y M9 terminadas, pendientes de la prueba del usuario. M5 espera la Fase 8B del backend (Izipay). Después: M11 (publicación).
+**Fase actual:** M5 (pagos web) y M10 (fotos) — código terminado; el checkout y la subida de fotos se prueban con la **compilación única** (guía al final), que el usuario lanza. M7, M8 y M9 terminadas, pendientes de la prueba del usuario. Después: M11 (publicación).
 
 **Backend de referencia:** `docs/api/`, copia de `..\charles\docs\mobile\` sincronizada con las fases 10, 11 y 12 del backend (notificaciones, valoraciones y favoritos, soporte). Correos de desarrollo: `pnpm --filter api dev:mail <correo>` desde `..\charles`.
 
@@ -296,6 +296,14 @@ Confirmada por el usuario en su teléfono.
 - Pruebas: `src/features/notifications/__tests__`. `expo-notifications` simulado en `jest.setup.tsx`.
 - **Push real en Android: pendiente de Firebase (FCM)** en la compilación final (ver cambios nativos pendientes). En desarrollo el backend usa `PUSH_DRIVER=fake`.
 
+## M5 — Pagar la reserva (código terminado; el checkout necesita la compilación única)
+
+- Contrato: `clientAction.type` = `FAKE` | `IZIPAY_WEB` | `MERCADOPAGO_WEB`; las web traen `{ paymentUrl, doneUrlPrefix }`. **Pruebas con Mercado Pago; Izipay queda oculto** para la migración futura: la app no tiene nada propio de ninguna pasarela (`shared/payments`: `checkoutFor`, `outcomeFromDoneUrl`, `WebCheckout`). El SDK nativo de Izipay se mantiene instalado (sin uso).
+- "Pagar S/ …" en la reserva pendiente (`POST /bookings/{id}/payment`, idempotente; también da un enlace nuevo si venció). `FAKE`: "Esperando la confirmación" (`dev:pay`). Web: página de pago a pantalla completa (`react-native-webview`; respaldo `expo-web-browser`), se cierra al llegar a `doneUrlPrefix`.
+- Resultado: success → "Confirmando tu pago…"; pending → "en proceso"; error/cancel → "no se completó" + "Reintentar el pago"; expired → recarga; cerrar a mano → como success. Siempre se vuelve a leer la reserva (cada 3 s mientras confirma): **solo `CONFIRMED` del backend confirma**. `clientAction` null → aviso para reintentar.
+- Pruebas: `booking/__tests__/payment.test.tsx`, `shared/payments/__tests__`.
+- **Probar con la compilación:** tarjeta de prueba Visa 4009 1753 3280 6176, CVV 123, 11/30, documento 123456789; titular APRO (aprobado), OTHE (rechazado), CONT (pendiente); e-mail inventado (test_user_charles@testuser.com). Yape en pruebas queda pendiente.
+
 ## M10 — Fotos y galería (código terminado; la subida necesita la compilación única)
 
 - **Sin compilar:** logo y portada reales (búsqueda, ficha, Mi barbería), foto, años de experiencia y especialidades de cada barbero; galería pública "Trabajos" en la ficha (destacadas primero), pantalla completa (`/barbershop/[id]/gallery`), visor con estilos, barbero, **"Reservar este estilo"** (abre la reserva con servicio y barbero) y **reportar foto** (con sesión). URLs relativas en desarrollo: `mediaUrl`.
@@ -352,6 +360,7 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 | `environment` por perfil en `eas.json` (`development`, `preview`, `production`) | EAS entrega a cada compilación las variables de su entorno (la clave de Maps) | Sin efecto |
 | **Firebase (FCM) para push en Android** (aprobado para la compilación final): proyecto de Firebase del usuario, `google-services.json` como archivo de EAS (no en el repositorio) y `android.googleServicesFile` en `app.config.ts`; clave de FCM V1 subida a EAS | El teléfono obtiene su token de Expo y recibe push | `getPushToken` devuelve null: no se registra el dispositivo; la bandeja y la campana funcionan |
 | **Fotos** (M10): `expo-image-picker` (plugin con permisos de fotos y cámara), `expo-image-manipulator` (2000 px y JPEG; convierte HEIC) | Subir portada, logo, foto del barbero y galería | `photosAvailable()` es false: las pantallas explican que llega con la próxima versión |
+| `react-native-webview` (M5) | Página de pago dentro de la app | El botón Pagar abre el pago con `expo-web-browser` si existiera; sin ninguno, avisa |
 | `expo-haptics` | Vibración leve al confirmar y en los mensajes breves (`haptic()`) | No vibra |
 | Instalados para usar **después de compilar** (aprobados el 2026-10-11 como "compilación única"): `expo-image` (caché de fotos), `react-native-reanimated` 4 + `react-native-worklets` + `react-native-gesture-handler` (deslizar citas), `lottie-react-native` (celebración), `expo-blur`, `expo-linear-gradient`, `expo-calendar` (plugin: agregar la cita al calendario), `expo-web-browser` (plugin), `expo-clipboard`, `expo-store-review`, `expo-updates` (`runtimeVersion` = versión de la app; activo fuera de desarrollo), `react-native-ssl-public-key-pinning` (M11), `@sentry/react-native` (M11, apagado) | Cada función se conecta y se prueba con la compilación instalada | **No se importan todavía** en el código (salvo los protegidos): la app actual no los necesita |
 | Colores de la pantalla de carga nativa (`#F4F6F8` / `#0D1015`) y `backgroundColor` | Splash con la paleta nueva | Ya se ve la pantalla de carga animada en JavaScript |
