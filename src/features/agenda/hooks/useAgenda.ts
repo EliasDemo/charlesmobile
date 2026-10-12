@@ -164,6 +164,8 @@ export function useAgenda() {
     days,
     date,
     setDate,
+    /** The next day offered, for "Ver el día siguiente" on an empty day. */
+    nextDay: days[days.findIndex((d) => d.date === date) + 1]?.date ?? null,
     barbers: view === 'shop' ? (barbers.data ?? []) : [],
     barberId,
     setBarberId,

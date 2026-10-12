@@ -13,6 +13,7 @@ import {
   FadeIn,
   Screen,
   ScreenTitle,
+  SkeletonTimeline,
   SegmentedControl,
   Text,
   TextField,
@@ -116,9 +117,15 @@ export function AgendaScreen({ headerRight }: { headerRight?: ReactNode }) {
               ) : null}
               <QueryView
                 query={a.agenda}
-                skeletonCount={3}
+                skeleton={<SkeletonTimeline />}
                 isEmpty={(agenda) => agenda.items.length === 0 && agenda.blocks.length === 0}
-                empty={{ title: t('empty'), icon: 'calendar-clear-outline' }}
+                empty={{
+                  title: t('empty'),
+                  icon: 'calendar-clear-outline',
+                  action: a.nextDay
+                    ? { label: t('nextDay', { ns: 'common' }), onPress: () => a.setDate(a.nextDay!) }
+                    : undefined,
+                }}
               >
                 {(agenda) => (
                   <View style={styles.list}>

@@ -65,5 +65,9 @@
   },
   "help": {
     "booking": "I need help with this booking"
+  },
+  "assistant": {
+    "title": "Charles assistant",
+    "soon": "Soon you'll get answers instantly, any time. Meanwhile, write to us here."
   }
 }

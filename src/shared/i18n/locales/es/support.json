@@ -65,5 +65,9 @@
   },
   "help": {
     "booking": "Necesito ayuda con esta reserva"
+  },
+  "assistant": {
+    "title": "Asistente de Charles",
+    "soon": "Pronto podrás resolver dudas al instante, a cualquier hora. Mientras tanto, escríbenos aquí."
   }
 }

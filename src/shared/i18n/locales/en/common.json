@@ -15,7 +15,8 @@
   },
   "offline": {
     "banner": "You are offline. Showing what we loaded last.",
-    "retry": "Retry connection"
+    "retry": "Retry connection",
+    "savedAt": "Offline · data from {{time}}"
   },
   "crash": {
     "title": "This screen had a problem",
@@ -138,7 +139,9 @@
   },
   "payment": {
     "title": "Secure payment",
-    "close": "Close the payment"
+    "close": "Close the payment",
+    "loadFailed": "We couldn't open the payment page. Check your connection.",
+    "openBrowser": "Open in the browser"
   },
   "calendar": {
     "months": [
@@ -165,5 +168,6 @@
   "emoji": {
     "open": "Add an emoji",
     "add": "Add to the text"
-  }
+  },
+  "nextDay": "See the next day"
 }

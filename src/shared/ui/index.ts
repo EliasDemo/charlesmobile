@@ -53,7 +53,14 @@ export { SearchField, type SearchFieldProps } from './SearchField';
 export { GENERIC_CATEGORY_ICON, categoryIcon } from './categoryIcons';
 export { IconTile, InfoCard, type InfoCardProps, type InfoItem } from './InfoCard';
 export { Illustration, type IllustrationProps } from './Illustration';
-export { Skeleton, SkeletonCard, SkeletonList } from './Skeleton';
+export {
+  Skeleton,
+  SkeletonCard,
+  SkeletonDetail,
+  SkeletonGrid,
+  SkeletonList,
+  SkeletonTimeline,
+} from './Skeleton';
 export {
   AnimatedNumber,
   FadeIn,

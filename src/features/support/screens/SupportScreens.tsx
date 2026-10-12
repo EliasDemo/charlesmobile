@@ -73,6 +73,7 @@ export function SupportScreen({
       header={
         <View style={styles.listHeader}>
           {header}
+          <AssistantSoon />
           <Button label={t('list.new')} icon="add-circle" onPress={onNew} fullWidth />
         </View>
       }
@@ -283,6 +284,22 @@ function Bubble({ mine, body, at }: { mine: boolean; body: string; at: string })
         {when(at)}
       </Text>
     </View>
+  );
+}
+
+/**
+ * Placeholder of the support assistant (bot): it needs a backend service that does not exist yet.
+ * When it does, this card opens the chat; until then it only says it is coming.
+ */
+function AssistantSoon() {
+  const { t } = useTranslation('support');
+  return (
+    <InfoCard
+      leading={<IconTile icon="sparkles" tone="pending" />}
+      title={t('assistant.title')}
+      subtitle={t('assistant.soon')}
+      testID="assistant-soon"
+    />
   );
 }
 

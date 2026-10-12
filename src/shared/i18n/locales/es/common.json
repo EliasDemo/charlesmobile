@@ -15,7 +15,8 @@
   },
   "offline": {
     "banner": "Sin conexión. Mostramos lo último que cargamos.",
-    "retry": "Reintentar conexión"
+    "retry": "Reintentar conexión",
+    "savedAt": "Sin conexión · datos de las {{time}}"
   },
   "crash": {
     "title": "Esta pantalla tuvo un problema",
@@ -138,7 +139,9 @@
   },
   "payment": {
     "title": "Pago seguro",
-    "close": "Cerrar el pago"
+    "close": "Cerrar el pago",
+    "loadFailed": "No pudimos abrir la página de pago. Revisa tu conexión.",
+    "openBrowser": "Abrir en el navegador"
   },
   "calendar": {
     "months": [
@@ -165,5 +168,6 @@
   "emoji": {
     "open": "Agregar un emoji",
     "add": "Agregar al texto"
-  }
+  },
+  "nextDay": "Ver el día siguiente"
 }

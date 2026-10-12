@@ -15,6 +15,7 @@ import {
   Screen,
   Text,
   categoryIcon,
+  SkeletonDetail,
 } from '@/shared/ui';
 import type { Barbershop } from '../api/barbershopApi';
 import { BarberRow, HoursList, ReviewItem, Section, ServiceRow } from '../components/DetailParts';
@@ -51,6 +52,7 @@ export function BarbershopScreen({
     <Screen>
       <QueryView
         query={detail.shop}
+        skeleton={<SkeletonDetail />}
         notFound={{
           title: t('notFound.title'),
           message: t('notFound.message'),

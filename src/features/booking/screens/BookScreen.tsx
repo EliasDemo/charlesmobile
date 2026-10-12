@@ -27,6 +27,7 @@ export function BookScreen({
   const { t } = useTranslation('booking');
   const setup = useBookingSetup(barbershopId, serviceId, barberId);
   const { draft } = setup;
+  const nextDay = setup.days[setup.days.findIndex((d) => d.date === draft.date) + 1]?.date ?? null;
   const notFound = {
     title: t('notFound.title', { ns: 'barbershop' }),
     message: t('notFound.message', { ns: 'barbershop' }),
@@ -95,7 +96,16 @@ export function BookScreen({
                     {() =>
                       setup.noSlots ? (
                         <View style={styles.content}>
-                          <Notice tone="info" message={t('book.noSlots')} />
+                          <Notice tone="info" message={t('book.noSlots')}>
+                            {nextDay ? (
+                              <Button
+                                label={t('nextDay', { ns: 'common' })}
+                                variant="secondary"
+                                icon="arrow-forward"
+                                onPress={() => draft.setDate(nextDay)}
+                              />
+                            ) : null}
+                          </Notice>
                           <Text variant="subtitle">{t('book.alternativesTitle')}</Text>
                           <QueryView
                             query={setup.alternatives}
