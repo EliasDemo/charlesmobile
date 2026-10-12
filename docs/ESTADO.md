@@ -302,7 +302,7 @@ Confirmada por el usuario en su teléfono.
 - "Pagar S/ …" en la reserva pendiente (`POST /bookings/{id}/payment`, idempotente; también da un enlace nuevo si venció). `FAKE`: "Esperando la confirmación" (`dev:pay`). Web: página de pago a pantalla completa (`react-native-webview`; respaldo `expo-web-browser`), se cierra al llegar a `doneUrlPrefix`.
 - Resultado: success → "Confirmando tu pago…"; pending → "en proceso"; error/cancel → "no se completó" + "Reintentar el pago"; expired → recarga; cerrar a mano → como success. Siempre se vuelve a leer la reserva (cada 3 s mientras confirma): **solo `CONFIRMED` del backend confirma**. `clientAction` null → aviso para reintentar.
 - Pruebas: `booking/__tests__/payment.test.tsx`, `shared/payments/__tests__`.
-- **Probar con la compilación:** tarjeta de prueba Visa 4009 1753 3280 6176, CVV 123, 11/30, documento 123456789; titular APRO (aprobado), OTHE (rechazado), CONT (pendiente); e-mail inventado (test_user_charles@testuser.com). Yape en pruebas queda pendiente.
+- **Probar con la compilación:** tarjeta de prueba Visa 4009 1753 3280 6176, CVV 123, 11/30, DNI de 8 dígitos (12345678; el campo no acepta 9); titular APRO (aprobado), OTHE (rechazado), CONT (pendiente); e-mail inventado (test_user_charles@testuser.com). Yape en pruebas queda pendiente.
 
 ## M10 — Fotos y galería (código terminado; la subida necesita la compilación única)
 
