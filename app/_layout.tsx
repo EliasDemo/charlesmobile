@@ -9,6 +9,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack, router, usePathname, type ErrorBoundaryProps } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSessionEndedRedirect } from '@/features/auth';
 import { notificationTarget, useDeviceRegistration, usePushTaps } from '@/features/notifications';
@@ -127,17 +128,21 @@ export default function RootLayout() {
     );
   }
   return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        {ready ? (
-          <NavigationThemeRoot>
-            <QueryClientProvider client={queryClient}>
-              <AppStack />
-            </QueryClientProvider>
-          </NavigationThemeRoot>
-        ) : null}
-        {splashDone ? null : <BrandSplash ready={ready} onDone={finishSplash} />}
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={rootStyle}>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          {ready ? (
+            <NavigationThemeRoot>
+              <QueryClientProvider client={queryClient}>
+                <AppStack />
+              </QueryClientProvider>
+            </NavigationThemeRoot>
+          ) : null}
+          {splashDone ? null : <BrandSplash ready={ready} onDone={finishSplash} />}
+        </ThemeProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const rootStyle = { flex: 1 };

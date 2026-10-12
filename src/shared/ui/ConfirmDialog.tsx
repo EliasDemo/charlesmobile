@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from '@/shared/i18n';
 import { haptic } from '@/shared/lib';
@@ -45,77 +47,101 @@ export function ConfirmDialog({
   const theme = useTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  // Drag the sheet down to dismiss it (like the close button); it springs back if released early.
+  const dragY = useSharedValue(0);
+  const dismiss = () => {
+    if (!loading) onCancel();
+  };
+  const drag = Gesture.Pan()
+    .activeOffsetY(DRAG_ACTIVATION)
+    .onUpdate((e) => {
+      dragY.value = Math.max(0, e.translationY);
+    })
+    .onEnd((e) => {
+      if (e.translationY > DRAG_TO_CLOSE) runOnJS(dismiss)();
+      dragY.value = withSpring(0);
+    });
+  const dragStyle = useAnimatedStyle(() => ({ transform: [{ translateY: dragY.value }] }));
   const tint = destructive ? theme.colors.danger : theme.colors.primary;
   const tintSoft = destructive ? theme.colors.statusDangerBg : theme.colors.primarySoft;
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onCancel} statusBarTranslucent>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <Pressable
-          style={[styles.backdrop, { backgroundColor: theme.colors.backdrop }]}
-          onPress={loading ? undefined : onCancel}
-          accessibilityLabel={t('actions.cancel')}
-        >
+      <GestureHandlerRootView style={styles.flex}>
+        <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
           <Pressable
-            accessibilityRole="alert"
-            style={[
-              styles.sheet,
-              {
-                backgroundColor: theme.colors.surfaceElevated,
-                borderTopLeftRadius: theme.radius.xl,
-                borderTopRightRadius: theme.radius.xl,
-                paddingBottom: spacing.xl + insets.bottom,
-              },
-            ]}
+            style={[styles.backdrop, { backgroundColor: theme.colors.backdrop }]}
+            onPress={loading ? undefined : onCancel}
+            accessibilityLabel={t('actions.cancel')}
           >
-            <View
-              style={[
-                styles.handle,
-                { backgroundColor: theme.colors.border, borderRadius: theme.radius.pill },
-              ]}
-            />
-            <View
-              importantForAccessibility="no-hide-descendants"
-              style={[styles.icon, { backgroundColor: tintSoft, borderRadius: theme.radius.pill }]}
-            >
-              <Icon
-                name={icon ?? (destructive ? 'alert-circle' : 'help-circle')}
-                size={sizes.iconLarge}
-                color={tint}
-              />
-            </View>
-            <Text variant="title" align="center">
-              {title}
-            </Text>
-            <Text color="textSecondary" align="center">
-              {message}
-            </Text>
-            {children}
-            <View style={styles.actions}>
-              <Button
-                label={confirmLabel}
-                variant={destructive ? 'danger' : 'primary'}
-                onPress={() => {
-                  haptic(destructive ? 'warning' : 'light');
-                  onConfirm();
-                }}
-                loading={loading}
-                disabled={confirmDisabled}
-                fullWidth
-              />
-              <Button
-                label={t('actions.cancel')}
-                variant="ghost"
-                onPress={onCancel}
-                disabled={loading}
-                fullWidth
-              />
-            </View>
+            <GestureDetector gesture={drag}>
+              <Animated.View style={dragStyle}>
+                <Pressable
+                  accessibilityRole="alert"
+                  style={[
+                    styles.sheet,
+                    {
+                      backgroundColor: theme.colors.surfaceElevated,
+                      borderTopLeftRadius: theme.radius.xl,
+                      borderTopRightRadius: theme.radius.xl,
+                      paddingBottom: spacing.xl + insets.bottom,
+                    },
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.handle,
+                      { backgroundColor: theme.colors.border, borderRadius: theme.radius.pill },
+                    ]}
+                  />
+                  <View
+                    importantForAccessibility="no-hide-descendants"
+                    style={[styles.icon, { backgroundColor: tintSoft, borderRadius: theme.radius.pill }]}
+                  >
+                    <Icon
+                      name={icon ?? (destructive ? 'alert-circle' : 'help-circle')}
+                      size={sizes.iconLarge}
+                      color={tint}
+                    />
+                  </View>
+                  <Text variant="title" align="center">
+                    {title}
+                  </Text>
+                  <Text color="textSecondary" align="center">
+                    {message}
+                  </Text>
+                  {children}
+                  <View style={styles.actions}>
+                    <Button
+                      label={confirmLabel}
+                      variant={destructive ? 'danger' : 'primary'}
+                      onPress={() => {
+                        haptic(destructive ? 'warning' : 'light');
+                        onConfirm();
+                      }}
+                      loading={loading}
+                      disabled={confirmDisabled}
+                      fullWidth
+                    />
+                    <Button
+                      label={t('actions.cancel')}
+                      variant="ghost"
+                      onPress={onCancel}
+                      disabled={loading}
+                      fullWidth
+                    />
+                  </View>
+                </Pressable>
+              </Animated.View>
+            </GestureDetector>
           </Pressable>
-        </Pressable>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </GestureHandlerRootView>
     </Modal>
   );
 }
+
+const DRAG_ACTIVATION = 12;
+const DRAG_TO_CLOSE = 120;
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },

@@ -8,6 +8,7 @@ import {
   Icon,
   IconTile,
   StatusPill,
+  SwipeRow,
   Text,
   categoryIcon,
   useSurfaceStyle,
@@ -127,46 +128,66 @@ export function AgendaItemCard({
   return (
     <View style={styles.row} testID={`agenda-item-${item.bookingId}`}>
       <TimeRail start={start} end={end} tone={style.tone} last={last} />
-      <View
-        style={[
-          styles.card,
-          surface,
-          item.pendingAttention
-            ? { borderWidth: sizes.borderWidth, borderColor: theme.colors.warning }
-            : null,
-        ]}
-      >
-        <View style={styles.cardHeader}>
-          <IconTile icon={categoryIcon(item.service.categoryKey)} />
-          <View style={styles.flex}>
-            <Text variant="bodyStrong">{item.service.name ?? ''}</Text>
-            <Text variant="caption" color="textMuted">
-              {t('range', { from: start, to: end })}
-            </Text>
+      <View style={styles.flex}>
+        <SwipeRow
+          right={
+            canMarkAttended
+              ? {
+                  label: t('actions.attended'),
+                  icon: 'checkmark-done',
+                  tone: 'success',
+                  onTrigger: onAttended,
+                }
+              : undefined
+          }
+          left={
+            canMarkNoShow
+              ? { label: t('actions.noShow'), icon: 'person-remove', tone: 'danger', onTrigger: onNoShow }
+              : undefined
+          }
+        >
+          <View
+            style={[
+              styles.card,
+              surface,
+              item.pendingAttention
+                ? { borderWidth: sizes.borderWidth, borderColor: theme.colors.warning }
+                : null,
+            ]}
+          >
+            <View style={styles.cardHeader}>
+              <IconTile icon={categoryIcon(item.service.categoryKey)} />
+              <View style={styles.flex}>
+                <Text variant="bodyStrong">{item.service.name ?? ''}</Text>
+                <Text variant="caption" color="textMuted">
+                  {t('range', { from: start, to: end })}
+                </Text>
+              </View>
+            </View>
+            <StatusPill tone={style.tone} icon={style.icon} label={style.label} />
+            <Detail icon="person" text={t('client', { name: item.client.name })} />
+            {showBarber ? <Detail icon="cut" text={t('barber', { name: item.barber.name })} /> : null}
+            {hasActions ? (
+              <View style={styles.actions}>
+                {canMarkAttended ? (
+                  <Button label={t('actions.attended')} onPress={onAttended} loading={attending} />
+                ) : null}
+                {canMarkNoShow ? (
+                  <Button
+                    label={t('actions.noShow')}
+                    variant="secondary"
+                    onPress={onNoShow}
+                    disabled={attending}
+                  />
+                ) : null}
+                {canCorrect ? (
+                  <Button label={t('actions.correct')} variant="secondary" onPress={onCorrect} />
+                ) : null}
+                {canCancel ? <Button label={t('actions.cancel')} variant="ghost" onPress={onCancel} /> : null}
+              </View>
+            ) : null}
           </View>
-        </View>
-        <StatusPill tone={style.tone} icon={style.icon} label={style.label} />
-        <Detail icon="person" text={t('client', { name: item.client.name })} />
-        {showBarber ? <Detail icon="cut" text={t('barber', { name: item.barber.name })} /> : null}
-        {hasActions ? (
-          <View style={styles.actions}>
-            {canMarkAttended ? (
-              <Button label={t('actions.attended')} onPress={onAttended} loading={attending} />
-            ) : null}
-            {canMarkNoShow ? (
-              <Button
-                label={t('actions.noShow')}
-                variant="secondary"
-                onPress={onNoShow}
-                disabled={attending}
-              />
-            ) : null}
-            {canCorrect ? (
-              <Button label={t('actions.correct')} variant="secondary" onPress={onCorrect} />
-            ) : null}
-            {canCancel ? <Button label={t('actions.cancel')} variant="ghost" onPress={onCancel} /> : null}
-          </View>
-        ) : null}
+        </SwipeRow>
       </View>
     </View>
   );

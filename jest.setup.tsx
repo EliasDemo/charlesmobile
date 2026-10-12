@@ -55,3 +55,8 @@ jest.mock('react-native-webview', () => {
 jest.mock('expo-calendar/legacy', () => ({
   createEventInCalendarAsync: jest.fn(async () => ({ action: 'saved' })),
 }));
+
+// Gestures and Reanimated need their native parts: use their official test setups.
+require('react-native-gesture-handler/jestSetup');
+jest.mock('react-native-worklets', () => require('react-native-worklets/src/mock'));
+jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));

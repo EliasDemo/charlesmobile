@@ -54,6 +54,15 @@ export function useBooking(id: string) {
   });
   const booking = query.data;
 
+  // Seen going from pending to confirmed on this screen (the celebration, once).
+  const previousStatus = useRef(booking?.status);
+  const [justConfirmed, setJustConfirmed] = useState(false);
+  useEffect(() => {
+    if (previousStatus.current === 'PENDING_PAYMENT' && booking?.status === 'CONFIRMED')
+      setJustConfirmed(true);
+    previousStatus.current = booking?.status;
+  }, [booking?.status]);
+
   // Countdown to expiresAt; at zero, ask the server instead of assuming EXPIRED.
   const countdown = useCountdown();
   const { start } = countdown;
@@ -127,6 +136,7 @@ export function useBooking(id: string) {
     preview,
     canCancel: preview.data?.allowed === true,
     payment,
+    justConfirmed,
     /** Opens the system dialog to add a confirmed booking to the phone calendar. */
     addToCalendar: () => {
       if (!booking) return;

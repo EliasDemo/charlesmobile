@@ -5,7 +5,17 @@ import { WebCheckout, type CheckoutOutcome } from '@/shared/payments';
 import { useTranslation } from '@/shared/i18n';
 import { formatDuration, formatLongDate, formatMinutes, formatMoney, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
-import { Button, Card, ConfirmDialog, Notice, QueryView, Screen, Text, SuccessCheck } from '@/shared/ui';
+import {
+  Button,
+  Card,
+  ConfirmDialog,
+  Notice,
+  QueryView,
+  Screen,
+  Text,
+  SuccessCheck,
+  Celebration,
+} from '@/shared/ui';
 import type { Booking, CancellationPreview } from '../api/bookingApi';
 import { DevBookingId, PriceBreakdown, StatusBadge } from '../components/BookingParts';
 import { useBooking } from '../hooks/useBooking';
@@ -199,6 +209,7 @@ export function BookingScreen({
           </View>
         )}
       </QueryView>
+      <Celebration visible={data.justConfirmed} />
     </Screen>
   );
 }

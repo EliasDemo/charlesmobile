@@ -24,6 +24,7 @@ import {
   Text,
   TextField,
   usePressScale,
+  ZoomableImage,
 } from '@/shared/ui';
 import type { GalleryImage } from '../api/galleryApi';
 import { REPORT_DETAILS_MAX, REPORT_REASONS, useReportImage } from '../hooks/useGallery';
@@ -110,10 +111,9 @@ export function PhotoViewer({
           contentContainerStyle={[styles.viewerContent, { paddingBottom: insets.bottom + spacing.xl }]}
         >
           {uri ? (
-            <Image
-              source={{ uri }}
+            <ZoomableImage
+              uri={uri}
               style={{ width, height, backgroundColor: theme.colors.surfaceMuted }}
-              resizeMode="contain"
               accessibilityLabel={photo.caption ?? t('photo')}
             />
           ) : null}
