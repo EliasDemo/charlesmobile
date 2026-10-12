@@ -122,6 +122,18 @@ export function WebCheckout({
           <Text variant="bodyStrong" style={styles.flex}>
             {t('payment.title')}
           </Text>
+          {browserAvailable() ? (
+            // Some gateways hide their login inside an embedded page; the system browser shows it.
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('payment.openBrowser')}
+              onPress={openInBrowser}
+              style={styles.close}
+              testID="checkout-open-browser"
+            >
+              <Icon name="open-outline" size={touchTarget / 2} color={theme.colors.textPrimary} />
+            </Pressable>
+          ) : null}
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={t('payment.close')}
@@ -144,9 +156,6 @@ export function WebCheckout({
                 webView.current?.reload();
               }}
             />
-            {browserAvailable() ? (
-              <Button label={t('payment.openBrowser')} variant="ghost" icon="open" onPress={openInBrowser} />
-            ) : null}
           </View>
         ) : null}
         <WebView

@@ -91,6 +91,19 @@ describe('WebCheckout with the in-app browser', () => {
   });
 });
 
+describe('WebCheckout in the system browser on request', () => {
+  it('offers the system browser at any moment and reads its result', async () => {
+    withWebView(true);
+    mockOptional.mockImplementation((name: string) => (name === 'ExpoWebBrowser' ? {} : null));
+    mockOpenAuth.mockResolvedValue({ type: 'success', url: `${DONE}?status=success` });
+    const onFinish = jest.fn();
+    await renderCheckout(onFinish);
+    await fireEvent.press(await screen.findByTestId('checkout-open-browser'));
+    await waitFor(() => expect(onFinish).toHaveBeenCalledWith('success'));
+    expect(mockOpenAuth).toHaveBeenCalledWith('https://pay.example/1', DONE);
+  });
+});
+
 describe('WebCheckout links inside the gateway', () => {
   it('opens wallet or bank apps outside, and loads the web fallback of an intent link', async () => {
     withWebView(true);
@@ -127,7 +140,7 @@ describe('WebCheckout when the page fails', () => {
     await screen.findByTestId('webview');
     await act(async () => mockFail.current!());
     expect(await screen.findByTestId('checkout-failed')).toBeTruthy();
-    await fireEvent.press(screen.getByRole('button', { name: /abrir en el navegador/i }));
+    await fireEvent.press(screen.getByTestId('checkout-open-browser'));
     await waitFor(() => expect(onFinish).toHaveBeenCalledWith('closed'));
     await fireEvent.press(screen.getByRole('button', { name: /reintentar/i }));
     expect(screen.queryByTestId('checkout-failed')).toBeNull();
