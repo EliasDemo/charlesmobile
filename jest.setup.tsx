@@ -52,4 +52,6 @@ jest.mock('react-native-webview', () => {
 });
 
 // expo-calendar's system dialog is native.
-jest.mock('expo-calendar/legacy', () => ({ createEventInCalendarAsync: jest.fn(async () => ({ action: 'saved' })) }));
+jest.mock('expo-calendar/legacy', () => ({
+  createEventInCalendarAsync: jest.fn(async () => ({ action: 'saved' })),
+}));
