@@ -214,6 +214,8 @@ export function useShopForm({
     coordinates,
     locationState,
     useMyLocation: () => void useMyLocation(),
+    /** The pin moved on the map. */
+    setCoordinates: (next: Coordinates) => setPicked(next),
     submit,
     isSubmitting: mutation.isPending,
     generalError,

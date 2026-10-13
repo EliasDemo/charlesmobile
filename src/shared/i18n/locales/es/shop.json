@@ -89,7 +89,8 @@
     "required": "Este dato es obligatorio.",
     "invalidUrl": "Escribe una dirección que empiece con https://",
     "min2": "Escribe al menos 2 caracteres.",
-    "min5": "Escribe al menos 5 caracteres."
+    "min5": "Escribe al menos 5 caracteres.",
+    "pinHint": "Mantén presionado o arrastra el pin hasta la puerta de tu barbería."
   },
   "statusForm": {
     "title": "Estado de atención",

@@ -41,5 +41,5 @@ export {
   type LocationPermission,
 } from './location';
 export { useDebouncedValue } from './useDebouncedValue';
-export { callPhone, isWebUrl, openDirections, openWebUrl } from './externalLinks';
+export { callPhone, isWebUrl, openDirections, openWaze, openWebUrl } from './externalLinks';
 export { formatPeruMobile, peruMobileDigits } from './phone';

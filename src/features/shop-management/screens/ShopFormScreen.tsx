@@ -15,6 +15,7 @@ import {
   type TextFieldProps,
 } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
+import { LocationPicker } from '../components/LocationPicker';
 import { PhotoField } from '../components/PhotoField';
 import { useManagedShop } from '../hooks/useManagedShop';
 import { LIMITS } from '../schemas/limits';
@@ -108,6 +109,7 @@ function ShopFormView({ shop, onDone }: { shop?: ManagedShop; onDone: (shopId: s
         <Text variant="caption" color="textSecondary">
           {t('form.locationExplain')}
         </Text>
+        <LocationPicker value={f.coordinates} onChange={f.setCoordinates} />
         {f.coordinates ? <Notice tone="success" message={t('form.locationSet')} /> : null}
         {f.locationState === 'denied' ? <Notice tone="warning" message={t('form.locationDenied')} /> : null}
         {f.locationState === 'error' ? (

@@ -17,8 +17,13 @@ export function openDirections({
   const name = encodeURIComponent(label);
   const url = Platform.OS === 'ios' ? `maps:?q=${name}&ll=${coords}` : `geo:${coords}?q=${coords}(${name})`;
   return Linking.openURL(url).catch(() =>
-    Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${coords}`),
+    Linking.openURL(`https://www.google.com/maps/dir/?api=1&destination=${coords}`),
   );
+}
+
+/** Waze navigation to a place (its app if installed, otherwise its web page). */
+export function openWaze({ latitude, longitude }: { latitude: number; longitude: number }) {
+  return Linking.openURL(`https://waze.com/ul?ll=${latitude},${longitude}&navigate=yes`);
 }
 
 export function callPhone(phone: string) {

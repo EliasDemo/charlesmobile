@@ -68,5 +68,6 @@
     "add": "Add to favorites",
     "remove": "Remove from favorites",
     "error": "We couldn't save the change. Please try again."
-  }
+  },
+  "waze": "Go with Waze"
 }

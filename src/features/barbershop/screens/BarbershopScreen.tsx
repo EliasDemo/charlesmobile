@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { FavoriteButton } from '@/features/favorites';
 import { GallerySection } from '@/features/gallery';
 import { useTranslation } from '@/shared/i18n';
-import { callPhone, formatLongDate, isWebUrl, openDirections, openWebUrl } from '@/shared/lib';
+import { callPhone, formatLongDate, isWebUrl, openDirections, openWaze, openWebUrl } from '@/shared/lib';
 import { sizes, spacing } from '@/shared/theme';
 import {
   Badge,
@@ -195,6 +195,11 @@ function About({ shop }: { shop: Barbershop }) {
           onPress={() =>
             void openDirections({ latitude: shop.latitude, longitude: shop.longitude, label: shop.name })
           }
+        />
+        <Button
+          label={t('waze')}
+          variant="secondary"
+          onPress={() => void openWaze({ latitude: shop.latitude, longitude: shop.longitude })}
         />
         {shop.phone ? (
           <Button label={t('call')} variant="secondary" onPress={() => void callPhone(shop.phone!)} />
