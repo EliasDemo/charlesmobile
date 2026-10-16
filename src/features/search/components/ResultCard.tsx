@@ -46,6 +46,7 @@ export function ResultCard({ item, onPress }: { item: SearchResult; onPress: (id
       }
       footer={
         <View style={styles.footer}>
+          {item.featured ? <Badge label={t('card.featured')} tone="primary" /> : null}
           <StatusPill tone={openState.tone} icon={openState.icon} label={openState.label} />
           {item.availableNow ? (
             <StatusPill tone="success" icon="flash" label={t('card.availableNow')} />

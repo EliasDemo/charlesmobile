@@ -180,6 +180,7 @@ export const service = (
 
 export const barber = (overrides: Partial<Schemas['BarberPublicDto']> = {}): Schemas['BarberPublicDto'] => ({
   id: '01990000-0000-7000-8000-0000000000ca',
+  profileId: null,
   yearsExperience: null,
   specialties: [],
   displayName: 'Barbero Demo',
@@ -297,3 +298,33 @@ export const daySlots = (date = '2030-01-07', startAts: string[] = []): Schemas[
     barberIds: ['01990000-0000-7000-8000-0000000000ca'],
   })),
 });
+
+const pen = (amount: number) => ({ amount, currency: 'PEN' });
+
+/** A quote: S/ 25 service, optional discount (positive, it subtracts) and the coupon result. */
+export const quote = ({
+  discount = 0,
+  promotion = null,
+  coupon = null,
+}: {
+  discount?: number;
+  promotion?: Schemas['BookingQuoteDto']['promotion'];
+  coupon?: Schemas['BookingQuoteDto']['coupon'];
+} = {}): Schemas['BookingQuoteDto'] => ({
+  subtotal: pen(2500),
+  discountTotal: pen(discount),
+  feeTotal: pen(0),
+  total: pen(2500 - discount),
+  lines: [
+    { type: 'SERVICE', description: 'Corte clásico', amount: pen(2500) },
+    ...(discount > 0
+      ? [{ type: 'DISCOUNT' as const, description: promotion?.name ?? 'Descuento', amount: pen(discount) }]
+      : []),
+    { type: 'FEE', description: 'Comisión de Charles', amount: pen(0) },
+  ],
+  promotion,
+  coupon,
+});
+
+/** A cursor page of items. */
+export const page = <T>(items: T[], nextCursor: string | null = null) => ({ items, nextCursor });

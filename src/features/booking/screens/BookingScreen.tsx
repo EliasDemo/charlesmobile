@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { PushPermissionPrompt } from '@/features/notifications';
 import { BookingReviewSection } from '@/features/reviews';
@@ -29,6 +30,8 @@ export interface BookingScreenProps {
   onHelp: (bookingId: string) => void;
   onReview: (bookingId: string) => void;
   onEditReview: (reviewId: string) => void;
+  /** Sponsor space shown once the booking is confirmed ("booking_success"). */
+  successSlot?: ReactNode;
 }
 
 export function BookingScreen({
@@ -39,6 +42,7 @@ export function BookingScreen({
   onHelp,
   onReview,
   onEditReview,
+  successSlot,
 }: BookingScreenProps) {
   const { t } = useTranslation('booking');
   const data = useBooking(id);
@@ -129,6 +133,7 @@ export function BookingScreen({
 
             {booking.status === 'PENDING_PAYMENT' ? <DevBookingId bookingId={booking.id} /> : null}
             {booking.status === 'CONFIRMED' ? <SuccessCheck /> : null}
+            {booking.status === 'CONFIRMED' ? successSlot : null}
             {booking.status === 'CONFIRMED' ? (
               <Notice tone="success" message={t('detail.confirmedTitle')}>
                 <Button

@@ -313,6 +313,21 @@ Confirmada por el usuario en su teléfono.
 - Pruebas: `gallery/__tests__`, `shop-management/__tests__/shopPhotos.test.tsx`. `mockApi` acepta cuerpos multipart.
 - Pendiente para después de compilar: búsqueda por estilo, caché con `expo-image`, deslizar citas, celebración, agregar al calendario.
 
+## Fase 13 — Crecimiento y carrera del barbero (código terminado; falta la prueba del usuario)
+
+Contrato estable del backend (commit a4b17a4), `pnpm sync:api` del 2026-10-15. Guías: `PEDIDO-CRECIMIENTO-Y-CARRERA.md`, `PROMOCIONES.md`, `CARRERA.md`.
+
+- **Ajustes:** varias barberías por barbero (ya listadas en "Mi barbería"), `profileId` abre el perfil de carrera, etiqueta "Destacado", avisos `conversation` y `job_application` (por `type`: recibida → barbería, actualizada → "Mis postulaciones"), 6 códigos de error nuevos.
+- **Cupones:** el resumen cotiza con `POST /bookings/quote` (líneas, descuento en verde, comisión solo si > 0, "S/ 25 → S/ 20"), campo de cupón con sus motivos, `BETTER_PROMOTION` como aviso; 409 `COUPON_NOT_VALID` quita el cupón y vuelve a cotizar sin reintentar. Cambiar el cupón abre un intento nuevo (otra Idempotency-Key). Promociones activas en el perfil de la barbería.
+- **Mensajes (`features/messaging`):** pestaña con insignia (`/me/conversations/unread`), lista, chat (más recientes primero, carga hacia arriba), `SYSTEM` como "Charles", retirado en cursiva gris, bloquear/desbloquear, reportar con motivo, "Enviar mensaje" en la barbería y bandeja de la barbería en modo barbería. Un aviso abre el chat buscando de qué lado es.
+- **Perfil profesional (`features/career`):** crear/editar (renueva la sesión para el rol BARBER), foto, especialidades (10), portafolio con consentimiento obligatorio, "Dónde trabajo" y "Dejar esta barbería" (409 explicado), perfil público con cortes/valoraciones/videos, ranking por `offset` ("Entras al ranking con 3 valoraciones").
+- **Bolsa de trabajo (`features/jobs`):** empleos con filtros, postular (403 → crear perfil), mis postulaciones y retirar; ofertas de la barbería, postulantes (preseleccionar, rechazar, contratar → barberos), "Buscar barberos" (disponibles) e "Invitar"; "Escribir" e "Invitar" en el perfil del barbero en modo barbería.
+- **Mapas:** pin arrastrable en el alta, "Cómo llegar" con ruta e "Ir con Waze". Falta la clave de Maps (la carga el usuario en EAS).
+- **Promociones del modo barbería (`features/promotions`):** lista con estado y canjes, crear (porcentaje o monto en soles → céntimos, servicio, días, fechas, topes, solo con cupón), editar, pausar/reanudar y cupones.
+- **Anuncios (`features/ads`):** `AdSlot` en `home_banner`, `search_top`, `booking_success` y `shop_dashboard`, etiqueta "Publicidad", impresión y clic (`viewerKey` por instalación en SecureStore sin sesión), catálogo del auspiciador.
+- **Videos (`features/videos`):** subir (recorte a 30 s en el selector, compresión, progreso), "Procesando…" consultando cada 4 s, fallos explicados, carrusel con póster y reproductor al tocar, borrar y reportar. Necesita la compilación nueva: hasta entonces lo dice.
+- Pruebas: `promotions`, `messaging`, `career`, `jobs`, `ads`, `videos` y el cupón en `booking`. Probado contra el backend local (2026-10-15): los endpoints responden como dice la documentación.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
@@ -348,7 +363,6 @@ Confirmada por el usuario en su teléfono.
 - **Pago con Mercado Pago (2026-10-12):** con la compilación nueva el formulario se llena bien (el teclado ya no tapa los campos), pero Mercado Pago responde "No pudimos procesar tu pago" con APRO. Causa (revisado en el backend con permiso): el vendedor es de prueba (`3760410520`) y solo acepta compradores de prueba con sesión iniciada; como invitado se rechaza antes de crear el pago. En el WebView Mercado Pago oculta "Ingresar con mi cuenta": el pago tiene un botón fijo "Abrir en el navegador" para iniciar sesión ahí.
 - **Subir fotos (2026-10-12):** el `fetch` de Expo (global por defecto) no envía archivos `{ uri }` en FormData y la subida fallaba como "sin conexión". Las peticiones multipart van por `XMLHttpRequest` de React Native (`shared/api/uploadFetch.ts`); el resto sigue con `fetch`. Probado contra el backend con curl: logo, portada y galería responden 200.
 - **Perfil completo (2026-10-12, contrato `PERFIL.md`):** foto de la cuenta (`PUT/DELETE /users/me/photo`, recorte cuadrado), fecha de nacimiento (DD/MM/AAAA → ISO; la edad mínima la valida el backend) y género opcionales con aviso de privacidad, cambio de contraseña (`POST /users/me/password`, `WRONG_PASSWORD` sin cerrar sesión) y foto del cliente en la agenda (`client.photoUrl`). Falta la prueba en el teléfono.
-- **Fase 13 / Carrera del barbero (pedido del backend `PEDIDO-CRECIMIENTO-Y-CARRERA.md`, aprobado completo el 2026-10-12):** reemplaza la interfaz del barbero propuesta. **Bloqueado por el contrato:** al 2026-10-12 `openapi.json` del backend no trae ninguno de los endpoints nuevos (quote, conversations, barber-profile, jobs, ranking, placements, sponsors, videos, promotions); se espera el aviso de contrato estable para `pnpm sync:api`. Hecho sin contrato: pin arrastrable en el alta de barbería (`LocationPicker`, con la clave de Maps), "Ir con Waze" y "Cómo llegar" con `maps/dir`, e instalación de los módulos de video.
 
 ## Compilación instalada y cambios nativos pendientes de compilar
 
@@ -368,6 +382,7 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 | `expo-haptics` | Vibración leve al confirmar y en los mensajes breves (`haptic()`) | No vibra |
 | Instalados para usar **después de compilar** (aprobados el 2026-10-11 como "compilación única"): `expo-image` (caché de fotos), `react-native-reanimated` 4 + `react-native-worklets` + `react-native-gesture-handler` (deslizar citas), `lottie-react-native` (celebración), `expo-blur`, `expo-linear-gradient`, `expo-calendar` (plugin: agregar la cita al calendario), `expo-web-browser` (plugin), `expo-clipboard`, `expo-store-review`, `expo-updates` (`runtimeVersion` = versión de la app; activo fuera de desarrollo), `react-native-ssl-public-key-pinning` (M11), `@sentry/react-native` (M11, apagado) | Cada función se conecta y se prueba con la compilación instalada | **No se importan todavía** en el código (salvo los protegidos): la app actual no los necesita |
 | **Videos (Fase 13, aprobado el 2026-10-12):** `expo-video` 57.0.5 (reproducir) y `react-native-compressor` 2.0.3 (comprimir antes de subir); el recorte a 30 s lo limita `expo-image-picker` (`videoMaxDuration`) | Subir y ver videos de 30 s | **No se importan todavía**: la sección de videos se hará con carga opcional del módulo |
+| `react-native-nitro-modules` 0.37.1 (lo necesita `react-native-compressor`) | Comprimir videos | `videoUploadAvailable()` es false: la pantalla lo explica |
 | Colores de la pantalla de carga nativa (`#F4F6F8` / `#0D1015`) y `backgroundColor` | Splash con la paleta nueva | Ya se ve la pantalla de carga animada en JavaScript |
 
 ### Guía de la compilación única (la lanza el usuario)

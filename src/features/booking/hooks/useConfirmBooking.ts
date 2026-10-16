@@ -14,13 +14,20 @@ export interface UseConfirmBookingOptions {
   onSlotTaken: () => void;
 }
 
+interface CouponHandling {
+  /** The coupon the last quote applied (sent with the booking). */
+  couponCode?: string;
+  /** 409 COUPON_NOT_VALID: the screen shows why, removes it and quotes again (no automatic retry). */
+  onCouponRejected: (reason: string | null) => void;
+}
+
 /** Errors that leave the attempt open: retrying must reuse the same Idempotency-Key. */
 function isRetryable(error: unknown): boolean {
   if (isNetworkError(error)) return true;
   return isApiError(error) && (error.status >= 500 || error.code === 'TOO_MANY_REQUESTS');
 }
 
-export function useConfirmBooking(options: UseConfirmBookingOptions) {
+export function useConfirmBooking(options: UseConfirmBookingOptions & CouponHandling) {
   const queryClient = useQueryClient();
   const draft = useBookingDraft();
   const status = useSession((s) => s.status);
@@ -32,7 +39,13 @@ export function useConfirmBooking(options: UseConfirmBookingOptions) {
     mutationFn: (): Promise<CreatedBooking> => {
       const { barbershopId, serviceId, slot, barberId, keyForAttempt } = useBookingDraft.getState();
       return createBooking(
-        { barbershopId: barbershopId!, serviceId: serviceId!, startAt: slot!.startAt, barberId },
+        {
+          barbershopId: barbershopId!,
+          serviceId: serviceId!,
+          startAt: slot!.startAt,
+          barberId,
+          couponCode: options.couponCode,
+        },
         keyForAttempt(),
       );
     },
@@ -61,6 +74,11 @@ export function useConfirmBooking(options: UseConfirmBookingOptions) {
         case 'EMAIL_NOT_VERIFIED':
           options.onRequireVerification();
           return;
+        case 'COUPON_NOT_VALID': {
+          const reason = err.details[0]?.reason;
+          options.onCouponRejected(typeof reason === 'string' ? reason : null);
+          return;
+        }
         case 'TOO_MANY_PENDING_BOOKINGS':
           setTooManyPending(true);
           return setError(translateError(err).message);

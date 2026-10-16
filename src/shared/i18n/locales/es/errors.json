@@ -21,7 +21,7 @@
     "LAST_OWNER": "La barbería necesita al menos un responsable principal.",
     "STATUS_CHANGE_NOT_ALLOWED": "La barbería está en revisión o suspendida.",
     "HAS_FUTURE_BOOKINGS": "Hay reservas futuras activas. Gestiónalas antes de continuar.",
-    "BARBER_ALREADY_ACTIVE_ELSEWHERE": "Esta cuenta ya es barbero activo en otra barbería.",
+    "BARBER_ALREADY_ACTIVE_ELSEWHERE": "Ya trabajas en esta barbería.",
     "BARBER_ALREADY_LINKED": "Este barbero ya tiene una cuenta vinculada.",
     "INVITATION_NO_LONGER_VALID": "La invitación venció o ya se usó. Pide una nueva.",
     "INDEPENDENT_SINGLE_BARBER": "Un barbero independiente solo puede tener un barbero activo.",
@@ -61,7 +61,13 @@
     "INVALID_IMAGE": "Esa imagen no se puede usar. Elige una foto JPEG, PNG o WebP.",
     "IMAGE_LIMIT_REACHED": "Llegaste al límite de fotos. Borra alguna para subir otra.",
     "STORAGE_UNAVAILABLE": "No pudimos guardar la foto ahora. Inténtalo en un momento.",
-    "WRONG_PASSWORD": "La contraseña actual no es correcta."
+    "WRONG_PASSWORD": "La contraseña actual no es correcta.",
+    "COUPON_NOT_VALID": "El cupón ya no se puede usar. Lo quitamos y recalculamos el precio.",
+    "COUPON_CODE_TAKEN": "Ese código ya existe. Elige otro.",
+    "CONVERSATION_BLOCKED": "Esta conversación está bloqueada.",
+    "ALREADY_APPLIED": "Ya postulaste a esta oferta (o ya trabajas en esa barbería).",
+    "JOB_POSTING_CLOSED": "Esta oferta ya cerró.",
+    "VIDEO_LIMIT_REACHED": "Llegaste al máximo de videos. Borra uno para subir otro."
   },
   "fields": {
     "required": "Este campo es obligatorio.",

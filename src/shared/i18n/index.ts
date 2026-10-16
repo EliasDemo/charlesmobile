@@ -15,6 +15,12 @@ import notifications from './locales/es/notifications.json';
 import support from './locales/es/support.json';
 import reviews from './locales/es/reviews.json';
 import gallery from './locales/es/gallery.json';
+import promotions from './locales/es/promotions.json';
+import messages from './locales/es/messages.json';
+import career from './locales/es/career.json';
+import jobs from './locales/es/jobs.json';
+import videos from './locales/es/videos.json';
+import ads from './locales/es/ads.json';
 import type devTexts from './locales/es/dev.json';
 import en_common from './locales/en/common.json';
 import en_errors from './locales/en/errors.json';
@@ -31,6 +37,12 @@ import en_notifications from './locales/en/notifications.json';
 import en_support from './locales/en/support.json';
 import en_reviews from './locales/en/reviews.json';
 import en_gallery from './locales/en/gallery.json';
+import en_promotions from './locales/en/promotions.json';
+import en_messages from './locales/en/messages.json';
+import en_career from './locales/en/career.json';
+import en_jobs from './locales/en/jobs.json';
+import en_videos from './locales/en/videos.json';
+import en_ads from './locales/en/ads.json';
 import { onLanguageChange } from './language';
 
 export const defaultNS = 'common';
@@ -51,6 +63,12 @@ export const resources = {
     support,
     reviews,
     gallery,
+    promotions,
+    messages,
+    career,
+    jobs,
+    videos,
+    ads,
   },
   en: {
     common: en_common,
@@ -68,6 +86,12 @@ export const resources = {
     support: en_support,
     reviews: en_reviews,
     gallery: en_gallery,
+    promotions: en_promotions,
+    messages: en_messages,
+    career: en_career,
+    jobs: en_jobs,
+    videos: en_videos,
+    ads: en_ads,
   },
 } as const;
 

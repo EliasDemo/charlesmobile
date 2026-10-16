@@ -1,0 +1,49 @@
+{
+  "title": "Mensajes",
+  "empty": "Aún no tienes mensajes",
+  "emptyMessage": "Escríbele a una barbería desde su perfil con \"Enviar mensaje\".",
+  "emptyShop": "Cuando un cliente o un barbero te escriba, lo verás aquí.",
+  "unknown": "Sin nombre",
+  "blocked": "Conversación bloqueada",
+  "unread_one": "{{count}} nuevo",
+  "unread_other": "{{count}} nuevos",
+  "send": "Enviar mensaje",
+  "chat": {
+    "label": "Escribe tu mensaje",
+    "send": "Enviar",
+    "empty": "Todavía no hay mensajes.",
+    "charles": "Charles",
+    "block": "Bloquear",
+    "unblock": "Desbloquear",
+    "blockTitle": "¿Bloquear esta conversación?",
+    "blockMessage": "Ninguno de los dos podrá enviar mensajes aquí hasta que la desbloquees. Solo tú puedes desbloquearla.",
+    "blockedDone": "Conversación bloqueada",
+    "unblockedDone": "Conversación desbloqueada",
+    "blockedByMe": "Bloqueaste esta conversación. Desbloquéala para volver a escribir.",
+    "blockedByThem": "Esta conversación está bloqueada. No puedes enviar mensajes.",
+    "slowDown": "Espera un momento antes de enviar otro mensaje.",
+    "notFound": "No encontramos esta conversación"
+  },
+  "report": {
+    "title": "Reportar mensaje",
+    "message": "Soporte lo revisará. Elige el motivo.",
+    "send": "Reportar",
+    "sent": "Mensaje reportado. Gracias por avisarnos.",
+    "already": "Ya reportaste este mensaje.",
+    "hint": "Mantén presionado para reportarlo",
+    "reasons": {
+      "SPAM": "Spam",
+      "HARASSMENT": "Acoso",
+      "INAPPROPRIATE": "Inapropiado",
+      "SCAM": "Estafa",
+      "OTHER": "Otro"
+    }
+  },
+  "new": {
+    "title": "Nuevo mensaje",
+    "titleTo": "Mensaje a {{name}}",
+    "hintShop": "Pregunta lo que necesites. La barbería te responderá por aquí.",
+    "hintBarber": "Escríbele sobre trabajo. Te responderá por aquí.",
+    "limit": "Hasta {{max}} caracteres."
+  }
+}

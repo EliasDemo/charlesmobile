@@ -99,3 +99,21 @@ export function zonedTimeToIso(date: string, time: string, timeZone: string): st
   instant = guess - zoneOffsetMinutes(new Date(instant), timeZone) * 60000;
   return new Date(instant).toISOString();
 }
+
+/** `DD/MM/YYYY` as a person types it → `YYYY-MM-DD`, or null if it is not a real date. */
+export function dmyToIsoDate(value: string): string | null {
+  const match = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(value.trim());
+  if (!match) return null;
+  const [day, month, year] = [Number(match[1]), Number(match[2]), Number(match[3])];
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
+    return null;
+  }
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+}
+
+/** `YYYY-MM-DD` → `DD/MM/YYYY` for a text field ('' when there is none). */
+export const isoDateToDmy = (iso: string | null | undefined): string => {
+  const match = iso ? /^(\d{4})-(\d{2})-(\d{2})/.exec(iso) : null;
+  return match ? `${match[3]}/${match[2]}/${match[1]}` : '';
+};

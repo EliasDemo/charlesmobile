@@ -8,6 +8,7 @@ import {
   createdBooking,
   daySlots,
   mockApi,
+  quote,
   searchResult,
   service,
 } from '@test/mockApi';
@@ -46,6 +47,7 @@ const shopRoutes = (overrides: Record<string, unknown> = {}) => ({
   'GET /api/v1/barbershops/{id}/availability': {
     body: daySlots('2030-01-07', ['2030-01-07T14:00:00.000Z', '2030-01-07T19:00:00.000Z']),
   },
+  'POST /api/v1/bookings/quote': { body: quote() },
   ...overrides,
 });
 const api = (routes: Record<string, unknown>) => mockApi(routes as never);
@@ -169,15 +171,104 @@ const summaryProps = () => ({
 });
 
 describe('SummaryScreen', () => {
-  it('shows the selection with the service price and explains the total comes later', async () => {
-    api(shopRoutes());
+  it('shows the selection and the price the backend quoted', async () => {
+    const calls = api(shopRoutes());
     completeDraft();
     await renderWithProviders(<SummaryScreen {...summaryProps()} />);
     expect(await screen.findByText('Barbería Demo Miraflores')).toBeTruthy();
     expect(screen.getByText(texts.summary.firstAvailable)).toBeTruthy();
     expect(screen.getByText(/lunes, 7 de enero de 2030 · 09:00/)).toBeTruthy();
-    expect(screen.getByText(texts.summary.servicePrice)).toBeTruthy();
-    expect(screen.getByText(texts.summary.priceNote)).toBeTruthy();
+    expect(await screen.findByTestId('booking-total')).toHaveTextContent(/25\.00/);
+    // A zero fee is not shown.
+    expect(screen.queryByText('Comisión de Charles')).toBeNull();
+    expect(calls.callsTo('POST', '/api/v1/bookings/quote')[0]!.body).toEqual({
+      barbershopId: SHOP,
+      serviceId: SERVICE,
+      startAt: '2030-01-07T14:00:00.000Z',
+    });
+  });
+
+  it('applies a coupon from the quote and sends it with the booking', async () => {
+    signIn();
+    const calls = api(
+      shopRoutes({
+        'POST /api/v1/bookings/quote': async (request: Request) => {
+          const body = (await request.json()) as { couponCode?: string };
+          return body.couponCode
+            ? {
+                body: quote({
+                  discount: 500,
+                  promotion: { id: 'p1', name: 'Bienvenida' },
+                  coupon: { code: 'HOLA10', applied: true, reason: null },
+                }),
+              }
+            : { body: quote() };
+        },
+        'POST /api/v1/bookings': { status: 201, body: createdBooking() },
+      }),
+    );
+    completeDraft();
+    await renderWithProviders(<SummaryScreen {...summaryProps()} />);
+    await fireEvent.changeText(await screen.findByTestId('coupon-input'), 'hola10');
+    await fireEvent.press(screen.getByRole('button', { name: texts.coupon.apply }));
+    expect(await screen.findByText(texts.coupon.applied)).toBeTruthy();
+    expect(screen.getByTestId('quote-change')).toHaveTextContent(/25\.00.*20\.00/);
+    expect(screen.getByTestId('price-discount')).toHaveTextContent(/5\.00/);
+    await fireEvent.press(screen.getByRole('button', { name: texts.summary.confirm }));
+    await waitFor(() => expect(calls.callsTo('POST', '/api/v1/bookings')).toHaveLength(1));
+    expect(calls.callsTo('POST', '/api/v1/bookings')[0]!.body).toMatchObject({ couponCode: 'hola10' });
+  });
+
+  it('explains why a coupon was not applied, and that a better promotion already applies', async () => {
+    let reason: string = 'EXHAUSTED';
+    api(
+      shopRoutes({
+        'POST /api/v1/bookings/quote': async (request: Request) => {
+          const body = (await request.json()) as { couponCode?: string };
+          return {
+            body: quote(
+              body.couponCode ? { coupon: { code: 'X', applied: false, reason: reason as never } } : {},
+            ),
+          };
+        },
+      }),
+    );
+    completeDraft();
+    await renderWithProviders(<SummaryScreen {...summaryProps()} />);
+    await fireEvent.changeText(await screen.findByTestId('coupon-input'), 'AGOTADO');
+    await fireEvent.press(screen.getByRole('button', { name: texts.coupon.apply }));
+    expect(await screen.findByText(texts.coupon.reasons.EXHAUSTED)).toBeTruthy();
+    reason = 'BETTER_PROMOTION';
+    await fireEvent.changeText(screen.getByTestId('coupon-input'), 'OTRO');
+    await fireEvent.press(screen.getByRole('button', { name: texts.coupon.apply }));
+    expect(await screen.findByText(texts.coupon.reasons.BETTER_PROMOTION)).toBeTruthy();
+  });
+
+  it('drops the coupon and quotes again when the booking says it is no longer valid', async () => {
+    signIn();
+    const calls = api(
+      shopRoutes({
+        'POST /api/v1/bookings/quote': async (request: Request) => {
+          const body = (await request.json()) as { couponCode?: string };
+          return body.couponCode
+            ? { body: quote({ discount: 500, coupon: { code: 'HOLA10', applied: true, reason: null } }) }
+            : { body: quote() };
+        },
+        'POST /api/v1/bookings': apiError(409, 'COUPON_NOT_VALID', [{ reason: 'EXHAUSTED' }]),
+      }),
+    );
+    completeDraft();
+    await renderWithProviders(<SummaryScreen {...summaryProps()} />);
+    await fireEvent.changeText(await screen.findByTestId('coupon-input'), 'HOLA10');
+    await fireEvent.press(screen.getByRole('button', { name: texts.coupon.apply }));
+    await screen.findByText(texts.coupon.applied);
+    await fireEvent.press(screen.getByRole('button', { name: texts.summary.confirm }));
+    expect(await screen.findByText(texts.coupon.reasons.EXHAUSTED)).toBeTruthy();
+    // Quoted again without the coupon; the booking is not retried by itself.
+    await waitFor(() =>
+      expect(calls.callsTo('POST', '/api/v1/bookings/quote').at(-1)!.body).not.toHaveProperty('couponCode'),
+    );
+    expect(calls.callsTo('POST', '/api/v1/bookings')).toHaveLength(1);
   });
 
   it('asks for an account only when confirming, keeping the selection', async () => {

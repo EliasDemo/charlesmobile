@@ -28,6 +28,13 @@ export default function ClientLayout() {
       <Stack.Screen name="reviews/[id]" options={{ title: t('form.editTitle', { ns: 'reviews' }) }} />
       <Stack.Screen name="profile/reviews" options={{ title: t('mine.title', { ns: 'reviews' }) }} />
       <Stack.Screen name="notifications" options={{ title: t('nav.notifications') }} />
+      <Stack.Screen name="messages/[id]" options={{ title: t('title', { ns: 'messages' }) }} />
+      <Stack.Screen name="messages/new" options={{ title: t('new.title', { ns: 'messages' }) }} />
+      <Stack.Screen name="career/index" options={{ title: t('title', { ns: 'career' }) }} />
+      <Stack.Screen name="career/edit" options={{ title: t('edit', { ns: 'career' }) }} />
+      <Stack.Screen name="career/specialties" options={{ title: t('specialties.title', { ns: 'career' }) }} />
+      <Stack.Screen name="career/add-cut" options={{ title: t('portfolio.add', { ns: 'career' }) }} />
+      <Stack.Screen name="jobs/applications" options={{ title: t('myApplications', { ns: 'jobs' }) }} />
       <Stack.Screen name="bookings/[id]" options={{ title: t('nav.booking') }} />
     </Stack>
   );

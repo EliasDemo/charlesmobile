@@ -28,7 +28,11 @@
       "hours": "Horario",
       "blocks": "Bloqueos",
       "reviews": "Valoraciones",
-      "gallery": "Galería"
+      "gallery": "Galería",
+      "promotions": "Promociones",
+      "jobs": "Ofertas de trabajo",
+      "talent": "Buscar barberos",
+      "videos": "Videos del local"
     },
     "asBarber": "Como barbero",
     "myBlocks": "Mis bloqueos en {{name}}",
@@ -46,7 +50,11 @@
       "hours": "Días y horas de atención",
       "blocks": "Descansos y ausencias",
       "reviews": "Lo que dicen tus clientes",
-      "gallery": "Fotos de tus trabajos"
+      "gallery": "Fotos de tus trabajos",
+      "promotions": "Descuentos y cupones",
+      "jobs": "Publica y elige postulantes",
+      "talent": "Barberos disponibles",
+      "videos": "Videos de 30 segundos"
     }
   },
   "status": {

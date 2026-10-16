@@ -1,6 +1,9 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { BarbershopScreen } from '@/features/barbershop';
+import { ActivePromotions } from '@/features/promotions';
+import { SendMessageButton } from '@/features/messaging';
 import { ReportBarbershopButton } from '@/features/support';
+import { ShopVideosSection } from '@/features/videos';
 import { useSession } from '@/shared/api';
 
 export default function BarbershopRoute() {
@@ -23,6 +26,22 @@ export default function BarbershopRoute() {
         })
       }
       footer={authenticated ? <ReportBarbershopButton barbershopId={id} /> : null}
+      extraSections={(shop) => (
+        <>
+          <SendMessageButton
+            onPress={() =>
+              authenticated
+                ? router.push({ pathname: '/messages/new', params: { barbershopId: id, name: shop.name } })
+                : router.push({ pathname: '/login', params: { returnTo: `/barbershop/${id}` } })
+            }
+          />
+          <ActivePromotions barbershopId={id} timeZone={shop.timezone} />
+          <ShopVideosSection barbershopId={id} />
+        </>
+      )}
+      onOpenBarberProfile={(profileId) =>
+        router.push({ pathname: '/barber/[id]', params: { id: profileId } })
+      }
       onRequireLogin={() => router.push({ pathname: '/login', params: { returnTo: `/barbershop/${id}` } })}
     />
   );

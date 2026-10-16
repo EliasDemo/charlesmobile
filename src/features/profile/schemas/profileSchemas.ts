@@ -1,23 +1,11 @@
 import { z } from 'zod';
-import { peruMobileDigits } from '@/shared/lib';
+import { dmyToIsoDate, isoDateToDmy, peruMobileDigits } from '@/shared/lib';
 
 /** `DD/MM/YYYY` as typed by the person → `YYYY-MM-DD` for the API, or null if it is not a real date. */
-export function birthDateToIso(value: string): string | null {
-  const match = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(value.trim());
-  if (!match) return null;
-  const [day, month, year] = [Number(match[1]), Number(match[2]), Number(match[3])];
-  const date = new Date(Date.UTC(year, month - 1, day));
-  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) {
-    return null;
-  }
-  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-}
+export const birthDateToIso = dmyToIsoDate;
 
 /** `YYYY-MM-DD` from the API → `DD/MM/YYYY` for the field. */
-export const birthDateFromIso = (iso: string | null | undefined): string => {
-  const match = iso ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso) : null;
-  return match ? `${match[3]}/${match[2]}/${match[1]}` : '';
-};
+export const birthDateFromIso = isoDateToDmy;
 
 // Messages are i18n keys of the `auth` namespace (shared validation texts), or `profile:` keys.
 export const editProfileSchema = z.object({

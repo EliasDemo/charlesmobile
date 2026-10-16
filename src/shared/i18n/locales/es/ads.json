@@ -1,0 +1,9 @@
+{
+  "label": "Publicidad",
+  "openAd": "Abrir anuncio: {{title}}",
+  "openSponsor": "Ver catálogo de {{name}}",
+  "notSold": "Charles no vende estos productos: \"Ver en la tienda\" abre la página del auspiciador.",
+  "noProducts": "Este auspiciador aún no publicó productos.",
+  "seeInStore": "Ver en la tienda",
+  "title": "Auspiciador"
+}

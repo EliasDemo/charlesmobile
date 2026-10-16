@@ -33,6 +33,10 @@ export interface BarbershopScreenProps {
   onBookStyle: (serviceId: string, barberId: string | null) => void;
   /** Quiet actions at the end (reporting the barbershop). */
   footer?: ReactNode;
+  /** Sections other features add after "About" (promotions, videos, "Enviar mensaje"). */
+  extraSections?: (shop: Barbershop) => ReactNode;
+  /** A barber with a career profile (`profileId`) opens it. */
+  onOpenBarberProfile?: (profileId: string) => void;
 }
 
 export function BarbershopScreen({
@@ -45,6 +49,8 @@ export function BarbershopScreen({
   onOpenGallery,
   onBookStyle,
   footer,
+  extraSections,
+  onOpenBarberProfile,
 }: BarbershopScreenProps) {
   const { t } = useTranslation('barbershop');
   const detail = useBarbershop(id);
@@ -74,6 +80,7 @@ export function BarbershopScreen({
             <Header shop={shop} onRequireLogin={onRequireLogin} onFavoriteChanged={detail.shop.refetch} />
             <Button label={t('book')} onPress={onBook} fullWidth />
             <About shop={shop} />
+            {extraSections?.(shop)}
             <GallerySection barbershopId={shop.id} onOpenAll={onOpenGallery} onBookStyle={onBookStyle} />
             <Section title={t('sections.hours')} query={detail.hours}>
               {(hours) => <HoursList hours={hours} today={detail.todayDayOfWeek} />}
@@ -107,7 +114,19 @@ export function BarbershopScreen({
               isEmpty={(barbers) => barbers.length === 0}
               emptyMessage={t('barbers.empty')}
             >
-              {(barbers) => barbers.map((barber) => <BarberRow key={barber.id} barber={barber} />)}
+              {(barbers) =>
+                barbers.map((barber) => (
+                  <BarberRow
+                    key={barber.id}
+                    barber={barber}
+                    onOpenProfile={
+                      barber.profileId && onOpenBarberProfile
+                        ? () => onOpenBarberProfile(barber.profileId!)
+                        : undefined
+                    }
+                  />
+                ))
+              }
             </Section>
             <Section
               title={t('sections.reviews')}

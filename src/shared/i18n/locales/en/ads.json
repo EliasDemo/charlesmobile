@@ -1,0 +1,9 @@
+{
+  "label": "Advertising",
+  "openAd": "Open ad: {{title}}",
+  "openSponsor": "See {{name}}'s catalog",
+  "notSold": "Charles doesn't sell these products: \"See in store\" opens the sponsor's page.",
+  "noProducts": "This sponsor hasn't published products yet.",
+  "seeInStore": "See in store",
+  "title": "Sponsor"
+}

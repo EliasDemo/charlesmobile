@@ -52,8 +52,8 @@ function AppStack() {
   useSessionEndedRedirect(pathname, goToLogin);
   // Push: register this device while there is a session; a tapped push opens its screen.
   useDeviceRegistration();
-  usePushTaps((resource) => {
-    const target = notificationTarget(resource);
+  usePushTaps((resource, type) => {
+    const target = notificationTarget(resource, type);
     if (target.kind === 'booking') router.push({ pathname: '/bookings/[id]', params: { id: target.id } });
     else if (target.kind === 'ticket') router.push({ pathname: '/support/[id]', params: { id: target.id } });
     else if (target.kind === 'support') router.push('/support');
@@ -61,6 +61,12 @@ function AppStack() {
       useAppMode.getState().setMode('shop');
       router.push({ pathname: '/shop/[shopId]/reviews', params: { shopId: target.shopId } });
     } else if (target.kind === 'shop') {
+      useAppMode.getState().setMode('shop');
+      router.navigate('/shop');
+    } else if (target.kind === 'conversation') {
+      router.push({ pathname: '/messages/[id]', params: { id: target.id, resolve: '1' } });
+    } else if (target.kind === 'myApplications') router.push('/jobs/applications');
+    else if (target.kind === 'shopJobs') {
       useAppMode.getState().setMode('shop');
       router.navigate('/shop');
     } else router.push('/notifications');

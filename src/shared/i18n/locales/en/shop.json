@@ -28,7 +28,11 @@
       "hours": "Hours",
       "blocks": "Blocks",
       "reviews": "Reviews",
-      "gallery": "Gallery"
+      "gallery": "Gallery",
+      "promotions": "Promotions",
+      "jobs": "Job postings",
+      "talent": "Find barbers",
+      "videos": "Shop videos"
     },
     "asBarber": "As a barber",
     "myBlocks": "My blocks at {{name}}",
@@ -46,7 +50,11 @@
       "hours": "Opening days and hours",
       "blocks": "Breaks and absences",
       "reviews": "What your clients say",
-      "gallery": "Photos of your work"
+      "gallery": "Photos of your work",
+      "promotions": "Discounts and coupons",
+      "jobs": "Post and choose applicants",
+      "talent": "Barbers available",
+      "videos": "30-second videos"
     }
   },
   "status": {

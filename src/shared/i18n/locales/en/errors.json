@@ -21,7 +21,7 @@
     "LAST_OWNER": "The barbershop needs at least one main owner.",
     "STATUS_CHANGE_NOT_ALLOWED": "The barbershop is under review or suspended.",
     "HAS_FUTURE_BOOKINGS": "There are active future bookings. Handle them before continuing.",
-    "BARBER_ALREADY_ACTIVE_ELSEWHERE": "This account is already an active barber at another barbershop.",
+    "BARBER_ALREADY_ACTIVE_ELSEWHERE": "You already work at this barbershop.",
     "BARBER_ALREADY_LINKED": "This barber already has a linked account.",
     "INVITATION_NO_LONGER_VALID": "The invitation expired or was already used. Ask for a new one.",
     "INDEPENDENT_SINGLE_BARBER": "An independent barber can only have one active barber.",
@@ -61,7 +61,13 @@
     "INVALID_IMAGE": "That image can't be used. Choose a JPEG, PNG or WebP photo.",
     "IMAGE_LIMIT_REACHED": "You reached the photo limit. Delete one to upload another.",
     "STORAGE_UNAVAILABLE": "We couldn't save the photo right now. Try again in a moment.",
-    "WRONG_PASSWORD": "The current password is not correct."
+    "WRONG_PASSWORD": "The current password is not correct.",
+    "COUPON_NOT_VALID": "The coupon can't be used anymore. We removed it and recalculated the price.",
+    "COUPON_CODE_TAKEN": "That code already exists. Choose another one.",
+    "CONVERSATION_BLOCKED": "This conversation is blocked.",
+    "ALREADY_APPLIED": "You already applied to this job (or you already work at that barbershop).",
+    "JOB_POSTING_CLOSED": "This job posting is closed.",
+    "VIDEO_LIMIT_REACHED": "You reached the video limit. Delete one to upload another."
   },
   "fields": {
     "required": "This field is required.",

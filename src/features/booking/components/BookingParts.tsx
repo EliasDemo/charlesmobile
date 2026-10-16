@@ -32,20 +32,43 @@ export function StatusBadge({ status }: { status: BookingStatus }) {
   return <StatusPill tone={tone} icon={icon} label={t(`status.${status}`)} />;
 }
 
-/** The price exactly as the API computed it: lines and total. Nothing is added up here. */
-export function PriceBreakdown({ price }: { price: Booking['price'] }) {
+interface PriceLine {
+  type: Booking['price']['lines'][number]['type'];
+  description: string;
+  amount: Booking['price']['total'];
+}
+
+/**
+ * The price exactly as the API computed it (a quote or a booking): lines and total. Nothing is
+ * added up here. The discount comes positive and is shown subtracting; a zero fee is not shown.
+ */
+export function PriceBreakdown({
+  price,
+  title,
+}: {
+  price: { lines: PriceLine[]; total: Booking['price']['total'] };
+  title?: string;
+}) {
   const { t } = useTranslation('booking');
   return (
     <Card>
-      <Text variant="subtitle">{t('detail.price')}</Text>
-      {price.lines.map((line, index) => (
-        <View key={`${line.type}-${index}`} style={styles.priceRow}>
-          <Text color="textSecondary" style={styles.flex}>
-            {line.description}
-          </Text>
-          <Text>{formatMoney(line.amount)}</Text>
-        </View>
-      ))}
+      <Text variant="subtitle">{title ?? t('detail.price')}</Text>
+      {price.lines
+        .filter((line) => !(line.type === 'FEE' && line.amount.amount === 0))
+        .map((line, index) => (
+          <View key={`${line.type}-${index}`} style={styles.priceRow}>
+            <Text color="textSecondary" style={styles.flex}>
+              {line.description}
+            </Text>
+            {line.type === 'DISCOUNT' ? (
+              <Text color="success" testID="price-discount">
+                {t('detail.discountAmount', { amount: formatMoney(line.amount) })}
+              </Text>
+            ) : (
+              <Text>{formatMoney(line.amount)}</Text>
+            )}
+          </View>
+        ))}
       <View style={styles.priceRow}>
         <Text variant="bodyStrong" style={styles.flex}>
           {t('detail.total')}

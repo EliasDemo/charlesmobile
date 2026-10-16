@@ -13,10 +13,12 @@ const RESOURCE_ICON: Record<NotificationResource['type'], IconName> = {
   ticket: 'chatbubbles',
   barbershop: 'storefront',
   account: 'shield-checkmark',
+  conversation: 'chatbubble-ellipses',
+  job_application: 'briefcase',
 };
 
 /** Inbox of notices: every notice lands here, even when the push did not arrive. */
-export function InboxScreen({ onOpen }: { onOpen: (resource: NotificationResource) => void }) {
+export function InboxScreen({ onOpen }: { onOpen: (resource: NotificationResource, type: string) => void }) {
   const { t } = useTranslation('notifications');
   const inbox = useInbox();
   const renderItem = ({ item }: { item: AppNotification }) => {
@@ -24,7 +26,10 @@ export function InboxScreen({ onOpen }: { onOpen: (resource: NotificationResourc
     return (
       <InfoCard
         testID={`notification-${item.id}`}
-        onPress={() => onOpen(inbox.open(item))}
+        onPress={() => {
+          inbox.open(item);
+          onOpen(item.resource, item.type);
+        }}
         leading={<IconTile icon={RESOURCE_ICON[item.resource.type]} />}
         title={item.title}
         subtitle={item.body}

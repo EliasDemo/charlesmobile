@@ -70,3 +70,13 @@ jest.mock('expo-linear-gradient', () => {
   const { View } = jest.requireActual('react-native');
   return { LinearGradient: View };
 });
+
+// Video: the player is a plain view and the compressor returns the same file (native modules).
+jest.mock('expo-video', () => {
+  const { View } = jest.requireActual('react-native');
+  return { useVideoPlayer: () => ({}), VideoView: () => <View testID="video-view" /> };
+});
+jest.mock('react-native-compressor', () => ({
+  Video: { compress: async (uri: string) => uri },
+  getFileSize: async () => '1000',
+}));

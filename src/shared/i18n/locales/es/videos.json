@@ -1,0 +1,53 @@
+{
+  "title": "Videos",
+  "play": "Ver video",
+  "close": "Cerrar",
+  "mine": "Mis videos",
+  "empty": "Aún no hay videos",
+  "emptyMine": "Aún no subiste videos",
+  "untitled": "Video sin descripción",
+  "caption": "Descripción (opcional)",
+  "choose": "Elegir video",
+  "record": "Grabar",
+  "rules": "Videos de hasta 30 segundos y 50 MB. Máximo {{limit}}.",
+  "compressing": "Preparando el video… {{percent}} %",
+  "uploading": "Subiendo… {{percent}} %",
+  "processing": "Video subido. Lo estamos procesando.",
+  "limitReached": "Llegaste al máximo de videos. Borra uno para subir otro.",
+  "unavailable": "Los videos estarán disponibles con la próxima versión de la app.",
+  "delete": "Borrar video",
+  "deleteTitle": "¿Borrar este video?",
+  "deleteMessage": "Dejará de verse para todos.",
+  "status": {
+    "PROCESSING": "Procesando…",
+    "READY": "Publicado",
+    "FAILED": "No se pudo publicar"
+  },
+  "failure": {
+    "TOO_LONG": "Dura más de 30 segundos.",
+    "NOT_A_VIDEO": "El archivo no es un video.",
+    "TOO_LARGE": "Pesa más de 50 MB.",
+    "PROCESSING_FAILED": "No pudimos procesarlo. Inténtalo de nuevo."
+  },
+  "pick": {
+    "denied": "Necesitamos permiso para usar tus videos. Actívalo en los ajustes del teléfono.",
+    "unavailable": "Los videos estarán disponibles con la próxima versión de la app.",
+    "tooLong": "Ese video dura más de 30 segundos. Elige o graba uno más corto.",
+    "tooLarge": "Ese video pesa más de 50 MB incluso comprimido. Elige uno más corto."
+  },
+  "report": {
+    "action": "Reportar video",
+    "title": "Reportar video",
+    "message": "Soporte lo revisará. Elige el motivo.",
+    "send": "Reportar",
+    "sent": "Video reportado. Gracias por avisarnos.",
+    "already": "Ya reportaste este video.",
+    "reasons": {
+      "NOT_MY_PHOTO": "Aparezco yo sin permiso",
+      "NO_CONSENT": "Sin consentimiento",
+      "INAPPROPRIATE": "Inapropiado",
+      "MISLEADING": "Engañoso",
+      "OTHER": "Otro"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import type { FieldValues, Path, UseFormSetError } from 'react-hook-form';
-import { useTranslation } from '@/shared/i18n';
+import { useTranslation, type resources } from '@/shared/i18n';
 import { fieldErrorsFrom, translateError } from '@/shared/api';
 
 /**
@@ -27,7 +27,7 @@ export function applyServerErrors<T extends FieldValues>(
  * Text for a field error: client rules store an i18n key of the given namespace, server errors
  * arrive already translated (applyServerErrors). Unknown keys are shown as they are.
  */
-export function useFieldErrorText(namespace: 'auth' | 'profile' | 'shop' | 'support' | 'reviews') {
+export function useFieldErrorText(namespace: keyof (typeof resources)['es']) {
   const { t } = useTranslation(namespace);
   return (message: string | undefined): string | undefined =>
     message ? (t(message as never, { defaultValue: message }) as string) : undefined;

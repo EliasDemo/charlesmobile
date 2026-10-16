@@ -45,7 +45,16 @@ export interface CreateBookingInput {
   /** Exactly the `startAt` of a slot returned by the availability. */
   startAt: string;
   barberId: string | null;
+  /** Only when the last quote applied it. */
+  couponCode?: string;
 }
+
+export type BookingQuote = components['schemas']['BookingQuoteDto'];
+export type CouponReason = NonNullable<components['schemas']['QuoteCouponDto']['reason']>;
+
+/** The price the backend would charge (one discount: the biggest). Reserves nothing. */
+export const fetchQuote = (body: components['schemas']['QuoteBookingDto']): Promise<BookingQuote> =>
+  unwrap(api.POST('/api/v1/bookings/quote', { body }));
 
 /**
  * The same `idempotencyKey` must be sent again when this attempt is retried: the backend then
@@ -60,6 +69,7 @@ export const createBooking = (input: CreateBookingInput, idempotencyKey: string)
         serviceId: input.serviceId,
         startAt: input.startAt,
         ...(input.barberId ? { barberId: input.barberId } : {}),
+        ...(input.couponCode ? { couponCode: input.couponCode } : {}),
       },
     }),
   );

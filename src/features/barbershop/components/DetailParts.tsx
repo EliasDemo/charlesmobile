@@ -6,6 +6,7 @@ import { sizes, spacing, useTheme } from '@/shared/theme';
 import {
   Badge,
   Card,
+  Icon,
   IconTile,
   Monogram,
   QueryView,
@@ -127,9 +128,10 @@ export function ServiceRow({ service, onPress }: { service: Service; onPress: ()
   );
 }
 
-export function BarberRow({ barber }: { barber: Barber }) {
+export function BarberRow({ barber, onOpenProfile }: { barber: Barber; onOpenProfile?: () => void }) {
   const { t } = useTranslation('barbershop');
-  return (
+  const theme = useTheme();
+  const content = (
     <View style={styles.barberRow}>
       <Monogram name={barber.displayName} size={sizes.avatar} imageUrl={barber.photoUrl} />
       <View style={styles.flex}>
@@ -152,8 +154,27 @@ export function BarberRow({ barber }: { barber: Barber }) {
             ))}
           </View>
         ) : null}
+        {onOpenProfile ? (
+          <Text variant="label" color="primary">
+            {t('barbers.seeProfile')}
+          </Text>
+        ) : null}
       </View>
+      {onOpenProfile ? (
+        <Icon name="chevron-forward" size={sizes.icon} color={theme.colors.textMuted} />
+      ) : null}
     </View>
+  );
+  if (!onOpenProfile) return content;
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={t('barbers.openProfile', { name: barber.displayName })}
+      onPress={onOpenProfile}
+      testID={`barber-profile-${barber.id}`}
+    >
+      {content}
+    </Pressable>
   );
 }
 

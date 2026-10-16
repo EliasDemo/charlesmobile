@@ -11,6 +11,8 @@ export interface ProfileScreenProps {
   onVerifyEmail: (email: string) => void;
   onEditProfile: () => void;
   onChangePassword: () => void;
+  /** "Mi perfil profesional" (barbers, or anyone who wants to become one). */
+  onCareer: () => void;
   onPreferences: () => void;
   onFavorites: () => void;
   onHelp: () => void;
@@ -79,6 +81,7 @@ export function ProfileScreen(props: ProfileScreenProps) {
                   onPress={props.onSwitchMode}
                 />
               ) : null}
+              <ListRow icon="cut" title={t('title', { ns: 'career' })} onPress={props.onCareer} />
               <ListRow
                 icon="add-circle"
                 title={t('mode.create', { ns: 'shop' })}

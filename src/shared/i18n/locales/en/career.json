@@ -1,0 +1,103 @@
+{
+  "title": "My professional profile",
+  "rank": "#{{rank}} in the ranking",
+  "rankPending": "You enter the ranking with 3 reviews",
+  "noReviews": "No reviews yet",
+  "attended_one": "{{count}} appointment",
+  "attended_other": "{{count}} appointments",
+  "years_one": "{{count}} year of experience",
+  "years_other": "{{count}} years of experience",
+  "availableForWork": "Available for work",
+  "edit": "Edit my profile",
+  "seePublic": "See my public profile",
+  "jobs": "Jobs",
+  "applications": "My applications",
+  "worksAt": "Works at",
+  "notFound": "We couldn't find this profile",
+  "back": "Back",
+  "allStyles": "All",
+  "more": "See more",
+  "noVideos": "No videos yet",
+  "tabs": {
+    "label": "Profile sections",
+    "cuts": "Cuts",
+    "reviews": "Reviews",
+    "videos": "Videos"
+  },
+  "create": {
+    "title": "Create your professional profile",
+    "message": "Your reviews, cuts and ranking stay with you even if you change barbershops. It also lets you apply to jobs.",
+    "action": "Create my profile"
+  },
+  "photo": {
+    "change": "Change photo",
+    "remove": "Remove photo"
+  },
+  "form": {
+    "displayName": "Professional name",
+    "headline": "Headline (optional)",
+    "headlineHint": "For example: Fade specialist",
+    "bio": "About you (optional)",
+    "years": "Years of experience (optional)",
+    "district": "District (optional)",
+    "available": "Available for work",
+    "availableHint": "Barbershops looking for staff will be able to find and invite you.",
+    "create": "Create my profile",
+    "save": "Save",
+    "created": "Profile created. You now have the barber role.",
+    "saved": "Changes saved",
+    "createInfo": "When you create it, your account gets the barber role.",
+    "displayNameLength": "Write 2 to 60 characters.",
+    "headlineLength": "Up to 80 characters.",
+    "bioLength": "Up to 600 characters.",
+    "yearsRange": "Write a number from 0 to 60.",
+    "districtLength": "Write 2 to 60 characters."
+  },
+  "specialties": {
+    "title": "Specialties",
+    "count": "{{count}} of {{max}}",
+    "hint": "Choose up to {{max}} styles you're good at."
+  },
+  "portfolio": {
+    "title": "My portfolio",
+    "add": "Add a cut",
+    "empty": "Upload photos of your best cuts.",
+    "emptyPublic": "No cuts yet",
+    "cut": "Cut",
+    "removeHint": "Long-press a cut to remove it.",
+    "removeTitle": "Remove this cut?",
+    "removeMessage": "It will no longer show on your profile.",
+    "remove": "Remove",
+    "uploaded": "Cut published",
+    "unavailable": "To upload photos you need the latest version of the app.",
+    "choose": "Choose from gallery",
+    "take": "Take photo",
+    "caption": "Description (optional)",
+    "styles": "Styles (up to {{max}})",
+    "consent": "The person photographed agreed to publish it",
+    "upload": "Publish cut"
+  },
+  "workplaces": {
+    "title": "Where I work",
+    "keep": "Your reviews, cuts and ranking stay with you.",
+    "none": "You don't work at any barbershop right now.",
+    "since": "Since {{date}}",
+    "leave": "Leave this barbershop",
+    "leaveTitle": "Leave {{name}}?",
+    "leaveMessage": "You'll stop showing at that barbershop and its clients won't be able to book with you there. Your reviews, cuts and ranking stay with you.",
+    "left": "You no longer work at that barbershop",
+    "hasBookings": "You have pending bookings there: attend them or ask them to be reassigned.",
+    "past": "You used to work at",
+    "pastLine": "{{name}} (until {{until}})"
+  },
+  "ranking": {
+    "title": "Barbers",
+    "search": "Search by name",
+    "district": "District",
+    "empty": "No barbers match those filters",
+    "line": "#{{rank}} {{name}}",
+    "rating": "{{average}} ({{count}})",
+    "availableInfo": "Barbers available for work."
+  },
+  "profileTitle": "Barber profile"
+}

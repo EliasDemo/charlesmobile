@@ -19,9 +19,27 @@ function parseHeaders(raw: string): Headers {
   return headers;
 }
 
+type ProgressListener = (fraction: number) => void;
+let nextProgressListener: ProgressListener | null = null;
+
+/**
+ * Reports the upload progress (0 to 1) of the next multipart request, for a progress bar. One
+ * upload at a time: the listener is taken by the next upload and then forgotten.
+ */
+export function onNextUploadProgress(listener: ProgressListener) {
+  nextProgressListener = listener;
+}
+
 function sendWithXhr(request: Request, body: FormData): Promise<Response> {
+  const progress = nextProgressListener;
+  nextProgressListener = null;
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
+    if (progress && xhr.upload) {
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable && event.total > 0) progress(event.loaded / event.total);
+      };
+    }
     xhr.open(request.method, request.url, true);
     request.headers.forEach((value, key) => {
       // The boundary is set by XMLHttpRequest itself.

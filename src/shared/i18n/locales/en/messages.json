@@ -1,0 +1,49 @@
+{
+  "title": "Messages",
+  "empty": "No messages yet",
+  "emptyMessage": "Write to a barbershop from its profile with \"Send message\".",
+  "emptyShop": "When a client or a barber writes to you, you'll see it here.",
+  "unknown": "No name",
+  "blocked": "Blocked conversation",
+  "unread_one": "{{count}} new",
+  "unread_other": "{{count}} new",
+  "send": "Send message",
+  "chat": {
+    "label": "Write your message",
+    "send": "Send",
+    "empty": "No messages yet.",
+    "charles": "Charles",
+    "block": "Block",
+    "unblock": "Unblock",
+    "blockTitle": "Block this conversation?",
+    "blockMessage": "Neither of you will be able to send messages here until you unblock it. Only you can unblock it.",
+    "blockedDone": "Conversation blocked",
+    "unblockedDone": "Conversation unblocked",
+    "blockedByMe": "You blocked this conversation. Unblock it to write again.",
+    "blockedByThem": "This conversation is blocked. You can't send messages.",
+    "slowDown": "Wait a moment before sending another message.",
+    "notFound": "We couldn't find this conversation"
+  },
+  "report": {
+    "title": "Report message",
+    "message": "Support will review it. Choose the reason.",
+    "send": "Report",
+    "sent": "Message reported. Thanks for letting us know.",
+    "already": "You already reported this message.",
+    "hint": "Long-press to report it",
+    "reasons": {
+      "SPAM": "Spam",
+      "HARASSMENT": "Harassment",
+      "INAPPROPRIATE": "Inappropriate",
+      "SCAM": "Scam",
+      "OTHER": "Other"
+    }
+  },
+  "new": {
+    "title": "New message",
+    "titleTo": "Message to {{name}}",
+    "hintShop": "Ask whatever you need. The barbershop will reply here.",
+    "hintBarber": "Write about work. They'll reply here.",
+    "limit": "Up to {{max}} characters."
+  }
+}

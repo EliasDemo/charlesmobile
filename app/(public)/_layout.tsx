@@ -15,6 +15,11 @@ export default function PublicLayout() {
       <Stack.Screen name="barbershop/[id]/gallery" options={{ title: t('title', { ns: 'gallery' }) }} />
       <Stack.Screen name="barbershop/[id]/reviews" options={{ title: t('nav.reviews') }} />
       <Stack.Screen name="account-deleted" options={{ headerShown: false }} />
+      <Stack.Screen name="barbers" options={{ title: t('ranking.title', { ns: 'career' }) }} />
+      <Stack.Screen name="barber/[id]" options={{ title: t('profileTitle', { ns: 'career' }) }} />
+      <Stack.Screen name="jobs/index" options={{ title: t('jobs', { ns: 'search' }) }} />
+      <Stack.Screen name="jobs/[id]" options={{ title: t('jobs', { ns: 'search' }) }} />
+      <Stack.Screen name="sponsor/[id]" options={{ title: t('title', { ns: 'ads' }) }} />
       <Stack.Screen name="book/[barbershopId]" options={{ title: t('nav.book') }} />
       <Stack.Screen
         name="book/summary" // The screen shows its own big title (no duplicate in the header).

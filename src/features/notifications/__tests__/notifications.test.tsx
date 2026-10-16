@@ -41,6 +41,13 @@ describe('notificationTarget', () => {
     expect(notificationTarget({ type: 'review', id: 's1' })).toEqual({ kind: 'shopReviews', shopId: 's1' });
     expect(notificationTarget({ type: 'ticket', id: 't' })).toEqual({ kind: 'ticket', id: 't' });
     expect(notificationTarget({ type: 'account', id: null })).toEqual({ kind: 'support' });
+    expect(notificationTarget({ type: 'conversation', id: 'c' })).toEqual({ kind: 'conversation', id: 'c' });
+  });
+
+  it('sends a job application to the side that should act on it', () => {
+    const resource = { type: 'job_application' as const, id: 'a' };
+    expect(notificationTarget(resource, 'JOB_APPLICATION_RECEIVED')).toEqual({ kind: 'shopJobs' });
+    expect(notificationTarget(resource, 'JOB_APPLICATION_UPDATED')).toEqual({ kind: 'myApplications' });
   });
 });
 
@@ -55,7 +62,7 @@ describe('InboxScreen', () => {
     await renderWithProviders(<InboxScreen onOpen={onOpen} />);
     expect(await screen.findByText(texts.unread)).toBeTruthy();
     await fireEvent.press(screen.getByText('Reserva confirmada'));
-    expect(onOpen).toHaveBeenCalledWith({ type: 'booking', id: 'bk-1' });
+    expect(onOpen).toHaveBeenCalledWith({ type: 'booking', id: 'bk-1' }, 'BOOKING_CONFIRMED');
     await waitFor(() =>
       expect(api.calls.some((c) => c.path === '/api/v1/me/notifications/n1/read')).toBe(true),
     );

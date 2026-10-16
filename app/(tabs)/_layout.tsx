@@ -1,5 +1,6 @@
 import { Redirect, Tabs, usePathname } from 'expo-router';
 import { Animated, StyleSheet, type ColorValue } from 'react-native';
+import { useUnreadMessages } from '@/features/messaging';
 import { useEffectiveMode } from '@/features/shop-management';
 import { useTranslation } from '@/shared/i18n';
 import { fontFamily, useTheme } from '@/shared/theme';
@@ -43,6 +44,7 @@ export default function TabsLayout() {
   const animation = useTabAnimation();
   // Barbershop mode has its own tab set; the hidden tabs stay as routes (href: null).
   const shopMode = useEffectiveMode() === 'shop';
+  const unreadMessages = useUnreadMessages();
   const client = shopMode ? null : undefined;
   const shop = shopMode ? undefined : null;
   // A hidden tab can still be the current one (the app opens on Explorar, or the mode changed):
@@ -85,6 +87,16 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="bookings"
           options={{ href: client, title: t('nav.bookings'), tabBarIcon: tabIcon('calendar') }}
+        />
+        <Tabs.Screen
+          name="messages"
+          options={{
+            title: t('nav.messages'),
+            tabBarIcon: tabIcon('chatbubbles'),
+            // The person's own unread conversations (the barbershop side shows them in its list).
+            tabBarBadge: !shopMode && unreadMessages > 0 ? unreadMessages : undefined,
+            tabBarBadgeStyle: { backgroundColor: theme.colors.primary, color: theme.colors.onPrimary },
+          }}
         />
         <Tabs.Screen name="profile" options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person') }} />
       </Tabs>

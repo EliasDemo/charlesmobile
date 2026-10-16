@@ -26,13 +26,14 @@
     "firstAvailable": "First available",
     "when": "Date and time",
     "duration": "Duration",
-    "servicePrice": "Service price",
-    "priceNote": "This is the service price. The final total, with the breakdown the barbershop calculates, shows up when you confirm.",
     "confirm": "Confirm booking",
     "loginNote": "We'll ask you to sign in or create your account to confirm. You won't lose what you chose.",
     "incomplete": "Choose a time first.",
     "back": "Choose another time",
-    "seeBookings": "See my bookings"
+    "seeBookings": "See my bookings",
+    "price": "Price",
+    "priceChange": "{{from}} → {{to}}",
+    "promotion": "Promotion applied: {{name}}"
   },
   "status": {
     "PENDING_PAYMENT": "Pending payment",
@@ -71,7 +72,8 @@
     },
     "barber": "with {{barber}}",
     "openBarbershop": "See barbershop",
-    "help": "I need help with this booking"
+    "help": "I need help with this booking",
+    "discountAmount": "− {{amount}}"
   },
   "cancel": {
     "action": "Cancel booking",
@@ -120,5 +122,19 @@
   },
   "calendar": {
     "title": "{{service}} at {{shop}}"
+  },
+  "coupon": {
+    "label": "Have a coupon?",
+    "apply": "Apply",
+    "applied": "Coupon applied.",
+    "remove": "Remove coupon",
+    "reasons": {
+      "NOT_FOUND": "That coupon doesn't exist.",
+      "NOT_ACTIVE": "That coupon isn't valid right now.",
+      "NOT_APPLICABLE": "That coupon doesn't apply to this service, barbershop or day.",
+      "EXHAUSTED": "That coupon has no uses left.",
+      "ALREADY_USED": "You already used this coupon.",
+      "BETTER_PROMOTION": "You already have a better discount; only one applies per booking."
+    }
   }
 }

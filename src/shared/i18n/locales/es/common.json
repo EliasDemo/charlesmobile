@@ -48,7 +48,8 @@
     "booking": "Tu reserva",
     "deleteAccount": "Eliminar mi cuenta",
     "notifications": "Avisos",
-    "changePassword": "Cambiar contraseña"
+    "changePassword": "Cambiar contraseña",
+    "messages": "Mensajes"
   },
   "placeholder": {
     "comingSoon": "Disponible en una próxima versión."

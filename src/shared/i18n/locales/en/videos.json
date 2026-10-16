@@ -1,0 +1,53 @@
+{
+  "title": "Videos",
+  "play": "Play video",
+  "close": "Close",
+  "mine": "My videos",
+  "empty": "No videos yet",
+  "emptyMine": "You haven't uploaded videos yet",
+  "untitled": "Video without description",
+  "caption": "Description (optional)",
+  "choose": "Choose video",
+  "record": "Record",
+  "rules": "Videos up to 30 seconds and 50 MB. Up to {{limit}}.",
+  "compressing": "Preparing the video… {{percent}} %",
+  "uploading": "Uploading… {{percent}} %",
+  "processing": "Video uploaded. We're processing it.",
+  "limitReached": "You reached the video limit. Delete one to upload another.",
+  "unavailable": "Videos will be available with the next version of the app.",
+  "delete": "Delete video",
+  "deleteTitle": "Delete this video?",
+  "deleteMessage": "It will stop showing for everyone.",
+  "status": {
+    "PROCESSING": "Processing…",
+    "READY": "Published",
+    "FAILED": "Couldn't publish"
+  },
+  "failure": {
+    "TOO_LONG": "It's longer than 30 seconds.",
+    "NOT_A_VIDEO": "The file is not a video.",
+    "TOO_LARGE": "It's bigger than 50 MB.",
+    "PROCESSING_FAILED": "We couldn't process it. Try again."
+  },
+  "pick": {
+    "denied": "We need permission to use your videos. Turn it on in your phone settings.",
+    "unavailable": "Videos will be available with the next version of the app.",
+    "tooLong": "That video is longer than 30 seconds. Choose or record a shorter one.",
+    "tooLarge": "That video is bigger than 50 MB even compressed. Choose a shorter one."
+  },
+  "report": {
+    "action": "Report video",
+    "title": "Report video",
+    "message": "Support will review it. Choose the reason.",
+    "send": "Report",
+    "sent": "Video reported. Thanks for letting us know.",
+    "already": "You already reported this video.",
+    "reasons": {
+      "NOT_MY_PHOTO": "It's me without permission",
+      "NO_CONSENT": "No consent",
+      "INAPPROPRIATE": "Inappropriate",
+      "MISLEADING": "Misleading",
+      "OTHER": "Other"
+    }
+  }
+}

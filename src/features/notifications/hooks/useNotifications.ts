@@ -64,10 +64,9 @@ export function useInbox() {
       refetch: query.refetch,
     },
     hasUnread: items?.some((n) => n.readAt === null) ?? false,
-    /** Marks it as read (if needed) and returns where it leads. */
-    open: (notification: AppNotification): NotificationResource => {
+    /** Marks it as read (if needed). */
+    open: (notification: AppNotification) => {
       if (notification.readAt === null) read.mutate(notification.id);
-      return notification.resource;
     },
     readAll: () => readAll.mutate(),
     isReadingAll: readAll.isPending,
@@ -104,7 +103,7 @@ export function useDeviceRegistration() {
 }
 
 /** Where a tapped push leads: its `resource` (type and id), the only data the push carries. */
-export function usePushTaps(onOpen: (resource: NotificationResource) => void) {
+export function usePushTaps(onOpen: (resource: NotificationResource, type?: string) => void) {
   const handler = useRef(onOpen);
   useEffect(() => {
     handler.current = onOpen;
@@ -114,7 +113,10 @@ export function usePushTaps(onOpen: (resource: NotificationResource) => void) {
       onPushTapped((data) => {
         const resource = data.resource as Partial<NotificationResource> | undefined;
         if (resource && typeof resource.type === 'string') {
-          handler.current({ type: resource.type, id: resource.id ?? null } as NotificationResource);
+          handler.current(
+            { type: resource.type, id: resource.id ?? null } as NotificationResource,
+            typeof data.type === 'string' ? data.type : undefined,
+          );
         }
       }),
     [],
@@ -176,17 +178,25 @@ export type NotificationTarget =
   | { kind: 'support' }
   | { kind: 'shop' }
   | { kind: 'shopReviews'; shopId: string }
+  | { kind: 'conversation'; id: string }
+  | { kind: 'myApplications' }
+  | { kind: 'shopJobs' }
   | { kind: 'inbox' };
 
 /**
- * Screen a notice leads to (docs/api/PUSH.md): a booking, a support ticket, the help screen
- * (account notices), or the barbershop panel.
+ * Screen a notice leads to (docs/api/PUSH.md, CARRERA.md): a booking, a support ticket, the help
+ * screen (account notices), the barbershop panel, a chat, or a job application. `type` tells the
+ * side of a job application: received by the barbershop, or updated for the barber.
  */
-export function notificationTarget(resource: NotificationResource): NotificationTarget {
+export function notificationTarget(resource: NotificationResource, type?: string): NotificationTarget {
   if (resource.type === 'booking' && resource.id) return { kind: 'booking', id: resource.id };
   if (resource.type === 'review' && resource.id) return { kind: 'shopReviews', shopId: resource.id };
   if (resource.type === 'barbershop' || resource.type === 'review') return { kind: 'shop' };
   if (resource.type === 'ticket' && resource.id) return { kind: 'ticket', id: resource.id };
   if (resource.type === 'account' || resource.type === 'ticket') return { kind: 'support' };
+  if (resource.type === 'conversation' && resource.id) return { kind: 'conversation', id: resource.id };
+  if (resource.type === 'job_application') {
+    return type === 'JOB_APPLICATION_RECEIVED' ? { kind: 'shopJobs' } : { kind: 'myApplications' };
+  }
   return { kind: 'inbox' };
 }

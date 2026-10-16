@@ -5955,6 +5955,142 @@
         "tags": ["search"]
       }
     },
+    "/api/v1/admin/featured": {
+      "get": {
+        "operationId": "FeaturedAdminController_list_v1",
+        "parameters": [
+          {
+            "name": "includePast",
+            "required": false,
+            "in": "query",
+            "description": "true incluye los terminados y retirados.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FeaturedListingDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: destacados vigentes y programados (o todos)",
+        "tags": ["admin"]
+      },
+      "post": {
+        "description": "Hasta 3 destacadas suben al inicio de la primera página de resultados, solo si cumplen los filtros de la búsqueda. Sin cobro por ahora.",
+        "operationId": "FeaturedAdminController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeaturedDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeaturedListingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: destacar una barbería por un periodo",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/featured/{id}": {
+      "delete": {
+        "operationId": "FeaturedAdminController_cancel_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeaturedListingDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: retirar un destacado antes de tiempo",
+        "tags": ["admin"]
+      }
+    },
     "/api/v1/bookings/{id}/payment": {
       "post": {
         "operationId": "PaymentsController_start_v1",
@@ -6258,6 +6394,52 @@
           }
         ],
         "summary": "RF-RES-001/002: crear una reserva (pendiente de pago) en un turno disponible",
+        "tags": ["bookings"]
+      }
+    },
+    "/api/v1/bookings/quote": {
+      "post": {
+        "description": "No reserva el turno ni el cupo de la promoción. Con couponCode, `coupon` dice si se aplicó o por qué no (sin error).",
+        "operationId": "BookingsController_quote_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuoteBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingQuoteDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fase 13: cotizar una reserva (descuento, comisión y total) antes de crearla",
         "tags": ["bookings"]
       }
     },
@@ -6988,6 +7170,663 @@
         ],
         "summary": "RF-RES-004/008: reservas de mi barbería (OWNER o MANAGER)",
         "tags": ["bookings"]
+      }
+    },
+    "/api/v1/barbershops/{id}/promotions/active": {
+      "get": {
+        "description": "Para mostrar en el perfil de la barbería. Los cupones no aparecen.",
+        "operationId": "PromotionsController_active_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicPromotionDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Promociones automáticas vigentes de la barbería (y las de Charles)",
+        "tags": ["promotions"]
+      }
+    },
+    "/api/v1/barbershops/{id}/promotions": {
+      "get": {
+        "operationId": "PromotionsController_list_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PromotionDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: promociones de la barbería, con canjes y cupones",
+        "tags": ["promotions"]
+      },
+      "post": {
+        "description": "Con serviceId, solo para ese servicio. Un solo descuento por reserva: el mayor entre los que apliquen.",
+        "operationId": "PromotionsController_create_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePromotionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: crear una promoción (la asume la barbería)",
+        "tags": ["promotions"]
+      }
+    },
+    "/api/v1/barbershops/{id}/promotions/{promotionId}": {
+      "patch": {
+        "operationId": "PromotionsController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "promotionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePromotionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: editar nombre, fin, topes, o pausar y reanudar",
+        "tags": ["promotions"]
+      }
+    },
+    "/api/v1/barbershops/{id}/promotions/{promotionId}/coupons": {
+      "post": {
+        "operationId": "PromotionsController_addCoupon_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "promotionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "COUPON_CODE_TAKEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: agregar un código de cupón",
+        "tags": ["promotions"]
+      }
+    },
+    "/api/v1/barbershops/{id}/promotions/{promotionId}/coupons/{couponId}": {
+      "delete": {
+        "operationId": "PromotionsController_removeCoupon_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "promotionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "couponId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: retirar un cupón (los canjes hechos se conservan)",
+        "tags": ["promotions"]
+      }
+    },
+    "/api/v1/admin/promotions": {
+      "get": {
+        "operationId": "PromotionsAdminController_list_v1",
+        "parameters": [
+          {
+            "name": "scope",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["PLATFORM", "BARBERSHOP", "SERVICE"]
+            }
+          },
+          {
+            "name": "barbershopId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PromotionDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: promociones (las 200 más recientes), con canjes",
+        "tags": ["admin"]
+      },
+      "post": {
+        "operationId": "PromotionsAdminController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePromotionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: crear una promoción de Charles (la asume Charles)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/promotions/{promotionId}": {
+      "patch": {
+        "operationId": "PromotionsAdminController_update_v1",
+        "parameters": [
+          {
+            "name": "promotionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePromotionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: editar o pausar cualquier promoción (también de barberías)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/promotions/{promotionId}/coupons": {
+      "post": {
+        "operationId": "PromotionsAdminController_addCoupon_v1",
+        "parameters": [
+          {
+            "name": "promotionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCouponDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: agregar un código de cupón",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/promotions/{promotionId}/coupons/{couponId}": {
+      "delete": {
+        "operationId": "PromotionsAdminController_removeCoupon_v1",
+        "parameters": [
+          {
+            "name": "promotionId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "couponId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromotionDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: retirar un cupón",
+        "tags": ["admin"]
       }
     },
     "/api/v1/support/tickets": {
@@ -10176,6 +11015,3562 @@
         "summary": "Cancelar la eliminación (dentro del plazo); las reservas canceladas no se restauran",
         "tags": ["account"]
       }
+    },
+    "/api/v1/placements": {
+      "get": {
+        "description": "home_banner, search_top y booking_success son de clientes; shop_dashboard, de la pantalla de la barbería. Lista vacía si no hay campañas.",
+        "operationId": "SponsorsController_placements_v1",
+        "parameters": [
+          {
+            "name": "slot",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["home_banner", "search_top", "booking_success", "shop_dashboard"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicPlacementDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Anuncios vigentes de un espacio (hasta 3, mayor prioridad primero)",
+        "tags": ["sponsors"]
+      }
+    },
+    "/api/v1/placements/{id}/events": {
+      "post": {
+        "description": "Una por persona (o instalación) por hora y tipo; las repetidas se ignoran (204 igual). Sin sesión, envía viewerKey. No se guarda la IP.",
+        "operationId": "SponsorsController_event_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlacementEventDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Registrar una impresión o un clic",
+        "tags": ["sponsors"]
+      }
+    },
+    "/api/v1/sponsors/{id}": {
+      "get": {
+        "operationId": "SponsorsController_sponsor_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicSponsorDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Auspiciador y su catálogo de productos (enlaces externos)",
+        "tags": ["sponsors"]
+      }
+    },
+    "/api/v1/admin/sponsors": {
+      "get": {
+        "operationId": "SponsorsAdminController_list_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SponsorDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: auspiciadores",
+        "tags": ["admin"]
+      },
+      "post": {
+        "operationId": "SponsorsAdminController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSponsorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SponsorDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: crear un auspiciador",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/sponsors/{id}": {
+      "patch": {
+        "operationId": "SponsorsAdminController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSponsorDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SponsorDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: editar o desactivar un auspiciador",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/sponsors/media": {
+      "post": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Devuelve las URL para usar en logoUrl o imageUrl.",
+        "operationId": "SponsorsAdminController_media_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SponsorMediaDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: subir una imagen de auspiciador (logo, anuncio o producto)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/sponsors/{id}/campaigns": {
+      "get": {
+        "operationId": "SponsorsAdminController_campaigns_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CampaignDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: campañas de un auspiciador, con sus anuncios",
+        "tags": ["admin"]
+      },
+      "post": {
+        "operationId": "SponsorsAdminController_createCampaign_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCampaignDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: crear una campaña (en borrador)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/campaigns/{id}": {
+      "patch": {
+        "operationId": "SponsorsAdminController_updateCampaign_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCampaignDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: editar, publicar, pausar o terminar una campaña",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/campaigns/{id}/metrics": {
+      "get": {
+        "operationId": "SponsorsAdminController_metrics_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignMetricsDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: impresiones, clics y CTR de una campaña",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/campaigns/{id}/placements": {
+      "post": {
+        "operationId": "SponsorsAdminController_addPlacement_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePlacementDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: agregar un anuncio a un espacio",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/placements/{id}": {
+      "patch": {
+        "operationId": "SponsorsAdminController_updatePlacement_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePlacementDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: editar un anuncio",
+        "tags": ["admin"]
+      },
+      "delete": {
+        "operationId": "SponsorsAdminController_removePlacement_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: quitar un anuncio sin impresiones ni clics",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/sponsors/{id}/products": {
+      "get": {
+        "operationId": "SponsorsAdminController_products_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: catálogo de productos del auspiciador",
+        "tags": ["admin"]
+      },
+      "post": {
+        "operationId": "SponsorsAdminController_createProduct_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: agregar un producto (con enlace externo de compra)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/products/{id}": {
+      "patch": {
+        "operationId": "SponsorsAdminController_updateProduct_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProductDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: editar u ocultar un producto",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/me/barber-profile": {
+      "get": {
+        "description": "Incluye dónde trabajo y dónde trabajé (workplaces), mis especialidades y mi puesto.",
+        "operationId": "MyBarberProfileController_mine_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberProfileDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mi perfil profesional (404 si aún no lo creo)",
+        "tags": ["career"]
+      },
+      "put": {
+        "description": "Es mío, no de la barbería: me llevo mis valoraciones, mi portafolio y mi ranking si me voy. Crearlo da el rol BARBER (renueva la sesión para verlo en el token).",
+        "operationId": "MyBarberProfileController_upsert_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertBarberProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberProfileDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Crear o editar mi perfil profesional",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/me/barber-profile/specialties": {
+      "put": {
+        "operationId": "MyBarberProfileController_specialties_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetProfileSpecialtiesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberProfileDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis especialidades (máximo 10 estilos)",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/me/barber-profile/photo": {
+      "put": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP.",
+        "operationId": "MyBarberProfileController_setPhoto_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePhotoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Foto de mi perfil profesional (512 px)",
+        "tags": ["career"]
+      },
+      "delete": {
+        "operationId": "MyBarberProfileController_deletePhoto_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfilePhotoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar la foto de mi perfil profesional",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/me/barber-profile/portfolio": {
+      "post": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Exige consent=true (la persona fotografiada aceptó). Mismo tope que la galería.",
+        "operationId": "MyBarberProfileController_upload_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PortfolioUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortfolioItemDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "IMAGE_LIMIT_REACHED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Subir un corte a mi portafolio",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/me/barber-profile/portfolio/{imageId}": {
+      "delete": {
+        "operationId": "MyBarberProfileController_removePortfolio_v1",
+        "parameters": [
+          {
+            "name": "imageId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar un corte de mi portafolio (también los subidos en una barbería)",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/me/barber-profile/workplaces/{barberId}/leave": {
+      "post": {
+        "description": "Termina el vínculo. Mis valoraciones, portafolio y ranking siguen conmigo. Con reservas futuras activas: 409 HAS_FUTURE_BOOKINGS. Mi barbería independiente no se deja así (409).",
+        "operationId": "MyBarberProfileController_leave_v1",
+        "parameters": [
+          {
+            "name": "barberId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberProfileDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Dejar una barbería",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/barbers/ranking": {
+      "get": {
+        "description": "Promedio bayesiano (pocas valoraciones no pesan como muchas); entra al ranking con 3 valoraciones. Filtros: especialidad, distrito, nombre y \"disponible para trabajar\".",
+        "operationId": "BarberProfilesController_ranking_v1",
+        "parameters": [
+          {
+            "name": "style",
+            "required": false,
+            "in": "query",
+            "description": "Clave de estilo (especialidad).",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "district",
+            "required": false,
+            "in": "query",
+            "description": "Distrito (coincidencia parcial, sin tildes ni mayúsculas).",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Nombre del barbero (coincidencia parcial).",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "type": "string"
+            }
+          },
+          {
+            "name": "availableForWork",
+            "required": false,
+            "in": "query",
+            "description": "Solo los disponibles para trabajar (para barberías).",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "description": "Desplazamiento (paginación).",
+            "schema": {
+              "minimum": 0,
+              "default": 0,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "ranking",
+              "type": "string",
+              "enum": ["ranking", "newest"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankingPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Ranking y búsqueda de barberos",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/barber-profiles/{id}": {
+      "get": {
+        "operationId": "BarberProfilesController_profile_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BarberProfileDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Perfil público de un barbero (dónde trabaja hoy, especialidades, ranking)",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/barber-profiles/{id}/portfolio": {
+      "get": {
+        "operationId": "BarberProfilesController_portfolio_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "style",
+            "required": false,
+            "in": "query",
+            "description": "Clave de estilo (por ejemplo fade_low).",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 40,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortfolioPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Portafolio del barbero: sus cortes en todas sus barberías",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/barber-profiles/{id}/reviews": {
+      "get": {
+        "operationId": "BarberProfilesController_reviews_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "style",
+            "required": false,
+            "in": "query",
+            "description": "Clave de estilo (por ejemplo fade_low).",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 40,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileReviewPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Valoraciones de toda su carrera (más recientes primero)",
+        "tags": ["career"]
+      }
+    },
+    "/api/v1/me/conversations": {
+      "get": {
+        "operationId": "MyConversationsController_list_v1",
+        "parameters": [
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis conversaciones (más recientes primero), con no leídos",
+        "tags": ["messages"]
+      },
+      "post": {
+        "description": "Si ya existe la conversación, el mensaje se agrega a ella.",
+        "operationId": "MyConversationsController_start_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartConversationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessagePageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONVERSATION_BLOCKED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Escribir a una barbería (consulta, o como barbero con kind=PROFESSIONAL)",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/me/conversations/unread": {
+      "get": {
+        "operationId": "MyConversationsController_unread_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnreadMessagesDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cuántas conversaciones tienen mensajes sin leer",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/me/conversations/{id}/messages": {
+      "get": {
+        "operationId": "MyConversationsController_messages_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessagePageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mensajes (más recientes primero); la primera página marca como leída",
+        "tags": ["messages"]
+      },
+      "post": {
+        "operationId": "MyConversationsController_send_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "CONVERSATION_BLOCKED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Responder",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/me/conversations/{id}/block": {
+      "post": {
+        "operationId": "MyConversationsController_block_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Bloquear la conversación (nadie puede escribir)",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/me/conversations/{id}/unblock": {
+      "post": {
+        "operationId": "MyConversationsController_unblock_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Desbloquear (solo quien bloqueó)",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/conversations": {
+      "get": {
+        "operationId": "BarbershopConversationsController_list_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: conversaciones de la barbería",
+        "tags": ["messages"]
+      },
+      "post": {
+        "description": "A clientes no se les escribe primero: se responde cuando ellos escriben.",
+        "operationId": "BarbershopConversationsController_contact_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactBarberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessagePageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: escribir a un barbero (desde su perfil profesional)",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/conversations/{id}/messages": {
+      "get": {
+        "operationId": "BarbershopConversationsController_messages_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessagePageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: mensajes; la primera página marca como leída",
+        "tags": ["messages"]
+      },
+      "post": {
+        "operationId": "BarbershopConversationsController_send_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: responder",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/conversations/{id}/block": {
+      "post": {
+        "operationId": "BarbershopConversationsController_block_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: bloquear la conversación",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/conversations/{id}/unblock": {
+      "post": {
+        "operationId": "BarbershopConversationsController_unblock_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: desbloquear (solo si la bloqueó la barbería)",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/messages/{id}/report": {
+      "post": {
+        "operationId": "MessageReportsController_report_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportMessageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "409": {
+            "description": "ALREADY_REPORTED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reportar un mensaje recibido (una vez por persona)",
+        "tags": ["messages"]
+      }
+    },
+    "/api/v1/admin/message-reports": {
+      "get": {
+        "operationId": "MessageReportsAdminController_list_v1",
+        "parameters": [
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageReportPageDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mensajes reportados sin resolver (con su texto, solo para soporte)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/message-reports/{id}/resolve": {
+      "post": {
+        "operationId": "MessageReportsAdminController_resolve_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveMessageReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retirar el mensaje o descartar el reporte (con motivo)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/jobs": {
+      "get": {
+        "description": "Con sesión de barbero, cada oferta dice si ya postulé (myApplicationStatus).",
+        "operationId": "JobsController_list_v1",
+        "parameters": [
+          {
+            "name": "style",
+            "required": false,
+            "in": "query",
+            "description": "Clave de estilo buscado.",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "employmentType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["FULL_TIME", "PART_TIME", "WEEKENDS", "COMMISSION", "FREELANCE"]
+            }
+          },
+          {
+            "name": "area",
+            "required": false,
+            "in": "query",
+            "description": "Texto en la dirección de la barbería (distrito, ciudad).",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobPostingPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Ofertas de trabajo abiertas (más recientes primero)",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/jobs/{id}": {
+      "get": {
+        "operationId": "JobsController_get_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobPostingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Detalle de una oferta",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/jobs/{id}/applications": {
+      "post": {
+        "description": "La barbería ve mi perfil, ranking y portafolio, y recibe un mensaje en su bandeja.",
+        "operationId": "JobsController_apply_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobApplicationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "ALREADY_APPLIED, JOB_POSTING_CLOSED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Postular (barbero con perfil profesional)",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/me/job-applications": {
+      "get": {
+        "operationId": "JobsController_mine_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JobApplicationDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis postulaciones",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/me/job-applications/{id}/withdraw": {
+      "post": {
+        "operationId": "JobsController_withdraw_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobApplicationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Retirar mi postulación (mientras no esté decidida)",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/jobs": {
+      "get": {
+        "operationId": "BarbershopJobsController_list_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JobPostingDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: mis ofertas (abiertas y cerradas)",
+        "tags": ["jobs"]
+      },
+      "post": {
+        "operationId": "BarbershopJobsController_create_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobPostingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobPostingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: publicar una oferta (máximo 10 abiertas)",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/jobs/{id}": {
+      "patch": {
+        "operationId": "BarbershopJobsController_update_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateJobPostingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobPostingDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: editar, cerrar o reabrir una oferta",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/jobs/{id}/applications": {
+      "get": {
+        "operationId": "BarbershopJobsController_applications_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JobApplicationDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: postulaciones de una oferta",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/job-applications/{id}/decision": {
+      "post": {
+        "description": "HIRED crea el vínculo del barbero (asígnale servicios y horario después).",
+        "operationId": "BarbershopJobsController_decide_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecideApplicationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobApplicationDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: preseleccionar, rechazar o contratar",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/barber-invitations": {
+      "post": {
+        "description": "Le llega la invitación por correo (código) y un mensaje a su bandeja.",
+        "operationId": "BarbershopJobsController_invite_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvitedBarberDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: invitar a un barbero desde su perfil profesional",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/barbershops/{id}/videos": {
+      "get": {
+        "operationId": "VideosController_shopVideos_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Videos publicitarios de la barbería (listos y visibles)",
+        "tags": ["videos"]
+      },
+      "post": {
+        "description": "multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).",
+        "operationId": "VideosController_uploadShop_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: subir un video del local (máximo 5)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/barber-profiles/{id}/videos": {
+      "get": {
+        "operationId": "VideosController_profileVideos_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Videos de cortes del barbero (listos y visibles)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/barbershops/{id}/videos/manage": {
+      "get": {
+        "operationId": "VideosController_manageShop_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: todos los videos (también en proceso o fallidos)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/me/barber-profile/videos": {
+      "get": {
+        "operationId": "VideosController_manageMine_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis videos de cortes (también en proceso o fallidos)",
+        "tags": ["videos"]
+      },
+      "post": {
+        "description": "multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).",
+        "operationId": "VideosController_uploadMine_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Subir un video de mis cortes (máximo 10)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/videos/{id}": {
+      "delete": {
+        "operationId": "VideosController_remove_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Borrar un video (su barbería o su barbero)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/videos/{id}/report": {
+      "post": {
+        "operationId": "VideosController_report_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reportar un video (una vez por persona)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/admin/videos/reported": {
+      "get": {
+        "operationId": "VideosAdminController_reported_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedVideoDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Videos con reportes abiertos",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/videos/{id}/moderation": {
+      "post": {
+        "operationId": "VideosAdminController_moderate_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoModerationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mantener, retirar o restaurar un video (con motivo)",
+        "tags": ["admin"]
+      }
     }
   },
   "info": {
@@ -11888,6 +16283,12 @@
             "type": "string",
             "format": "uuid"
           },
+          "profileId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "Carrera del barbero: su perfil profesional (GET /barber-profiles/{id}). null si no tiene cuenta."
+          },
           "displayName": {
             "type": "string"
           },
@@ -11928,6 +16329,7 @@
         },
         "required": [
           "id",
+          "profileId",
           "displayName",
           "bio",
           "photoUrl",
@@ -11972,6 +16374,12 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "profileId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "Carrera del barbero: su perfil profesional (GET /barber-profiles/{id}). null si no tiene cuenta."
           },
           "displayName": {
             "type": "string"
@@ -12029,6 +16437,7 @@
         },
         "required": [
           "id",
+          "profileId",
           "displayName",
           "bio",
           "photoUrl",
@@ -14082,6 +18491,90 @@
         },
         "required": ["date", "categoryKey", "items"]
       },
+      "FeaturedListingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopName": {
+            "type": "string",
+            "nullable": true
+          },
+          "startsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": ["SCHEDULED", "ACTIVE", "ENDED", "CANCELLED"]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "barbershopId",
+          "barbershopName",
+          "startsAt",
+          "endsAt",
+          "priority",
+          "note",
+          "status",
+          "createdAt"
+        ]
+      },
+      "CreateFeaturedDto": {
+        "type": "object",
+        "properties": {
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startsAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Por defecto, ahora."
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Fin del destacado (máximo 365 días después del inicio)."
+          },
+          "priority": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Mayor primero."
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "Nota interna (por qué se destaca).",
+            "minLength": 1
+          }
+        },
+        "required": ["barbershopId", "endsAt"]
+      },
       "PaymentStatus": {
         "type": "string",
         "enum": ["PENDING", "SUCCEEDED", "REJECTED", "CANCELLED", "REFUNDED", "PARTIALLY_REFUNDED"]
@@ -14300,6 +18793,13 @@
             "type": "string",
             "format": "uuid",
             "description": "Sin barbero: se asigna el libre con menos reservas activas ese día."
+          },
+          "couponCode": {
+            "type": "string",
+            "example": "BIENVENIDO10",
+            "description": "Fase 13: cupón. Si no se puede usar: 409 COUPON_NOT_VALID (details[0].reason). Cotiza antes con POST /bookings/quote. Un solo descuento por reserva: el mayor.",
+            "minLength": 1,
+            "maxLength": 40
           }
         },
         "required": ["barbershopId", "serviceId", "startAt"]
@@ -14600,6 +19100,142 @@
           "canReview",
           "review",
           "payment"
+        ]
+      },
+      "QuoteBookingDto": {
+        "type": "object",
+        "properties": {
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "serviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Inicio del turno (define el día para las promociones por día)."
+          },
+          "couponCode": {
+            "type": "string",
+            "example": "BIENVENIDO10",
+            "minLength": 1,
+            "maxLength": 40
+          }
+        },
+        "required": ["barbershopId", "serviceId", "startAt"]
+      },
+      "QuoteLineDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["SERVICE", "DISCOUNT", "FEE"]
+          },
+          "description": {
+            "type": "string"
+          },
+          "amount": {
+            "description": "Siempre positivo; DISCOUNT se resta.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MoneyDto"
+              }
+            ]
+          }
+        },
+        "required": ["type", "description", "amount"]
+      },
+      "QuotePromotionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name"]
+      },
+      "QuoteCouponDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "applied": {
+            "type": "boolean",
+            "description": "true si el descuento elegido es el del cupón."
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "NOT_FOUND",
+              "NOT_ACTIVE",
+              "NOT_APPLICABLE",
+              "EXHAUSTED",
+              "ALREADY_USED",
+              "BETTER_PROMOTION"
+            ],
+            "nullable": true,
+            "description": "Por qué no se aplicó: no existe, no vigente, no aplica a esta reserva, sin cupos, ya lo usaste, o hay una promoción mejor (un solo descuento por reserva)."
+          }
+        },
+        "required": ["code", "applied", "reason"]
+      },
+      "BookingQuoteDto": {
+        "type": "object",
+        "properties": {
+          "subtotal": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "discountTotal": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "feeTotal": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "total": {
+            "$ref": "#/components/schemas/MoneyDto"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuoteLineDto"
+            }
+          },
+          "promotion": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/QuotePromotionDto"
+              }
+            ]
+          },
+          "coupon": {
+            "nullable": true,
+            "description": "Solo si se envió couponCode.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/QuoteCouponDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "subtotal",
+          "discountTotal",
+          "feeTotal",
+          "total",
+          "lines",
+          "promotion",
+          "coupon"
         ]
       },
       "BookingDto": {
@@ -15120,6 +19756,321 @@
           }
         },
         "required": ["items"]
+      },
+      "PromotionType": {
+        "type": "string",
+        "enum": ["PERCENTAGE", "FIXED_AMOUNT"]
+      },
+      "PublicPromotionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromotionType"
+              }
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "serviceId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "null: todos los servicios."
+          },
+          "daysOfWeek": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "fromCharles": {
+            "type": "boolean",
+            "description": "true: la ofrece Charles (vale en toda la app)."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "value",
+          "currency",
+          "serviceId",
+          "daysOfWeek",
+          "endsAt",
+          "fromCharles"
+        ]
+      },
+      "PromotionScope": {
+        "type": "string",
+        "enum": ["PLATFORM", "BARBERSHOP", "SERVICE"]
+      },
+      "CouponDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          },
+          "redemptions": {
+            "type": "number",
+            "description": "Canjes vigentes (sin contar reservas canceladas o vencidas)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["id", "code", "redemptions", "createdAt"]
+      },
+      "PromotionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scope": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromotionScope"
+              }
+            ]
+          },
+          "barbershopId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "serviceId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromotionType"
+              }
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "startsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "maxRedemptions": {
+            "type": "number",
+            "nullable": true
+          },
+          "maxPerUser": {
+            "type": "number",
+            "nullable": true
+          },
+          "daysOfWeek": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "requiresCoupon": {
+            "type": "boolean"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["SCHEDULED", "ACTIVE", "PAUSED", "ENDED", "EXHAUSTED"],
+            "description": "Calculado: programada, vigente, pausada, terminada o sin cupos."
+          },
+          "redemptions": {
+            "type": "number",
+            "description": "Canjes vigentes."
+          },
+          "discountedTotal": {
+            "description": "Total descontado en canjes vigentes.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MoneyDto"
+              }
+            ]
+          },
+          "coupons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CouponDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "scope",
+          "barbershopId",
+          "serviceId",
+          "name",
+          "type",
+          "value",
+          "currency",
+          "startsAt",
+          "endsAt",
+          "maxRedemptions",
+          "maxPerUser",
+          "daysOfWeek",
+          "requiresCoupon",
+          "isActive",
+          "status",
+          "redemptions",
+          "discountedTotal",
+          "coupons",
+          "createdAt"
+        ]
+      },
+      "CreatePromotionDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 80,
+            "example": "20 % los martes"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PromotionType"
+              }
+            ]
+          },
+          "value": {
+            "type": "number",
+            "description": "PERCENTAGE: 1 a 100 (porcentaje). FIXED_AMOUNT: céntimos en PEN, de 100 (S/ 1) a 50000 (S/ 500).",
+            "example": 20
+          },
+          "serviceId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Solo barberías: limita la promoción a un servicio propio (alcance SERVICE)."
+          },
+          "startsAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Por defecto, ahora."
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true,
+            "description": "null o ausente: sin fin."
+          },
+          "maxRedemptions": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100000,
+            "description": "Usos totales."
+          },
+          "maxPerUser": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "Usos por cliente."
+          },
+          "daysOfWeek": {
+            "description": "Días de la cita en que aplica (0 = domingo … 6 = sábado). Vacío: todos.",
+            "example": [2],
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "requiresCoupon": {
+            "type": "boolean",
+            "default": false,
+            "description": "true: solo con cupón (se crean aparte). false: se aplica sola."
+          }
+        },
+        "required": ["name", "type", "value"]
+      },
+      "UpdatePromotionDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 80
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "maxRedemptions": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 100000
+          },
+          "maxPerUser": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 100
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "false la pausa; true la reanuda."
+          }
+        }
+      },
+      "CreateCouponDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "BIENVENIDO10",
+            "description": "4 a 20 letras o números; se guarda en mayúsculas."
+          }
+        },
+        "required": ["code"]
       },
       "CreateTicketDto": {
         "type": "object",
@@ -16780,7 +21731,15 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["booking", "review", "ticket", "barbershop", "account"],
+            "enum": [
+              "booking",
+              "review",
+              "ticket",
+              "barbershop",
+              "account",
+              "conversation",
+              "job_application"
+            ],
             "description": "Pantalla que abre la app al tocar el aviso."
           },
           "id": {
@@ -16972,6 +21931,1786 @@
           }
         },
         "required": ["password"]
+      },
+      "PublicPlacementDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "sponsorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sponsorName": {
+            "type": "string"
+          },
+          "sponsorLogoUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "imageUrl",
+          "actionUrl",
+          "sponsorId",
+          "sponsorName",
+          "sponsorLogoUrl"
+        ]
+      },
+      "PlacementEventDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["IMPRESSION", "CLICK"]
+          },
+          "viewerKey": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Sin sesión: identificador aleatorio de la instalación (UUID que la app genera una vez y guarda). Con sesión se ignora. Nunca se guarda en claro."
+          }
+        },
+        "required": ["type"]
+      },
+      "ProductDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sponsorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionUrl": {
+            "type": "string"
+          },
+          "priceText": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "sponsorId",
+          "name",
+          "description",
+          "imageUrl",
+          "actionUrl",
+          "priceText",
+          "sortOrder",
+          "isActive"
+        ]
+      },
+      "PublicSponsorDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductDto"
+            }
+          }
+        },
+        "required": ["id", "name", "logoUrl", "products"]
+      },
+      "SponsorDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "contact": {
+            "type": "string",
+            "nullable": true,
+            "description": "Solo en /admin."
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "campaigns": {
+            "type": "number"
+          },
+          "products": {
+            "type": "number"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "logoUrl",
+          "contact",
+          "isActive",
+          "campaigns",
+          "products",
+          "createdAt"
+        ]
+      },
+      "CreateSponsorDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "contact": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Contacto interno (se guarda cifrado).",
+            "minLength": 1
+          },
+          "logoUrl": {
+            "type": "string",
+            "description": "URL devuelta por POST /admin/sponsors/media.",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": ["name"]
+      },
+      "UpdateSponsorDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "contact": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SponsorMediaDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Imagen grande (1600 px de ancho)."
+          },
+          "thumbUrl": {
+            "type": "string",
+            "description": "Miniatura (400 px de ancho)."
+          }
+        },
+        "required": ["url", "thumbUrl"]
+      },
+      "PlacementDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slotKey": {
+            "type": "string",
+            "enum": ["home_banner", "search_top", "booking_success", "shop_dashboard"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "priority": {
+            "type": "number"
+          }
+        },
+        "required": ["id", "slotKey", "title", "imageUrl", "actionUrl", "priority"]
+      },
+      "CampaignDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sponsorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["CLIENTS", "BARBERSHOPS", "ALL"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "ACTIVE", "PAUSED", "ENDED"]
+          },
+          "live": {
+            "type": "boolean",
+            "description": "ACTIVE y dentro de sus fechas: se está mostrando."
+          },
+          "placements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sponsorId",
+          "name",
+          "startsAt",
+          "endsAt",
+          "audience",
+          "status",
+          "live",
+          "placements",
+          "createdAt"
+        ]
+      },
+      "CreateCampaignDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "startsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["CLIENTS", "BARBERSHOPS", "ALL"],
+            "default": "ALL"
+          }
+        },
+        "required": ["name", "startsAt", "endsAt"]
+      },
+      "UpdateCampaignDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["CLIENTS", "BARBERSHOPS", "ALL"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["DRAFT", "ACTIVE", "PAUSED", "ENDED"],
+            "description": "DRAFT → ACTIVE (publicar), ACTIVE ↔ PAUSED, cualquiera → ENDED (definitivo)."
+          }
+        }
+      },
+      "PlacementMetricsDto": {
+        "type": "object",
+        "properties": {
+          "placementId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slotKey": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "impressions": {
+            "type": "number",
+            "description": "Impresiones (una por persona o dispositivo por hora)."
+          },
+          "clicks": {
+            "type": "number"
+          },
+          "ctr": {
+            "type": "number",
+            "description": "Clics / impresiones (0 a 1)."
+          }
+        },
+        "required": ["placementId", "slotKey", "title", "impressions", "clicks", "ctr"]
+      },
+      "CampaignMetricsDto": {
+        "type": "object",
+        "properties": {
+          "campaignId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "impressions": {
+            "type": "number"
+          },
+          "clicks": {
+            "type": "number"
+          },
+          "ctr": {
+            "type": "number"
+          },
+          "placements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlacementMetricsDto"
+            }
+          }
+        },
+        "required": ["campaignId", "impressions", "clicks", "ctr", "placements"]
+      },
+      "CreatePlacementDto": {
+        "type": "object",
+        "properties": {
+          "slotKey": {
+            "type": "string",
+            "enum": ["home_banner", "search_top", "booking_success", "shop_dashboard"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "URL devuelta por POST /admin/sponsors/media.",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "actionUrl": {
+            "type": "string",
+            "description": "Enlace https al tocar el anuncio.",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "priority": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": ["slotKey", "title"]
+      },
+      "UpdatePlacementDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "actionUrl": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "priority": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        }
+      },
+      "CreateProductDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          },
+          "imageUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "actionUrl": {
+            "type": "string",
+            "description": "Enlace https de compra (Charles no vende ni cobra).",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "priceText": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "Desde S/ 39.90",
+            "minLength": 1
+          },
+          "sortOrder": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 1000
+          }
+        },
+        "required": ["name", "actionUrl"]
+      },
+      "UpdateProductDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "actionUrl": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "priceText": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "sortOrder": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        }
+      },
+      "WorkplaceDto": {
+        "type": "object",
+        "properties": {
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Vínculo (id de barbero en esa barbería)."
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "barbershopType": {
+            "type": "string",
+            "enum": ["SHOP", "INDEPENDENT"]
+          },
+          "current": {
+            "type": "boolean",
+            "description": "Trabaja ahí actualmente."
+          },
+          "since": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "until": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "barberId",
+          "barbershopId",
+          "barbershopName",
+          "barbershopType",
+          "current",
+          "since",
+          "until"
+        ]
+      },
+      "BarberProfileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "headline": {
+            "type": "string",
+            "nullable": true
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "yearsExperience": {
+            "type": "number",
+            "nullable": true
+          },
+          "district": {
+            "type": "string",
+            "nullable": true
+          },
+          "availableForWork": {
+            "type": "boolean"
+          },
+          "ratingAverage": {
+            "type": "number",
+            "nullable": true,
+            "description": "null sin valoraciones."
+          },
+          "ratingCount": {
+            "type": "number"
+          },
+          "attendedCount": {
+            "type": "number",
+            "description": "Atenciones completadas en toda su carrera en Charles."
+          },
+          "rank": {
+            "type": "number",
+            "nullable": true,
+            "description": "Puesto en el ranking general (null hasta tener 3 valoraciones)."
+          },
+          "specialties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
+          "workplaces": {
+            "description": "Dónde trabaja hoy (y dónde trabajó, en /me).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkplaceDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "headline",
+          "bio",
+          "photoUrl",
+          "yearsExperience",
+          "district",
+          "availableForWork",
+          "ratingAverage",
+          "ratingCount",
+          "attendedCount",
+          "rank",
+          "specialties",
+          "workplaces",
+          "createdAt"
+        ]
+      },
+      "UpsertBarberProfileDto": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60,
+            "example": "Carlos \"El Fade\""
+          },
+          "headline": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 80,
+            "example": "Especialista en degradados",
+            "minLength": 1
+          },
+          "bio": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 600,
+            "minLength": 1
+          },
+          "yearsExperience": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 0,
+            "maximum": 60
+          },
+          "district": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 60,
+            "example": "Miraflores",
+            "minLength": 2
+          },
+          "availableForWork": {
+            "type": "boolean",
+            "description": "Aparece en la búsqueda de barberos para las barberías (\"disponible para trabajar\")."
+          }
+        },
+        "required": ["displayName"]
+      },
+      "SetProfileSpecialtiesDto": {
+        "type": "object",
+        "properties": {
+          "styleIds": {
+            "maxItems": 10,
+            "description": "Ids de estilos activos (máximo 10).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["styleIds"]
+      },
+      "PortfolioUploadDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          },
+          "caption": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "styleIds": {
+            "description": "Ids de estilos (multipart: repetir el campo o separar con comas).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "consent": {
+            "type": "boolean",
+            "description": "Confirma que la persona fotografiada aceptó que se publique (obligatorio)."
+          }
+        },
+        "required": ["file", "consent"]
+      },
+      "PortfolioItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thumbUrl": {
+            "type": "string"
+          },
+          "largeUrl": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "styles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
+          "barbershopName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Barbería donde se subió (null si la subió el barbero desde su perfil)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "thumbUrl",
+          "largeUrl",
+          "width",
+          "height",
+          "caption",
+          "styles",
+          "barbershopName",
+          "createdAt"
+        ]
+      },
+      "RankedBarberDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rank": {
+            "type": "number",
+            "nullable": true,
+            "description": "Puesto (null si aún no entra al ranking)."
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "headline": {
+            "type": "string",
+            "nullable": true
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "district": {
+            "type": "string",
+            "nullable": true
+          },
+          "ratingAverage": {
+            "type": "number",
+            "nullable": true
+          },
+          "ratingCount": {
+            "type": "number"
+          },
+          "attendedCount": {
+            "type": "number"
+          },
+          "score": {
+            "type": "number",
+            "description": "Puntaje del ranking (promedio bayesiano, 0 a 5)."
+          },
+          "availableForWork": {
+            "type": "boolean"
+          },
+          "specialties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
+          "currentBarbershops": {
+            "description": "Barberías donde trabaja hoy.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "rank",
+          "displayName",
+          "headline",
+          "photoUrl",
+          "district",
+          "ratingAverage",
+          "ratingCount",
+          "attendedCount",
+          "score",
+          "availableForWork",
+          "specialties",
+          "currentBarbershops"
+        ]
+      },
+      "RankingPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RankedBarberDto"
+            }
+          },
+          "nextOffset": {
+            "type": "number",
+            "nullable": true,
+            "description": "offset de la página siguiente."
+          }
+        },
+        "required": ["items", "nextOffset"]
+      },
+      "PortfolioPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PortfolioItemDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ProfileReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "number"
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientName": {
+            "type": "string",
+            "description": "Nombre del cliente (o \"Cuenta eliminada\")."
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "serviceName": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "rating",
+          "comment",
+          "clientName",
+          "barbershopName",
+          "serviceName",
+          "createdAt"
+        ]
+      },
+      "ProfileReviewPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProfileReviewDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "CounterpartDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "barberProfileId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid",
+            "description": "Si el otro lado es un barbero con perfil profesional."
+          }
+        },
+        "required": ["id", "name", "photoUrl", "barberProfileId"]
+      },
+      "ConversationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["CLIENT", "PROFESSIONAL"]
+          },
+          "counterpart": {
+            "description": "Con quién hablo (la barbería o la persona).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CounterpartDto"
+              }
+            ]
+          },
+          "lastMessagePreview": {
+            "type": "string",
+            "nullable": true,
+            "description": "Inicio del último mensaje (120 caracteres)."
+          },
+          "lastMessageAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "unread": {
+            "type": "number"
+          },
+          "blocked": {
+            "type": "boolean",
+            "description": "Bloqueada: nadie puede escribir."
+          },
+          "blockedByMe": {
+            "type": "boolean",
+            "description": "La bloqueé yo (puedo desbloquearla)."
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "counterpart",
+          "lastMessagePreview",
+          "lastMessageAt",
+          "unread",
+          "blocked",
+          "blockedByMe"
+        ]
+      },
+      "ConversationPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConversationDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "UnreadMessagesDto": {
+        "type": "object",
+        "properties": {
+          "conversations": {
+            "type": "number",
+            "description": "Conversaciones con mensajes sin leer (como persona)."
+          }
+        },
+        "required": ["conversations"]
+      },
+      "StartConversationDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["CLIENT", "PROFESSIONAL"],
+            "default": "CLIENT",
+            "description": "PROFESSIONAL: como barbero (exige perfil profesional)."
+          }
+        },
+        "required": ["body", "barbershopId"]
+      },
+      "MessageDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "side": {
+            "type": "string",
+            "enum": ["BARBERSHOP", "USER", "SYSTEM"]
+          },
+          "mine": {
+            "type": "boolean",
+            "description": "Lo escribí yo (mi lado de la conversación)."
+          },
+          "senderName": {
+            "type": "string",
+            "nullable": true,
+            "description": "Quién lo escribió (nombre de pila)."
+          },
+          "body": {
+            "type": "string",
+            "description": "Texto; \"Mensaje retirado por soporte.\" si se retiró."
+          },
+          "removed": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["id", "side", "mine", "senderName", "body", "removed", "createdAt"]
+      },
+      "MessagePageDto": {
+        "type": "object",
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/ConversationDto"
+          },
+          "items": {
+            "description": "Más recientes primero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["conversation", "items", "nextCursor"]
+      },
+      "SendMessageDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          }
+        },
+        "required": ["body"]
+      },
+      "ContactBarberDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "barberProfileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Perfil profesional del barbero."
+          }
+        },
+        "required": ["body", "barberProfileId"]
+      },
+      "ReportMessageDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": ["SPAM", "HARASSMENT", "INAPPROPRIATE", "SCAM", "OTHER"]
+          },
+          "details": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": ["reason"]
+      },
+      "MessageReportDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "messageId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["SPAM", "HARASSMENT", "INAPPROPRIATE", "SCAM", "OTHER"]
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          },
+          "messageBody": {
+            "type": "string",
+            "description": "Texto del mensaje reportado (solo para soporte)."
+          },
+          "messageSide": {
+            "type": "string",
+            "enum": ["BARBERSHOP", "USER", "SYSTEM"]
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "removed": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "messageId",
+          "reason",
+          "details",
+          "messageBody",
+          "messageSide",
+          "barbershopName",
+          "userName",
+          "removed",
+          "createdAt"
+        ]
+      },
+      "MessageReportPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageReportDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ResolveMessageReportDto": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["REMOVE", "DISMISS"],
+            "description": "REMOVE retira el mensaje."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 500
+          }
+        },
+        "required": ["action", "reason"]
+      },
+      "JobBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "ratingAverage": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": ["id", "name", "address", "logoUrl", "ratingAverage"]
+      },
+      "JobPostingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/JobBarbershopDto"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "employmentType": {
+            "type": "string",
+            "enum": ["FULL_TIME", "PART_TIME", "WEEKENDS", "COMMISSION", "FREELANCE"]
+          },
+          "compensationText": {
+            "type": "string",
+            "nullable": true
+          },
+          "styles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StyleRefDto"
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "CLOSED"],
+            "description": "CLOSED también si pasó closesAt."
+          },
+          "closesAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "applicationsCount": {
+            "type": "number",
+            "description": "Postulaciones activas (solo en la vista de la barbería; 0 en la pública)."
+          },
+          "myApplicationStatus": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["APPLIED", "SHORTLISTED", "REJECTED", "HIRED", "WITHDRAWN"],
+            "description": "Mi postulación a esta oferta (si soy barbero y postulé)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "barbershop",
+          "title",
+          "description",
+          "employmentType",
+          "compensationText",
+          "styles",
+          "status",
+          "closesAt",
+          "applicationsCount",
+          "myApplicationStatus",
+          "createdAt"
+        ]
+      },
+      "JobPostingPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobPostingDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ApplyDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "Presentación para la barbería.",
+            "minLength": 1
+          }
+        }
+      },
+      "ApplicantDto": {
+        "type": "object",
+        "properties": {
+          "barberProfileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "ratingAverage": {
+            "type": "number",
+            "nullable": true
+          },
+          "ratingCount": {
+            "type": "number"
+          },
+          "yearsExperience": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": [
+          "barberProfileId",
+          "displayName",
+          "photoUrl",
+          "ratingAverage",
+          "ratingCount",
+          "yearsExperience"
+        ]
+      },
+      "JobApplicationDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "postingId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "postingTitle": {
+            "type": "string"
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "applicant": {
+            "$ref": "#/components/schemas/ApplicantDto"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": ["APPLIED", "SHORTLISTED", "REJECTED", "HIRED", "WITHDRAWN"]
+          },
+          "decidedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "postingId",
+          "postingTitle",
+          "barbershopName",
+          "applicant",
+          "message",
+          "status",
+          "decidedAt",
+          "createdAt"
+        ]
+      },
+      "CreateJobPostingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 80,
+            "example": "Barbero con experiencia en degradados"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 2000
+          },
+          "employmentType": {
+            "type": "string",
+            "enum": ["FULL_TIME", "PART_TIME", "WEEKENDS", "COMMISSION", "FREELANCE"]
+          },
+          "compensationText": {
+            "type": "string",
+            "maxLength": 120,
+            "example": "50 % por servicio",
+            "minLength": 1
+          },
+          "styleIds": {
+            "maxItems": 10,
+            "description": "Especialidades buscadas.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "closesAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Cierre automático (opcional, máximo 90 días)."
+          }
+        },
+        "required": ["title", "description", "employmentType"]
+      },
+      "UpdateJobPostingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 80
+          },
+          "description": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 2000
+          },
+          "employmentType": {
+            "type": "string",
+            "enum": ["FULL_TIME", "PART_TIME", "WEEKENDS", "COMMISSION", "FREELANCE"]
+          },
+          "compensationText": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "styleIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "closesAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "CLOSED"],
+            "description": "Cerrar o reabrir la oferta."
+          }
+        }
+      },
+      "DecideApplicationDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["SHORTLISTED", "REJECTED", "HIRED"],
+            "description": "HIRED crea el vínculo del barbero en la barbería (luego asígnale servicios)."
+          }
+        },
+        "required": ["status"]
+      },
+      "InviteProfileDto": {
+        "type": "object",
+        "properties": {
+          "barberProfileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "Mensaje que llega a su bandeja.",
+            "minLength": 1
+          }
+        },
+        "required": ["barberProfileId"]
+      },
+      "InvitedBarberDto": {
+        "type": "object",
+        "properties": {
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Vínculo creado (pendiente de que acepte)."
+          }
+        },
+        "required": ["barberId"]
+      },
+      "VideoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PROCESSING", "READY", "FAILED"],
+            "description": "PROCESSING mientras se comprime (segundos); vuelve a consultar."
+          },
+          "videoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "MP4 (H.264, máx. 720p). null si no está listo."
+          },
+          "posterUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Miniatura WebP."
+          },
+          "durationMs": {
+            "type": "number",
+            "nullable": true
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["NOT_A_VIDEO", "TOO_LONG", "TOO_LARGE", "PROCESSING_FAILED"],
+            "description": "Por qué falló (solo en la vista de quien lo subió)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "videoUrl",
+          "posterUrl",
+          "durationMs",
+          "caption",
+          "failureReason",
+          "createdAt"
+        ]
+      },
+      "VideoUploadDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "MP4, MOV o WebM; hasta 30 s y 50 MB."
+          },
+          "caption": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1
+          }
+        },
+        "required": ["file"]
+      },
+      "VideoReportDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": ["NOT_MY_PHOTO", "NO_CONSENT", "INAPPROPRIATE", "MISLEADING", "OTHER"]
+          },
+          "details": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": ["reason"]
+      },
+      "ReportedVideoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PROCESSING", "READY", "FAILED"],
+            "description": "PROCESSING mientras se comprime (segundos); vuelve a consultar."
+          },
+          "videoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "MP4 (H.264, máx. 720p). null si no está listo."
+          },
+          "posterUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Miniatura WebP."
+          },
+          "durationMs": {
+            "type": "number",
+            "nullable": true
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["NOT_A_VIDEO", "TOO_LONG", "TOO_LARGE", "PROCESSING_FAILED"],
+            "description": "Por qué falló (solo en la vista de quien lo subió)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "ownerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "openReports": {
+            "type": "number"
+          },
+          "removed": {
+            "type": "boolean"
+          },
+          "reasons": {
+            "description": "Motivos de los reportes abiertos.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "videoUrl",
+          "posterUrl",
+          "durationMs",
+          "caption",
+          "failureReason",
+          "createdAt",
+          "ownerName",
+          "openReports",
+          "removed",
+          "reasons"
+        ]
+      },
+      "VideoModerationDto": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": ["KEEP", "REMOVE", "RESTORE"]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 500
+          }
+        },
+        "required": ["decision", "reason"]
       }
     }
   }

@@ -34,11 +34,17 @@ export type ShopSection =
   | 'barbers'
   | 'members'
   | 'hours'
-  | 'blocks';
+  | 'blocks'
+  | 'promotions'
+  | 'jobs'
+  | 'talent'
+  | 'videos';
 
 export interface ShopHomeScreenProps {
   /** Action on the right of the title (the notifications bell, given by the route). */
   headerRight?: ReactNode;
+  /** Sponsor space at the end of the panel ("shop_dashboard"). */
+  bottomSlot?: ReactNode;
   onCreate: () => void;
   onInvitations: () => void;
   onOpen: (shopId: string, section: ShopSection) => void;
@@ -69,7 +75,11 @@ const SECTIONS: ShopSection[] = [
   'hours',
   'blocks',
   'gallery',
+  'videos',
   'reviews',
+  'promotions',
+  'jobs',
+  'talent',
   'status',
   'members',
   'details',
@@ -86,6 +96,10 @@ const SECTION_ICON: Record<ShopSection, IconName> = {
   members: 'shield-checkmark',
   hours: 'time',
   blocks: 'calendar-clear',
+  promotions: 'pricetag',
+  jobs: 'briefcase',
+  talent: 'person-add',
+  videos: 'videocam',
 };
 
 export function ShopHomeScreen({
@@ -94,6 +108,7 @@ export function ShopHomeScreen({
   onOpen,
   onOpenAsBarber,
   headerRight,
+  bottomSlot,
 }: ShopHomeScreenProps) {
   const { t } = useTranslation('shop');
   const home = useShopHome();
@@ -240,6 +255,7 @@ export function ShopHomeScreen({
               ) : null}
               <Button label={t('home.invitations')} variant="ghost" icon="mail" onPress={onInvitations} />
             </View>
+            {bottomSlot}
           </View>
         )}
       </QueryView>

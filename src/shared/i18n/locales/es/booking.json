@@ -26,13 +26,14 @@
     "firstAvailable": "El primero disponible",
     "when": "Fecha y hora",
     "duration": "Duración",
-    "servicePrice": "Precio del servicio",
-    "priceNote": "Es el precio del servicio. El total definitivo, con el detalle que calcula la barbería, aparece al confirmar.",
     "confirm": "Confirmar reserva",
     "loginNote": "Te pediremos iniciar sesión o crear tu cuenta para confirmar. No perderás lo que elegiste.",
     "incomplete": "Falta elegir el horario.",
     "back": "Elegir otro horario",
-    "seeBookings": "Ver mis reservas"
+    "seeBookings": "Ver mis reservas",
+    "price": "Precio",
+    "priceChange": "{{from}} → {{to}}",
+    "promotion": "Promoción aplicada: {{name}}"
   },
   "status": {
     "PENDING_PAYMENT": "Pendiente de pago",
@@ -71,7 +72,8 @@
     },
     "barber": "con {{barber}}",
     "openBarbershop": "Ver barbería",
-    "help": "Necesito ayuda con esta reserva"
+    "help": "Necesito ayuda con esta reserva",
+    "discountAmount": "− {{amount}}"
   },
   "cancel": {
     "action": "Cancelar reserva",
@@ -120,5 +122,19 @@
   },
   "calendar": {
     "title": "{{service}} en {{shop}}"
+  },
+  "coupon": {
+    "label": "¿Tienes un cupón?",
+    "apply": "Aplicar",
+    "applied": "Cupón aplicado.",
+    "remove": "Quitar cupón",
+    "reasons": {
+      "NOT_FOUND": "Ese cupón no existe.",
+      "NOT_ACTIVE": "Ese cupón no está vigente.",
+      "NOT_APPLICABLE": "Ese cupón no aplica a este servicio, barbería o día.",
+      "EXHAUSTED": "Ese cupón ya no tiene usos disponibles.",
+      "ALREADY_USED": "Ya usaste este cupón.",
+      "BETTER_PROMOTION": "Ya tienes un descuento mejor; solo se aplica uno por reserva."
+    }
   }
 }

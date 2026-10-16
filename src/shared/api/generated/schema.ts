@@ -178,6 +178,57 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/campaigns/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar, publicar, pausar o terminar una campaña */
+        patch: operations["SponsorsAdminController_updateCampaign_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/campaigns/{id}/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: impresiones, clics y CTR de una campaña */
+        get: operations["SponsorsAdminController_metrics_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/campaigns/{id}/placements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Solo ADMIN: agregar un anuncio a un espacio */
+        post: operations["SponsorsAdminController_addPlacement_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/cancellation-reviews": {
         parameters: {
             query?: never;
@@ -227,6 +278,44 @@ export type paths = {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/featured": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: destacados vigentes y programados (o todos) */
+        get: operations["FeaturedAdminController_list_v1"];
+        put?: never;
+        /**
+         * Solo ADMIN: destacar una barbería por un periodo
+         * @description Hasta 3 destacadas suben al inicio de la primera página de resultados, solo si cumplen los filtros de la búsqueda. Sin cobro por ahora.
+         */
+        post: operations["FeaturedAdminController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/featured/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Solo ADMIN: retirar un destacado antes de tiempo */
+        delete: operations["FeaturedAdminController_cancel_v1"];
         options?: never;
         head?: never;
         patch?: never;
@@ -283,6 +372,40 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/message-reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mensajes reportados sin resolver (con su texto, solo para soporte) */
+        get: operations["MessageReportsAdminController_list_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/message-reports/{id}/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retirar el mensaje o descartar el reporte (con motivo) */
+        post: operations["MessageReportsAdminController_resolve_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/payments/{id}/refunds": {
         parameters: {
             query?: never;
@@ -298,6 +421,110 @@ export type paths = {
          */
         post: operations["AdminOperationsController_refund_v1"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/placements/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Solo ADMIN: quitar un anuncio sin impresiones ni clics */
+        delete: operations["SponsorsAdminController_removePlacement_v1"];
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar un anuncio */
+        patch: operations["SponsorsAdminController_updatePlacement_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/products/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar u ocultar un producto */
+        patch: operations["SponsorsAdminController_updateProduct_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/promotions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: promociones (las 200 más recientes), con canjes */
+        get: operations["PromotionsAdminController_list_v1"];
+        put?: never;
+        /** Solo ADMIN: crear una promoción de Charles (la asume Charles) */
+        post: operations["PromotionsAdminController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/promotions/{promotionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar o pausar cualquier promoción (también de barberías) */
+        patch: operations["PromotionsAdminController_update_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/promotions/{promotionId}/coupons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Solo ADMIN: agregar un código de cupón */
+        post: operations["PromotionsAdminController_addCoupon_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/promotions/{promotionId}/coupons/{couponId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Solo ADMIN: retirar un cupón */
+        delete: operations["PromotionsAdminController_removeCoupon_v1"];
         options?: never;
         head?: never;
         patch?: never;
@@ -456,6 +683,97 @@ export type paths = {
          */
         put: operations["AdminConfigController_updateSetting_v1"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sponsors": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: auspiciadores */
+        get: operations["SponsorsAdminController_list_v1"];
+        put?: never;
+        /** Solo ADMIN: crear un auspiciador */
+        post: operations["SponsorsAdminController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sponsors/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar o desactivar un auspiciador */
+        patch: operations["SponsorsAdminController_update_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/sponsors/{id}/campaigns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: campañas de un auspiciador, con sus anuncios */
+        get: operations["SponsorsAdminController_campaigns_v1"];
+        put?: never;
+        /** Solo ADMIN: crear una campaña (en borrador) */
+        post: operations["SponsorsAdminController_createCampaign_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sponsors/{id}/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: catálogo de productos del auspiciador */
+        get: operations["SponsorsAdminController_products_v1"];
+        put?: never;
+        /** Solo ADMIN: agregar un producto (con enlace externo de compra) */
+        post: operations["SponsorsAdminController_createProduct_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sponsors/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Solo ADMIN: subir una imagen de auspiciador (logo, anuncio o producto)
+         * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Devuelve las URL para usar en logoUrl o imageUrl.
+         */
+        post: operations["SponsorsAdminController_media_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -671,6 +989,40 @@ export type paths = {
          * @description Nadie se lo quita a sí mismo; nunca al último ADMIN activo (409 LAST_ADMIN).
          */
         delete: operations["AdminUsersController_revoke_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/videos/{id}/moderation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Mantener, retirar o restaurar un video (con motivo) */
+        post: operations["VideosAdminController_moderate_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/videos/reported": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Videos con reportes abiertos */
+        get: operations["VideosAdminController_reported_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1034,6 +1386,94 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/barber-profiles/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Perfil público de un barbero (dónde trabaja hoy, especialidades, ranking) */
+        get: operations["BarberProfilesController_profile_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barber-profiles/{id}/portfolio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Portafolio del barbero: sus cortes en todas sus barberías */
+        get: operations["BarberProfilesController_portfolio_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barber-profiles/{id}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Valoraciones de toda su carrera (más recientes primero) */
+        get: operations["BarberProfilesController_reviews_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barber-profiles/{id}/videos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Videos de cortes del barbero (listos y visibles) */
+        get: operations["VideosController_profileVideos_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbers/ranking": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ranking y búsqueda de barberos
+         * @description Promedio bayesiano (pocas valoraciones no pesan como muchas); entra al ranking con 3 valoraciones. Filtros: especialidad, distrito, nombre y "disponible para trabajar".
+         */
+        get: operations["BarberProfilesController_ranking_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops": {
         parameters: {
             query?: never;
@@ -1045,6 +1485,171 @@ export type paths = {
         put?: never;
         /** RF-BAR-001: registrar una barbería (quien la registra queda como OWNER) */
         post: operations["BarbershopsController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/barber-invitations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * OWNER o MANAGER: invitar a un barbero desde su perfil profesional
+         * @description Le llega la invitación por correo (código) y un mensaje a su bandeja.
+         */
+        post: operations["BarbershopJobsController_invite_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/conversations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: conversaciones de la barbería */
+        get: operations["BarbershopConversationsController_list_v1"];
+        put?: never;
+        /**
+         * OWNER o MANAGER: escribir a un barbero (desde su perfil profesional)
+         * @description A clientes no se les escribe primero: se responde cuando ellos escriben.
+         */
+        post: operations["BarbershopConversationsController_contact_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/conversations/{id}/block": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** OWNER o MANAGER: bloquear la conversación */
+        post: operations["BarbershopConversationsController_block_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/conversations/{id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: mensajes; la primera página marca como leída */
+        get: operations["BarbershopConversationsController_messages_v1"];
+        put?: never;
+        /** OWNER o MANAGER: responder */
+        post: operations["BarbershopConversationsController_send_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/conversations/{id}/unblock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** OWNER o MANAGER: desbloquear (solo si la bloqueó la barbería) */
+        post: operations["BarbershopConversationsController_unblock_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/job-applications/{id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * OWNER o MANAGER: preseleccionar, rechazar o contratar
+         * @description HIRED crea el vínculo del barbero (asígnale servicios y horario después).
+         */
+        post: operations["BarbershopJobsController_decide_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: mis ofertas (abiertas y cerradas) */
+        get: operations["BarbershopJobsController_list_v1"];
+        put?: never;
+        /** OWNER o MANAGER: publicar una oferta (máximo 10 abiertas) */
+        post: operations["BarbershopJobsController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/jobs/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** OWNER o MANAGER: editar, cerrar o reabrir una oferta */
+        patch: operations["BarbershopJobsController_update_v1"];
+        trace?: never;
+    };
+    "/api/v1/barbershops/{barbershopId}/jobs/{id}/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: postulaciones de una oferta */
+        get: operations["BarbershopJobsController_applications_v1"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1504,6 +2109,98 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/barbershops/{id}/promotions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: promociones de la barbería, con canjes y cupones */
+        get: operations["PromotionsController_list_v1"];
+        put?: never;
+        /**
+         * OWNER o MANAGER: crear una promoción (la asume la barbería)
+         * @description Con serviceId, solo para ese servicio. Un solo descuento por reserva: el mayor entre los que apliquen.
+         */
+        post: operations["PromotionsController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/promotions/{promotionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** OWNER o MANAGER: editar nombre, fin, topes, o pausar y reanudar */
+        patch: operations["PromotionsController_update_v1"];
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/promotions/{promotionId}/coupons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** OWNER o MANAGER: agregar un código de cupón */
+        post: operations["PromotionsController_addCoupon_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/promotions/{promotionId}/coupons/{couponId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** OWNER o MANAGER: retirar un cupón (los canjes hechos se conservan) */
+        delete: operations["PromotionsController_removeCoupon_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/promotions/active": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Promociones automáticas vigentes de la barbería (y las de Charles)
+         * @description Para mostrar en el perfil de la barbería. Los cupones no aparecen.
+         */
+        get: operations["PromotionsController_active_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops/{id}/reports": {
         parameters: {
             query?: never;
@@ -1664,6 +2361,44 @@ export type paths = {
         post?: never;
         /** Eliminar un bloqueo */
         delete: operations["AvailabilityController_deleteBlock_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/videos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Videos publicitarios de la barbería (listos y visibles) */
+        get: operations["VideosController_shopVideos_v1"];
+        put?: never;
+        /**
+         * OWNER o MANAGER: subir un video del local (máximo 5)
+         * @description multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).
+         */
+        post: operations["VideosController_uploadShop_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/videos/manage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: todos los videos (también en proceso o fallidos) */
+        get: operations["VideosController_manageShop_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1866,6 +2601,26 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/bookings/quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Fase 13: cotizar una reserva (descuento, comisión y total) antes de crearla
+         * @description No reserva el turno ni el cupo de la promoción. Con couponCode, `coupon` dice si se aplicó o por qué no (sin error).
+         */
+        post: operations["BookingsController_quote_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/gallery/{imageId}/reports": {
         parameters: {
             query?: never;
@@ -1897,6 +2652,63 @@ export type paths = {
         get: operations["HealthController_check_v1"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Ofertas de trabajo abiertas (más recientes primero)
+         * @description Con sesión de barbero, cada oferta dice si ya postulé (myApplicationStatus).
+         */
+        get: operations["JobsController_list_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Detalle de una oferta */
+        get: operations["JobsController_get_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/jobs/{id}/applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Postular (barbero con perfil profesional)
+         * @description La barbería ve mi perfil, ranking y portafolio, y recibe un mensaje en su bandeja.
+         */
+        post: operations["JobsController_apply_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1953,6 +2765,146 @@ export type paths = {
         get: operations["BarbersController_myProfiles_v1"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/barber-profile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Mi perfil profesional (404 si aún no lo creo)
+         * @description Incluye dónde trabajo y dónde trabajé (workplaces), mis especialidades y mi puesto.
+         */
+        get: operations["MyBarberProfileController_mine_v1"];
+        /**
+         * Crear o editar mi perfil profesional
+         * @description Es mío, no de la barbería: me llevo mis valoraciones, mi portafolio y mi ranking si me voy. Crearlo da el rol BARBER (renueva la sesión para verlo en el token).
+         */
+        put: operations["MyBarberProfileController_upsert_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/barber-profile/photo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Foto de mi perfil profesional (512 px)
+         * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP.
+         */
+        put: operations["MyBarberProfileController_setPhoto_v1"];
+        post?: never;
+        /** Quitar la foto de mi perfil profesional */
+        delete: operations["MyBarberProfileController_deletePhoto_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/barber-profile/portfolio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Subir un corte a mi portafolio
+         * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Exige consent=true (la persona fotografiada aceptó). Mismo tope que la galería.
+         */
+        post: operations["MyBarberProfileController_upload_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/barber-profile/portfolio/{imageId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Quitar un corte de mi portafolio (también los subidos en una barbería) */
+        delete: operations["MyBarberProfileController_removePortfolio_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/barber-profile/specialties": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Mis especialidades (máximo 10 estilos) */
+        put: operations["MyBarberProfileController_specialties_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/barber-profile/videos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mis videos de cortes (también en proceso o fallidos) */
+        get: operations["VideosController_manageMine_v1"];
+        put?: never;
+        /**
+         * Subir un video de mis cortes (máximo 10)
+         * @description multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).
+         */
+        post: operations["VideosController_uploadMine_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/barber-profile/workplaces/{barberId}/leave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Dejar una barbería
+         * @description Termina el vínculo. Mis valoraciones, portafolio y ranking siguen conmigo. Con reservas futuras activas: 409 HAS_FUTURE_BOOKINGS. Mi barbería independiente no se deja así (409).
+         */
+        post: operations["MyBarberProfileController_leave_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2172,6 +3124,96 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/me/conversations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mis conversaciones (más recientes primero), con no leídos */
+        get: operations["MyConversationsController_list_v1"];
+        put?: never;
+        /**
+         * Escribir a una barbería (consulta, o como barbero con kind=PROFESSIONAL)
+         * @description Si ya existe la conversación, el mensaje se agrega a ella.
+         */
+        post: operations["MyConversationsController_start_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/conversations/{id}/block": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Bloquear la conversación (nadie puede escribir) */
+        post: operations["MyConversationsController_block_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/conversations/{id}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mensajes (más recientes primero); la primera página marca como leída */
+        get: operations["MyConversationsController_messages_v1"];
+        put?: never;
+        /** Responder */
+        post: operations["MyConversationsController_send_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/conversations/{id}/unblock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Desbloquear (solo quien bloqueó) */
+        post: operations["MyConversationsController_unblock_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/conversations/unread": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cuántas conversaciones tienen mensajes sin leer */
+        get: operations["MyConversationsController_unread_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/me/devices": {
         parameters: {
             query?: never;
@@ -2240,6 +3282,40 @@ export type paths = {
         post?: never;
         /** RF-FAV-002: quitar de favoritos (idempotente) */
         delete: operations["FavoritesController_remove_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/job-applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mis postulaciones */
+        get: operations["JobsController_mine_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/me/job-applications/{id}/withdraw": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retirar mi postulación (mientras no esté decidida) */
+        post: operations["JobsController_withdraw_v1"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2384,6 +3460,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/messages/{id}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reportar un mensaje recibido (una vez por persona) */
+        post: operations["MessageReportsController_report_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/payments/webhooks/{provider}": {
         parameters: {
             query?: never;
@@ -2395,6 +3488,46 @@ export type paths = {
         put?: never;
         /** RF-PAG-002: aviso firmado de la pasarela (IPN). Idempotente por evento. */
         post: operations["PaymentsController_webhook_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/placements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Anuncios vigentes de un espacio (hasta 3, mayor prioridad primero)
+         * @description home_banner, search_top y booking_success son de clientes; shop_dashboard, de la pantalla de la barbería. Lista vacía si no hay campañas.
+         */
+        get: operations["SponsorsController_placements_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/placements/{id}/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registrar una impresión o un clic
+         * @description Una por persona (o instalación) por hora y tipo; las repetidas se ignoran (204 igual). Sin sesión, envía viewerKey. No se guarda la IP.
+         */
+        post: operations["SponsorsController_event_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2510,6 +3643,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/sponsors/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Auspiciador y su catálogo de productos (enlaces externos) */
+        get: operations["SponsorsController_sponsor_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/support/tickets": {
         parameters: {
             query?: never;
@@ -2584,6 +3734,40 @@ export type paths = {
         post?: never;
         /** Quitar mi foto de perfil (idempotente) */
         delete: operations["ImagesController_deleteMyPhoto_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/videos/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Borrar un video (su barbería o su barbero) */
+        delete: operations["VideosController_remove_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/videos/{id}/report": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reportar un video (una vez por persona) */
+        post: operations["VideosController_report_v1"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -3009,6 +4193,19 @@ export type components = {
             /** Format: date-time */
             startAt: string;
         };
+        ApplicantDto: {
+            /** Format: uuid */
+            barberProfileId: string;
+            displayName: string;
+            photoUrl: string | null;
+            ratingAverage: number | null;
+            ratingCount: number;
+            yearsExperience: number | null;
+        };
+        ApplyDto: {
+            /** @description Presentación para la barbería. */
+            message?: string;
+        };
         AssignTicketDto: {
             /**
              * Format: uuid
@@ -3054,6 +4251,11 @@ export type components = {
             linkedUser: components["schemas"]["LinkedUserDto"] | null;
             phone: string | null;
             photoUrl: string | null;
+            /**
+             * Format: uuid
+             * @description Carrera del barbero: su perfil profesional (GET /barber-profiles/{id}). null si no tiene cuenta.
+             */
+            profileId: string | null;
             /** @description Valoraciones visibles del barbero (Fase 11). */
             rating: components["schemas"]["RatingDto"];
             serviceIds: string[];
@@ -3069,12 +4271,40 @@ export type components = {
         BarberPhotoDto: {
             photoUrl: string | null;
         };
+        BarberProfileDto: {
+            /** @description Atenciones completadas en toda su carrera en Charles. */
+            attendedCount: number;
+            availableForWork: boolean;
+            bio: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            displayName: string;
+            district: string | null;
+            headline: string | null;
+            /** Format: uuid */
+            id: string;
+            photoUrl: string | null;
+            /** @description Puesto en el ranking general (null hasta tener 3 valoraciones). */
+            rank: number | null;
+            /** @description null sin valoraciones. */
+            ratingAverage: number | null;
+            ratingCount: number;
+            specialties: components["schemas"]["StyleRefDto"][];
+            /** @description Dónde trabaja hoy (y dónde trabajó, en /me). */
+            workplaces: components["schemas"]["WorkplaceDto"][];
+            yearsExperience: number | null;
+        };
         BarberPublicDto: {
             bio: string | null;
             displayName: string;
             /** Format: uuid */
             id: string;
             photoUrl: string | null;
+            /**
+             * Format: uuid
+             * @description Carrera del barbero: su perfil profesional (GET /barber-profiles/{id}). null si no tiene cuenta.
+             */
+            profileId: string | null;
             /** @description Valoraciones visibles del barbero (Fase 11). */
             rating: components["schemas"]["RatingDto"];
             serviceIds: string[];
@@ -3280,6 +4510,16 @@ export type components = {
             /** @description Incluye impuestos (ADR 0002). */
             total: components["schemas"]["MoneyDto"];
         };
+        BookingQuoteDto: {
+            /** @description Solo si se envió couponCode. */
+            coupon: components["schemas"]["QuoteCouponDto"] | null;
+            discountTotal: components["schemas"]["MoneyDto"];
+            feeTotal: components["schemas"]["MoneyDto"];
+            lines: components["schemas"]["QuoteLineDto"][];
+            promotion: components["schemas"]["QuotePromotionDto"] | null;
+            subtotal: components["schemas"]["MoneyDto"];
+            total: components["schemas"]["MoneyDto"];
+        };
         BookingServiceDto: {
             /**
              * @description Clave de la categoría del servicio.
@@ -3307,6 +4547,34 @@ export type components = {
             isOpenNow: boolean;
             /** @example America/Lima */
             timezone: string;
+        };
+        CampaignDto: {
+            /** @enum {string} */
+            audience: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            id: string;
+            /** @description ACTIVE y dentro de sus fechas: se está mostrando. */
+            live: boolean;
+            name: string;
+            placements: components["schemas"]["PlacementDto"][];
+            /** Format: uuid */
+            sponsorId: string;
+            /** Format: date-time */
+            startsAt: string;
+            /** @enum {string} */
+            status: "DRAFT" | "ACTIVE" | "PAUSED" | "ENDED";
+        };
+        CampaignMetricsDto: {
+            /** Format: uuid */
+            campaignId: string;
+            clicks: number;
+            ctr: number;
+            impressions: number;
+            placements: components["schemas"]["PlacementMetricsDto"][];
         };
         CancelBookingDto: {
             /** @description Obligatorio si cancela la barbería (OWNER o MANAGER); el cliente puede omitirlo. */
@@ -3406,9 +4674,58 @@ export type components = {
              */
             ticketId?: string;
         };
+        ContactBarberDto: {
+            /**
+             * Format: uuid
+             * @description Perfil profesional del barbero.
+             */
+            barberProfileId: string;
+            body: string;
+        };
         ContactDto: {
             email: string;
             phone: string | null;
+        };
+        ConversationDto: {
+            /** @description Bloqueada: nadie puede escribir. */
+            blocked: boolean;
+            /** @description La bloqueé yo (puedo desbloquearla). */
+            blockedByMe: boolean;
+            /** @description Con quién hablo (la barbería o la persona). */
+            counterpart: components["schemas"]["CounterpartDto"];
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            kind: "CLIENT" | "PROFESSIONAL";
+            /** Format: date-time */
+            lastMessageAt: string;
+            /** @description Inicio del último mensaje (120 caracteres). */
+            lastMessagePreview: string | null;
+            unread: number;
+        };
+        ConversationPageDto: {
+            items: components["schemas"]["ConversationDto"][];
+            nextCursor: string | null;
+        };
+        CounterpartDto: {
+            /**
+             * Format: uuid
+             * @description Si el otro lado es un barbero con perfil profesional.
+             */
+            barberProfileId: string | null;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            photoUrl: string | null;
+        };
+        CouponDto: {
+            code: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            id: string;
+            /** @description Canjes vigentes (sin contar reservas canceladas o vencidas). */
+            redemptions: number;
         };
         CreateBarberDto: {
             bio?: string | null;
@@ -3461,6 +4778,11 @@ export type components = {
             barberId?: string;
             /** Format: uuid */
             barbershopId: string;
+            /**
+             * @description Fase 13: cupón. Si no se puede usar: 409 COUPON_NOT_VALID (details[0].reason). Cotiza antes con POST /bookings/quote. Un solo descuento por reserva: el mayor.
+             * @example BIENVENIDO10
+             */
+            couponCode?: string;
             /** Format: uuid */
             serviceId: string;
             /**
@@ -3469,6 +4791,18 @@ export type components = {
              * @example 2030-01-07T14:00:00.000Z
              */
             startAt: string;
+        };
+        CreateCampaignDto: {
+            /**
+             * @default ALL
+             * @enum {string}
+             */
+            audience: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            /** Format: date-time */
+            endsAt: string;
+            name: string;
+            /** Format: date-time */
+            startsAt: string;
         };
         CreateCategoryDto: {
             /**
@@ -3479,6 +4813,13 @@ export type components = {
             name: string;
             /** @default 0 */
             sortOrder: number;
+        };
+        CreateCouponDto: {
+            /**
+             * @description 4 a 20 letras o números; se guarda en mayúsculas.
+             * @example BIENVENIDO10
+             */
+            code: string;
         };
         CreatedBarbershopDto: {
             address: string;
@@ -3589,6 +4930,27 @@ export type components = {
             /** @description BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero). */
             type: components["schemas"]["BarbershopType"];
         };
+        CreateFeaturedDto: {
+            /** Format: uuid */
+            barbershopId: string;
+            /**
+             * Format: date-time
+             * @description Fin del destacado (máximo 365 días después del inicio).
+             */
+            endsAt: string;
+            /** @description Nota interna (por qué se destaca). */
+            note?: string;
+            /**
+             * @description Mayor primero.
+             * @default 0
+             */
+            priority: number;
+            /**
+             * Format: date-time
+             * @description Por defecto, ahora.
+             */
+            startsAt?: string;
+        };
         CreateImageReportDto: {
             details?: string;
             reason: components["schemas"]["ImageReportReason"];
@@ -3624,6 +4986,85 @@ export type components = {
              */
             timezone?: string;
             websiteUrl?: string | null;
+        };
+        CreateJobPostingDto: {
+            /**
+             * Format: date-time
+             * @description Cierre automático (opcional, máximo 90 días).
+             */
+            closesAt?: string;
+            /** @example 50 % por servicio */
+            compensationText?: string;
+            description: string;
+            /** @enum {string} */
+            employmentType: "FULL_TIME" | "PART_TIME" | "WEEKENDS" | "COMMISSION" | "FREELANCE";
+            /** @description Especialidades buscadas. */
+            styleIds?: string[];
+            /** @example Barbero con experiencia en degradados */
+            title: string;
+        };
+        CreatePlacementDto: {
+            /** @description Enlace https al tocar el anuncio. */
+            actionUrl?: string;
+            /** @description URL devuelta por POST /admin/sponsors/media. */
+            imageUrl?: string;
+            /** @default 0 */
+            priority: number;
+            /** @enum {string} */
+            slotKey: "home_banner" | "search_top" | "booking_success" | "shop_dashboard";
+            title: string;
+        };
+        CreateProductDto: {
+            /** @description Enlace https de compra (Charles no vende ni cobra). */
+            actionUrl: string;
+            description?: string;
+            imageUrl?: string;
+            name: string;
+            /** @example Desde S/ 39.90 */
+            priceText?: string;
+            /** @default 0 */
+            sortOrder: number;
+        };
+        CreatePromotionDto: {
+            /**
+             * @description Días de la cita en que aplica (0 = domingo … 6 = sábado). Vacío: todos.
+             * @example [
+             *       2
+             *     ]
+             */
+            daysOfWeek?: number[];
+            /**
+             * Format: date-time
+             * @description null o ausente: sin fin.
+             */
+            endsAt?: string | null;
+            /** @description Usos por cliente. */
+            maxPerUser?: number;
+            /** @description Usos totales. */
+            maxRedemptions?: number;
+            /** @example 20 % los martes */
+            name: string;
+            /**
+             * @description true: solo con cupón (se crean aparte). false: se aplica sola.
+             * @default false
+             */
+            requiresCoupon: boolean;
+            /**
+             * Format: uuid
+             * @description Solo barberías: limita la promoción a un servicio propio (alcance SERVICE).
+             */
+            serviceId?: string;
+            /**
+             * Format: date-time
+             * @description Por defecto, ahora.
+             */
+            startsAt?: string;
+            type: components["schemas"]["PromotionType"];
+            /**
+             * @description PERCENTAGE: 1 a 100 (porcentaje). FIXED_AMOUNT: céntimos en PEN, de 100 (S/ 1) a 50000 (S/ 500).
+             * @example 20
+             */
+            value: number;
         };
         CreateReviewDto: {
             /** @description Texto plano: se recortan los espacios y no se interpreta HTML. */
@@ -3663,6 +5104,13 @@ export type components = {
              * @example 2500
              */
             priceAmount: number;
+        };
+        CreateSponsorDto: {
+            /** @description Contacto interno (se guarda cifrado). */
+            contact?: string;
+            /** @description URL devuelta por POST /admin/sponsors/media. */
+            logoUrl?: string;
+            name: string;
         };
         CreateStyleDto: {
             /** Format: uuid */
@@ -3722,6 +5170,13 @@ export type components = {
             dayOfWeek: number;
             /** @description Varias ventanas por día permiten descansos. */
             windows: components["schemas"]["WindowDto"][];
+        };
+        DecideApplicationDto: {
+            /**
+             * @description HIRED crea el vínculo del barbero en la barbería (luego asígnale servicios).
+             * @enum {string}
+             */
+            status: "SHORTLISTED" | "REJECTED" | "HIRED";
         };
         DeletionBlockerDto: {
             /** Format: uuid */
@@ -3786,6 +5241,23 @@ export type components = {
         FavoritePageDto: {
             items: components["schemas"]["FavoriteDto"][];
             nextCursor: string | null;
+        };
+        FeaturedListingDto: {
+            /** Format: uuid */
+            barbershopId: string;
+            barbershopName: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            id: string;
+            note: string | null;
+            priority: number;
+            /** Format: date-time */
+            startsAt: string;
+            /** @enum {string} */
+            status: "SCHEDULED" | "ACTIVE" | "ENDED" | "CANCELLED";
         };
         GalleryImageDto: {
             /** Format: uuid */
@@ -3938,6 +5410,13 @@ export type components = {
              */
             email: string;
         };
+        InvitedBarberDto: {
+            /**
+             * Format: uuid
+             * @description Vínculo creado (pendiente de que acepte).
+             */
+            barberId: string;
+        };
         InviteMemberDto: {
             /**
              * @description Correo de una cuenta existente.
@@ -3945,6 +5424,67 @@ export type components = {
              */
             email: string;
             role: components["schemas"]["BarbershopMemberRole"];
+        };
+        InviteProfileDto: {
+            /** Format: uuid */
+            barberProfileId: string;
+            /** @description Mensaje que llega a su bandeja. */
+            message?: string;
+        };
+        JobApplicationDto: {
+            applicant: components["schemas"]["ApplicantDto"];
+            barbershopName: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            decidedAt: string | null;
+            /** Format: uuid */
+            id: string;
+            message: string | null;
+            /** Format: uuid */
+            postingId: string;
+            postingTitle: string;
+            /** @enum {string} */
+            status: "APPLIED" | "SHORTLISTED" | "REJECTED" | "HIRED" | "WITHDRAWN";
+        };
+        JobBarbershopDto: {
+            address: string;
+            /** Format: uuid */
+            id: string;
+            logoUrl: string | null;
+            name: string;
+            ratingAverage: number | null;
+        };
+        JobPostingDto: {
+            /** @description Postulaciones activas (solo en la vista de la barbería; 0 en la pública). */
+            applicationsCount: number;
+            barbershop: components["schemas"]["JobBarbershopDto"];
+            /** Format: date-time */
+            closesAt: string | null;
+            compensationText: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            description: string;
+            /** @enum {string} */
+            employmentType: "FULL_TIME" | "PART_TIME" | "WEEKENDS" | "COMMISSION" | "FREELANCE";
+            /** Format: uuid */
+            id: string;
+            /**
+             * @description Mi postulación a esta oferta (si soy barbero y postulé).
+             * @enum {string|null}
+             */
+            myApplicationStatus: "APPLIED" | "SHORTLISTED" | "REJECTED" | "HIRED" | "WITHDRAWN" | null;
+            /**
+             * @description CLOSED también si pasó closesAt.
+             * @enum {string}
+             */
+            status: "OPEN" | "CLOSED";
+            styles: components["schemas"]["StyleRefDto"][];
+            title: string;
+        };
+        JobPostingPageDto: {
+            items: components["schemas"]["JobPostingDto"][];
+            nextCursor: string | null;
         };
         LinkedUserDto: {
             fullName: string;
@@ -4027,6 +5567,49 @@ export type components = {
         };
         MemberPageDto: {
             items: components["schemas"]["MemberDto"][];
+            nextCursor: string | null;
+        };
+        MessageDto: {
+            /** @description Texto; "Mensaje retirado por soporte." si se retiró. */
+            body: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            id: string;
+            /** @description Lo escribí yo (mi lado de la conversación). */
+            mine: boolean;
+            removed: boolean;
+            /** @description Quién lo escribió (nombre de pila). */
+            senderName: string | null;
+            /** @enum {string} */
+            side: "BARBERSHOP" | "USER" | "SYSTEM";
+        };
+        MessagePageDto: {
+            conversation: components["schemas"]["ConversationDto"];
+            /** @description Más recientes primero. */
+            items: components["schemas"]["MessageDto"][];
+            nextCursor: string | null;
+        };
+        MessageReportDto: {
+            barbershopName: string;
+            /** Format: date-time */
+            createdAt: string;
+            details: string | null;
+            /** Format: uuid */
+            id: string;
+            /** @description Texto del mensaje reportado (solo para soporte). */
+            messageBody: string;
+            /** Format: uuid */
+            messageId: string;
+            /** @enum {string} */
+            messageSide: "BARBERSHOP" | "USER" | "SYSTEM";
+            /** @enum {string} */
+            reason: "SPAM" | "HARASSMENT" | "INAPPROPRIATE" | "SCAM" | "OTHER";
+            removed: boolean;
+            userName: string;
+        };
+        MessageReportPageDto: {
+            items: components["schemas"]["MessageReportDto"][];
             nextCursor: string | null;
         };
         MfaCodeDto: {
@@ -4194,7 +5777,7 @@ export type components = {
              * @description Pantalla que abre la app al tocar el aviso.
              * @enum {string}
              */
-            type: "booking" | "review" | "ticket" | "barbershop" | "account";
+            type: "booking" | "review" | "ticket" | "barbershop" | "account" | "conversation" | "job_application";
         };
         OwnerDocumentDto: {
             number: string;
@@ -4272,6 +5855,63 @@ export type components = {
             /** @description Reservas que el cliente puede valorar ahora (canReview), las más recientes primero. */
             items: components["schemas"]["BookingDto"][];
         };
+        PlacementDto: {
+            actionUrl: string | null;
+            /** Format: uuid */
+            id: string;
+            imageUrl: string | null;
+            priority: number;
+            /** @enum {string} */
+            slotKey: "home_banner" | "search_top" | "booking_success" | "shop_dashboard";
+            title: string;
+        };
+        PlacementEventDto: {
+            /** @enum {string} */
+            type: "IMPRESSION" | "CLICK";
+            /**
+             * Format: uuid
+             * @description Sin sesión: identificador aleatorio de la instalación (UUID que la app genera una vez y guarda). Con sesión se ignora. Nunca se guarda en claro.
+             */
+            viewerKey?: string;
+        };
+        PlacementMetricsDto: {
+            clicks: number;
+            /** @description Clics / impresiones (0 a 1). */
+            ctr: number;
+            /** @description Impresiones (una por persona o dispositivo por hora). */
+            impressions: number;
+            /** Format: uuid */
+            placementId: string;
+            slotKey: string;
+            title: string;
+        };
+        PortfolioItemDto: {
+            /** @description Barbería donde se subió (null si la subió el barbero desde su perfil). */
+            barbershopName: string | null;
+            caption: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            height: number;
+            /** Format: uuid */
+            id: string;
+            largeUrl: string;
+            styles: components["schemas"]["StyleRefDto"][];
+            thumbUrl: string;
+            width: number;
+        };
+        PortfolioPageDto: {
+            items: components["schemas"]["PortfolioItemDto"][];
+            nextCursor: string | null;
+        };
+        PortfolioUploadDto: {
+            caption?: string;
+            /** @description Confirma que la persona fotografiada aceptó que se publique (obligatorio). */
+            consent: boolean;
+            /** Format: binary */
+            file: string;
+            /** @description Ids de estilos (multipart: repetir el campo o separar con comas). */
+            styleIds?: string[];
+        };
         PriceLineDto: {
             amount: components["schemas"]["MoneyDto"];
             description: string;
@@ -4279,6 +5919,19 @@ export type components = {
         };
         /** @enum {string} */
         PriceLineType: "SERVICE" | "DISCOUNT" | "FEE" | "TAX";
+        ProductDto: {
+            actionUrl: string;
+            description: string | null;
+            /** Format: uuid */
+            id: string;
+            imageUrl: string | null;
+            isActive: boolean;
+            name: string;
+            priceText: string | null;
+            sortOrder: number;
+            /** Format: uuid */
+            sponsorId: string;
+        };
         ProfileDto: {
             /**
              * Format: date
@@ -4303,6 +5956,89 @@ export type components = {
         ProfilePhotoDto: {
             photoUrl: string | null;
         };
+        ProfileReviewDto: {
+            barbershopName: string;
+            /** @description Nombre del cliente (o "Cuenta eliminada"). */
+            clientName: string;
+            comment: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            id: string;
+            rating: number;
+            serviceName: string;
+        };
+        ProfileReviewPageDto: {
+            items: components["schemas"]["ProfileReviewDto"][];
+            nextCursor: string | null;
+        };
+        PromotionDto: {
+            /** Format: uuid */
+            barbershopId: string | null;
+            coupons: components["schemas"]["CouponDto"][];
+            /** Format: date-time */
+            createdAt: string;
+            currency: string | null;
+            daysOfWeek: number[];
+            /** @description Total descontado en canjes vigentes. */
+            discountedTotal: components["schemas"]["MoneyDto"];
+            /** Format: date-time */
+            endsAt: string | null;
+            /** Format: uuid */
+            id: string;
+            isActive: boolean;
+            maxPerUser: number | null;
+            maxRedemptions: number | null;
+            name: string;
+            /** @description Canjes vigentes. */
+            redemptions: number;
+            requiresCoupon: boolean;
+            scope: components["schemas"]["PromotionScope"];
+            /** Format: uuid */
+            serviceId: string | null;
+            /** Format: date-time */
+            startsAt: string;
+            /**
+             * @description Calculado: programada, vigente, pausada, terminada o sin cupos.
+             * @enum {string}
+             */
+            status: "SCHEDULED" | "ACTIVE" | "PAUSED" | "ENDED" | "EXHAUSTED";
+            type: components["schemas"]["PromotionType"];
+            value: number;
+        };
+        /** @enum {string} */
+        PromotionScope: "PLATFORM" | "BARBERSHOP" | "SERVICE";
+        /** @enum {string} */
+        PromotionType: "PERCENTAGE" | "FIXED_AMOUNT";
+        PublicPlacementDto: {
+            actionUrl: string | null;
+            /** Format: uuid */
+            id: string;
+            imageUrl: string | null;
+            /** Format: uuid */
+            sponsorId: string;
+            sponsorLogoUrl: string | null;
+            sponsorName: string;
+            title: string;
+        };
+        PublicPromotionDto: {
+            currency: string | null;
+            daysOfWeek: number[];
+            /** Format: date-time */
+            endsAt: string | null;
+            /** @description true: la ofrece Charles (vale en toda la app). */
+            fromCharles: boolean;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /**
+             * Format: uuid
+             * @description null: todos los servicios.
+             */
+            serviceId: string | null;
+            type: components["schemas"]["PromotionType"];
+            value: number;
+        };
         PublicReviewDto: {
             /**
              * @description Nombre e inicial del apellido.
@@ -4326,6 +6062,72 @@ export type components = {
         PublicReviewPageDto: {
             items: components["schemas"]["PublicReviewDto"][];
             nextCursor: string | null;
+        };
+        PublicSponsorDto: {
+            /** Format: uuid */
+            id: string;
+            logoUrl: string | null;
+            name: string;
+            products: components["schemas"]["ProductDto"][];
+        };
+        QuoteBookingDto: {
+            /** Format: uuid */
+            barbershopId: string;
+            /** @example BIENVENIDO10 */
+            couponCode?: string;
+            /** Format: uuid */
+            serviceId: string;
+            /**
+             * Format: date-time
+             * @description Inicio del turno (define el día para las promociones por día).
+             */
+            startAt: string;
+        };
+        QuoteCouponDto: {
+            /** @description true si el descuento elegido es el del cupón. */
+            applied: boolean;
+            code: string;
+            /**
+             * @description Por qué no se aplicó: no existe, no vigente, no aplica a esta reserva, sin cupos, ya lo usaste, o hay una promoción mejor (un solo descuento por reserva).
+             * @enum {string|null}
+             */
+            reason: "NOT_FOUND" | "NOT_ACTIVE" | "NOT_APPLICABLE" | "EXHAUSTED" | "ALREADY_USED" | "BETTER_PROMOTION" | null;
+        };
+        QuoteLineDto: {
+            /** @description Siempre positivo; DISCOUNT se resta. */
+            amount: components["schemas"]["MoneyDto"];
+            description: string;
+            /** @enum {string} */
+            type: "SERVICE" | "DISCOUNT" | "FEE";
+        };
+        QuotePromotionDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+        };
+        RankedBarberDto: {
+            attendedCount: number;
+            availableForWork: boolean;
+            /** @description Barberías donde trabaja hoy. */
+            currentBarbershops: string[];
+            displayName: string;
+            district: string | null;
+            headline: string | null;
+            /** Format: uuid */
+            id: string;
+            photoUrl: string | null;
+            /** @description Puesto (null si aún no entra al ranking). */
+            rank: number | null;
+            ratingAverage: number | null;
+            ratingCount: number;
+            /** @description Puntaje del ranking (promedio bayesiano, 0 a 5). */
+            score: number;
+            specialties: components["schemas"]["StyleRefDto"][];
+        };
+        RankingPageDto: {
+            items: components["schemas"]["RankedBarberDto"][];
+            /** @description offset de la página siguiente. */
+            nextOffset: number | null;
         };
         RatingDto: {
             /** @example 4.5 */
@@ -4420,11 +6222,51 @@ export type components = {
             count: number;
             reason: string;
         };
+        ReportedVideoDto: {
+            caption: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            durationMs: number | null;
+            /**
+             * @description Por qué falló (solo en la vista de quien lo subió).
+             * @enum {string|null}
+             */
+            failureReason: "NOT_A_VIDEO" | "TOO_LONG" | "TOO_LARGE" | "PROCESSING_FAILED" | null;
+            /** Format: uuid */
+            id: string;
+            openReports: number;
+            ownerName: string | null;
+            /** @description Miniatura WebP. */
+            posterUrl: string | null;
+            /** @description Motivos de los reportes abiertos. */
+            reasons: string[];
+            removed: boolean;
+            /**
+             * @description PROCESSING mientras se comprime (segundos); vuelve a consultar.
+             * @enum {string}
+             */
+            status: "PROCESSING" | "READY" | "FAILED";
+            /** @description MP4 (H.264, máx. 720p). null si no está listo. */
+            videoUrl: string | null;
+        };
+        ReportMessageDto: {
+            details?: string;
+            /** @enum {string} */
+            reason: "SPAM" | "HARASSMENT" | "INAPPROPRIATE" | "SCAM" | "OTHER";
+        };
         /** @enum {string} */
         ReportStatus: "OPEN" | "IN_REVIEW" | "RESOLVED";
         RequestAccountDeletionDto: {
             /** @description Contraseña actual (confirmación). */
             password: string;
+        };
+        ResolveMessageReportDto: {
+            /**
+             * @description REMOVE retira el mensaje.
+             * @enum {string}
+             */
+            action: "REMOVE" | "DISMISS";
+            reason: string;
         };
         ResolveReportsDto: {
             /** @description Resolución (queda en los reportes). */
@@ -4518,6 +6360,9 @@ export type components = {
             timezone: string;
             type: components["schemas"]["BarbershopType"];
         };
+        SendMessageDto: {
+            body: string;
+        };
         ServiceCategoryDto: {
             /** @example haircut */
             key: string;
@@ -4580,6 +6425,10 @@ export type components = {
         SetBarberServicesDto: {
             serviceIds: string[];
         };
+        SetProfileSpecialtiesDto: {
+            /** @description Ids de estilos activos (máximo 10). */
+            styleIds: string[];
+        };
         SetSpecialtiesDto: {
             /** @description Estilos (hasta 5). */
             styleIds: string[];
@@ -4590,6 +6439,25 @@ export type components = {
             endAt: string;
             /** Format: date-time */
             startAt: string;
+        };
+        SponsorDto: {
+            campaigns: number;
+            /** @description Solo en /admin. */
+            contact: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            id: string;
+            isActive: boolean;
+            logoUrl: string | null;
+            name: string;
+            products: number;
+        };
+        SponsorMediaDto: {
+            /** @description Miniatura (400 px de ancho). */
+            thumbUrl: string;
+            /** @description Imagen grande (1600 px de ancho). */
+            url: string;
         };
         StaffPersonDto: {
             fullName: string;
@@ -4671,6 +6539,17 @@ export type components = {
             roles: ("CLIENT" | "BARBER" | "OWNER" | "SUPPORT" | "ADMIN")[];
             /** @enum {string} */
             status: "ACTIVE" | "DISABLED";
+        };
+        StartConversationDto: {
+            /** Format: uuid */
+            barbershopId: string;
+            body: string;
+            /**
+             * @description PROFESSIONAL: como barbero (exige perfil profesional).
+             * @default CLIENT
+             * @enum {string}
+             */
+            kind: "CLIENT" | "PROFESSIONAL";
         };
         StyleRefDto: {
             /** Format: uuid */
@@ -4815,6 +6694,10 @@ export type components = {
         UnreadCountDto: {
             unread: number;
         };
+        UnreadMessagesDto: {
+            /** @description Conversaciones con mensajes sin leer (como persona). */
+            conversations: number;
+        };
         UpdateBarberDto: {
             bio?: string | null;
             displayName?: string;
@@ -4862,6 +6745,18 @@ export type components = {
             /** @enum {string} */
             status: "OPEN" | "TEMPORARILY_CLOSED";
         };
+        UpdateCampaignDto: {
+            /** @enum {string} */
+            audience?: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            /** Format: date-time */
+            endsAt?: string;
+            name?: string;
+            /**
+             * @description DRAFT → ACTIVE (publicar), ACTIVE ↔ PAUSED, cualquiera → ENDED (definitivo).
+             * @enum {string}
+             */
+            status?: "DRAFT" | "ACTIVE" | "PAUSED" | "ENDED";
+        };
         UpdateCategoryDto: {
             /** @description false la desactiva (nunca se borra). */
             isActive?: boolean;
@@ -4876,6 +6771,36 @@ export type components = {
             serviceId?: string | null;
             /** @description Reemplaza los estilos (hasta 3). */
             styleIds?: string[];
+        };
+        UpdateJobPostingDto: {
+            /** Format: date-time */
+            closesAt?: string | null;
+            compensationText?: string | null;
+            description?: string;
+            /** @enum {string} */
+            employmentType?: "FULL_TIME" | "PART_TIME" | "WEEKENDS" | "COMMISSION" | "FREELANCE";
+            /**
+             * @description Cerrar o reabrir la oferta.
+             * @enum {string}
+             */
+            status?: "OPEN" | "CLOSED";
+            styleIds?: string[];
+            title?: string;
+        };
+        UpdatePlacementDto: {
+            actionUrl?: string | null;
+            imageUrl?: string | null;
+            priority?: number;
+            title?: string;
+        };
+        UpdateProductDto: {
+            actionUrl?: string;
+            description?: string | null;
+            imageUrl?: string | null;
+            isActive?: boolean;
+            name?: string;
+            priceText?: string | null;
+            sortOrder?: number;
         };
         UpdateProfileDto: {
             /**
@@ -4894,6 +6819,15 @@ export type components = {
              */
             phone?: string | null;
             preferences?: components["schemas"]["NotificationPreferencesDto"];
+        };
+        UpdatePromotionDto: {
+            /** Format: date-time */
+            endsAt?: string | null;
+            /** @description false la pausa; true la reanuda. */
+            isActive?: boolean;
+            maxPerUser?: number | null;
+            maxRedemptions?: number | null;
+            name?: string;
         };
         UpdateReviewDto: {
             /** @description null quita el comentario. */
@@ -4929,6 +6863,12 @@ export type components = {
                 [key: string]: unknown;
             };
         };
+        UpdateSponsorDto: {
+            contact?: string | null;
+            isActive?: boolean;
+            logoUrl?: string | null;
+            name?: string;
+        };
         UpdateStyleDto: {
             /** @description false lo oculta de la app y de la búsqueda (no se borra). */
             isActive?: boolean;
@@ -4941,11 +6881,63 @@ export type components = {
             /** @enum {string} */
             status: "IN_PROGRESS" | "RESOLVED" | "CLOSED";
         };
+        UpsertBarberProfileDto: {
+            /** @description Aparece en la búsqueda de barberos para las barberías ("disponible para trabajar"). */
+            availableForWork?: boolean;
+            bio?: string | null;
+            /** @example Carlos "El Fade" */
+            displayName: string;
+            /** @example Miraflores */
+            district?: string | null;
+            /** @example Especialista en degradados */
+            headline?: string | null;
+            yearsExperience?: number | null;
+        };
         VerdictResultDto: {
             /** @description Si este veredicto suspendió la barbería. */
             barbershopSuspended: boolean;
             /** @enum {string} */
             verdict: "JUSTIFIED" | "UNJUSTIFIED";
+        };
+        VideoDto: {
+            caption: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            durationMs: number | null;
+            /**
+             * @description Por qué falló (solo en la vista de quien lo subió).
+             * @enum {string|null}
+             */
+            failureReason: "NOT_A_VIDEO" | "TOO_LONG" | "TOO_LARGE" | "PROCESSING_FAILED" | null;
+            /** Format: uuid */
+            id: string;
+            /** @description Miniatura WebP. */
+            posterUrl: string | null;
+            /**
+             * @description PROCESSING mientras se comprime (segundos); vuelve a consultar.
+             * @enum {string}
+             */
+            status: "PROCESSING" | "READY" | "FAILED";
+            /** @description MP4 (H.264, máx. 720p). null si no está listo. */
+            videoUrl: string | null;
+        };
+        VideoModerationDto: {
+            /** @enum {string} */
+            decision: "KEEP" | "REMOVE" | "RESTORE";
+            reason: string;
+        };
+        VideoReportDto: {
+            details?: string;
+            /** @enum {string} */
+            reason: "NOT_MY_PHOTO" | "NO_CONSENT" | "INAPPROPRIATE" | "MISLEADING" | "OTHER";
+        };
+        VideoUploadDto: {
+            caption?: string;
+            /**
+             * Format: binary
+             * @description MP4, MOV o WebM; hasta 30 s y 50 MB.
+             */
+            file: string;
         };
         WebhookReceiptDto: {
             /** @description true si el evento ya se había recibido (no se aplica de nuevo). */
@@ -4985,6 +6977,24 @@ export type components = {
              * @example 09:00
              */
             start: string;
+        };
+        WorkplaceDto: {
+            /**
+             * Format: uuid
+             * @description Vínculo (id de barbero en esa barbería).
+             */
+            barberId: string;
+            /** Format: uuid */
+            barbershopId: string;
+            barbershopName: string;
+            /** @enum {string} */
+            barbershopType: "SHOP" | "INDEPENDENT";
+            /** @description Trabaja ahí actualmente. */
+            current: boolean;
+            /** Format: date-time */
+            since: string;
+            /** Format: date-time */
+            until: string | null;
         };
     };
     responses: never;
@@ -5437,6 +7447,125 @@ export interface operations {
             };
         };
     };
+    SponsorsAdminController_updateCampaign_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCampaignDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_metrics_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignMetricsDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_addPlacement_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePlacementDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     AdminOperationsController_cancellationReviews_v1: {
         parameters: {
             query?: {
@@ -5541,6 +7670,96 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminDashboardDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    FeaturedAdminController_list_v1: {
+        parameters: {
+            query?: {
+                /** @description true incluye los terminados y retirados. */
+                includePast?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeaturedListingDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    FeaturedAdminController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateFeaturedDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeaturedListingDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    FeaturedAdminController_cancel_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeaturedListingDto"];
                 };
             };
             403: {
@@ -5669,6 +7888,51 @@ export interface operations {
             };
         };
     };
+    MessageReportsAdminController_list_v1: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageReportPageDto"];
+                };
+            };
+        };
+    };
+    MessageReportsAdminController_resolve_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolveMessageReportDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     AdminOperationsController_refund_v1: {
         parameters: {
             query?: never;
@@ -5709,6 +7973,330 @@ export interface operations {
                 };
             };
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_removePlacement_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_updatePlacement_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePlacementDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_updateProduct_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProductDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsAdminController_list_v1: {
+        parameters: {
+            query?: {
+                barbershopId?: string;
+                scope?: "PLATFORM" | "BARBERSHOP" | "SERVICE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsAdminController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePromotionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsAdminController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                promotionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePromotionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsAdminController_addCoupon_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                promotionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCouponDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsAdminController_removeCoupon_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                couponId: string;
+                promotionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6203,6 +8791,348 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_list_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SponsorDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSponsorDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SponsorDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSponsorDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SponsorDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_campaigns_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_createCampaign_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCampaignDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CampaignDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_products_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_createProduct_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProductDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_media_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["ImageUploadDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SponsorMediaDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            503: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6806,6 +9736,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosAdminController_moderate_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VideoModerationDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    VideosAdminController_reported_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportedVideoDto"][];
                 };
             };
         };
@@ -7623,6 +10595,172 @@ export interface operations {
             };
         };
     };
+    BarberProfilesController_profile_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarberProfileDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarberProfilesController_portfolio_v1: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+                /** @description Clave de estilo (por ejemplo fade_low). */
+                style?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarberProfilesController_reviews_v1: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+                /** @description Clave de estilo (por ejemplo fade_low). */
+                style?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfileReviewPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosController_profileVideos_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarberProfilesController_ranking_v1: {
+        parameters: {
+            query?: {
+                /** @description Solo los disponibles para trabajar (para barberías). */
+                availableForWork?: boolean;
+                /** @description Distrito (coincidencia parcial, sin tildes ni mayúsculas). */
+                district?: string;
+                limit?: number;
+                /** @description Desplazamiento (paginación). */
+                offset?: number;
+                /** @description Nombre del barbero (coincidencia parcial). */
+                q?: string;
+                sort?: "ranking" | "newest";
+                /** @description Clave de estilo (especialidad). */
+                style?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RankingPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     BarbershopsController_create_v1: {
         parameters: {
             query?: never;
@@ -7642,6 +10780,399 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CreatedBarbershopDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopJobsController_invite_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteProfileDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvitedBarberDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopConversationsController_list_v1: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                barbershopId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopConversationsController_contact_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContactBarberDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessagePageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopConversationsController_block_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopConversationsController_messages_v1: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                barbershopId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessagePageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopConversationsController_send_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SendMessageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopConversationsController_unblock_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopJobsController_decide_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DecideApplicationDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobApplicationDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopJobsController_list_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobPostingDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopJobsController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateJobPostingDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobPostingDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopJobsController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateJobPostingDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobPostingDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopJobsController_applications_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barbershopId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobApplicationDto"][];
                 };
             };
             404: {
@@ -9041,6 +12572,205 @@ export interface operations {
             };
         };
     };
+    PromotionsController_list_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePromotionDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                promotionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePromotionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsController_addCoupon_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                promotionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCouponDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description COUPON_CODE_TAKEN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsController_removeCoupon_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                couponId: string;
+                id: string;
+                promotionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromotionDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PromotionsController_active_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicPromotionDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     BarbershopReportsController_report_v1: {
         parameters: {
             query?: never;
@@ -9461,6 +13191,97 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosController_shopVideos_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosController_uploadShop_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["VideoUploadDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosController_manageShop_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoDto"][];
+                };
             };
             404: {
                 headers: {
@@ -10000,6 +13821,37 @@ export interface operations {
             };
         };
     };
+    BookingsController_quote_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["QuoteBookingDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BookingQuoteDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     ImagesController_report_v1: {
         parameters: {
             query?: never;
@@ -10081,6 +13933,112 @@ export interface operations {
                 };
             };
             503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    JobsController_list_v1: {
+        parameters: {
+            query?: {
+                /** @description Texto en la dirección de la barbería (distrito, ciudad). */
+                area?: string;
+                cursor?: string;
+                employmentType?: "FULL_TIME" | "PART_TIME" | "WEEKENDS" | "COMMISSION" | "FREELANCE";
+                limit?: number;
+                /** @description Clave de estilo buscado. */
+                style?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobPostingPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    JobsController_get_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobPostingDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    JobsController_apply_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplyDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobApplicationDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description ALREADY_APPLIED, JOB_POSTING_CLOSED */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -10212,6 +14170,379 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyBarberProfileController_mine_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarberProfileDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyBarberProfileController_upsert_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertBarberProfileDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarberProfileDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyBarberProfileController_setPhoto_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["ImageUploadDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfilePhotoDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyBarberProfileController_deletePhoto_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProfilePhotoDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyBarberProfileController_upload_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["PortfolioUploadDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioItemDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description IMAGE_LIMIT_REACHED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyBarberProfileController_removePortfolio_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                imageId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyBarberProfileController_specialties_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetProfileSpecialtiesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarberProfileDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosController_manageMine_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosController_uploadMine_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["VideoUploadDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyBarberProfileController_leave_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barberId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarberProfileDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -10622,6 +14953,235 @@ export interface operations {
             };
         };
     };
+    MyConversationsController_list_v1: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyConversationsController_start_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartConversationDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessagePageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description CONVERSATION_BLOCKED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyConversationsController_block_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyConversationsController_messages_v1: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessagePageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyConversationsController_send_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SendMessageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description CONVERSATION_BLOCKED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyConversationsController_unblock_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConversationDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyConversationsController_unread_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnreadMessagesDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     NotificationsController_listDevices_v1: {
         parameters: {
             query?: never;
@@ -10765,6 +15325,62 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    JobsController_mine_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobApplicationDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    JobsController_withdraw_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobApplicationDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
             };
         };
     };
@@ -10989,6 +15605,38 @@ export interface operations {
             };
         };
     };
+    MessageReportsController_report_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportMessageDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description ALREADY_REPORTED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     PaymentsController_webhook_v1: {
         parameters: {
             query?: never;
@@ -11017,6 +15665,58 @@ export interface operations {
                 };
             };
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsController_placements_v1: {
+        parameters: {
+            query: {
+                slot: "home_banner" | "search_top" | "booking_success" | "shop_dashboard";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicPlacementDto"][];
+                };
+            };
+        };
+    };
+    SponsorsController_event_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlacementEventDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -11338,6 +16038,35 @@ export interface operations {
             };
         };
     };
+    SponsorsController_sponsor_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicSponsorDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     SupportController_create_v1: {
         parameters: {
             query?: never;
@@ -11559,6 +16288,64 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ProfilePhotoDto"];
                 };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosController_remove_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    VideosController_report_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VideoReportDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             404: {
                 headers: {

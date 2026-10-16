@@ -1,0 +1,103 @@
+{
+  "title": "Mi perfil profesional",
+  "rank": "Puesto #{{rank}} en el ranking",
+  "rankPending": "Entras al ranking con 3 valoraciones",
+  "noReviews": "Aún sin valoraciones",
+  "attended_one": "{{count}} atención",
+  "attended_other": "{{count}} atenciones",
+  "years_one": "{{count}} año de experiencia",
+  "years_other": "{{count}} años de experiencia",
+  "availableForWork": "Disponible para trabajar",
+  "edit": "Editar mi perfil",
+  "seePublic": "Ver mi perfil público",
+  "jobs": "Empleos",
+  "applications": "Mis postulaciones",
+  "worksAt": "Trabaja en",
+  "notFound": "No encontramos este perfil",
+  "back": "Volver",
+  "allStyles": "Todos",
+  "more": "Ver más",
+  "noVideos": "Aún no hay videos",
+  "tabs": {
+    "label": "Secciones del perfil",
+    "cuts": "Cortes",
+    "reviews": "Valoraciones",
+    "videos": "Videos"
+  },
+  "create": {
+    "title": "Crea tu perfil profesional",
+    "message": "Tus valoraciones, cortes y ranking quedan contigo aunque cambies de barbería. También te sirve para postular a empleos.",
+    "action": "Crear mi perfil"
+  },
+  "photo": {
+    "change": "Cambiar foto",
+    "remove": "Quitar foto"
+  },
+  "form": {
+    "displayName": "Nombre profesional",
+    "headline": "Titular (opcional)",
+    "headlineHint": "Por ejemplo: Especialista en degradados",
+    "bio": "Sobre ti (opcional)",
+    "years": "Años de experiencia (opcional)",
+    "district": "Distrito (opcional)",
+    "available": "Disponible para trabajar",
+    "availableHint": "Las barberías que buscan personal te podrán encontrar e invitar.",
+    "create": "Crear mi perfil",
+    "save": "Guardar",
+    "created": "Perfil creado. Ya tienes el rol de barbero.",
+    "saved": "Cambios guardados",
+    "createInfo": "Al crearlo, tu cuenta pasa a tener el rol de barbero.",
+    "displayNameLength": "Escribe de 2 a 60 caracteres.",
+    "headlineLength": "Hasta 80 caracteres.",
+    "bioLength": "Hasta 600 caracteres.",
+    "yearsRange": "Escribe un número de 0 a 60.",
+    "districtLength": "Escribe de 2 a 60 caracteres."
+  },
+  "specialties": {
+    "title": "Especialidades",
+    "count": "{{count}} de {{max}}",
+    "hint": "Elige hasta {{max}} estilos en los que eres fuerte."
+  },
+  "portfolio": {
+    "title": "Mi portafolio",
+    "add": "Agregar corte",
+    "empty": "Sube fotos de tus mejores cortes.",
+    "emptyPublic": "Aún no hay cortes",
+    "cut": "Corte",
+    "removeHint": "Mantén presionado un corte para quitarlo.",
+    "removeTitle": "¿Quitar este corte?",
+    "removeMessage": "Dejará de verse en tu perfil.",
+    "remove": "Quitar",
+    "uploaded": "Corte publicado",
+    "unavailable": "Para subir fotos necesitas la versión más reciente de la app.",
+    "choose": "Elegir de la galería",
+    "take": "Tomar foto",
+    "caption": "Descripción (opcional)",
+    "styles": "Estilos (hasta {{max}})",
+    "consent": "La persona fotografiada aceptó que se publique",
+    "upload": "Publicar corte"
+  },
+  "workplaces": {
+    "title": "Dónde trabajo",
+    "keep": "Tus valoraciones, cortes y ranking se quedan contigo.",
+    "none": "Ahora no trabajas en ninguna barbería.",
+    "since": "Desde el {{date}}",
+    "leave": "Dejar esta barbería",
+    "leaveTitle": "¿Dejar {{name}}?",
+    "leaveMessage": "Dejarás de aparecer en esa barbería y sus clientes ya no podrán reservar contigo ahí. Tus valoraciones, cortes y ranking se quedan contigo.",
+    "left": "Ya no trabajas en esa barbería",
+    "hasBookings": "Tienes reservas pendientes ahí: atiéndelas o pide que las reasignen.",
+    "past": "Antes trabajaste en",
+    "pastLine": "{{name}} (hasta el {{until}})"
+  },
+  "ranking": {
+    "title": "Barberos",
+    "search": "Buscar por nombre",
+    "district": "Distrito",
+    "empty": "No encontramos barberos con esos filtros",
+    "line": "#{{rank}} {{name}}",
+    "rating": "{{average}} ({{count}})",
+    "availableInfo": "Barberos disponibles para trabajar."
+  },
+  "profileTitle": "Perfil del barbero"
+}

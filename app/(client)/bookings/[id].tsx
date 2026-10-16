@@ -1,4 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
+import { AdSlot } from '@/features/ads';
 import { BookingScreen } from '@/features/booking';
 
 export default function BookingRoute() {
@@ -14,6 +15,12 @@ export default function BookingRoute() {
       onHelp={(bookingId) => router.push({ pathname: '/support/new', params: { bookingId } })}
       onReview={(bookingId) => router.push({ pathname: '/reviews/new', params: { bookingId } })}
       onEditReview={(id) => router.push({ pathname: '/reviews/[id]', params: { id } })}
+      successSlot={
+        <AdSlot
+          slot="booking_success"
+          onOpenSponsor={(sponsorId) => router.push({ pathname: '/sponsor/[id]', params: { id: sponsorId } })}
+        />
+      }
     />
   );
 }

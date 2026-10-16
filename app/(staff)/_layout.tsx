@@ -32,6 +32,24 @@ export default function StaffLayout() {
       <Stack.Screen name="shop/[shopId]/hours" options={{ title: t('home.sections.hours') }} />
       <Stack.Screen name="shop/[shopId]/blocks/index" options={{ title: t('home.sections.blocks') }} />
       <Stack.Screen name="shop/[shopId]/blocks/new" options={{ title: t('nav.newBlock') }} />
+      <Stack.Screen
+        name="shop/[shopId]/promotions/index"
+        options={{ title: t('home.sections.promotions') }}
+      />
+      <Stack.Screen name="shop/[shopId]/promotions/new" options={{ title: t('new', { ns: 'promotions' }) }} />
+      <Stack.Screen name="shop/[shopId]/jobs/index" options={{ title: t('home.sections.jobs') }} />
+      <Stack.Screen name="shop/[shopId]/jobs/new" options={{ title: t('shop.new', { ns: 'jobs' }) }} />
+      <Stack.Screen name="shop/[shopId]/jobs/[jobId]/index" options={{ title: t('home.sections.jobs') }} />
+      <Stack.Screen
+        name="shop/[shopId]/jobs/[jobId]/applicants"
+        options={{ title: t('shop.applicantsTitle', { ns: 'jobs' }) }}
+      />
+      <Stack.Screen name="shop/[shopId]/talent" options={{ title: t('home.sections.talent') }} />
+      <Stack.Screen name="shop/[shopId]/videos" options={{ title: t('home.sections.videos') }} />
+      <Stack.Screen
+        name="shop/[shopId]/promotions/[promotionId]"
+        options={{ title: t('title', { ns: 'promotions' }) }}
+      />
     </Stack>
   );
 }

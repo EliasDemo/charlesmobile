@@ -87,7 +87,7 @@ Cabecera en cada petición autenticada: `Authorization: Bearer <accessToken>`.
 7. **Recuperar la contraseña:**
    - pedir el código: `POST /auth/password-reset/request` con `{ email }` (respuesta idéntica exista o no la cuenta);
    - confirmar: `POST /auth/password-reset/confirm` con `{ email, code, newPassword }`, que **cierra todas las sesiones**.
-8. **Perfil:** `GET /users/me` y `PATCH /users/me`, para nombre, teléfono, preferencias, fecha de nacimiento y género; foto con `PUT`/`DELETE /users/me/photo`; contraseña con `POST /users/me/password`. El correo no se cambia en el MVP. Detalle en [`PERFIL.md`](PERFIL.md).
+8. **Perfil:** `GET /users/me` y `PATCH /users/me`, para nombre, teléfono, preferencias, fecha de nacimiento y género; foto con `PUT`/`DELETE /users/me/photo`; contraseña con `POST /users/me/password`. El correo no se cambia en el MVP. Detalle en [`PERFIL.md`](PERFIL.md). Promociones, cupones y anuncios: [`PROMOCIONES.md`](PROMOCIONES.md). Perfil profesional del barbero, mensajes, bolsa de trabajo y videos: [`CARRERA.md`](CARRERA.md).
 
 ### Qué hacer ante un 401
 
@@ -177,6 +177,12 @@ Todos los errores tienen la misma forma:
 | `PAYLOAD_TOO_LARGE`                     | 413       | Cuerpo demasiado grande                                                                   | Error de la app.                                                                     |
 | `UNSUPPORTED_MEDIA_TYPE`                | 415       | Tipo de contenido no soportado                                                            | Error de la app (usar JSON).                                                         |
 | `WRONG_PASSWORD`                        | 400       | Cambio de contraseña: la actual no es correcta (no cierra la sesión)                      | Marcar el campo "Contraseña actual".                                                 |
+| `COUPON_NOT_VALID`                      | 409       | El cupón no se puede usar al reservar (`details[0].reason`)                               | Mostrar el motivo y volver a cotizar (ver `PROMOCIONES.md`).                         |
+| `COUPON_CODE_TAKEN`                     | 409       | Ese código de cupón ya existe                                                             | "Elige otro código."                                                                 |
+| `CONVERSATION_BLOCKED`                  | 409       | La conversación está bloqueada                                                            | Deshabilitar el envío (ver `CARRERA.md`).                                            |
+| `ALREADY_APPLIED`                       | 409       | Ya postuló a esa oferta o ya trabaja en esa barbería                                      | Mostrar el estado de su postulación.                                                 |
+| `JOB_POSTING_CLOSED`                    | 409       | La oferta está cerrada                                                                    | "Esta oferta ya cerró."                                                              |
+| `VIDEO_LIMIT_REACHED`                   | 409       | Tope de videos (`details[0].limit`)                                                       | "Borra un video para subir otro."                                                    |
 | `ACCOUNT_LOCKED`                        | 429       | Demasiados intentos fallidos de acceso                                                    | "Espera unos minutos." `details[0].retryAfterSeconds` indica cuánto.                 |
 | `TOO_MANY_REQUESTS`                     | 429       | Límite de peticiones                                                                      | Esperar y reintentar con espera creciente.                                           |
 | `INTERNAL_ERROR`                        | 500       | Error inesperado                                                                          | Mensaje genérico; reportar con `requestId`.                                          |

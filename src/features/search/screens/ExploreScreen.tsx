@@ -24,9 +24,23 @@ export interface ExploreScreenProps {
   onOpenFilters: () => void;
   /** Action on the right of the title (the notifications bell, given by the route). */
   headerRight?: ReactNode;
+  /** "Barberos" (ranking) and "Empleos". */
+  onOpenBarbers?: () => void;
+  onOpenJobs?: () => void;
+  /** Sponsor spaces: on the start page, and above the results of a search. */
+  homeBanner?: ReactNode;
+  resultsTop?: ReactNode;
 }
 
-export function ExploreScreen({ onOpenBarbershop, onOpenFilters, headerRight }: ExploreScreenProps) {
+export function ExploreScreen({
+  onOpenBarbershop,
+  onOpenFilters,
+  headerRight,
+  onOpenBarbers,
+  onOpenJobs,
+  homeBanner,
+  resultsTop,
+}: ExploreScreenProps) {
   const theme = useTheme();
   const { t } = useTranslation('search');
   const store = useSearchStore();
@@ -69,6 +83,8 @@ export function ExploreScreen({ onOpenBarbershop, onOpenFilters, headerRight }: 
           label={store.view === 'list' ? t('viewMap') : t('viewList')}
           onPress={() => store.setView(store.view === 'list' ? 'map' : 'list')}
         />
+        {onOpenBarbers ? <Chip label={t('barbers')} onPress={onOpenBarbers} /> : null}
+        {onOpenJobs ? <Chip label={t('jobs')} onPress={onOpenJobs} /> : null}
       </ScrollView>
       {categories.data && categories.data.length > 0 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
@@ -100,6 +116,7 @@ export function ExploreScreen({ onOpenBarbershop, onOpenFilters, headerRight }: 
           {t('states.loading', { ns: 'common' })}
         </Text>
       ) : null}
+      {store.view === 'list' ? (results.usingDefaultOrder ? homeBanner : resultsTop) : null}
       {store.view === 'list' && results.usingDefaultOrder && results.query.items?.length ? (
         // "Mejor valoradas" only when some result actually has reviews.
         <Text variant="subtitle">

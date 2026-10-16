@@ -40,7 +40,9 @@
   "barbers": {
     "empty": "This barbershop has no visible barbers yet.",
     "experience_one": "{{count}} year of experience",
-    "experience_other": "{{count}} years of experience"
+    "experience_other": "{{count}} years of experience",
+    "seeProfile": "See profile and cuts",
+    "openProfile": "Open {{name}}'s profile"
   },
   "reviews": {
     "empty": "No reviews yet.",

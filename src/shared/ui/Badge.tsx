@@ -2,10 +2,11 @@ import { StyleSheet, View } from 'react-native';
 import { spacing, useTheme } from '@/shared/theme';
 import { Text } from './Text';
 
-export type BadgeTone = 'neutral' | 'success' | 'warning' | 'danger';
+export type BadgeTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger';
 
 const TEXT_COLOR = {
   neutral: 'textSecondary',
+  primary: 'primary',
   success: 'success',
   warning: 'warning',
   danger: 'danger',
