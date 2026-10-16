@@ -85,5 +85,12 @@
     "sent": "Invitation sent. They'll get a code by email and a message.",
     "invited": "Invited",
     "write": "Write"
-  }
+  },
+  "intro": "Jobs from barbershops looking for barbers. Apply with your professional profile.",
+  "areaPlaceholder": "Miraflores, Surco…",
+  "openShop": "See the barbershop {{name}}",
+  "seeShop": "See barbershop",
+  "wanted": "Specialties wanted",
+  "about": "About the job",
+  "applyTitle": "Apply to this job"
 }

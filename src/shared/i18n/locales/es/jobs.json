@@ -85,5 +85,12 @@
     "sent": "Invitación enviada. Le llegará un código por correo y un mensaje.",
     "invited": "Invitado",
     "write": "Escribir"
-  }
+  },
+  "intro": "Ofertas de barberías que buscan barberos. Postula con tu perfil profesional.",
+  "areaPlaceholder": "Miraflores, Surco…",
+  "openShop": "Ver la barbería {{name}}",
+  "seeShop": "Ver barbería",
+  "wanted": "Especialidades buscadas",
+  "about": "Sobre el puesto",
+  "applyTitle": "Postula a esta oferta"
 }

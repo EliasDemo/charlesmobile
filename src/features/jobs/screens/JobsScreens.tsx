@@ -1,31 +1,33 @@
 import { useState } from 'react';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useStyles } from '@/features/gallery';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate } from '@/shared/lib';
-import { sizes, spacing, type StatusTone } from '@/shared/theme';
+import { sizes, spacing } from '@/shared/theme';
 import {
+  Badge,
   Button,
   Card,
   Chip,
   ConfirmDialog,
   InfiniteList,
   InfoCard,
+  ListRow,
   Monogram,
   Notice,
   QueryView,
   Screen,
+  SearchField,
   StatusPill,
   Text,
   TextField,
   useFieldErrorText,
-  type IconName,
-  type InfoItem,
   type TextFieldProps,
 } from '@/shared/ui';
-import type { ApplicationStatus, EmploymentType, JobApplication, JobPosting } from '../api/jobsApi';
+import type { EmploymentType, JobApplication } from '../api/jobsApi';
+import { ApplicationProgress, ApplicationStatusPill, JobCard, JobFact } from '../components/JobParts';
 import {
   EMPLOYMENT_TYPES,
   useApplicants,
@@ -37,53 +39,7 @@ import {
   useShopJobs,
 } from '../hooks/useJobs';
 
-const STATUS: Record<ApplicationStatus, { tone: StatusTone; icon: IconName }> = {
-  APPLIED: { tone: 'pending', icon: 'paper-plane' },
-  SHORTLISTED: { tone: 'pending', icon: 'star' },
-  REJECTED: { tone: 'danger', icon: 'close-circle' },
-  HIRED: { tone: 'success', icon: 'checkmark-circle' },
-  WITHDRAWN: { tone: 'neutral', icon: 'return-down-back' },
-};
-
-export function ApplicationStatusPill({ status }: { status: ApplicationStatus }) {
-  const { t } = useTranslation('jobs');
-  return <StatusPill tone={STATUS[status].tone} icon={STATUS[status].icon} label={t(`status.${status}`)} />;
-}
-
 const zone = env.defaultTimeZone;
-
-function JobCard({ job, onPress }: { job: JobPosting; onPress: () => void }) {
-  const { t } = useTranslation('jobs');
-  const details: InfoItem[] = [
-    { icon: 'briefcase', text: t(`types.${job.employmentType}`) },
-    { icon: 'location', text: job.barbershop.address },
-  ];
-  if (job.compensationText) details.push({ icon: 'cash', text: job.compensationText });
-  if (job.closesAt)
-    details.push({ icon: 'time', text: t('closesAt', { date: formatShortDate(job.closesAt, zone) }) });
-  return (
-    <InfoCard
-      testID={`job-${job.id}`}
-      onPress={onPress}
-      leading={
-        <Monogram name={job.barbershop.name} size={sizes.avatarSmall} imageUrl={job.barbershop.logoUrl} />
-      }
-      title={job.title}
-      subtitle={job.barbershop.name}
-      details={details}
-      trailing={
-        job.myApplicationStatus ? <ApplicationStatusPill status={job.myApplicationStatus} /> : undefined
-      }
-      footer={
-        job.styles.length > 0 ? (
-          <Text variant="caption" color="textSecondary">
-            {job.styles.map((s) => s.name).join(' · ')}
-          </Text>
-        ) : undefined
-      }
-    />
-  );
-}
 
 /** "Empleos": open postings, filtered by kind, specialty and area. */
 export function JobsScreen({
@@ -107,27 +63,36 @@ export function JobsScreen({
         empty={{ title: t('empty'), message: t('emptyMessage'), icon: 'briefcase-outline' }}
         header={
           <View style={styles.section}>
+            <Text color="textSecondary">{t('intro')}</Text>
             {onApplications ? (
-              <Button
-                label={t('myApplications')}
-                variant="secondary"
-                icon="document-text"
-                onPress={onApplications}
-              />
+              <ListRow icon="document-text" title={t('myApplications')} onPress={onApplications} />
             ) : null}
-            <TextField label={t('area')} value={area} onChangeText={setArea} maxLength={60} />
-            <View style={styles.chips}>
+            <SearchField
+              label={t('area')}
+              placeholder={t('areaPlaceholder')}
+              value={area}
+              onChangeText={setArea}
+            />
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.chipRow}
+            >
               <Chip label={t('allTypes')} selected={!type} onPress={() => setType(undefined)} />
               {EMPLOYMENT_TYPES.map((k) => (
                 <Chip key={k} label={t(`types.${k}`)} selected={type === k} onPress={() => setType(k)} />
               ))}
-            </View>
-            <View style={styles.chips}>
+            </ScrollView>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.chipRow}
+            >
               <Chip label={t('allStyles')} selected={!style} onPress={() => setStyle(undefined)} />
               {(styleList.data ?? []).map((s) => (
                 <Chip key={s.id} label={s.name} selected={style === s.key} onPress={() => setStyle(s.key)} />
               ))}
-            </View>
+            </ScrollView>
           </View>
         }
         renderItem={({ item }) => <JobCard job={item} onPress={() => onOpen(item.id)} />}
@@ -157,22 +122,71 @@ export function JobScreen({
       <QueryView query={job.query}>
         {(posting) => (
           <View style={styles.content}>
-            <JobCard job={posting} onPress={() => onOpenShop(posting.barbershop.id)} />
-            {posting.barbershop.ratingAverage !== null ? (
-              <Text color="textSecondary">
-                {t('shopRating', { average: posting.barbershop.ratingAverage.toFixed(1) })}
-              </Text>
+            <Card>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={t('openShop', { name: posting.barbershop.name })}
+                onPress={() => onOpenShop(posting.barbershop.id)}
+                style={styles.shop}
+              >
+                <Monogram
+                  name={posting.barbershop.name}
+                  size={sizes.avatarLarge}
+                  imageUrl={posting.barbershop.logoUrl}
+                />
+                <View style={styles.flex}>
+                  <Text variant="bodyStrong">{posting.barbershop.name}</Text>
+                  {posting.barbershop.ratingAverage !== null ? (
+                    <Text color="textSecondary">
+                      {t('shopRating', { average: posting.barbershop.ratingAverage.toFixed(1) })}
+                    </Text>
+                  ) : null}
+                  <Text variant="caption" color="primary">
+                    {t('seeShop')}
+                  </Text>
+                </View>
+              </Pressable>
+              <Text variant="title">{posting.title}</Text>
+              <View style={styles.chips}>
+                <Badge label={t(`types.${posting.employmentType}`)} tone="primary" />
+                {posting.status === 'CLOSED' ? <Badge label={t('shop.status.CLOSED')} /> : null}
+              </View>
+              {posting.compensationText ? (
+                <JobFact icon="cash" text={posting.compensationText} strong />
+              ) : null}
+              <JobFact icon="location" text={posting.barbershop.address} />
+              {posting.closesAt ? (
+                <JobFact
+                  icon="time"
+                  text={t('closesAt', { date: formatShortDate(posting.closesAt, zone) })}
+                />
+              ) : null}
+              <JobFact icon="people" text={t('shop.applicants', { count: posting.applicationsCount })} />
+            </Card>
+            {posting.styles.length > 0 ? (
+              <View style={styles.section}>
+                <Text variant="subtitle">{t('wanted')}</Text>
+                <View style={styles.chips}>
+                  {posting.styles.map((st) => (
+                    <Badge key={st.id} label={st.name} />
+                  ))}
+                </View>
+              </View>
             ) : null}
-            <Text>{posting.description}</Text>
+            <View style={styles.section}>
+              <Text variant="subtitle">{t('about')}</Text>
+              <Text>{posting.description}</Text>
+            </View>
             {posting.myApplicationStatus ? (
               <Card>
                 <Text variant="subtitle">{t('yourApplication')}</Text>
-                <ApplicationStatusPill status={posting.myApplicationStatus} />
+                <ApplicationProgress status={posting.myApplicationStatus} />
               </Card>
             ) : posting.status === 'CLOSED' ? (
               <Notice tone="info" message={t('closed')} />
             ) : (
               <Card>
+                <Text variant="subtitle">{t('applyTitle')}</Text>
                 <TextField
                   label={t('message')}
                   hint={t('messageHint')}
@@ -226,8 +240,8 @@ export function MyApplicationsScreen({ onOpenJob }: { onOpenJob: (postingId: str
                   details={[
                     { icon: 'calendar', text: t('sentOn', { date: formatShortDate(a.createdAt, zone) }) },
                   ]}
-                  trailing={<ApplicationStatusPill status={a.status} />}
                 />
+                <ApplicationProgress status={a.status} />
                 {a.status === 'HIRED' ? <Notice tone="success" message={t('hiredInfo')} /> : null}
                 {a.status === 'APPLIED' || a.status === 'SHORTLISTED' ? (
                   <Button label={t('withdraw')} variant="ghost" onPress={() => setWithdrawing(a)} />
@@ -553,6 +567,9 @@ export function ApplicantsScreen({
 
 const styles = StyleSheet.create({
   content: { gap: spacing.md },
+  chipRow: { gap: spacing.sm },
+  shop: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  flex: { flex: 1, gap: spacing.xxs },
   section: { gap: spacing.sm },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
