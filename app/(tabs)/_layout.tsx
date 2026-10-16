@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Redirect, Tabs, usePathname } from 'expo-router';
 import { Animated, StyleSheet, type ColorValue } from 'react-native';
 import { useUnreadMessages } from '@/features/messaging';
@@ -38,6 +39,9 @@ function tabIcon(name: IconName) {
   };
 }
 
+/** Stable: a new function on each render would mount the blur again and again. */
+const renderTabBarBackground = () => <GlassBackground />;
+
 export default function TabsLayout() {
   const { t } = useTranslation();
   const theme = useTheme();
@@ -45,6 +49,10 @@ export default function TabsLayout() {
   // Barbershop mode has its own tab set; the hidden tabs stay as routes (href: null).
   const shopMode = useEffectiveMode() === 'shop';
   const unreadMessages = useUnreadMessages();
+  const badgeStyle = useMemo(
+    () => ({ backgroundColor: theme.colors.primary, color: theme.colors.onPrimary }),
+    [theme.colors.primary, theme.colors.onPrimary],
+  );
   const client = shopMode ? null : undefined;
   const shop = shopMode ? undefined : null;
   // A hidden tab can still be the current one (the app opens on Explorar, or the mode changed):
@@ -68,7 +76,7 @@ export default function TabsLayout() {
             borderTopColor: theme.colors.border,
             elevation: 0,
           },
-          tabBarBackground: () => <GlassBackground />,
+          tabBarBackground: renderTabBarBackground,
           tabBarLabelStyle: { fontFamily: fontFamily.medium },
         }}
       >
@@ -95,7 +103,7 @@ export default function TabsLayout() {
             tabBarIcon: tabIcon('chatbubbles'),
             // The person's own unread conversations (the barbershop side shows them in its list).
             tabBarBadge: !shopMode && unreadMessages > 0 ? unreadMessages : undefined,
-            tabBarBadgeStyle: { backgroundColor: theme.colors.primary, color: theme.colors.onPrimary },
+            tabBarBadgeStyle: badgeStyle,
           }}
         />
         <Tabs.Screen name="profile" options={{ title: t('nav.profile'), tabBarIcon: tabIcon('person') }} />
