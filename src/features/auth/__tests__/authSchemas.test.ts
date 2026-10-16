@@ -36,7 +36,8 @@ describe('schemas', () => {
   const validRegister = {
     fullName: 'Ana',
     email: 'ana@example.com',
-    password: 'una-clave-larga',
+    password: 'Una-Clave-Larga1',
+    confirmPassword: 'Una-Clave-Larga1',
     phone: '',
     declaresAdult: true,
     acceptTerms: true,
@@ -74,11 +75,19 @@ describe('schemas', () => {
   });
 
   it('requires a 6-digit code', () => {
-    expect(resetPasswordSchema.safeParse({ code: '12345', newPassword: 'una-clave-larga' }).success).toBe(
-      false,
-    );
-    expect(resetPasswordSchema.safeParse({ code: '123456', newPassword: 'una-clave-larga' }).success).toBe(
-      true,
-    );
+    expect(
+      resetPasswordSchema.safeParse({
+        code: '12345',
+        newPassword: 'Una-Clave-Larga1',
+        confirmPassword: 'Una-Clave-Larga1',
+      }).success,
+    ).toBe(false);
+    expect(
+      resetPasswordSchema.safeParse({
+        code: '123456',
+        newPassword: 'Una-Clave-Larga1',
+        confirmPassword: 'Una-Clave-Larga1',
+      }).success,
+    ).toBe(true);
   });
 });

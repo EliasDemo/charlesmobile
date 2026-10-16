@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { dmyToIsoDate, isoDateToDmy, peruMobileDigits } from '@/shared/lib';
+import { dmyToIsoDate, isoDateToDmy, passwordStrongEnough, peruMobileDigits } from '@/shared/lib';
 
 /** `DD/MM/YYYY` as typed by the person → `YYYY-MM-DD` for the API, or null if it is not a real date. */
 export const birthDateToIso = dmyToIsoDate;
@@ -27,10 +27,20 @@ export const editProfileSchema = z.object({
 });
 export type EditProfileForm = z.infer<typeof editProfileSchema>;
 
-export const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1, { error: 'profile:password.required' }),
-  newPassword: z
-    .string()
-    .refine((value) => value.length >= 10 && value.length <= 128, { error: 'validation.passwordLength' }),
-});
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, { error: 'profile:password.required' }),
+    newPassword: z
+      .string()
+      .refine((value) => value.length >= 10 && value.length <= 128, {
+        error: 'validation.passwordLength',
+        abort: true,
+      })
+      .refine(passwordStrongEnough, { error: 'validation.passwordWeak' }),
+    confirmPassword: z.string(),
+  })
+  .refine((v) => v.newPassword === v.confirmPassword, {
+    error: 'validation.passwordMismatch',
+    path: ['confirmPassword'],
+  });
 export type ChangePasswordForm = z.infer<typeof changePasswordSchema>;

@@ -17,3 +17,11 @@ export function peruMobileDigits(input: string): string | null {
 export function formatPeruMobile(digits: string): string {
   return `+51 ${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
 }
+
+/** "987654321" (or a stored "+51 987 654 321") → "987 654 321" for the field after "+51". */
+export function formatPeruNational(input: string): string {
+  let digits = input.replace(/\D/g, '');
+  if (digits.length > 9 && digits.startsWith('51')) digits = digits.slice(2);
+  digits = digits.slice(0, 9);
+  return [digits.slice(0, 3), digits.slice(3, 6), digits.slice(6)].filter(Boolean).join(' ');
+}

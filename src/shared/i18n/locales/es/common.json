@@ -171,5 +171,18 @@
     "open": "Agregar un emoji",
     "add": "Agregar al texto"
   },
-  "nextDay": "Ver el día siguiente"
+  "nextDay": "Ver el día siguiente",
+  "phone": {
+    "countryCode": "Código de país de Perú, más 51"
+  },
+  "passwordRules": {
+    "length": "Entre 10 y 128 caracteres ({{count}} ahora)",
+    "upper": "Una letra mayúscula",
+    "lower": "Una letra minúscula",
+    "number": "Un número",
+    "symbol": "Un carácter especial (por ejemplo ! ? @ # . -)",
+    "common": "No uses contraseñas muy comunes: el servidor puede rechazarlas.",
+    "met": "Cumplido",
+    "notMet": "Pendiente"
+  }
 }

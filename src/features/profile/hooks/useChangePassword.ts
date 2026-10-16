@@ -12,12 +12,13 @@ export function useChangePassword({ onDone }: { onDone: () => void }) {
   const form = useForm<ChangePasswordForm>({
     resolver: zodResolver(changePasswordSchema),
     mode: 'onTouched',
-    defaultValues: { currentPassword: '', newPassword: '' },
+    defaultValues: { currentPassword: '', newPassword: '', confirmPassword: '' },
   });
   const [generalError, setGeneralError] = useState<string | null>(null);
 
   const mutation = useMutation({
-    mutationFn: changePassword,
+    mutationFn: (values: ChangePasswordForm) =>
+      changePassword({ currentPassword: values.currentPassword, newPassword: values.newPassword }),
     onSuccess: () => {
       showToast(i18n.t('profile:password.done'));
       onDone();

@@ -9,14 +9,15 @@ import {
   ErrorState,
   LoadingState,
   Notice,
+  PasswordChecklist,
   PasswordField,
+  PhoneField,
   Screen,
   Text,
   TextField,
   translateErrorMessage,
   useFieldErrorText,
 } from '@/shared/ui';
-import { PasswordRequirements } from '../components/PasswordRequirements';
 import { useRegister, type UseRegisterOptions } from '../hooks/useRegister';
 
 export interface RegisterScreenProps extends UseRegisterOptions {
@@ -101,7 +102,22 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
             onBlur={field.onBlur}
             ref={field.ref}
             error={errorText(fieldState.error?.message)}
-            footer={<PasswordRequirements password={field.value} />}
+            footer={<PasswordChecklist password={field.value} />}
+          />
+        )}
+      />
+      <Controller
+        control={form.control}
+        name="confirmPassword"
+        render={({ field, fieldState }) => (
+          <PasswordField
+            purpose="new"
+            label={t('fields.confirmPassword')}
+            value={field.value}
+            onChangeText={field.onChange}
+            onBlur={field.onBlur}
+            ref={field.ref}
+            error={errorText(fieldState.error?.message)}
           />
         )}
       />
@@ -109,13 +125,10 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
         control={form.control}
         name="phone"
         render={({ field, fieldState }) => (
-          <TextField
+          <PhoneField
             label={t('fields.phone')}
             placeholder={t('fields.phonePlaceholder')}
             hint={t('fields.phoneHint')}
-            keyboardType="phone-pad"
-            autoComplete="tel"
-            textContentType="telephoneNumber"
             value={field.value}
             onChangeText={field.onChange}
             onBlur={field.onBlur}

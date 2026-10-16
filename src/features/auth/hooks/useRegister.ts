@@ -30,6 +30,7 @@ export function useRegister({ onSuccess }: UseRegisterOptions) {
       fullName: '',
       email: '',
       password: '',
+      confirmPassword: '',
       phone: '',
       declaresAdult: false,
       acceptTerms: false,

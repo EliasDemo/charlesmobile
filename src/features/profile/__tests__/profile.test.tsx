@@ -146,7 +146,7 @@ describe('EditProfileScreen', () => {
     await renderWithProviders(<EditProfileScreen onSaved={onSaved} />);
     const phone = await screen.findByLabelText(auth.fields.phone);
     expect(screen.getByLabelText(texts.email).props.editable).toBe(false);
-    await waitFor(() => expect(screen.getByLabelText(auth.fields.phone).props.value).toBe('+51 987 654 321'));
+    await waitFor(() => expect(screen.getByLabelText(auth.fields.phone).props.value).toBe('987 654 321'));
 
     await fireEvent.changeText(phone, '123');
     await fireEvent(phone, 'blur');

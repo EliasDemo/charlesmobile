@@ -10,12 +10,14 @@ export interface TextFieldProps extends TextInputProps {
   error?: string;
   /** Control inside the field, on the right (e.g. show password). */
   accessory?: ReactNode;
+  /** Fixed content inside the field, on the left (e.g. the country code). */
+  prefix?: ReactNode;
   /** Extra content under the field (e.g. live password requirements). */
   footer?: ReactNode;
 }
 
 export const TextField = forwardRef<TextInput, TextFieldProps>(function TextField(
-  { label, hint, error, accessory, footer, onFocus, onBlur, editable = true, style, ...props },
+  { label, hint, error, accessory, prefix, footer, onFocus, onBlur, editable = true, style, ...props },
   ref,
 ) {
   const theme = useTheme();
@@ -36,6 +38,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
           },
         ]}
       >
+        {prefix}
         <TextInput
           ref={ref}
           accessibilityLabel={label}

@@ -171,5 +171,18 @@
     "open": "Add an emoji",
     "add": "Add to the text"
   },
-  "nextDay": "See the next day"
+  "nextDay": "See the next day",
+  "phone": {
+    "countryCode": "Peru country code, plus 51"
+  },
+  "passwordRules": {
+    "length": "Between 10 and 128 characters ({{count}} now)",
+    "upper": "An uppercase letter",
+    "lower": "A lowercase letter",
+    "number": "A number",
+    "symbol": "A special character (for example ! ? @ # . -)",
+    "common": "Don't use very common passwords: the server may reject them.",
+    "met": "Done",
+    "notMet": "Pending"
+  }
 }

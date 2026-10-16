@@ -1,7 +1,15 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from '@/shared/i18n';
-import { Button, Notice, PasswordField, Screen, Text, TextField, useFieldErrorText } from '@/shared/ui';
-import { PasswordRequirements } from '../components/PasswordRequirements';
+import {
+  Button,
+  Notice,
+  PasswordChecklist,
+  PasswordField,
+  Screen,
+  Text,
+  TextField,
+  useFieldErrorText,
+} from '@/shared/ui';
 import { useResetPassword } from '../hooks/usePasswordReset';
 
 export interface ResetPasswordScreenProps {
@@ -52,7 +60,22 @@ export function ResetPasswordScreen({ email, onDone, onResend }: ResetPasswordSc
             onBlur={field.onBlur}
             ref={field.ref}
             error={errorText(fieldState.error?.message)}
-            footer={<PasswordRequirements password={field.value} />}
+            footer={<PasswordChecklist password={field.value} />}
+          />
+        )}
+      />
+      <Controller
+        control={form.control}
+        name="confirmPassword"
+        render={({ field, fieldState }) => (
+          <PasswordField
+            purpose="new"
+            label={t('fields.confirmPassword')}
+            value={field.value}
+            onChangeText={field.onChange}
+            onBlur={field.onBlur}
+            ref={field.ref}
+            error={errorText(fieldState.error?.message)}
           />
         )}
       />

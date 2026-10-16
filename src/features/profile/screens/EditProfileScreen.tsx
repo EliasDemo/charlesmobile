@@ -2,7 +2,17 @@ import { Controller } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { spacing } from '@/shared/theme';
-import { Button, Chip, Notice, QueryView, Screen, Text, TextField, useFieldErrorText } from '@/shared/ui';
+import {
+  Button,
+  Chip,
+  Notice,
+  PhoneField,
+  QueryView,
+  Screen,
+  Text,
+  TextField,
+  useFieldErrorText,
+} from '@/shared/ui';
 import { ProfilePhoto } from '../components/ProfilePhoto';
 import { useEditProfile } from '../hooks/useEditProfile';
 
@@ -46,13 +56,10 @@ export function EditProfileScreen({ onSaved }: { onSaved: () => void }) {
               control={form.control}
               name="phone"
               render={({ field, fieldState }) => (
-                <TextField
+                <PhoneField
                   label={t('fields.phone', { ns: 'auth' })}
                   placeholder={t('fields.phonePlaceholder', { ns: 'auth' })}
                   hint={t('edit.phoneHint')}
-                  keyboardType="phone-pad"
-                  autoComplete="tel"
-                  textContentType="telephoneNumber"
                   value={field.value}
                   onChangeText={field.onChange}
                   onBlur={field.onBlur}

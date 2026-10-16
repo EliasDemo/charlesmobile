@@ -105,7 +105,8 @@ describe('useRegister', () => {
   const valid = {
     fullName: ' Ana Pérez ',
     email: 'ana@example.com',
-    password: 'una-clave-larga',
+    password: 'Una-Clave-Larga1',
+    confirmPassword: 'Una-Clave-Larga1',
     phone: '987654321',
     declaresAdult: true,
     acceptTerms: true,
@@ -126,7 +127,7 @@ describe('useRegister', () => {
     expect(api.callsTo('POST', '/api/v1/auth/register')[0]!.body).toEqual({
       fullName: 'Ana Pérez',
       email: 'ana@example.com',
-      password: 'una-clave-larga',
+      password: 'Una-Clave-Larga1',
       phone: '+51 987 654 321',
       acceptTerms: true,
       declaresAdult: true,
@@ -267,14 +268,18 @@ describe('password reset', () => {
     const { result } = await renderHookWithProviders(() =>
       useResetPassword({ email: 'ana@example.com', onDone }),
     );
-    await fill(result.current.form, { code: '123456', newPassword: 'nueva-clave-larga' });
+    await fill(result.current.form, {
+      code: '123456',
+      newPassword: 'Nueva-Clave-Larga1',
+      confirmPassword: 'Nueva-Clave-Larga1',
+    });
     await act(() => result.current.submit());
 
     await waitFor(() => expect(onDone).toHaveBeenCalled());
     expect(api.calls[0]!.body).toEqual({
       email: 'ana@example.com',
       code: '123456',
-      newPassword: 'nueva-clave-larga',
+      newPassword: 'Nueva-Clave-Larga1',
     });
     expect(useSession.getState().status).toBe('anonymous');
     expect(await tokenStorage.getRefreshToken()).toBeNull();
@@ -286,7 +291,11 @@ describe('password reset', () => {
     const { result } = await renderHookWithProviders(() =>
       useResetPassword({ email: 'ana@example.com', onDone: jest.fn() }),
     );
-    await fill(result.current.form, { code: '123456', newPassword: 'nueva-clave-larga' });
+    await fill(result.current.form, {
+      code: '123456',
+      newPassword: 'Nueva-Clave-Larga1',
+      confirmPassword: 'Nueva-Clave-Larga1',
+    });
     await act(() => result.current.submit());
     await waitFor(() => expect(result.current.generalError).toBe(errors.codes.INVALID_CODE));
   });

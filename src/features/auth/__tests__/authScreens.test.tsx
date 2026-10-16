@@ -109,10 +109,14 @@ describe('RegisterScreen', () => {
     expect(await screen.findByText(auth.register.terms)).toBeTruthy();
     // The internal terms version is sent to the backend, never shown.
     expect(screen.queryByText(/2026-10/)).toBeNull();
-    expect(screen.getByText(`• ${auth.passwordRules.common}`)).toBeTruthy();
+    expect(screen.getByText(common.passwordRules.common)).toBeTruthy();
     expect(screen.getByText(/\(0 ahora\)/)).toBeTruthy();
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'abcdefghij');
-    expect(screen.getByText(/✓ Entre 10 y 128 caracteres \(10 ahora\)/)).toBeTruthy();
+    expect(screen.getByLabelText(/Entre 10 y 128 caracteres \(10 ahora\): Cumplido/)).toBeTruthy();
+    expect(
+      screen.getByLabelText(`${common.passwordRules.upper}: ${common.passwordRules.notMet}`),
+    ).toBeTruthy();
+    expect(screen.getByLabelText(`${common.passwordRules.lower}: ${common.passwordRules.met}`)).toBeTruthy();
     expect(screen.getByText(auth.register.termsLink)).toBeTruthy();
     // The privacy link is not shown when GET /auth/terms does not send it.
     expect(screen.queryByText(auth.register.privacyLink)).toBeNull();
@@ -144,7 +148,8 @@ describe('RegisterScreen', () => {
     await screen.findByText(auth.register.terms);
     await fireEvent.changeText(screen.getByLabelText(auth.fields.fullName), 'Ana Pérez');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.email), 'ana@example.com');
-    await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'una-clave-larga');
+    await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'Una-Clave-Larga1');
+    await fireEvent.changeText(screen.getByLabelText(auth.fields.confirmPassword), 'Una-Clave-Larga1');
     await fireEvent.press(screen.getByRole('checkbox', { name: auth.register.adult }));
     await fireEvent.press(screen.getByRole('checkbox', { name: auth.register.terms }));
     await fireEvent.press(screen.getByRole('button', { name: auth.register.submit }));
@@ -223,7 +228,8 @@ describe('password recovery screens', () => {
       <ResetPasswordScreen email="ana@example.com" onDone={jest.fn()} onResend={jest.fn()} />,
     );
     await fireEvent.changeText(screen.getByLabelText(auth.fields.code), '123456');
-    await fireEvent.changeText(screen.getByLabelText(auth.fields.newPassword), 'nueva-clave-larga');
+    await fireEvent.changeText(screen.getByLabelText(auth.fields.newPassword), 'Nueva-Clave-Larga1');
+    await fireEvent.changeText(screen.getByLabelText(auth.fields.confirmPassword), 'Nueva-Clave-Larga1');
     await fireEvent.press(screen.getByRole('button', { name: auth.reset.submit }));
     expect(await screen.findByText(errors.codes.INVALID_CODE)).toBeTruthy();
   });

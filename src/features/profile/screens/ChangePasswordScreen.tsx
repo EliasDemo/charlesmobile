@@ -1,6 +1,6 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from '@/shared/i18n';
-import { Button, Notice, PasswordField, Screen, useFieldErrorText } from '@/shared/ui';
+import { Button, Notice, PasswordChecklist, PasswordField, Screen, useFieldErrorText } from '@/shared/ui';
 import { useChangePassword } from '../hooks/useChangePassword';
 
 export function ChangePasswordScreen({ onDone }: { onDone: () => void }) {
@@ -32,7 +32,22 @@ export function ChangePasswordScreen({ onDone }: { onDone: () => void }) {
           <PasswordField
             purpose="new"
             label={t('password.new')}
-            hint={t('password.newHint')}
+            value={field.value}
+            onChangeText={field.onChange}
+            onBlur={field.onBlur}
+            ref={field.ref}
+            error={errorText(fieldState.error?.message)}
+            footer={<PasswordChecklist password={field.value} />}
+          />
+        )}
+      />
+      <Controller
+        control={form.control}
+        name="confirmPassword"
+        render={({ field, fieldState }) => (
+          <PasswordField
+            purpose="new"
+            label={t('fields.confirmPassword', { ns: 'auth' })}
             value={field.value}
             onChangeText={field.onChange}
             onBlur={field.onBlur}

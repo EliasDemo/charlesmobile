@@ -37,7 +37,7 @@ export function useResetPassword({ email, onDone }: { email: string; onDone: () 
   const form = useForm<ResetPasswordForm>({
     resolver: zodResolver(resetPasswordSchema),
     mode: 'onTouched',
-    defaultValues: { code: '', newPassword: '' },
+    defaultValues: { code: '', newPassword: '', confirmPassword: '' },
   });
   const [generalError, setGeneralError] = useState<string | null>(null);
   const mutation = useMutation({
