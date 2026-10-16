@@ -6,7 +6,8 @@
     "goHome": "Ir al inicio",
     "cancel": "Cancelar",
     "continue": "Continuar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "close": "Cerrar"
   },
   "states": {
     "loading": "Cargando…",
@@ -184,5 +185,12 @@
     "common": "No uses contraseñas muy comunes: el servidor puede rechazarlas.",
     "met": "Cumplido",
     "notMet": "Pendiente"
+  },
+  "filters": {
+    "title": "Filtros",
+    "withCount_one": "Filtros · {{count}}",
+    "withCount_other": "Filtros · {{count}}",
+    "clear": "Limpiar",
+    "apply": "Ver resultados"
   }
 }

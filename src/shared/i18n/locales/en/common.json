@@ -6,7 +6,8 @@
     "goHome": "Go home",
     "cancel": "Cancel",
     "continue": "Continue",
-    "save": "Save"
+    "save": "Save",
+    "close": "Close"
   },
   "states": {
     "loading": "Loading…",
@@ -184,5 +185,12 @@
     "common": "Don't use very common passwords: the server may reject them.",
     "met": "Done",
     "notMet": "Pending"
+  },
+  "filters": {
+    "title": "Filters",
+    "withCount_one": "Filters · {{count}}",
+    "withCount_other": "Filters · {{count}}",
+    "clear": "Clear",
+    "apply": "See results"
   }
 }

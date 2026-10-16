@@ -12,6 +12,9 @@ import {
   Card,
   Chip,
   ConfirmDialog,
+  FilterButton,
+  FilterGroup,
+  FilterSheet,
   InfiniteList,
   InfoCard,
   ListRow,
@@ -54,9 +57,31 @@ export function JobsScreen({
   const [type, setType] = useState<EmploymentType | undefined>(undefined);
   const [style, setStyle] = useState<string | undefined>(undefined);
   const [area, setArea] = useState('');
+  const [filtering, setFiltering] = useState(false);
   const list = useJobList({ employmentType: type, style, area });
   return (
     <Screen scroll={false}>
+      <FilterSheet
+        visible={filtering}
+        onClose={() => setFiltering(false)}
+        onClear={() => {
+          setType(undefined);
+          setStyle(undefined);
+        }}
+      >
+        <FilterGroup title={t('filterType')}>
+          <Chip label={t('allTypes')} selected={!type} onPress={() => setType(undefined)} />
+          {EMPLOYMENT_TYPES.map((k) => (
+            <Chip key={k} label={t(`types.${k}`)} selected={type === k} onPress={() => setType(k)} />
+          ))}
+        </FilterGroup>
+        <FilterGroup title={t('filterStyle')}>
+          <Chip label={t('allStyles')} selected={!style} onPress={() => setStyle(undefined)} />
+          {(styleList.data ?? []).map((st) => (
+            <Chip key={st.id} label={st.name} selected={style === st.key} onPress={() => setStyle(st.key)} />
+          ))}
+        </FilterGroup>
+      </FilterSheet>
       <InfiniteList
         query={list}
         keyExtractor={(j) => j.id}
@@ -67,32 +92,38 @@ export function JobsScreen({
             {onApplications ? (
               <ListRow icon="document-text" title={t('myApplications')} onPress={onApplications} />
             ) : null}
-            <SearchField
-              label={t('area')}
-              placeholder={t('areaPlaceholder')}
-              value={area}
-              onChangeText={setArea}
-            />
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.chipRow}
-            >
-              <Chip label={t('allTypes')} selected={!type} onPress={() => setType(undefined)} />
-              {EMPLOYMENT_TYPES.map((k) => (
-                <Chip key={k} label={t(`types.${k}`)} selected={type === k} onPress={() => setType(k)} />
-              ))}
-            </ScrollView>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.chipRow}
-            >
-              <Chip label={t('allStyles')} selected={!style} onPress={() => setStyle(undefined)} />
-              {(styleList.data ?? []).map((s) => (
-                <Chip key={s.id} label={s.name} selected={style === s.key} onPress={() => setStyle(s.key)} />
-              ))}
-            </ScrollView>
+            <View style={styles.searchRow}>
+              <View style={styles.flex}>
+                <SearchField
+                  label={t('area')}
+                  placeholder={t('areaPlaceholder')}
+                  value={area}
+                  onChangeText={setArea}
+                />
+              </View>
+              <FilterButton
+                active={Number(Boolean(type)) + Number(Boolean(style))}
+                onPress={() => setFiltering(true)}
+              />
+            </View>
+            {type || style ? (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.chipRow}
+              >
+                {type ? (
+                  <Chip label={`${t(`types.${type}`)} ✕`} selected onPress={() => setType(undefined)} />
+                ) : null}
+                {style ? (
+                  <Chip
+                    label={`${styleList.data?.find((st) => st.key === style)?.name ?? style} ✕`}
+                    selected
+                    onPress={() => setStyle(undefined)}
+                  />
+                ) : null}
+              </ScrollView>
+            ) : null}
           </View>
         }
         renderItem={({ item }) => <JobCard job={item} onPress={() => onOpen(item.id)} />}
@@ -568,6 +599,7 @@ export function ApplicantsScreen({
 const styles = StyleSheet.create({
   content: { gap: spacing.md },
   chipRow: { gap: spacing.sm },
+  searchRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
   shop: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   flex: { flex: 1, gap: spacing.xxs },
   section: { gap: spacing.sm },

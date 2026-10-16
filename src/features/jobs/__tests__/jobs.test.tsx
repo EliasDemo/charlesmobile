@@ -63,6 +63,7 @@ describe('JobsScreen', () => {
     });
     await renderWithProviders(<JobsScreen onOpen={jest.fn()} />);
     expect(await screen.findByText('Barbero con experiencia')).toBeTruthy();
+    await fireEvent.press(screen.getByTestId('filter-button'));
     await fireEvent.press(screen.getAllByText(texts.types.WEEKENDS)[0]!);
     await waitFor(() =>
       expect(

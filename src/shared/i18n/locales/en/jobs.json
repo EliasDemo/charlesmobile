@@ -92,5 +92,7 @@
   "seeShop": "See barbershop",
   "wanted": "Specialties wanted",
   "about": "About the job",
-  "applyTitle": "Apply to this job"
+  "applyTitle": "Apply to this job",
+  "filterType": "Kind of job",
+  "filterStyle": "Specialty"
 }

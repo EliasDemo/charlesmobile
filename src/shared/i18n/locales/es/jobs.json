@@ -92,5 +92,7 @@
   "seeShop": "Ver barbería",
   "wanted": "Especialidades buscadas",
   "about": "Sobre el puesto",
-  "applyTitle": "Postula a esta oferta"
+  "applyTitle": "Postula a esta oferta",
+  "filterType": "Tipo de trabajo",
+  "filterStyle": "Especialidad"
 }

@@ -13,6 +13,9 @@ import {
   Chip,
   ConfirmDialog,
   EmptyState,
+  FilterButton,
+  FilterGroup,
+  FilterSheet,
   InfiniteList,
   InfoCard,
   ListRow,
@@ -519,8 +522,25 @@ export function RankingScreen({
   const [style, setStyle] = useState<string | undefined>(undefined);
   const filters: RankingFilters = { q, district, style, availableForWork: availableOnly || undefined };
   const ranking = useRanking(filters);
+  const [filtering, setFiltering] = useState(false);
   return (
     <Screen scroll={false}>
+      <FilterSheet
+        visible={filtering}
+        onClose={() => setFiltering(false)}
+        onClear={() => {
+          setStyle(undefined);
+          setDistrict('');
+        }}
+      >
+        <TextField label={t('ranking.district')} value={district} onChangeText={setDistrict} maxLength={60} />
+        <FilterGroup title={t('specialties.title')}>
+          <Chip label={t('allStyles')} selected={!style} onPress={() => setStyle(undefined)} />
+          {(styleList.data ?? []).map((s) => (
+            <Chip key={s.id} label={s.name} selected={style === s.key} onPress={() => setStyle(s.key)} />
+          ))}
+        </FilterGroup>
+      </FilterSheet>
       <InfiniteList
         query={ranking}
         keyExtractor={(b) => b.id}
@@ -528,23 +548,19 @@ export function RankingScreen({
         header={
           <View style={styles.section}>
             {availableOnly ? <Notice tone="info" message={t('ranking.availableInfo')} /> : null}
-            <SearchField
-              label={t('ranking.search')}
-              value={q}
-              onChangeText={setQ}
-              placeholder={t('ranking.search')}
-            />
-            <TextField
-              label={t('ranking.district')}
-              value={district}
-              onChangeText={setDistrict}
-              maxLength={60}
-            />
-            <View style={styles.chips}>
-              <Chip label={t('allStyles')} selected={!style} onPress={() => setStyle(undefined)} />
-              {(styleList.data ?? []).map((s) => (
-                <Chip key={s.id} label={s.name} selected={style === s.key} onPress={() => setStyle(s.key)} />
-              ))}
+            <View style={styles.searchRow}>
+              <View style={styles.flex}>
+                <SearchField
+                  label={t('ranking.search')}
+                  value={q}
+                  onChangeText={setQ}
+                  placeholder={t('ranking.search')}
+                />
+              </View>
+              <FilterButton
+                active={Number(Boolean(style)) + Number(Boolean(district.trim()))}
+                onPress={() => setFiltering(true)}
+              />
             </View>
           </View>
         }
@@ -597,4 +613,6 @@ const styles = StyleSheet.create({
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   preview: { width: '100%', aspectRatio: 1 },
   rankItem: { gap: spacing.xs },
+  searchRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
+  flex: { flex: 1 },
 });
