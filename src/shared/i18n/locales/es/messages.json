@@ -22,7 +22,10 @@
     "blockedByMe": "Bloqueaste esta conversación. Desbloquéala para volver a escribir.",
     "blockedByThem": "Esta conversación está bloqueada. No puedes enviar mensajes.",
     "slowDown": "Espera un momento antes de enviar otro mensaje.",
-    "notFound": "No encontramos esta conversación"
+    "notFound": "No encontramos esta conversación",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "blockedShort": "Conversación bloqueada"
   },
   "report": {
     "title": "Reportar mensaje",

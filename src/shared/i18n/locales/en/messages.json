@@ -22,7 +22,10 @@
     "blockedByMe": "You blocked this conversation. Unblock it to write again.",
     "blockedByThem": "This conversation is blocked. You can't send messages.",
     "slowDown": "Wait a moment before sending another message.",
-    "notFound": "We couldn't find this conversation"
+    "notFound": "We couldn't find this conversation",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "blockedShort": "Conversation blocked"
   },
   "report": {
     "title": "Report message",

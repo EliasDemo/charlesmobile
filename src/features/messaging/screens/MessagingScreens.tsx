@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate, formatTime } from '@/shared/lib';
@@ -22,6 +22,7 @@ import {
   translateErrorMessage,
 } from '@/shared/ui';
 import type { Conversation, Mailbox, Message, ReportReason } from '../api/messagingApi';
+import { ChatBubble, Composer, DaySeparator, dayLabel } from '../components/ChatParts';
 import { MESSAGE_MAX, useChat, useConversations, useStartConversation } from '../hooks/useMessaging';
 import { useResolvedMailbox } from '../hooks/useResolvedMailbox';
 
@@ -163,12 +164,25 @@ function Chat({ mailbox, conversationId }: { mailbox: Mailbox; conversationId: s
             {t('chat.empty')}
           </Text>
         }
-        renderItem={({ item }) => (
-          <Bubble
-            message={item}
-            onReport={!item.mine && item.side !== 'SYSTEM' ? () => setReporting(item) : undefined}
-          />
-        )}
+        renderItem={({ item, index }) => {
+          const list = chat.messages ?? [];
+          const older = list[index + 1];
+          const newer = list[index - 1];
+          const day = dayLabel(item.createdAt, t);
+          const newDay = !older || dayLabel(older.createdAt, t) !== day;
+          const sameSide = (m?: Message) => Boolean(m && m.side === item.side && m.mine === item.mine);
+          return (
+            <View>
+              {newDay ? <DaySeparator label={day} /> : null}
+              <ChatBubble
+                message={item}
+                grouped={!newDay && sameSide(older)}
+                last={!sameSide(newer) || (newer ? dayLabel(newer.createdAt, t) !== day : true)}
+                onReport={!item.mine && item.side !== 'SYSTEM' ? () => setReporting(item) : undefined}
+              />
+            </View>
+          );
+        }}
       />
       {conversation?.blocked ? (
         <Notice
@@ -177,26 +191,15 @@ function Chat({ mailbox, conversationId }: { mailbox: Mailbox; conversationId: s
         />
       ) : null}
       {chat.error ? <Notice tone="danger" message={chat.error} /> : null}
-      <View style={[styles.composer, { borderTopColor: theme.colors.border }]}>
-        <View style={styles.fill}>
-          <TextField
-            label={t('chat.label')}
-            value={chat.draft}
-            onChangeText={chat.setDraft}
-            multiline
-            maxLength={MESSAGE_MAX}
-            editable={!conversation?.blocked}
-            testID="chat-input"
-          />
-        </View>
-        <Button
-          label={t('chat.send')}
-          icon="send"
-          onPress={chat.send}
-          loading={chat.isSending}
-          disabled={!chat.canSend}
-        />
-      </View>
+      <Composer
+        value={chat.draft}
+        onChange={chat.setDraft}
+        onSend={chat.send}
+        canSend={chat.canSend}
+        sending={chat.isSending}
+        disabled={Boolean(conversation?.blocked)}
+        maxLength={MESSAGE_MAX}
+      />
 
       <ConfirmDialog
         visible={confirmBlock}
@@ -234,55 +237,6 @@ function Chat({ mailbox, conversationId }: { mailbox: Mailbox; conversationId: s
         </View>
       </ConfirmDialog>
     </KeyboardAvoidingView>
-  );
-}
-
-function Bubble({ message, onReport }: { message: Message; onReport?: () => void }) {
-  const { t } = useTranslation('messages');
-  const theme = useTheme();
-  const time = formatTime(message.createdAt, env.defaultTimeZone);
-  if (message.side === 'SYSTEM') {
-    return (
-      <View style={[styles.system, { backgroundColor: theme.colors.surface, borderRadius: theme.radius.md }]}>
-        <Text variant="caption" color="primary">
-          {t('chat.charles')}
-        </Text>
-        <Text variant="caption" color="textSecondary" align="center">
-          {message.body}
-        </Text>
-      </View>
-    );
-  }
-  return (
-    <Pressable
-      onLongPress={onReport}
-      disabled={!onReport}
-      accessibilityHint={onReport ? t('report.hint') : undefined}
-      style={[
-        styles.bubble,
-        { borderRadius: theme.radius.lg },
-        message.mine
-          ? { alignSelf: 'flex-end', backgroundColor: theme.colors.primarySoft }
-          : { alignSelf: 'flex-start', backgroundColor: theme.colors.surface },
-      ]}
-      testID={`message-${message.id}`}
-    >
-      {!message.mine && message.senderName ? (
-        <Text variant="caption" color="textSecondary">
-          {message.side === 'USER' ? `@${message.senderName}` : message.senderName}
-        </Text>
-      ) : null}
-      <Text
-        color={message.removed ? 'textMuted' : 'textPrimary'}
-        style={message.removed ? styles.removed : undefined}
-        selectable
-      >
-        {message.body}
-      </Text>
-      <Text variant="caption" color="textMuted" align="right">
-        {time}
-      </Text>
-    </Pressable>
   );
 }
 
