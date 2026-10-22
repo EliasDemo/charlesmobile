@@ -21,6 +21,7 @@ import { i18n, loadLanguagePreference, useTranslation } from '@/shared/i18n';
 import { ensureNotificationChannels, loadAppSettings } from '@/shared/lib';
 import { ThemeProvider, loadThemePreference } from '@/shared/theme';
 import {
+  AuthPromptHost,
   BrandSplash,
   ErrorFallback,
   NavigationThemeRoot,
@@ -99,6 +100,10 @@ function AppStack() {
         <Stack.Screen name="+not-found" options={{ title: t('notFound.title') }} />
       </Stack>
       <ToastHost />
+      <AuthPromptHost
+        onLogin={(returnTo) => router.push({ pathname: '/login', params: { returnTo } })}
+        onRegister={(returnTo) => router.push({ pathname: '/register', params: { returnTo } })}
+      />
       <TourOverlay />
       <PlanLimitNotice
         onSeePlan={() => {

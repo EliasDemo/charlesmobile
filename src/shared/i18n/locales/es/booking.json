@@ -16,7 +16,10 @@
       "morning": "Por la mañana",
       "afternoon": "Por la tarde",
       "evening": "Por la noche"
-    }
+    },
+    "topRated": "Mejor valorado",
+    "seeProfile": "Ver perfil y reseñas",
+    "seeProfileOf": "Ver el perfil y las reseñas de {{name}}"
   },
   "summary": {
     "title": "Revisa tu reserva",

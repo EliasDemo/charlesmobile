@@ -12,6 +12,7 @@ export default function BookRoute() {
       onContinue={() => router.push('/book/summary')}
       onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
       onOpenBarbershop={(id) => router.push({ pathname: '/barbershop/[id]', params: { id } })}
+      onOpenBarberProfile={(id) => router.push({ pathname: '/barber/[id]', params: { id } })}
     />
   );
 }

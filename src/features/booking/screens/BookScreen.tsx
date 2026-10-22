@@ -4,6 +4,7 @@ import { useTranslation } from '@/shared/i18n';
 import { formatMinutes, formatMoney, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
 import { Button, Chip, DateSelector, Notice, QueryView, Screen, Text } from '@/shared/ui';
+import { BarberChoice } from '../components/BarberChoice';
 import { useBookingSetup } from '../hooks/useBookingSetup';
 
 export interface BookScreenProps {
@@ -14,6 +15,8 @@ export interface BookScreenProps {
   onContinue: () => void;
   onBack: () => void;
   onOpenBarbershop: (id: string) => void;
+  /** The barber's professional profile (reviews, work), to check before choosing. */
+  onOpenBarberProfile?: (profileId: string) => void;
 }
 
 export function BookScreen({
@@ -23,6 +26,7 @@ export function BookScreen({
   onContinue,
   onBack,
   onOpenBarbershop,
+  onOpenBarberProfile,
 }: BookScreenProps) {
   const { t } = useTranslation('booking');
   const setup = useBookingSetup(barbershopId, serviceId, barberId);
@@ -68,15 +72,22 @@ export function BookScreen({
                       selected={draft.barberId === null}
                       onPress={() => draft.setBarber(null)}
                     />
-                    {setup.eligibleBarbers.map((barber) => (
-                      <Chip
-                        key={barber.id}
-                        label={barber.displayName}
-                        selected={draft.barberId === barber.id}
-                        onPress={() => draft.setBarber(barber.id)}
-                      />
-                    ))}
                   </View>
+                  {setup.eligibleBarbers.map((barber) => {
+                    const profileId = barber.profileId;
+                    return (
+                      <BarberChoice
+                        key={barber.id}
+                        barber={barber}
+                        selected={draft.barberId === barber.id}
+                        topRated={setup.topRatedBarberId === barber.id}
+                        onSelect={() => draft.setBarber(barber.id)}
+                        onOpenProfile={
+                          profileId && onOpenBarberProfile ? () => onOpenBarberProfile(profileId) : undefined
+                        }
+                      />
+                    );
+                  })}
                 </Section>
 
                 <Section title={t('book.day')}>

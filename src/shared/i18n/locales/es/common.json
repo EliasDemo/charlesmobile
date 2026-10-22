@@ -204,5 +204,33 @@
     "skip": "Saltar",
     "next": "Siguiente",
     "done": "Entendido"
+  },
+  "authPrompt": {
+    "register": "Crear cuenta",
+    "login": "Ya tengo cuenta: iniciar sesión",
+    "book": {
+      "title": "Crea tu cuenta para reservar",
+      "text": "Así guardamos tu turno, te avisamos antes de la cita y puedes cancelarlo desde la app. Tu elección se mantiene."
+    },
+    "message": {
+      "title": "Crea tu cuenta para escribir",
+      "text": "Necesitas una cuenta para enviar mensajes a la barbería y recibir su respuesta."
+    },
+    "favorite": {
+      "title": "Guarda tus favoritas",
+      "text": "Con una cuenta guardas barberías y las encuentras rápido en cualquier teléfono."
+    },
+    "apply": {
+      "title": "Crea tu cuenta para postular",
+      "text": "La barbería verá tu perfil profesional y podrá contactarte."
+    },
+    "subscribe": {
+      "title": "Crea tu cuenta para suscribirte",
+      "text": "La membresía queda a tu nombre y la ves en tu perfil."
+    },
+    "generic": {
+      "title": "Necesitas una cuenta",
+      "text": "Crea tu cuenta o inicia sesión para continuar. Vuelves aquí al terminar."
+    }
   }
 }

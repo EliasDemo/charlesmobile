@@ -15,6 +15,9 @@ import { groupSlotsByDayPart, useBookingDraft } from './bookingDraft';
 const HORIZON_DAYS = 30;
 
 /** Service, barber, day and slot of the booking being prepared. */
+/** Fewer reviews than this are not enough to call someone "Mejor valorado". */
+const TOP_RATED_MIN_REVIEWS = 3;
+
 export function useBookingSetup(
   barbershopId: string,
   initialServiceId: string | undefined,
@@ -41,6 +44,14 @@ export function useBookingSetup(
   const service = services.data?.find((s) => s.id === draft.serviceId);
   // Barbers who do the chosen service, as the API lists them.
   const eligibleBarbers = (barbers.data ?? []).filter((b) => service && b.serviceIds.includes(service.id));
+
+  // Highlight only: the barber with the best average the API reports, among those with enough reviews.
+  const topRatedBarberId = eligibleBarbers
+    .filter((b) => b.rating.count >= TOP_RATED_MIN_REVIEWS)
+    .reduce<(typeof eligibleBarbers)[number] | undefined>(
+      (best, b) => (!best || b.rating.average > best.rating.average ? b : best),
+      undefined,
+    )?.id;
 
   const days = useMemo(() => {
     if (!timeZone) return [];
@@ -85,6 +96,7 @@ export function useBookingSetup(
     barbers,
     service,
     eligibleBarbers,
+    topRatedBarberId,
     timeZone,
     days,
     availability,

@@ -37,6 +37,7 @@ export { Text, type TextProps } from './Text';
 export { TextField, type TextFieldProps } from './TextField';
 export { Checkbox, type CheckboxProps } from './Checkbox';
 export { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
+export { AuthPromptHost, askForAccount, type AuthPromptHostProps, type AuthPromptReason } from './AuthPrompt';
 export { ListRow, SwitchRow, type ListRowProps, type SwitchRowProps } from './ListRow';
 export { Notice, type NoticeProps, type NoticeTone } from './Notice';
 export { PasswordField, type PasswordFieldProps } from './PasswordField';

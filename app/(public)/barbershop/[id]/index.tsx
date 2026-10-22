@@ -7,6 +7,7 @@ import { SendMessageButton } from '@/features/messaging';
 import { ReportBarbershopButton } from '@/features/support';
 import { ShopVideosSection } from '@/features/videos';
 import { useSession } from '@/shared/api';
+import { askForAccount } from '@/shared/ui';
 
 export default function BarbershopRoute() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -35,23 +36,21 @@ export default function BarbershopRoute() {
             onPress={() =>
               authenticated
                 ? router.push({ pathname: '/messages/new', params: { barbershopId: id, name: shop.name } })
-                : router.push({ pathname: '/login', params: { returnTo: `/barbershop/${id}` } })
+                : askForAccount('message', `/barbershop/${id}`)
             }
           />
           <ActivePromotions barbershopId={id} timeZone={shop.timezone} />
           <ShopVideosSection barbershopId={id} />
           <MembershipPlansSection
             barbershopId={id}
-            onRequireLogin={() =>
-              router.push({ pathname: '/login', params: { returnTo: `/barbershop/${id}` } })
-            }
+            onRequireLogin={() => askForAccount('subscribe', `/barbershop/${id}`)}
           />
         </>
       )}
       onOpenBarberProfile={(profileId) =>
         router.push({ pathname: '/barber/[id]', params: { id: profileId } })
       }
-      onRequireLogin={() => router.push({ pathname: '/login', params: { returnTo: `/barbershop/${id}` } })}
+      onRequireLogin={() => askForAccount('favorite', `/barbershop/${id}`)}
     />
   );
 }

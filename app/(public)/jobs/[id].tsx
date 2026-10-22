@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { JobScreen } from '@/features/jobs';
 import { useSession } from '@/shared/api';
+import { askForAccount } from '@/shared/ui';
 
 export default function JobRoute() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -9,7 +10,7 @@ export default function JobRoute() {
     <JobScreen
       id={id}
       authenticated={authenticated}
-      onRequireLogin={() => router.push({ pathname: '/login', params: { returnTo: `/jobs/${id}` } })}
+      onRequireLogin={() => askForAccount('apply', `/jobs/${id}`)}
       onRequireProfile={() => router.push('/career/edit')}
       onOpenShop={(barbershopId) =>
         router.push({ pathname: '/barbershop/[id]', params: { id: barbershopId } })

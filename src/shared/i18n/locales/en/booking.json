@@ -16,7 +16,10 @@
       "morning": "Morning",
       "afternoon": "Afternoon",
       "evening": "Evening"
-    }
+    },
+    "topRated": "Top rated",
+    "seeProfile": "See profile and reviews",
+    "seeProfileOf": "See {{name}}'s profile and reviews"
   },
   "summary": {
     "title": "Review your booking",

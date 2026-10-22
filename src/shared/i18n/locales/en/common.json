@@ -204,5 +204,33 @@
     "skip": "Skip",
     "next": "Next",
     "done": "Got it"
+  },
+  "authPrompt": {
+    "register": "Create account",
+    "login": "I have an account: log in",
+    "book": {
+      "title": "Create your account to book",
+      "text": "We keep your slot, remind you before the appointment and you can cancel it from the app. Your choice is kept."
+    },
+    "message": {
+      "title": "Create your account to write",
+      "text": "You need an account to message the barbershop and get its answer."
+    },
+    "favorite": {
+      "title": "Save your favorites",
+      "text": "With an account you save barbershops and find them fast on any phone."
+    },
+    "apply": {
+      "title": "Create your account to apply",
+      "text": "The barbershop will see your professional profile and can contact you."
+    },
+    "subscribe": {
+      "title": "Create your account to subscribe",
+      "text": "The membership is in your name and you see it in your profile."
+    },
+    "generic": {
+      "title": "You need an account",
+      "text": "Create your account or log in to continue. You come back here when done."
+    }
   }
 }

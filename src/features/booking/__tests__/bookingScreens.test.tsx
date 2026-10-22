@@ -97,6 +97,32 @@ describe('BookScreen', () => {
     });
   });
 
+  it('highlights the top rated barber and opens a barber profile before choosing', async () => {
+    api(
+      shopRoutes({
+        'GET /api/v1/barbershops/{id}/barbers': {
+          body: page([
+            barber({ serviceIds: [SERVICE], profileId: 'profile-1', rating: { average: 4.9, count: 12 } }),
+            barber({
+              id: 'b-2',
+              displayName: 'Nuevo',
+              serviceIds: [SERVICE],
+              rating: { average: 5, count: 1 },
+            }),
+          ]),
+        },
+      }),
+    );
+    const props = { ...bookProps(), onOpenBarberProfile: jest.fn() };
+    await renderWithProviders(<BookScreen {...props} />);
+    expect(await screen.findByText('Barbero Demo')).toBeTruthy();
+    // One review is not enough to be "Mejor valorado".
+    expect(screen.getAllByText(texts.book.topRated)).toHaveLength(1);
+    await fireEvent.press(screen.getByTestId(`barber-choice-profile-${BARBER}`));
+    expect(props.onOpenBarberProfile).toHaveBeenCalledWith('profile-1');
+    expect(screen.queryByTestId('barber-choice-profile-b-2')).toBeNull();
+  });
+
   it('offers other barbershops when the day has no slots', async () => {
     api(
       shopRoutes({
