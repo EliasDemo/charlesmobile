@@ -54,6 +54,8 @@ export interface ShopHomeScreenProps {
   headerRight?: ReactNode;
   /** Sponsor space at the end of the panel ("shop_dashboard"). */
   bottomSlot?: ReactNode;
+  /** "Hoy" at the top of the panel: register, sales and a quick "Nueva venta" (business feature). */
+  todaySlot?: (shopId: string) => ReactNode;
   onCreate: () => void;
   onInvitations: () => void;
   onOpen: (shopId: string, section: ShopSection) => void;
@@ -78,28 +80,13 @@ const STATUS_STYLE: Record<
   SUSPENDED: { tone: 'danger', icon: 'ban' },
 };
 
-const SECTIONS: ShopSection[] = [
-  'cash',
-  'sales',
-  'clients',
-  'reports',
-  'catalog',
-  'services',
-  'barbers',
-  'hours',
-  'blocks',
-  'gallery',
-  'videos',
-  'reviews',
-  'promotions',
-  'memberships',
-  'jobs',
-  'talent',
-  'plan',
-  'invoicing',
-  'status',
-  'members',
-  'details',
+/** The panel in groups, so 25 sections read at a glance. */
+const GROUPS: { key: 'day' | 'team' | 'business' | 'marketing' | 'settings'; sections: ShopSection[] }[] = [
+  { key: 'day', sections: ['cash', 'sales', 'blocks'] },
+  { key: 'team', sections: ['barbers', 'hours', 'services', 'members', 'jobs', 'talent'] },
+  { key: 'business', sections: ['clients', 'reports', 'memberships', 'catalog', 'invoicing'] },
+  { key: 'marketing', sections: ['promotions', 'gallery', 'videos', 'reviews'] },
+  { key: 'settings', sections: ['details', 'status', 'plan'] },
 ];
 
 const SECTION_ICON: Record<ShopSection, IconName> = {
@@ -134,6 +121,7 @@ export function ShopHomeScreen({
   onOpenAsBarber,
   headerRight,
   bottomSlot,
+  todaySlot,
 }: ShopHomeScreenProps) {
   const { t } = useTranslation('shop');
   const home = useShopHome();
@@ -211,22 +199,35 @@ export function ShopHomeScreen({
                     {shop.status === 'SUSPENDED' ? (
                       <Notice tone="danger" message={t('home.suspended')} />
                     ) : null}
-                    <TileGrid>
-                      {(REVIEW_STATES.includes(shop.status)
-                        ? (['review', ...SECTIONS] as ShopSection[])
-                        : SECTIONS
-                      ).map((section, index) => (
-                        <FadeIn key={section} index={index} style={styles.cell}>
-                          <ActionTile
-                            icon={SECTION_ICON[section]}
-                            label={t(`home.sections.${section}`)}
-                            hint={t(`home.sectionHints.${section}`)}
-                            tone={section === 'review' ? 'pending' : undefined}
-                            onPress={() => onOpen(shop.id, section)}
-                          />
-                        </FadeIn>
-                      ))}
-                    </TileGrid>
+                    {todaySlot?.(shop.id)}
+                    {REVIEW_STATES.includes(shop.status) ? (
+                      <ActionTile
+                        icon={SECTION_ICON.review}
+                        label={t('home.sections.review')}
+                        hint={t('home.sectionHints.review')}
+                        tone="pending"
+                        onPress={() => onOpen(shop.id, 'review')}
+                      />
+                    ) : null}
+                    {GROUPS.map((group, g) => (
+                      <View key={group.key} style={styles.section}>
+                        <Text variant="label" color="textSecondary">
+                          {t(`home.groups.${group.key}`)}
+                        </Text>
+                        <TileGrid>
+                          {group.sections.map((section, index) => (
+                            <FadeIn key={section} index={g * 3 + index} style={styles.cell}>
+                              <ActionTile
+                                icon={SECTION_ICON[section]}
+                                label={t(`home.sections.${section}`)}
+                                hint={t(`home.sectionHints.${section}`)}
+                                onPress={() => onOpen(shop.id, section)}
+                              />
+                            </FadeIn>
+                          ))}
+                        </TileGrid>
+                      </View>
+                    ))}
                   </View>
                 )}
               </QueryView>

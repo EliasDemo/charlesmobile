@@ -71,6 +71,13 @@
       "catalog": "Photos as services",
       "reports": "Sales and commissions",
       "invoicing": "Electronic receipts"
+    },
+    "groups": {
+      "day": "Day to day",
+      "team": "Team",
+      "business": "Business",
+      "marketing": "Marketing",
+      "settings": "Settings"
     }
   },
   "status": {

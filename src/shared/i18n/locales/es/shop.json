@@ -71,6 +71,13 @@
       "catalog": "Fotos como servicios",
       "reports": "Ventas y comisiones",
       "invoicing": "Boleta electrónica"
+    },
+    "groups": {
+      "day": "Día a día",
+      "team": "Equipo",
+      "business": "Negocio",
+      "marketing": "Marketing",
+      "settings": "Configuración"
     }
   },
   "status": {

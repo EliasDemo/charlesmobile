@@ -1,7 +1,16 @@
 {
   "amountInvalid": "Write an amount in soles, for example 25 or 25.50.",
-  "range": { "today": "Today", "week": "7 days", "month": "30 days" },
-  "tiers": { "NONE": "No tier", "BRONZE": "Bronze", "SILVER": "Silver", "GOLD": "Gold" },
+  "range": {
+    "today": "Today",
+    "week": "7 days",
+    "month": "30 days"
+  },
+  "tiers": {
+    "NONE": "No tier",
+    "BRONZE": "Bronze",
+    "SILVER": "Silver",
+    "GOLD": "Gold"
+  },
   "invoice": {
     "title": "Receipt",
     "PENDING": "Issuing",
@@ -19,7 +28,12 @@
     "TRANSFER": "Transfer",
     "MEMBERSHIP_CREDIT": "Membership credit"
   },
-  "docs": { "NONE": "No document", "DNI": "DNI", "CE": "C.E.", "RUC": "RUC" },
+  "docs": {
+    "NONE": "No document",
+    "DNI": "DNI",
+    "CE": "C.E.",
+    "RUC": "RUC"
+  },
   "cash": {
     "opened": "Register opened",
     "closed": "Register closed",
@@ -104,7 +118,10 @@
     "save": "Save",
     "history": "History",
     "noVisits": "No visits yet",
-    "source": { "BOOKING": "Booking", "SALE": "In-shop sale" },
+    "source": {
+      "BOOKING": "Booking",
+      "SALE": "In-shop sale"
+    },
     "archive": "Archive client"
   },
   "catalog": {
@@ -151,7 +168,10 @@
     "title": "Receipts",
     "intro": "Set up electronic receipts. Credentials go straight to the server and are not kept on the phone.",
     "enabled": "Issue receipts",
-    "providers": { "NUBEFACT": "Nubefact", "FAKE": "Test (no SUNAT)" },
+    "providers": {
+      "NUBEFACT": "Nubefact",
+      "FAKE": "Test (no SUNAT)"
+    },
     "series": "Series",
     "seriesHint": "For example B001.",
     "next": "Next number: {{number}}",
@@ -161,5 +181,13 @@
     "tokenSaved": "A token is already saved. Write another only to change it.",
     "save": "Save",
     "saved": "Settings saved"
+  },
+  "today": {
+    "title": "Today",
+    "cashOpen": "Register open",
+    "cashClosed": "Register closed",
+    "sold": "Sold today",
+    "count": "Sales and appointments",
+    "seeCash": "See register"
   }
 }

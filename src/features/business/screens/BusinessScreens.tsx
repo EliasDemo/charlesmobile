@@ -1068,4 +1068,54 @@ const styles = StyleSheet.create({
   },
   footer: { paddingTop: spacing.sm, borderTopWidth: StyleSheet.hairlineWidth },
   thumb: { width: sizes.avatar, height: sizes.avatar },
+  today: { padding: spacing.md, gap: spacing.sm },
 });
+
+// --------------------------------------------------------------------------- Today (panel)
+
+/** "Hoy" at the top of "Mi barbería": what was sold, the register and a quick new sale. */
+export function TodaySummary({
+  shopId,
+  onNewSale,
+  onOpenCash,
+}: {
+  shopId: string;
+  onNewSale: () => void;
+  onOpenCash: () => void;
+}) {
+  const { t } = useTranslation('business');
+  const theme = useTheme();
+  const { from, to } = rangeFor('today');
+  const report = useSalesReport(shopId, from, to);
+  const cash = useCash(shopId);
+  const open = cash.query.data ?? null;
+  return (
+    <View
+      style={[styles.today, { backgroundColor: theme.colors.primarySoft, borderRadius: theme.radius.lg }]}
+    >
+      <View style={styles.row}>
+        <Text variant="subtitle" style={styles.flex}>
+          {t('today.title')}
+        </Text>
+        <Badge
+          label={open ? t('today.cashOpen') : t('today.cashClosed')}
+          tone={open ? 'success' : 'warning'}
+        />
+      </View>
+      <StatRow>
+        <Stat
+          label={t('today.sold')}
+          value={report.query.data ? PEN(report.query.data.totalAmount) : '—'}
+          tone="primary"
+        />
+        <Stat label={t('today.count')} value={report.query.data ? String(report.query.data.count) : '—'} />
+      </StatRow>
+      <View style={styles.row}>
+        <View style={styles.flex}>
+          <Button label={t('sale.new')} icon="add-circle" onPress={onNewSale} fullWidth />
+        </View>
+        <Button label={open ? t('today.seeCash') : t('cash.open')} variant="secondary" onPress={onOpenCash} />
+      </View>
+    </View>
+  );
+}

@@ -1,7 +1,16 @@
 {
   "amountInvalid": "Escribe un monto en soles, por ejemplo 25 o 25.50.",
-  "range": { "today": "Hoy", "week": "7 días", "month": "30 días" },
-  "tiers": { "NONE": "Sin nivel", "BRONZE": "Bronce", "SILVER": "Plata", "GOLD": "Oro" },
+  "range": {
+    "today": "Hoy",
+    "week": "7 días",
+    "month": "30 días"
+  },
+  "tiers": {
+    "NONE": "Sin nivel",
+    "BRONZE": "Bronce",
+    "SILVER": "Plata",
+    "GOLD": "Oro"
+  },
   "invoice": {
     "title": "Boleta",
     "PENDING": "Emitiendo",
@@ -19,7 +28,12 @@
     "TRANSFER": "Transferencia",
     "MEMBERSHIP_CREDIT": "Crédito de membresía"
   },
-  "docs": { "NONE": "Sin documento", "DNI": "DNI", "CE": "C.E.", "RUC": "RUC" },
+  "docs": {
+    "NONE": "Sin documento",
+    "DNI": "DNI",
+    "CE": "C.E.",
+    "RUC": "RUC"
+  },
   "cash": {
     "opened": "Caja abierta",
     "closed": "Caja cerrada",
@@ -104,7 +118,10 @@
     "save": "Guardar",
     "history": "Historial",
     "noVisits": "Aún no tiene visitas",
-    "source": { "BOOKING": "Reserva", "SALE": "Venta en el local" },
+    "source": {
+      "BOOKING": "Reserva",
+      "SALE": "Venta en el local"
+    },
     "archive": "Archivar cliente"
   },
   "catalog": {
@@ -151,7 +168,10 @@
     "title": "Boletas",
     "intro": "Configura la boleta electrónica. Las credenciales se envían directo al servidor y no se guardan en el teléfono.",
     "enabled": "Emitir boletas",
-    "providers": { "NUBEFACT": "Nubefact", "FAKE": "Prueba (sin SUNAT)" },
+    "providers": {
+      "NUBEFACT": "Nubefact",
+      "FAKE": "Prueba (sin SUNAT)"
+    },
     "series": "Serie",
     "seriesHint": "Por ejemplo B001.",
     "next": "Siguiente número: {{number}}",
@@ -161,5 +181,13 @@
     "tokenSaved": "Ya hay un token guardado. Escribe otro solo si quieres cambiarlo.",
     "save": "Guardar",
     "saved": "Configuración guardada"
+  },
+  "today": {
+    "title": "Hoy",
+    "cashOpen": "Caja abierta",
+    "cashClosed": "Caja cerrada",
+    "sold": "Vendido hoy",
+    "count": "Ventas y atenciones",
+    "seeCash": "Ver caja"
   }
 }
