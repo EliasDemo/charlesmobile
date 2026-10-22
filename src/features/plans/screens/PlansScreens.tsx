@@ -21,7 +21,7 @@ import {
   type IconName,
 } from '@/shared/ui';
 import type { Plan, PlanUsage, Subscription } from '../api/plansApi';
-import { usePlanBadges, usePlanCatalog, useShopPlan } from '../hooks/usePlans';
+import { usePlanBadges, usePlanCatalog, usePlanUnlock, useShopPlan } from '../hooks/usePlans';
 
 const zone = env.defaultTimeZone;
 
@@ -98,6 +98,11 @@ export function MyPlanScreen({
   const { t } = useTranslation('plans');
   const surface = useSurfaceStyle();
   const p = useShopPlan(shopId);
+  usePlanUnlock(
+    shopId,
+    p.query.data?.plan as Plan | null | undefined,
+    p.query.data?.subscription?.status === 'ACTIVE' || p.query.data?.subscription?.status === 'TRIALING',
+  );
   const [cancelling, setCancelling] = useState(false);
   return (
     <Screen refreshing={p.query.isRefetching} onRefresh={() => void p.query.refetch()}>

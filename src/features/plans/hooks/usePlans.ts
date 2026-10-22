@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import { isApiError } from '@/shared/api';
 import { i18n } from '@/shared/i18n';
-import { showToast, translateErrorMessage } from '@/shared/ui';
+import { showToast, showUnlocked, translateErrorMessage } from '@/shared/ui';
 import {
   cancelSubscription,
   fetchBadges,
@@ -126,4 +126,31 @@ export function usePlanBadges(shopId: string) {
     queryFn: () => fetchBadges(shopId),
     staleTime: 300_000,
   });
+}
+
+/**
+ * A paid plan became active: "Desbloqueaste…" once, with what it includes (labels from the API).
+ * The free/default plan unlocks nothing.
+ */
+export function usePlanUnlock(shopId: string, plan: Plan | null | undefined, active: boolean) {
+  useEffect(() => {
+    if (!plan || plan.isDefault || !active) return;
+    showUnlocked({
+      id: `unlock.plan.${shopId}.${plan.code}`,
+      title: i18n.t('plans:unlocked.title', { plan: plan.name }),
+      text: i18n.t('plans:unlocked.text'),
+      items: plan.entitlements
+        .filter((e) => e.value === null || e.value > 0)
+        .map((e) => ({
+          icon: 'checkmark-circle' as const,
+          title: e.label,
+          text:
+            e.kind === 'LIMIT'
+              ? e.value === null
+                ? i18n.t('plans:unlocked.unlimited')
+                : i18n.t('plans:unlocked.upTo', { value: e.value })
+              : undefined,
+        })),
+    });
+  }, [shopId, plan, active]);
 }

@@ -25,6 +25,10 @@
     "groups": {
       "title": "Everything in order",
       "text": "Team, business, marketing and settings, each in its group."
+    },
+    "jobBoard": {
+      "title": "Your job board",
+      "text": "Offers near you. Open one and apply; the barbershop sees your professional profile."
     }
   }
 }

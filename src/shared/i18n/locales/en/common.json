@@ -232,5 +232,43 @@
       "title": "You need an account",
       "text": "Create your account or log in to continue. You come back here when done."
     }
+  },
+  "unlock": {
+    "go": "Go",
+    "done": "Got it!",
+    "owner": {
+      "title": "Welcome to your panel",
+      "text": "You run your barbershop from here now. This opened for you:",
+      "panel": "My barbershop",
+      "panelText": "Register, sales, team, services and more, in groups.",
+      "agenda": "Agenda",
+      "agendaText": "Appointments of the whole team today.",
+      "messages": "Messages from clients and barbers",
+      "messagesText": "Questions, applications and invitations."
+    },
+    "barber": {
+      "title": "Welcome to barber mode",
+      "text": "This opened for you:",
+      "jobs": "Job board",
+      "jobsText": "Offers from barbershops near you. Apply in two taps.",
+      "agenda": "Your agenda",
+      "agendaText": "Your appointments of the day and attendance.",
+      "career": "Your professional profile",
+      "careerText": "Reviews, cuts and ranking you take to any barbershop.",
+      "messages": "Work messages",
+      "messagesText": "Invitations and work conversations."
+    },
+    "created": {
+      "title": "Your barbershop is created!",
+      "text": "To start getting bookings, complete these steps:",
+      "hours": "Hours",
+      "hoursText": "When you work each day.",
+      "services": "Services",
+      "servicesText": "What you offer, price and duration.",
+      "barbers": "Barbers",
+      "barbersText": "Your team and the services each one does.",
+      "open": "Open the barbershop",
+      "openText": "Send it to review and start showing in Explore."
+    }
   }
 }

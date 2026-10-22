@@ -25,6 +25,10 @@
     "groups": {
       "title": "Todo ordenado",
       "text": "Equipo, negocio, marketing y configuración, cada uno en su grupo."
+    },
+    "jobBoard": {
+      "title": "Tu bolsa laboral",
+      "text": "Ofertas cerca de ti. Abre una y postula; la barbería ve tu perfil profesional."
     }
   }
 }

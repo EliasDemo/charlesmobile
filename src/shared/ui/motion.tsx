@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { AccessibilityInfo, Animated, Easing, type StyleProp, type ViewStyle } from 'react-native';
+import {
+  AccessibilityInfo,
+  Animated,
+  Easing,
+  type LayoutChangeEvent,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import { create } from 'zustand';
 import { sizes, useTheme } from '@/shared/theme';
 import { Icon } from './Icon';
@@ -57,10 +64,12 @@ export function FadeIn({
   index = 0,
   children,
   style,
+  onLayout,
 }: {
   index?: number;
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  onLayout?: (event: LayoutChangeEvent) => void;
 }) {
   const reduce = useReduceMotion();
   const [progress] = useState(() => new Animated.Value(reduce ? 1 : 0));
@@ -76,6 +85,7 @@ export function FadeIn({
   }, [progress, index, reduce]);
   return (
     <Animated.View
+      onLayout={onLayout}
       style={[
         style,
         {

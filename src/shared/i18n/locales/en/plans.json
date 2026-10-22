@@ -53,5 +53,11 @@
   "seeMyPlan": "See my plan",
   "verified": "Verified",
   "unlimited": "{{used}} · unlimited",
-  "unlimitedShort": "Unlimited"
+  "unlimitedShort": "Unlimited",
+  "unlocked": {
+    "title": "You unlocked {{plan}}!",
+    "text": "Your plan now includes:",
+    "unlimited": "Unlimited",
+    "upTo": "Up to {{value}}"
+  }
 }

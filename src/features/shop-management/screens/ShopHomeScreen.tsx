@@ -138,6 +138,7 @@ export function ShopHomeScreen({
     [
       { target: 'shop.today', key: 'today' },
       { target: 'shop.groups', key: 'groups' },
+      { target: 'shop.jobBoard', key: 'jobBoard' },
     ],
     'tour',
   );
@@ -150,7 +151,7 @@ export function ShopHomeScreen({
           <View style={styles.content}>
             {home.seeking && jobBoardSlot ? (
               <>
-                {jobBoardSlot('primary')}
+                <TourTarget id="shop.jobBoard">{jobBoardSlot('primary')}</TourTarget>
                 <Card style={styles.header}>
                   <Text variant="bodyStrong">{t('home.ownShopTitle')}</Text>
                   <Text color="textSecondary">{t('home.ownShopText')}</Text>

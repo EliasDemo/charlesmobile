@@ -232,5 +232,43 @@
       "title": "Necesitas una cuenta",
       "text": "Crea tu cuenta o inicia sesión para continuar. Vuelves aquí al terminar."
     }
+  },
+  "unlock": {
+    "go": "Ir",
+    "done": "¡Entendido!",
+    "owner": {
+      "title": "Bienvenido a tu panel",
+      "text": "Ahora manejas tu barbería desde aquí. Esto se abrió para ti:",
+      "panel": "Mi barbería",
+      "panelText": "Caja, ventas, equipo, servicios y más, en grupos.",
+      "agenda": "Agenda",
+      "agendaText": "Las citas del día de todo el equipo.",
+      "messages": "Mensajes de clientes y barberos",
+      "messagesText": "Consultas, postulaciones e invitaciones."
+    },
+    "barber": {
+      "title": "Bienvenido al modo barbero",
+      "text": "Esto se abrió para ti:",
+      "jobs": "Bolsa laboral",
+      "jobsText": "Ofertas de barberías cerca de ti. Postula en dos toques.",
+      "agenda": "Tu agenda",
+      "agendaText": "Tus citas del día y marcar asistencia.",
+      "career": "Tu perfil profesional",
+      "careerText": "Valoraciones, cortes y ranking que te llevas a cualquier barbería.",
+      "messages": "Mensajes profesionales",
+      "messagesText": "Invitaciones y conversaciones de trabajo."
+    },
+    "created": {
+      "title": "¡Tu barbería está creada!",
+      "text": "Para empezar a recibir reservas, completa estos pasos:",
+      "hours": "Horarios",
+      "hoursText": "Cuándo atiendes cada día.",
+      "services": "Servicios",
+      "servicesText": "Qué ofreces, precio y duración.",
+      "barbers": "Barberos",
+      "barbersText": "Tu equipo y qué servicios hace cada uno.",
+      "open": "Abrir la barbería",
+      "openText": "Envíala a revisión y empieza a aparecer en Explorar."
+    }
   }
 }

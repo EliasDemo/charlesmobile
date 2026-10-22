@@ -53,5 +53,11 @@
   "seeMyPlan": "Ver mi plan",
   "verified": "Verificada",
   "unlimited": "{{used}} · sin límite",
-  "unlimitedShort": "Sin límite"
+  "unlimitedShort": "Sin límite",
+  "unlocked": {
+    "title": "¡Desbloqueaste {{plan}}!",
+    "text": "Esto incluye tu plan ahora:",
+    "unlimited": "Sin límite",
+    "upTo": "Hasta {{value}}"
+  }
 }

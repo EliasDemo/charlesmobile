@@ -1,13 +1,14 @@
-import { useMemo } from 'react';
-import { Redirect, Tabs, usePathname } from 'expo-router';
+import { useEffect, useMemo } from 'react';
+import { Redirect, Tabs, router, usePathname, type Href } from 'expo-router';
 import { Animated, StyleSheet, type ColorValue } from 'react-native';
 import { useUnreadMessages } from '@/features/messaging';
-import { useEffectiveMode } from '@/features/shop-management';
+import { useEffectiveMode, useShopHome } from '@/features/shop-management';
 import { useTranslation } from '@/shared/i18n';
 import { fontFamily, useTheme } from '@/shared/theme';
 import {
   GlassBackground,
   Icon,
+  showUnlocked,
   useFadeOnChange,
   usePopWhen,
   useTabAnimation,
@@ -39,6 +40,77 @@ function tabIcon(name: IconName) {
   };
 }
 
+/** The first time in barbershop mode: what opened, with a shortcut to each function. */
+function useShopModeUnlock(shopMode: boolean) {
+  const { t } = useTranslation();
+  const home = useShopHome();
+  const loaded = home.mine.data !== undefined;
+  const manages = home.shops.length > 0;
+  useEffect(() => {
+    if (!shopMode || !loaded) return;
+    const go = (href: Href) => () => router.navigate(href);
+    showUnlocked(
+      manages
+        ? {
+            id: 'unlock.mode.owner',
+            title: t('unlock.owner.title'),
+            text: t('unlock.owner.text'),
+            items: [
+              {
+                icon: 'storefront',
+                title: t('unlock.owner.panel'),
+                text: t('unlock.owner.panelText'),
+                onPress: go('/shop'),
+              },
+              {
+                icon: 'today',
+                title: t('unlock.owner.agenda'),
+                text: t('unlock.owner.agendaText'),
+                onPress: go('/agenda'),
+              },
+              {
+                icon: 'chatbubbles',
+                title: t('unlock.owner.messages'),
+                text: t('unlock.owner.messagesText'),
+                onPress: go('/messages'),
+              },
+            ],
+          }
+        : {
+            id: 'unlock.mode.barber',
+            title: t('unlock.barber.title'),
+            text: t('unlock.barber.text'),
+            items: [
+              {
+                icon: 'briefcase',
+                title: t('unlock.barber.jobs'),
+                text: t('unlock.barber.jobsText'),
+                onPress: go('/jobs'),
+              },
+              {
+                icon: 'today',
+                title: t('unlock.barber.agenda'),
+                text: t('unlock.barber.agendaText'),
+                onPress: go('/agenda'),
+              },
+              {
+                icon: 'person-circle',
+                title: t('unlock.barber.career'),
+                text: t('unlock.barber.careerText'),
+                onPress: go('/career'),
+              },
+              {
+                icon: 'chatbubbles',
+                title: t('unlock.barber.messages'),
+                text: t('unlock.barber.messagesText'),
+                onPress: go('/messages'),
+              },
+            ],
+          },
+    );
+  }, [shopMode, loaded, manages, t]);
+}
+
 /** Stable: a new function on each render would mount the blur again and again. */
 const renderTabBarBackground = () => <GlassBackground />;
 
@@ -59,6 +131,7 @@ export default function TabsLayout() {
   // send each mode to its own first tab.
   const pathname = usePathname();
   const fade = useFadeOnChange(shopMode ? 'shop' : 'client');
+  useShopModeUnlock(shopMode);
   if (shopMode && (pathname === '/' || pathname === '/bookings')) return <Redirect href="/shop" />;
   if (!shopMode && (pathname === '/shop' || pathname === '/agenda')) return <Redirect href="/" />;
   return (

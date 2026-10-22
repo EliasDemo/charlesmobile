@@ -30,6 +30,7 @@ import {
   SystemBars,
   ToastHost,
   TourOverlay,
+  UnlockHost,
   useStackScreenOptions,
 } from '@/shared/ui';
 
@@ -105,6 +106,7 @@ function AppStack() {
         onRegister={(returnTo) => router.push({ pathname: '/register', params: { returnTo } })}
       />
       <TourOverlay />
+      <UnlockHost />
       <PlanLimitNotice
         onSeePlan={() => {
           useAppMode.getState().setMode('shop');
