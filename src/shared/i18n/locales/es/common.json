@@ -119,24 +119,8 @@
     "searchMore": "Buscar más resultados",
     "searchMoreHint": "Todavía no encontramos coincidencias, pero puede haber más."
   },
-  "days": [
-    "domingo",
-    "lunes",
-    "martes",
-    "miércoles",
-    "jueves",
-    "viernes",
-    "sábado"
-  ],
-  "daysShort": [
-    "dom",
-    "lun",
-    "mar",
-    "mié",
-    "jue",
-    "vie",
-    "sáb"
-  ],
+  "days": ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+  "daysShort": ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
   "date": {
     "today": "Hoy",
     "tomorrow": "Mañana",
@@ -177,20 +161,7 @@
       "noviembre",
       "diciembre"
     ],
-    "monthsShort": [
-      "ene",
-      "feb",
-      "mar",
-      "abr",
-      "may",
-      "jun",
-      "jul",
-      "ago",
-      "sept",
-      "oct",
-      "nov",
-      "dic"
-    ],
+    "monthsShort": ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sept", "oct", "nov", "dic"],
     "showMonth": "Ver calendario",
     "showDays": "Ver días",
     "addToCalendar": "Agregar a mi calendario",
