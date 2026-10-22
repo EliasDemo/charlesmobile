@@ -36,6 +36,7 @@ describe('schemas', () => {
   const validRegister = {
     fullName: 'Ana',
     email: 'ana@example.com',
+    username: 'ana.perez',
     password: 'Una-Clave-Larga1',
     confirmPassword: 'Una-Clave-Larga1',
     phone: '',
@@ -70,8 +71,8 @@ describe('schemas', () => {
     });
   });
 
-  it('trims the email at login', () => {
-    expect(loginSchema.parse({ email: ' ana@example.com ', password: 'x' }).email).toBe('ana@example.com');
+  it('trims the username or email at login', () => {
+    expect(loginSchema.parse({ login: ' ana@example.com ', password: 'x' }).login).toBe('ana@example.com');
   });
 
   it('requires a 6-digit code', () => {

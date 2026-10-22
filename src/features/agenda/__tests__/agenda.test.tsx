@@ -16,7 +16,7 @@ const item = (overrides: Partial<S['AgendaItemDto']> = {}): S['AgendaItemDto'] =
   endAt: '2030-01-07T14:30:00.000Z',
   service: { id: 'sv1', name: 'Corte clásico', categoryKey: 'haircut' },
   barber: { id: 'b1', name: 'Barbero Demo' },
-  client: { id: 'c1', name: 'Cliente Demo', photoUrl: null },
+  client: { id: 'c1', name: 'Cliente Demo', photoUrl: null, username: 'cliente.demo' },
   awaitingPayment: false,
   pendingAttention: false,
   actions: { canMarkAttended: false, canMarkNoShow: false, canCorrect: false, canCancel: false },

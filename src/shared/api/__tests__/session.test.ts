@@ -20,7 +20,7 @@ const tokens = (n: number): AuthTokens => ({
   accessTokenExpiresAt: '2030-01-01T00:15:00.000Z',
   refreshToken: `refresh-${n}`,
   refreshTokenExpiresAt: '2030-01-31T00:00:00.000Z',
-  user: { id: 'u1', fullName: 'Ana', emailVerified: true, roles: ['CLIENT'] },
+  user: { id: 'u1', fullName: 'Ana', username: 'ana', emailVerified: true, roles: ['CLIENT'] },
 });
 
 const ok = (body: unknown) => new Response(JSON.stringify(body), { status: 200 });

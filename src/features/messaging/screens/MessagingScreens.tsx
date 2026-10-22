@@ -269,7 +269,7 @@ function Bubble({ message, onReport }: { message: Message; onReport?: () => void
     >
       {!message.mine && message.senderName ? (
         <Text variant="caption" color="textSecondary">
-          {message.senderName}
+          {message.side === 'USER' ? `@${message.senderName}` : message.senderName}
         </Text>
       ) : null}
       <Text

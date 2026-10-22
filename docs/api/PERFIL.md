@@ -7,6 +7,8 @@ Para quien construye la app. Todo es de la cuenta autenticada: no existe una rut
 ```json
 {
   "id": "…",
+  "username": "ana.perez",
+  "usernameChangeableAt": null,
   "fullName": "Ana Pérez",
   "email": "ana@example.com",
   "emailVerified": true,
@@ -20,19 +22,22 @@ Para quien construye la app. Todo es de la cuenta autenticada: no existe una rut
 }
 ```
 
+`username` es público (lo ven otras personas en lugar del nombre real). `usernameChangeableAt` es la fecha desde la que puede volver a cambiarlo (`null`: ya puede).
+
 `birthDate`, `gender` y `photoUrl` son `null` mientras la persona no los complete. `photoUrl` es **relativa** en desarrollo (súmale la URL base de la API) y absoluta en producción (CDN): úsala tal como llega si empieza con `http`.
 
 ## Editar: `PATCH /users/me`
 
 Envía **solo** los campos que cambian. Omitir un campo lo deja igual; `null` lo borra (en `phone`, `birthDate` y `gender`).
 
-| Campo         | Tipo                                                    | Reglas                                                                               |
-| ------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `fullName`    | texto                                                   | 2 a 120 caracteres (se recortan los espacios).                                       |
-| `phone`       | texto o `null`                                          | Dígitos, espacios, guiones, paréntesis y `+` inicial; 6 a 20 caracteres.             |
-| `preferences` | objeto                                                  | `notificationChannels` (sin repetidos) y `reminders` opcional. Ver `PUSH.md`.        |
-| `birthDate`   | `"YYYY-MM-DD"` o `null`                                 | Fecha real del calendario, desde 1900, con **18 años cumplidos** hoy (hora de Lima). |
-| `gender`      | `MALE`, `FEMALE`, `OTHER`, `PREFER_NOT_TO_SAY` o `null` | Uno de esos valores exactos.                                                         |
+| Campo         | Tipo                                                    | Reglas                                                                                                                                                                                                          |
+| ------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `username`    | texto                                                   | Mismas reglas que en el registro. **Una vez cada 30 días** (409 `USERNAME_CHANGE_TOO_SOON` con `details[0].nextChangeAt`; 409 `USERNAME_TAKEN` si está ocupado). Enviar el mismo usuario no cuenta como cambio. |
+| `fullName`    | texto                                                   | 2 a 120 caracteres (se recortan los espacios). No se muestra en público.                                                                                                                                        |
+| `phone`       | texto o `null`                                          | Dígitos, espacios, guiones, paréntesis y `+` inicial; 6 a 20 caracteres.                                                                                                                                        |
+| `preferences` | objeto                                                  | `notificationChannels` (sin repetidos) y `reminders` opcional. Ver `PUSH.md`.                                                                                                                                   |
+| `birthDate`   | `"YYYY-MM-DD"` o `null`                                 | Fecha real del calendario, desde 1900, con **18 años cumplidos** hoy (hora de Lima).                                                                                                                            |
+| `gender`      | `MALE`, `FEMALE`, `OTHER`, `PREFER_NOT_TO_SAY` o `null` | Uno de esos valores exactos.                                                                                                                                                                                    |
 
 Responde 200 con el perfil completo (igual que `GET`).
 

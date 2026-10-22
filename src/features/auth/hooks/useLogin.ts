@@ -10,7 +10,7 @@ import { loginSchema, type LoginForm } from '../schemas/authSchemas';
 import { useRestrictedAccess } from './usePendingDeletion';
 
 export interface UseLoginOptions {
-  /** Called with the signed-in user and the email typed; the route decides where to go next. */
+  /** Called with the signed-in user and the email typed (empty when it was a username). */
   onSuccess: (user: SessionUser, email: string) => void;
   /** The account is pending deletion: the restricted access is ready to cancel it. */
   onPendingDeletion: () => void;
@@ -22,14 +22,15 @@ export function useLogin({ onSuccess, onPendingDeletion, onDisabled }: UseLoginO
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     mode: 'onTouched',
-    defaultValues: { email: '', password: '' },
+    defaultValues: { login: '', password: '' },
   });
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [lockedWithoutTime, setLockedWithoutTime] = useState(false);
   const lock = useCountdown();
 
   const pendingAccess = useMutation({
-    mutationFn: (values: LoginForm) => supportAccess({ email: values.email, password: values.password }),
+    mutationFn: (values: LoginForm) =>
+      supportAccess({ login: values.login.trim(), password: values.password }),
     onSuccess: (access) => {
       useRestrictedAccess.getState().set(access.accessToken, access.scope);
       if (access.scope === 'support') onDisabled();
@@ -40,12 +41,12 @@ export function useLogin({ onSuccess, onPendingDeletion, onDisabled }: UseLoginO
 
   const mutation = useMutation({
     mutationFn: (values: LoginForm) =>
-      login({ email: values.email, password: values.password, deviceName: deviceModelName() }),
+      login({ login: values.login.trim(), password: values.password, deviceName: deviceModelName() }),
     onSuccess: async (tokens, values) => {
       await startSession(tokens);
       // Public data read as a visitor (e.g. isFavorite) is now per account: read it again.
       void queryClient.invalidateQueries();
-      onSuccess(tokens.user, values.email);
+      onSuccess(tokens.user, values.login.includes('@') ? values.login.trim() : '');
     },
     onError: (error, values) => {
       if (
@@ -63,7 +64,7 @@ export function useLogin({ onSuccess, onPendingDeletion, onDisabled }: UseLoginO
         setGeneralError(null);
         return;
       }
-      setGeneralError(applyServerErrors(error, form.setError, ['email', 'password']));
+      setGeneralError(applyServerErrors(error, form.setError, ['login', 'password']));
     },
   });
 

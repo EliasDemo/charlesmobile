@@ -283,6 +283,24 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/face-shape-rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: matriz de compatibilidad forma de cara ↔ corte */
+        get: operations["FaceShapeRulesAdminController_list_v1"];
+        /** Solo ADMIN: crear o cambiar una regla (con motivo, queda en la auditoría) */
+        put: operations["FaceShapeRulesAdminController_upsert_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/featured": {
         parameters: {
             query?: never;
@@ -406,6 +424,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/package-purchases/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Solo ADMIN: anular una compra sin pagar */
+        post: operations["SponsorPackagesAdminController_cancelPurchase_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/payments/{id}/refunds": {
         parameters: {
             query?: never;
@@ -442,6 +477,76 @@ export type paths = {
         head?: never;
         /** Solo ADMIN: editar un anuncio */
         patch: operations["SponsorsAdminController_updatePlacement_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: todos los planes (también ocultos), con suscripciones vivas */
+        get: operations["PlansAdminController_list_v1"];
+        put?: never;
+        /** Solo ADMIN: crear un plan */
+        post: operations["PlansAdminController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/plans/{planId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Solo ADMIN: eliminar un plan sin suscripciones (si las tiene, ocultarlo) */
+        delete: operations["PlansAdminController_remove_v1"];
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar un plan (precio nuevo: las suscripciones vigentes lo pagan desde su renovación) */
+        patch: operations["PlansAdminController_update_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/plans/{planId}/entitlements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Solo ADMIN: beneficios del plan (reemplaza todos) */
+        put: operations["PlansAdminController_setEntitlements_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/plans/entitlements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: catálogo de beneficios (claves y tipo) */
+        get: operations["PlansAdminController_catalog_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/admin/products/{id}": {
@@ -689,6 +794,41 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/sponsor-packages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: catálogo de paquetes para auspiciadores */
+        get: operations["SponsorPackagesAdminController_list_v1"];
+        put?: never;
+        /** Solo ADMIN: crear un paquete */
+        post: operations["SponsorPackagesAdminController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sponsor-packages/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar o desactivar un paquete */
+        patch: operations["SponsorPackagesAdminController_update_v1"];
+        trace?: never;
+    };
     "/api/v1/admin/sponsors": {
         parameters: {
             query?: never;
@@ -742,6 +882,24 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/sponsors/{id}/package-purchases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: compras de paquetes de un auspiciador */
+        get: operations["SponsorPackagesAdminController_purchases_v1"];
+        put?: never;
+        /** Solo ADMIN: vender un paquete (crea la campaña y envía el enlace de pago por correo) */
+        post: operations["SponsorPackagesAdminController_createPurchase_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/sponsors/{id}/products": {
         parameters: {
             query?: never;
@@ -774,6 +932,74 @@ export type paths = {
          * @description multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Devuelve las URL para usar en logoUrl o imageUrl.
          */
         post: operations["SponsorsAdminController_media_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: suscripciones (las 200 más recientes) */
+        get: operations["SubscriptionsAdminController_list_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/subscriptions/{subscriptionId}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Solo ADMIN: cancelar de inmediato (la barbería baja al plan gratis) */
+        post: operations["SubscriptionsAdminController_cancel_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/subscriptions/{subscriptionId}/extend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Solo ADMIN: sumar días de cortesía */
+        post: operations["SubscriptionsAdminController_extend_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/subscriptions/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: resumen de facturación (MRR, planes, cobros y comisiones del mes) */
+        get: operations["SubscriptionsAdminController_summary_v1"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -872,7 +1098,7 @@ export type paths = {
             path?: never;
             cookie?: never;
         };
-        /** RF-OPE-001: buscar una cuenta por correo exacto (datos mínimos) */
+        /** RF-OPE-001: buscar una cuenta por correo o nombre de usuario exactos (datos mínimos) */
         get: operations["AdminUsersController_find_v1"];
         put?: never;
         post?: never;
@@ -1071,7 +1297,7 @@ export type paths = {
         };
         get?: never;
         put?: never;
-        /** RF-AUT-002: inicio de sesión con correo y contraseña */
+        /** RF-AUT-002: inicio de sesión con usuario o correo y contraseña */
         post: operations["AuthController_login_v1"];
         delete?: never;
         options?: never;
@@ -1287,6 +1513,23 @@ export type paths = {
         };
         /** Versión vigente de los términos y condiciones */
         get: operations["AuthController_terms_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/auth/username-available": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Comprobar si un nombre de usuario está libre (para el registro) */
+        get: operations["AuthController_usernameAvailable_v1"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1795,6 +2038,23 @@ export type paths = {
         patch: operations["BarbersController_update_v1"];
         trace?: never;
     };
+    "/api/v1/barbershops/{id}/barbers/{barberId}/commission": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Solo OWNER: comisión del barbero sobre sus atenciones (para reportes) */
+        put: operations["ShopController_commission_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops/{id}/barbers/{barberId}/gallery": {
         parameters: {
             query?: never;
@@ -1957,6 +2217,212 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/barbershops/{id}/cash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Caja abierta (null si no hay) */
+        get: operations["ShopController_cash_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/cash/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cerrar la caja (con el efectivo contado; calcula la diferencia) */
+        post: operations["ShopController_closeCash_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/cash/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Últimos 30 turnos de caja */
+        get: operations["ShopController_cashHistory_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/cash/open": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Abrir la caja */
+        post: operations["ShopController_openCash_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/catalog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Catálogo de cortes (servicios con estilo y foto) */
+        get: operations["ShopController_listCatalog_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/catalog/{serviceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Estilo y foto de portada de un corte del catálogo */
+        patch: operations["ShopController_updateCatalog_v1"];
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/catalog/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Crear un corte del catálogo desde una foto del portafolio de un barbero */
+        post: operations["ShopController_importItem_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/catalog/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Fotos de cortes de los barberos de la barbería (para importar) */
+        get: operations["ShopController_sources_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/clients": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Clientes de la barbería (búsqueda, nivel, habituales) */
+        get: operations["ShopController_listClients_v1"];
+        put?: never;
+        /** Registrar un cliente (del local o con su usuario de la app) */
+        post: operations["ShopController_createClient_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/clients/{clientId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cliente con su historial (reservas atendidas y ventas) */
+        get: operations["ShopController_client_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Editar un cliente (notas, preferencias, habitual, archivar) */
+        patch: operations["ShopController_updateClient_v1"];
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/clients/ranking": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ranking de clientes: niveles y los 50 mejores (plan con ranking) */
+        get: operations["ShopController_ranking_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/clients/ranking/recompute": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Recalcular el ranking ahora (se recalcula solo cada noche) */
+        post: operations["ShopController_recompute_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops/{id}/cover": {
         parameters: {
             query?: never;
@@ -1973,6 +2439,23 @@ export type paths = {
         post?: never;
         /** Fase 14: quitar la portada */
         delete: operations["ImagesController_deleteCover_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/featured": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** OWNER o MANAGER: usar días destacados incluidos en el plan */
+        post: operations["BarbershopPlanController_featured_v1"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2014,6 +2497,24 @@ export type paths = {
         head?: never;
         /** Fase 14: editar una foto (texto, estilos, servicio, destacar) */
         patch: operations["ImagesController_updateGallery_v1"];
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/invoicing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Configuración de boletas (nunca devuelve credenciales) */
+        get: operations["ShopController_invoicing_v1"];
+        /** Solo OWNER: configurar boletas (FAKE de demostración o NUBEFACT con su RUTA y TOKEN) */
+        put: operations["ShopController_setInvoicing_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/barbershops/{id}/logo": {
@@ -2089,6 +2590,75 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/barbershops/{id}/membership-members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: clientes con membresía vigente y sus créditos */
+        get: operations["BarbershopMembershipsController_members_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/membership-plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Membresías a la venta (vacío si el plan de la barbería no las incluye) */
+        get: operations["BarbershopMembershipsController_publicPlans_v1"];
+        put?: never;
+        /** Solo OWNER: crear una membresía (si el plan lo incluye) */
+        post: operations["BarbershopMembershipsController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/membership-plans/{planId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Solo OWNER: editar o dejar de vender una membresía (las vigentes siguen) */
+        patch: operations["BarbershopMembershipsController_update_v1"];
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/membership-plans/manage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: todas sus membresías, con miembros activos */
+        get: operations["BarbershopMembershipsController_managed_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops/{id}/owner-document": {
         parameters: {
             query?: never;
@@ -2102,6 +2672,57 @@ export type paths = {
          * @description RUC (11 dígitos, dígito verificador válido) o DNI (8). Se guarda cifrado; la respuesta lo devuelve enmascarado. Si la barbería ya estaba aprobada, sigue visible y queda marcada para que soporte revise el cambio.
          */
         put: operations["BarbershopsController_setOwnerDocument_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/plan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: plan vigente, límites y uso */
+        get: operations["BarbershopPlanController_plan_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/plan/active-barbers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Solo OWNER: elegir qué barberos siguen activos cuando el plan limita la cantidad */
+        put: operations["BarbershopPlanController_activeBarbers_v1"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/plan/badges": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Insignias públicas del plan (perfil de la barbería) */
+        get: operations["BarbershopPlanController_badges_v1"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -2221,6 +2842,40 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/barbershops/{id}/reports/sales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reporte de ventas: app y local, por día, barbero, servicio y medio de pago */
+        get: operations["ShopController_report_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/reports/sales.csv": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Exportar el reporte a CSV (plan con exportación) */
+        get: operations["ShopController_reportCsv_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops/{id}/review": {
         parameters: {
             query?: never;
@@ -2278,6 +2933,81 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/barbershops/{id}/sales": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ventas del local (por defecto, las de hoy) */
+        get: operations["ShopController_listSales_v1"];
+        put?: never;
+        /**
+         * Registrar una venta en el local (cliente sin reserva), opcionalmente con boleta
+         * @description Efectivo exige caja abierta. MEMBERSHIP_CREDIT usa un crédito de la membresía del cliente. La boleta se emite al momento si el proveedor responde; si no, se reintenta sola.
+         */
+        post: operations["ShopController_createSale_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/sales/{saleId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Una venta, con su boleta */
+        get: operations["ShopController_sale_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/sales/{saleId}/invoice/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reintentar la boleta de una venta (pendiente o fallida) */
+        post: operations["ShopController_retryInvoice_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/sales/{saleId}/void": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Anular una venta (con motivo)
+         * @description Devuelve el crédito de membresía. Una boleta ya emitida se anula con nota de crédito en el proveedor.
+         */
+        post: operations["ShopController_voidSale_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/barbershops/{id}/services": {
         parameters: {
             query?: never;
@@ -2329,6 +3059,61 @@ export type paths = {
         head?: never;
         /** RF-BAR-004: atendiendo o cerrada temporalmente (solo OWNER) */
         patch: operations["BarbershopsController_updateStatus_v1"];
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** OWNER o MANAGER: suscripción vigente o pendiente de pago (null si no hay) */
+        get: operations["BarbershopPlanController_current_v1"];
+        put?: never;
+        /**
+         * Solo OWNER: contratar un plan de pago
+         * @description Crea la suscripción en la pasarela y envía el enlace de pago por correo al dueño. La app no abre el enlace (políticas de Apple y Google). Queda PENDING hasta que el dueño pague.
+         */
+        post: operations["BarbershopPlanController_subscribe_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/subscription/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Solo OWNER: cancelar (el plan sigue hasta el fin del periodo pagado) */
+        post: operations["BarbershopPlanController_cancel_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/barbershops/{id}/subscription/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** OWNER o MANAGER: consultar a la pasarela si ya se pagó */
+        post: operations["BarbershopPlanController_sync_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/barbershops/{id}/time-blocks": {
@@ -2421,6 +3206,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/billing/webhooks/{provider}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Aviso firmado de la pasarela de facturación. Idempotente por evento. */
+        post: operations["BillingController_webhook_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/bookings": {
         parameters: {
             query?: never;
@@ -2435,6 +3237,23 @@ export type paths = {
          * @description Idempotente por la cabecera Idempotency-Key: repetir la misma petición devuelve la misma reserva (200). Requiere correo verificado.
          */
         post: operations["BookingsController_create_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/bookings/{bookingId}/pay-with-membership": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Pagar una reserva pendiente con un crédito de membresía */
+        post: operations["MyMembershipsController_pay_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2615,6 +3434,26 @@ export type paths = {
          * @description No reserva el turno ni el cupo de la promoción. Con couponCode, `coupon` dice si se aplicó o por qué no (sin error).
          */
         post: operations["BookingsController_quote_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/face-shape/classify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Clasificar la forma de cara a partir de 4 medidas (nunca la foto)
+         * @description La app mide la cara en el teléfono y envía solo estas proporciones. No se guarda nada. Devuelve la forma, la confianza y las alternativas (caras mixtas).
+         */
+        post: operations["RecommendationsController_classify_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3460,6 +4299,26 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/membership-plans/{planId}/subscribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Suscribirse a una membresía
+         * @description Devuelve checkoutUrl (pasarela): la app lo abre. Al pagarse, llegan los créditos.
+         */
+        post: operations["MyMembershipsController_subscribe_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/messages/{id}/report": {
         parameters: {
             query?: never;
@@ -3528,6 +4387,80 @@ export type paths = {
          * @description Una por persona (o instalación) por hora y tipo; las repetidas se ignoran (204 igual). Sin sesión, envía viewerKey. No se guarda la IP.
          */
         post: operations["SponsorsController_event_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Planes que se ofrecen, con sus beneficios */
+        get: operations["PlansController_list_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recommendations/haircuts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cortes recomendados para la forma de cara, con fotos y barberos cercanos
+         * @description Envía `faceShape` o `measurements` (si no, se usa la forma guardada de la cuenta). Nada se guarda. Muestra siempre `disclaimer`.
+         */
+        post: operations["RecommendationsController_recommend_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recommendations/interactions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Registrar que vio, guardó o reservó un corte (VIEW: una por foto y hora) */
+        post: operations["InteractionsController_interaction_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recommendations/similar-faces": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Etapa 2: fotos de cortes en caras parecidas a la del cliente, cerca
+         * @description Compara las proporciones de la cara (medidas en el teléfono) con las de las fotos de la galería que se subieron con medidas. Nada del cliente se guarda.
+         */
+        post: operations["RecommendationsController_similar_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3698,6 +4631,57 @@ export type paths = {
         patch: operations["UsersController_update_v1"];
         trace?: never;
     };
+    "/api/v1/users/me/memberships": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mis membresías (sin las vencidas), con créditos disponibles */
+        get: operations["MyMembershipsController_mine_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/memberships/{membershipId}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Cancelar (los créditos siguen hasta que vencen; sin devolución del mes) */
+        post: operations["MyMembershipsController_cancel_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/users/me/memberships/{membershipId}/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Consultar a la pasarela si ya se pagó (al volver del pago) */
+        post: operations["MyMembershipsController_sync_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users/me/password": {
         parameters: {
             query?: never;
@@ -3816,6 +4800,10 @@ export type components = {
              * @description Cuándo se ejecuta (hasta entonces se puede cancelar).
              */
             scheduledFor: string | null;
+        };
+        ActiveBarbersDto: {
+            /** @description Barberos que siguen activos (hasta el límite del plan). */
+            barberIds: string[];
         };
         AdminBarbershopDetailDto: {
             /** Format: date-time */
@@ -4007,6 +4995,43 @@ export type components = {
             refunds: components["schemas"]["AdminRefundDto"][];
             status: string;
         };
+        AdminPlanDto: {
+            /**
+             * @description BARBERSHOP: barberías. BARBER: barberos independientes.
+             * @enum {string}
+             */
+            audience: "BARBERSHOP" | "BARBER";
+            /** @example pro */
+            code: string;
+            /** @description Comisión por reserva en puntos básicos (500 = 5 %). null: la general. */
+            commissionBp: number | null;
+            /** @example PEN */
+            currency: string;
+            description: string | null;
+            entitlements: components["schemas"]["PlanEntitlementDto"][];
+            /** Format: uuid */
+            id: string;
+            isActive: boolean;
+            isDefault: boolean;
+            isVisible: boolean;
+            /** @description Suscripciones vivas (en prueba, activas o con pago atrasado). */
+            liveSubscriptions: number;
+            /** @example Pro */
+            name: string;
+            /**
+             * @description Céntimos por mes.
+             * @example 5900
+             */
+            priceMonthly: number;
+            /** @description Céntimos por año (null: sin opción anual). */
+            priceYearly: number | null;
+            sortOrder: number;
+            /** @example 14 */
+            trialDays: number;
+        };
+        AdminReasonDto: {
+            reason: string;
+        };
         AdminRefundDto: {
             amount: number;
             /** Format: date-time */
@@ -4025,11 +5050,17 @@ export type components = {
             caption: string | null;
             /** Format: date-time */
             createdAt: string;
+            /** @enum {string|null} */
+            faceShape: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
             height: number;
             /** @description Oculta al público: por reportes (images.report_hide_threshold) o retirada por soporte. */
             hidden: boolean;
             /** Format: uuid */
             id: string;
+            /** @description Foto de demostración (stock): muéstrala como "Ejemplo". */
+            isDemo: boolean;
+            /** @description Estilos y forma confirmados por el barbero. */
+            labelConfirmed: boolean;
             /** @description Grande (hasta 1600 px de ancho, WebP). */
             largeUrl: string;
             /** @description Reportes abiertos. */
@@ -4086,14 +5117,20 @@ export type components = {
             categoryId: string;
             /** @example haircut */
             categoryKey: string;
+            description: string | null;
+            hairTypes: components["schemas"]["HairType"][];
             /** Format: uuid */
             id: string;
             isActive: boolean;
             /** @example fade_low */
             key: string;
+            /** @enum {string|null} */
+            maintenance: "LOW" | "MEDIUM" | "HIGH" | null;
             /** @example Degradado bajo */
             name: string;
             sortOrder: number;
+            /** @enum {string|null} */
+            vibe: "CLASSIC" | "MODERN" | null;
         };
         AdminSettingDto: {
             description: string | null;
@@ -4110,6 +5147,41 @@ export type components = {
             value: (string | number | boolean | unknown[] | {
                 [key: string]: unknown;
             }) | null;
+        };
+        AdminSubscriptionDto: {
+            /** Format: uuid */
+            barbershopId: string;
+            barbershopName: string;
+            cancelAtPeriodEnd: boolean;
+            /** Format: date-time */
+            canceledAt: string | null;
+            cancelReason: string | null;
+            /** @description Enlace de pago (solo mientras está PENDING). La app no lo abre: se envía por correo. */
+            checkoutUrl: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            currency: string;
+            /** Format: date-time */
+            currentPeriodEnd: string | null;
+            /**
+             * Format: date-time
+             * @description Con pago atrasado: fin del periodo de gracia.
+             */
+            graceUntil: string | null;
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            interval: "MONTHLY" | "YEARLY";
+            /** @description Precio desde la próxima renovación. */
+            nextPriceAmount: number | null;
+            /** Format: date-time */
+            nextPriceFrom: string | null;
+            plan: components["schemas"]["PlanDto"];
+            priceAmount: number;
+            /** @enum {string} */
+            status: "PENDING" | "TRIALING" | "ACTIVE" | "PAST_DUE" | "CANCELED" | "EXPIRED";
+            /** Format: date-time */
+            trialEndsAt: string | null;
         };
         AgendaActionsDto: {
             /** @description Solo OWNER o MANAGER (el barbero no cancela): reserva pendiente de pago, o confirmada que aún no empieza. POST /bookings/{id}/cancel exige motivo. */
@@ -4241,6 +5313,9 @@ export type components = {
              * @example America/Lima
              */
             timezone: string;
+        };
+        BarberCommissionDto: {
+            commissionBp: number | null;
         };
         BarberManageDto: {
             bio: string | null;
@@ -4381,6 +5456,17 @@ export type components = {
         };
         /** @enum {string} */
         BarbershopMemberRole: "OWNER" | "MANAGER";
+        BarbershopPlanDto: {
+            /** @description Fotos que el plan ocultó. */
+            hiddenPhotos: number;
+            /** @description null: sin planes configurados (sin límites). */
+            plan: components["schemas"]["PlanDto"] | null;
+            /** @description Suscripción vigente o pendiente de pago. */
+            subscription: components["schemas"]["SubscriptionDto"] | null;
+            /** @description Barberos que el plan dejó inactivos (se reactivan al subir de plan). */
+            suspendedBarbers: number;
+            usage: components["schemas"]["PlanUsageDto"][];
+        };
         BarbershopPublicDto: {
             address: string;
             closure: components["schemas"]["ClosureDto"] | null;
@@ -4440,6 +5526,19 @@ export type components = {
          * @enum {string}
          */
         BarbershopType: "BARBERSHOP" | "INDEPENDENT";
+        BillingSummaryDto: {
+            byPlan: components["schemas"]["PlanCountDto"][];
+            /** @description Cobros confirmados del mes calendario. */
+            chargesThisMonth: components["schemas"]["PurposeAmountDto"][];
+            /** @description Comisiones por reservas del mes (céntimos). */
+            commissionsThisMonth: number;
+            /** @description Ingreso mensual recurrente de los planes (céntimos; anuales ÷ 12). */
+            mrr: number;
+            /** @description Suscripciones con pago atrasado. */
+            pastDue: number;
+            /** @description Suscripciones en prueba gratis. */
+            trialing: number;
+        };
         BookingBarbershopDto: {
             /** Format: uuid */
             id: string;
@@ -4557,6 +5656,10 @@ export type components = {
             endsAt: string;
             /** Format: uuid */
             id: string;
+            /** @description Impresiones contadas (una por persona y hora). */
+            impressionsCount: number;
+            /** @description Fase 15: impresiones del paquete comprado (null: sin tope). */
+            impressionsLimit: number | null;
             /** @description ACTIVE y dentro de sus fechas: se está mostrando. */
             live: boolean;
             name: string;
@@ -4633,6 +5736,56 @@ export type components = {
             startAt: string;
             status: components["schemas"]["BookingStatus"];
         };
+        CancelSubscriptionDto: {
+            reason?: string;
+        };
+        CashSessionDto: {
+            /** Format: date-time */
+            closedAt: string | null;
+            countedAmount: number | null;
+            /** @description Contado − esperado. */
+            difference: number | null;
+            /** @description Efectivo esperado: apertura + ventas en efectivo del turno. */
+            expectedAmount: number;
+            /** Format: uuid */
+            id: string;
+            note: string | null;
+            /** Format: date-time */
+            openedAt: string;
+            openingAmount: number;
+            /** @description Ventas del turno (no anuladas). */
+            salesCount: number;
+            /** @description Total vendido en el turno (todos los medios). */
+            salesTotal: number;
+        };
+        CatalogItemDto: {
+            coverUrl: string | null;
+            durationMinutes: number;
+            /** @description Barbero de la foto de portada. */
+            fromBarberName: string | null;
+            /**
+             * Format: uuid
+             * @description ID del servicio.
+             */
+            id: string;
+            isAvailable: boolean;
+            name: string;
+            priceAmount: number;
+            styleKey: string | null;
+            styleName: string | null;
+        };
+        CatalogSourceDto: {
+            barberName: string;
+            caption: string | null;
+            /**
+             * Format: uuid
+             * @description ID de la foto del portafolio.
+             */
+            imageId: string;
+            imageUrl: string;
+            /** @description Claves de los estilos de la foto. */
+            styleKeys: string[];
+        };
         ChangeMemberRoleDto: {
             role: components["schemas"]["BarbershopMemberRole"];
         };
@@ -4658,6 +5811,28 @@ export type components = {
             name: string | null;
             /** @description Foto de perfil; null si no tiene. */
             photoUrl: string | null;
+            /**
+             * @description Nombre de usuario (name es el nombre de pila).
+             * @example ana.perez
+             */
+            username: string;
+        };
+        ClientVisitDto: {
+            /** Format: date-time */
+            at: string;
+            barberName: string | null;
+            /** Format: uuid */
+            id: string;
+            /** @description Servicios. */
+            services: string[];
+            /** @enum {string} */
+            source: "BOOKING" | "SALE";
+            totalAmount: number;
+        };
+        CloseCashDto: {
+            /** @description Efectivo contado al cerrar (céntimos). */
+            countedAmount: number;
+            note?: string;
         };
         ClosureDto: {
             /** Format: date-time */
@@ -4791,6 +5966,11 @@ export type components = {
              * @example 2030-01-07T14:00:00.000Z
              */
             startAt: string;
+            /**
+             * Format: uuid
+             * @description Forma de cara: corte elegido (por ejemplo, al reservar desde una foto o una recomendación). Sirve para medir las estrellas del barbero en ese corte.
+             */
+            styleId?: string;
         };
         CreateCampaignDto: {
             /**
@@ -5003,6 +6183,29 @@ export type components = {
             /** @example Barbero con experiencia en degradados */
             title: string;
         };
+        CreateMembershipPlanDto: {
+            creditsPerPeriod: number;
+            description?: string;
+            /** @example Corte mensual */
+            name: string;
+            /** @description Céntimos por mes (mínimo S/ 10). */
+            priceAmount: number;
+            /** @description Servicios que cubre (vacío: todos). */
+            serviceIds?: string[];
+        };
+        CreatePackagePurchaseDto: {
+            /**
+             * @default ALL
+             * @enum {string}
+             */
+            audience: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            /** @description Nombre de la campaña que se creará. */
+            campaignName: string;
+            /** Format: uuid */
+            packageId: string;
+            /** @description Correo al que se envía el enlace de pago. */
+            payerEmail: string;
+        };
         CreatePlacementDto: {
             /** @description Enlace https al tocar el anuncio. */
             actionUrl?: string;
@@ -5013,6 +6216,33 @@ export type components = {
             /** @enum {string} */
             slotKey: "home_banner" | "search_top" | "booking_success" | "shop_dashboard";
             title: string;
+        };
+        CreatePlanDto: {
+            /** @enum {string} */
+            audience: "BARBERSHOP" | "BARBER";
+            /**
+             * @description Minúsculas, números y _ (2 a 40).
+             * @example pro
+             */
+            code: string;
+            commissionBp?: number | null;
+            description?: string;
+            /**
+             * @description Plan por defecto (gratis) de su público.
+             * @default false
+             */
+            isDefault: boolean;
+            /** @default true */
+            isVisible: boolean;
+            /** @example Pro */
+            name: string;
+            /** @description Céntimos por mes (0 para el plan gratis). */
+            priceMonthly: number;
+            priceYearly?: number | null;
+            /** @default 0 */
+            sortOrder: number;
+            /** @default 0 */
+            trialDays: number;
         };
         CreateProductDto: {
             /** @description Enlace https de compra (Charles no vende ni cobra). */
@@ -5042,6 +6272,11 @@ export type components = {
             maxPerUser?: number;
             /** @description Usos totales. */
             maxRedemptions?: number;
+            /**
+             * @description Solo barberías con ranking de clientes en su plan: la promoción aplica a clientes de ese nivel o superior (BRONZE < SILVER < GOLD).
+             * @enum {string}
+             */
+            minTier?: "BRONZE" | "SILVER" | "GOLD";
             /** @example 20 % los martes */
             name: string;
             /**
@@ -5083,6 +6318,35 @@ export type components = {
              */
             target: "REVIEW" | "RESPONSE";
         };
+        CreateSaleDto: {
+            /** Format: uuid */
+            barberId?: string;
+            /** @description Datos del comprador para la boleta. */
+            customer?: components["schemas"]["CustomerDocDto"];
+            /**
+             * @description Descuento en céntimos (no supera el subtotal).
+             * @default 0
+             */
+            discountAmount: number;
+            /**
+             * @description Emitir boleta electrónica.
+             * @default false
+             */
+            issueInvoice: boolean;
+            lines: components["schemas"]["SaleLineInputDto"][];
+            /**
+             * Format: uuid
+             * @description Con MEMBERSHIP_CREDIT: membresía del cliente (usa 1 crédito).
+             */
+            membershipId?: string;
+            /** @enum {string} */
+            paymentMethod: "CASH" | "YAPE" | "CARD" | "TRANSFER" | "MEMBERSHIP_CREDIT";
+            /**
+             * Format: uuid
+             * @description Cliente del panel (o venta anónima).
+             */
+            shopClientId?: string;
+        };
         CreateServiceDto: {
             /**
              * @description Clave de una categoría activa (GET /service-categories).
@@ -5105,6 +6369,17 @@ export type components = {
              */
             priceAmount: number;
         };
+        CreateShopClientDto: {
+            /** @description Nombre (obligatorio si no se indica el usuario de la app). */
+            displayName?: string;
+            /** @default false */
+            isRegular: boolean;
+            notes?: string;
+            phone?: string;
+            preferences?: string;
+            /** @description Usuario de la app, para vincularlo (su historial de reservas se suma). */
+            username?: string;
+        };
         CreateSponsorDto: {
             /** @description Contacto interno (se guarda cifrado). */
             contact?: string;
@@ -5112,14 +6387,34 @@ export type components = {
             logoUrl?: string;
             name: string;
         };
+        CreateSponsorPackageDto: {
+            /** @example crecimiento */
+            code: string;
+            description?: string;
+            durationDays: number;
+            impressionsLimit?: number | null;
+            /** @example Crecimiento */
+            name: string;
+            placementsLimit: number;
+            /** @description Céntimos. */
+            priceAmount: number;
+            /** @default 0 */
+            sortOrder: number;
+        };
         CreateStyleDto: {
             /** Format: uuid */
             categoryId: string;
+            description?: string | null;
+            hairTypes?: components["schemas"]["HairType"][];
             /** @example fade_low */
             key: string;
+            /** @enum {string|null} */
+            maintenance?: "LOW" | "MEDIUM" | "HIGH" | null;
             /** @example Degradado bajo */
             name: string;
             sortOrder?: number;
+            /** @enum {string|null} */
+            vibe?: "CLASSIC" | "MODERN" | null;
         };
         CreateTicketDto: {
             /** @enum {string} */
@@ -5157,6 +6452,13 @@ export type components = {
              */
             startAt: string;
             type: components["schemas"]["TimeBlockType"];
+        };
+        CustomerDocDto: {
+            name?: string;
+            /** @description DNI 8 dígitos, CE hasta 12, RUC 11. */
+            number?: string;
+            /** @enum {string} */
+            type: "DNI" | "CE" | "RUC" | "NONE";
         };
         DayAvailabilityDto: {
             /** @example 2030-01-07 */
@@ -5207,6 +6509,14 @@ export type components = {
             /** @example 123456 */
             code: string;
         };
+        EntitlementDefinitionDto: {
+            /** @example barbers */
+            key: string;
+            /** @enum {string} */
+            kind: "LIMIT" | "TOGGLE";
+            /** @example Barberos activos */
+            label: string;
+        };
         ErrorResponseDto: {
             /**
              * @description Código estable, en inglés.
@@ -5225,6 +6535,49 @@ export type components = {
             /** @example 0f8fad5b-d9cb-469f-a165-70867728950e */
             requestId: string;
         };
+        ExtendSubscriptionDto: {
+            /** @description Días de cortesía que se suman al periodo actual. */
+            days: number;
+            reason: string;
+        };
+        FaceMeasurementsDto: {
+            /** @description Ancho entre pómulos (lo más ancho de la cara media). */
+            cheekboneWidth: number;
+            /** @description Largo: de la frente (línea del cabello) al mentón. */
+            faceLength: number;
+            /** @description Ancho de la frente. */
+            foreheadWidth: number;
+            /** @description Ancho de la mandíbula a la altura de sus ángulos. */
+            jawWidth: number;
+        };
+        /** @enum {string} */
+        FaceShape: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND";
+        FaceShapeAlternativeDto: {
+            probability: number;
+            shape: components["schemas"]["FaceShape"];
+        };
+        FaceShapeResultDto: {
+            /** @description Formas también posibles (caras mixtas). Muéstralas como "también podría ser". */
+            alternatives: components["schemas"]["FaceShapeAlternativeDto"][];
+            /** @description Probabilidad de la forma elegida (0 a 1). */
+            confidence: number;
+            shape: components["schemas"]["FaceShape"];
+        };
+        FaceShapeRuleDto: {
+            faceShape: components["schemas"]["FaceShape"];
+            /** Format: uuid */
+            id: string;
+            note: string | null;
+            score: number;
+            /** Format: uuid */
+            styleId: string;
+            styleKey: string;
+            styleName: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** @description false: criterio general, aún no validado por barberos. */
+            validated: boolean;
+        };
         FavoriteDto: {
             address: string;
             /** Format: uuid */
@@ -5241,6 +6594,18 @@ export type components = {
         FavoritePageDto: {
             items: components["schemas"]["FavoriteDto"][];
             nextCursor: string | null;
+        };
+        FeaturedFromPlanDto: {
+            /** @description Días por mes del plan (null: ilimitado). */
+            daysLimit: number | null;
+            /** @description Días del plan usados este mes (incluido este). */
+            daysUsed: number;
+            /** Format: date-time */
+            endsAt: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            startsAt: string;
         };
         FeaturedListingDto: {
             /** Format: uuid */
@@ -5268,9 +6633,15 @@ export type components = {
             caption: string | null;
             /** Format: date-time */
             createdAt: string;
+            /** @enum {string|null} */
+            faceShape: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
             height: number;
             /** Format: uuid */
             id: string;
+            /** @description Foto de demostración (stock): muéstrala como "Ejemplo". */
+            isDemo: boolean;
+            /** @description Estilos y forma confirmados por el barbero. */
+            labelConfirmed: boolean;
             /** @description Grande (hasta 1600 px de ancho, WebP). */
             largeUrl: string;
             /** @description Destacada (fijada arriba). */
@@ -5291,11 +6662,17 @@ export type components = {
             caption: string | null;
             /** Format: date-time */
             createdAt: string;
+            /** @enum {string|null} */
+            faceShape: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
             height: number;
             /** @description Oculta al público: por reportes (images.report_hide_threshold) o retirada por soporte. */
             hidden: boolean;
             /** Format: uuid */
             id: string;
+            /** @description Foto de demostración (stock): muéstrala como "Ejemplo". */
+            isDemo: boolean;
+            /** @description Estilos y forma confirmados por el barbero. */
+            labelConfirmed: boolean;
             /** @description Grande (hasta 1600 px de ancho, WebP). */
             largeUrl: string;
             /** @description Reportes abiertos. */
@@ -5331,13 +6708,23 @@ export type components = {
         };
         GalleryUploadDto: {
             caption?: string | null;
+            cheekboneWidth?: number;
             /** @description Obligatorio y true: quien sube declara que la persona fotografiada dio su consentimiento. */
             consent: boolean;
+            /** @description Forma de cara, etapa 2: medidas de la cara de la foto tomadas EN EL TELÉFONO (largo, ancho de frente, pómulos y mandíbula, en cualquier unidad). Las cuatro o ninguna. Si no se envía faceShape, se clasifica con ellas (etiqueta sin confirmar). Nunca se envían puntos de la cara. */
+            faceLength?: number;
+            /**
+             * @description Forma de cara de la persona (la marca el barbero). Con estilos, la foto queda como etiqueta confirmada y sirve para recomendar cortes a caras parecidas.
+             * @enum {string|null}
+             */
+            faceShape?: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
             /**
              * Format: binary
              * @description JPEG, PNG o WebP (HEIC: convertir en la app), hasta 10 MB.
              */
             file: string;
+            foreheadWidth?: number;
+            jawWidth?: number;
             /**
              * Format: uuid
              * @description Servicio para "reservar este estilo" desde la foto (de la misma barbería).
@@ -5348,6 +6735,17 @@ export type components = {
         };
         /** @enum {string} */
         Gender: "MALE" | "FEMALE" | "OTHER" | "PREFER_NOT_TO_SAY";
+        HaircutRecommendationDto: {
+            /**
+             * @description Texto obligatorio en la pantalla: es una recomendación, no una regla.
+             * @example La forma de cara es una aproximación y muchas caras son mixtas: tómalo como una sugerencia.
+             */
+            disclaimer: string;
+            faceShape: components["schemas"]["FaceShapeResultDto"];
+            haircuts: components["schemas"]["RecommendedHaircutDto"][];
+        };
+        /** @enum {string} */
+        HairType: "STRAIGHT" | "WAVY" | "CURLY" | "COILY";
         HealthChecksDto: {
             database: components["schemas"]["ComponentStatus"];
             redis: components["schemas"]["ComponentStatus"];
@@ -5383,6 +6781,18 @@ export type components = {
              * @description JPEG, PNG o WebP (HEIC: convertir en la app), hasta 10 MB.
              */
             file: string;
+        };
+        ImportCatalogItemDto: {
+            durationMinutes: number;
+            /**
+             * Format: uuid
+             * @description Foto del portafolio de un barbero de la barbería.
+             */
+            imageId: string;
+            /** @description Por defecto, el nombre del estilo de la foto. */
+            name?: string;
+            /** @description Céntimos. */
+            priceAmount: number;
         };
         InvitationDto: {
             /** @description Perfil de barbero a vincular. */
@@ -5430,6 +6840,31 @@ export type components = {
             barberProfileId: string;
             /** @description Mensaje que llega a su bandeja. */
             message?: string;
+        };
+        InvoiceDto: {
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            issuedAt: string | null;
+            lastError: string | null;
+            /** @example B001-00000012 */
+            number: string;
+            pdfUrl: string | null;
+            /** @enum {string} */
+            status: "PENDING" | "ISSUED" | "REJECTED" | "FAILED" | "VOIDED";
+            /** @description IGV incluido en el total. */
+            taxAmount: number;
+            totalAmount: number;
+        };
+        InvoicingConfigDto: {
+            enabled: boolean;
+            /** @description Hay ruta y token guardados (nunca se devuelven). */
+            hasCredentials: boolean;
+            nextNumber: number;
+            /** @enum {string} */
+            provider: "FAKE" | "NUBEFACT";
+            /** @example B001 */
+            series: string;
         };
         JobApplicationDto: {
             applicant: components["schemas"]["ApplicantDto"];
@@ -5511,18 +6946,58 @@ export type components = {
              * @example iPhone de Ana
              */
             deviceName?: string;
-            /** @example ana@example.com */
-            email: string;
+            /**
+             * @deprecated
+             * @description Obsoleto: usa `login`. Se acepta mientras la app se actualiza.
+             * @example ana@example.com
+             */
+            email?: string;
+            /**
+             * @description Nombre de usuario o correo (con "@" se toma como correo).
+             * @example ana.perez
+             */
+            login?: string;
             password: string;
         };
         LogoutDto: {
             /** @description true cierra la sesión en todos los dispositivos. */
             allDevices?: boolean;
         };
+        /**
+         * @description Mantenimiento que prefiere (LOW: lo mínimo).
+         * @enum {string}
+         */
+        MaintenanceLevel: "LOW" | "MEDIUM" | "HIGH";
+        ManagedMembershipPlanDto: {
+            /** @description Membresías vigentes de clientes. */
+            activeMembers: number;
+            /** Format: uuid */
+            barbershopId: string;
+            /**
+             * @description Créditos por mes (1 crédito = 1 servicio).
+             * @example 4
+             */
+            creditsPerPeriod: number;
+            /** @example PEN */
+            currency: string;
+            description: string | null;
+            /** Format: uuid */
+            id: string;
+            isActive: boolean;
+            /** @example Corte mensual */
+            name: string;
+            /**
+             * @description Céntimos por mes.
+             * @example 9000
+             */
+            priceAmount: number;
+            /** @description Servicios que cubre (vacío: todos). */
+            services: components["schemas"]["MembershipPlanServiceDto"][];
+        };
         ManagedReviewDto: {
             /**
-             * @description Nombre e inicial del apellido.
-             * @example Ana R.
+             * @description Nombre de usuario del cliente (nunca su nombre real); "Cuenta eliminada" si la borró.
+             * @example ana.perez
              */
             authorName: string;
             barber: components["schemas"]["ReviewBarberDto"];
@@ -5568,6 +7043,60 @@ export type components = {
         MemberPageDto: {
             items: components["schemas"]["MemberDto"][];
             nextCursor: string | null;
+        };
+        MembershipDto: {
+            barbershopName: string;
+            cancelAtPeriodEnd: boolean;
+            /** @description Enlace de pago (solo PENDING). */
+            checkoutUrl: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** @description Créditos disponibles ahora. */
+            credits: number;
+            currency: string;
+            /** Format: date-time */
+            currentPeriodEnd: string | null;
+            /** Format: uuid */
+            id: string;
+            /**
+             * Format: date-time
+             * @description Vence el próximo lote de créditos.
+             */
+            nextCreditsExpireAt: string | null;
+            plan: components["schemas"]["MembershipPlanDto"];
+            /** @description Precio que paga (fijo desde que se suscribió). */
+            priceAmount: number;
+            /** @enum {string} */
+            status: "PENDING" | "ACTIVE" | "PAST_DUE" | "CANCELED" | "EXPIRED";
+        };
+        MembershipPlanDto: {
+            /** Format: uuid */
+            barbershopId: string;
+            /**
+             * @description Créditos por mes (1 crédito = 1 servicio).
+             * @example 4
+             */
+            creditsPerPeriod: number;
+            /** @example PEN */
+            currency: string;
+            description: string | null;
+            /** Format: uuid */
+            id: string;
+            isActive: boolean;
+            /** @example Corte mensual */
+            name: string;
+            /**
+             * @description Céntimos por mes.
+             * @example 9000
+             */
+            priceAmount: number;
+            /** @description Servicios que cubre (vacío: todos). */
+            services: components["schemas"]["MembershipPlanServiceDto"][];
+        };
+        MembershipPlanServiceDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
         };
         MessageDto: {
             /** @description Texto; "Mensaje retirado por soporte." si se retiró. */
@@ -5699,8 +7228,8 @@ export type components = {
         };
         MyReviewDto: {
             /**
-             * @description Nombre e inicial del apellido.
-             * @example Ana R.
+             * @description Nombre de usuario del cliente (nunca su nombre real); "Cuenta eliminada" si la borró.
+             * @example ana.perez
              */
             authorName: string;
             barber: components["schemas"]["ReviewBarberDto"];
@@ -5779,6 +7308,10 @@ export type components = {
              */
             type: "booking" | "review" | "ticket" | "barbershop" | "account" | "conversation" | "job_application";
         };
+        OpenCashDto: {
+            /** @description Efectivo inicial (céntimos). */
+            openingAmount: number;
+        };
         OwnerDocumentDto: {
             number: string;
             /** @enum {string} */
@@ -5801,6 +7334,25 @@ export type components = {
              */
             masked: string;
             type: components["schemas"]["OwnerDocumentType"];
+        };
+        PackagePurchaseDto: {
+            /** Format: uuid */
+            campaignId: string | null;
+            /** @description Enlace de pago (solo PENDING). */
+            checkoutUrl: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            currency: string;
+            /** Format: uuid */
+            id: string;
+            package: components["schemas"]["SponsorPackageDto"];
+            /** Format: date-time */
+            paidAt: string | null;
+            priceAmount: number;
+            /** Format: uuid */
+            sponsorId: string;
+            /** @enum {string} */
+            status: "PENDING" | "PAID" | "CANCELED";
         };
         PasswordResetConfirmDto: {
             /** @example 123456 */
@@ -5851,6 +7403,10 @@ export type components = {
             startedAt: string | null;
             status: components["schemas"]["PaymentStatus"];
         };
+        PayWithMembershipDto: {
+            /** Format: uuid */
+            membershipId: string;
+        };
         PendingReviewsDto: {
             /** @description Reservas que el cliente puede valorar ahora (canReview), las más recientes primero. */
             items: components["schemas"]["BookingDto"][];
@@ -5885,15 +7441,73 @@ export type components = {
             slotKey: string;
             title: string;
         };
+        PlanCountDto: {
+            count: number;
+            planCode: string;
+            planName: string;
+            /** @enum {string} */
+            status: "PENDING" | "TRIALING" | "ACTIVE" | "PAST_DUE" | "CANCELED" | "EXPIRED";
+        };
+        PlanDto: {
+            /**
+             * @description BARBERSHOP: barberías. BARBER: barberos independientes.
+             * @enum {string}
+             */
+            audience: "BARBERSHOP" | "BARBER";
+            /** @example pro */
+            code: string;
+            /** @description Comisión por reserva en puntos básicos (500 = 5 %). null: la general. */
+            commissionBp: number | null;
+            /** @example PEN */
+            currency: string;
+            description: string | null;
+            entitlements: components["schemas"]["PlanEntitlementDto"][];
+            /** Format: uuid */
+            id: string;
+            isDefault: boolean;
+            /** @example Pro */
+            name: string;
+            /**
+             * @description Céntimos por mes.
+             * @example 5900
+             */
+            priceMonthly: number;
+            /** @description Céntimos por año (null: sin opción anual). */
+            priceYearly: number | null;
+            /** @example 14 */
+            trialDays: number;
+        };
+        PlanEntitlementDto: {
+            /** @example barbers */
+            key: string;
+            /** @enum {string} */
+            kind: "LIMIT" | "TOGGLE";
+            label: string;
+            /** @description LIMIT: máximo (null = ilimitado; 0 = no incluido). TOGGLE: 1 incluido, 0 no. */
+            value: number | null;
+        };
+        PlanUsageDto: {
+            key: string;
+            /** @enum {string} */
+            kind: "LIMIT" | "TOGGLE";
+            label: string;
+            /** @description Límite (null ilimitado) o 1/0. */
+            limit: number | null;
+            /** @description Usado (solo límites con medición). */
+            used: number | null;
+        };
         PortfolioItemDto: {
             /** @description Barbería donde se subió (null si la subió el barbero desde su perfil). */
             barbershopName: string | null;
             caption: string | null;
             /** Format: date-time */
             createdAt: string;
+            /** @enum {string|null} */
+            faceShape: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
             height: number;
             /** Format: uuid */
             id: string;
+            labelConfirmed: boolean;
             largeUrl: string;
             styles: components["schemas"]["StyleRefDto"][];
             thumbUrl: string;
@@ -5907,6 +7521,11 @@ export type components = {
             caption?: string;
             /** @description Confirma que la persona fotografiada aceptó que se publique (obligatorio). */
             consent: boolean;
+            /**
+             * @description Forma de cara de la persona (la marca el barbero). Con estilos, la foto queda como etiqueta confirmada y sirve para recomendar cortes a caras parecidas.
+             * @enum {string|null}
+             */
+            faceShape?: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
             /** Format: binary */
             file: string;
             /** @description Ids de estilos (multipart: repetir el campo o separar con comas). */
@@ -5943,6 +7562,11 @@ export type components = {
             /** Format: email */
             email: string;
             emailVerified: boolean;
+            /**
+             * @description Forma de cara guardada (solo si la persona lo autorizó).
+             * @enum {string|null}
+             */
+            faceShape: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
             fullName: string;
             gender: components["schemas"]["Gender"] | null;
             /** Format: uuid */
@@ -5952,13 +7576,23 @@ export type components = {
             photoUrl: string | null;
             preferences: components["schemas"]["NotificationPreferencesDto"];
             roles: components["schemas"]["Role"][];
+            /**
+             * @description Público (lo ven otras personas).
+             * @example ana.perez
+             */
+            username: string;
+            /**
+             * Format: date-time
+             * @description Desde cuándo puede volver a cambiar el usuario (null: ya puede).
+             */
+            usernameChangeableAt: string | null;
         };
         ProfilePhotoDto: {
             photoUrl: string | null;
         };
         ProfileReviewDto: {
             barbershopName: string;
-            /** @description Nombre del cliente (o "Cuenta eliminada"). */
+            /** @description Nombre de usuario del cliente (o "Cuenta eliminada"). */
             clientName: string;
             comment: string | null;
             /** Format: date-time */
@@ -5989,6 +7623,11 @@ export type components = {
             isActive: boolean;
             maxPerUser: number | null;
             maxRedemptions: number | null;
+            /**
+             * @description Nivel mínimo del ranking.
+             * @enum {string|null}
+             */
+            minTier: "BRONZE" | "SILVER" | "GOLD" | null;
             name: string;
             /** @description Canjes vigentes. */
             redemptions: number;
@@ -6021,6 +7660,10 @@ export type components = {
             sponsorName: string;
             title: string;
         };
+        PublicPlanBadgesDto: {
+            /** @description Insignia "Verificada" del plan. */
+            verified: boolean;
+        };
         PublicPromotionDto: {
             currency: string | null;
             daysOfWeek: number[];
@@ -6041,8 +7684,8 @@ export type components = {
         };
         PublicReviewDto: {
             /**
-             * @description Nombre e inicial del apellido.
-             * @example Ana R.
+             * @description Nombre de usuario del cliente (nunca su nombre real); "Cuenta eliminada" si la borró.
+             * @example ana.perez
              */
             authorName: string;
             barber: components["schemas"]["ReviewBarberDto"];
@@ -6069,6 +7712,13 @@ export type components = {
             logoUrl: string | null;
             name: string;
             products: components["schemas"]["ProductDto"][];
+        };
+        PurposeAmountDto: {
+            /** @description Céntimos cobrados en el mes. */
+            amount: number;
+            count: number;
+            /** @enum {string} */
+            purpose: "SUBSCRIPTION" | "SPONSOR_PACKAGE" | "MEMBERSHIP";
         };
         QuoteBookingDto: {
             /** Format: uuid */
@@ -6124,10 +7774,52 @@ export type components = {
             score: number;
             specialties: components["schemas"]["StyleRefDto"][];
         };
+        RankedStyleBarberDto: {
+            /**
+             * Format: uuid
+             * @description Vínculo en esa barbería (para reservar con él).
+             */
+            barberId: string;
+            /** Format: uuid */
+            barberProfileId: string;
+            /** Format: uuid */
+            barbershopId: string;
+            barbershopName: string;
+            /** @description Trabajos confirmados de este corte. */
+            confirmedWorks: number;
+            displayName: string;
+            distanceMeters: number;
+            photoUrl: string | null;
+            /** @description De ellos, en caras de la misma forma que la del cliente. */
+            sameShapeWorks: number;
+            /** @description Puntaje combinado (0 a 1). */
+            score: number;
+            /** @description Estrellas en este corte (null sin valoraciones). */
+            styleRatingAverage: number | null;
+            styleRatingCount: number;
+            /** @example 23 trabajos de este corte en caras ovaladas · 4,9 ★ · a 1,2 km */
+            summary: string;
+        };
+        RankingDto: {
+            /** Format: date-time */
+            rankedAt: string | null;
+            tiers: components["schemas"]["RankingTierCountDto"][];
+            /** @description Los 50 mejores clientes. */
+            top: components["schemas"]["ShopClientDto"][];
+            /** @description Días que considera el puntaje. */
+            windowDays: number;
+        };
         RankingPageDto: {
             items: components["schemas"]["RankedBarberDto"][];
             /** @description offset de la página siguiente. */
             nextOffset: number | null;
+        };
+        RankingTierCountDto: {
+            count: number;
+            /** @description Puntaje mínimo del nivel. */
+            minScore: number | null;
+            /** @enum {string} */
+            tier: "NONE" | "BRONZE" | "SILVER" | "GOLD";
         };
         RatingDto: {
             /** @example 4.5 */
@@ -6137,6 +7829,65 @@ export type components = {
         };
         ReasonDto: {
             reason: string;
+        };
+        RecommendedHaircutDto: {
+            /** @description Mejores barberos de este corte cerca. */
+            barbers: components["schemas"]["RankedStyleBarberDto"][];
+            /** @description Compatibilidad con la forma de cara (0 a 100), ya ajustada a sus preferencias. */
+            compatibility: number;
+            description: string | null;
+            /** @enum {string|null} */
+            maintenance: "LOW" | "MEDIUM" | "HIGH" | null;
+            /** @description Fotos reales cerca, primero de caras parecidas. */
+            photos: components["schemas"]["RecommendedPhotoDto"][];
+            /** @description Por qué se recomienda. */
+            reason: string | null;
+            /** @description false: la regla aún no fue validada por barberos. */
+            ruleValidated: boolean;
+            style: components["schemas"]["StyleRefDto"];
+        };
+        RecommendedPhotoDto: {
+            barberName: string | null;
+            /** Format: uuid */
+            barberProfileId: string | null;
+            /** Format: uuid */
+            barbershopId: string;
+            barbershopName: string;
+            /** @description Etiqueta confirmada por el barbero. */
+            confirmed: boolean;
+            /** @description Metros hasta la barbería (redondeados). */
+            distanceMeters: number;
+            /** @enum {string|null} */
+            faceShape: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
+            /** Format: uuid */
+            id: string;
+            /** @description Foto de demostración (stock): muéstrala como "Ejemplo". */
+            isDemo: boolean;
+            largeUrl: string;
+            /** @description De una cara de la misma forma que la del cliente. */
+            sameFaceShape: boolean;
+            /**
+             * Format: uuid
+             * @description Para "reservar este corte".
+             */
+            serviceId: string | null;
+            thumbUrl: string;
+        };
+        RecommendHaircutsDto: {
+            /** @description Forma ya conocida (por ejemplo, la guardada). Si no, envía `measurements`. */
+            faceShape?: components["schemas"]["FaceShape"];
+            hairType?: components["schemas"]["HairType"];
+            /** @description Ubicación del cliente (solo para esta petición; no se guarda). */
+            lat: number;
+            lng: number;
+            /** @description Mantenimiento que prefiere (LOW: lo mínimo). */
+            maintenance?: components["schemas"]["MaintenanceLevel"];
+            /** @description Se clasifican y no se guardan. */
+            measurements?: components["schemas"]["FaceMeasurementsDto"];
+            /** @description Radio (km); por defecto el de la búsqueda. */
+            radiusKm?: number;
+            /** @description Clásico o moderno. */
+            vibe?: components["schemas"]["StyleVibe"];
         };
         RefBarberDto: {
             displayName: string;
@@ -6210,17 +7961,43 @@ export type components = {
             declaresAdult: boolean;
             /** @example ana@example.com */
             email: string;
-            /** @example Ana Pérez */
+            /**
+             * @description Nombre real: no se muestra en público.
+             * @example Ana Pérez
+             */
             fullName: string;
             password: string;
             /** @example +51 987 654 321 */
             phone?: string;
             /** @description Versión de los términos que el usuario aceptó (GET /auth/terms). */
             termsVersion: string;
+            /**
+             * @description Nombre de usuario (público y para iniciar sesión): 3 a 20 caracteres, minúsculas, números, punto y guion bajo, sin empezar ni terminar en punto o guion bajo ni dos seguidos.
+             * @example ana.perez
+             */
+            username: string;
+        };
+        ReportBarberDto: {
+            amount: number;
+            /** Format: uuid */
+            barberId: string;
+            barberName: string;
+            /** @description Comisión del barbero (céntimos). */
+            commissionAmount: number;
+            /** @description Porcentaje de comisión (puntos básicos). */
+            commissionBp: number | null;
+            count: number;
         };
         ReportCountDto: {
             count: number;
             reason: string;
+        };
+        ReportDayDto: {
+            appAmount: number;
+            count: number;
+            /** @example 2026-10-20 */
+            day: string;
+            localAmount: number;
         };
         ReportedVideoDto: {
             caption: string | null;
@@ -6253,6 +8030,17 @@ export type components = {
             details?: string;
             /** @enum {string} */
             reason: "SPAM" | "HARASSMENT" | "INAPPROPRIATE" | "SCAM" | "OTHER";
+        };
+        ReportMethodDto: {
+            amount: number;
+            count: number;
+            /** @enum {string} */
+            method: "CASH" | "YAPE" | "CARD" | "TRANSFER" | "MEMBERSHIP_CREDIT";
+        };
+        ReportServiceDto: {
+            amount: number;
+            count: number;
+            name: string;
         };
         /** @enum {string} */
         ReportStatus: "OPEN" | "IN_REVIEW" | "RESOLVED";
@@ -6318,6 +8106,78 @@ export type components = {
         };
         /** @enum {string} */
         Role: "CLIENT" | "BARBER" | "OWNER" | "SUPPORT" | "ADMIN";
+        SaleDto: {
+            /** Format: uuid */
+            barberId: string | null;
+            barberName: string | null;
+            clientName: string | null;
+            currency: string;
+            discountAmount: number;
+            /** Format: uuid */
+            id: string;
+            invoice: components["schemas"]["InvoiceDto"] | null;
+            lines: components["schemas"]["SaleLineDto"][];
+            /** @enum {string} */
+            paymentMethod: "CASH" | "YAPE" | "CARD" | "TRANSFER" | "MEMBERSHIP_CREDIT";
+            /** Format: uuid */
+            shopClientId: string | null;
+            /** Format: date-time */
+            soldAt: string;
+            /** @enum {string} */
+            status: "COMPLETED" | "VOIDED";
+            subtotalAmount: number;
+            totalAmount: number;
+            voidReason: string | null;
+        };
+        SaleLineDto: {
+            description: string;
+            quantity: number;
+            /** Format: uuid */
+            serviceId: string | null;
+            totalAmount: number;
+            unitAmount: number;
+        };
+        SaleLineInputDto: {
+            /** @description Obligatoria si no hay servicio. */
+            description?: string;
+            /** @default 1 */
+            quantity: number;
+            /**
+             * Format: uuid
+             * @description Servicio de la barbería (o descripción libre).
+             */
+            serviceId?: string;
+            /** @description Céntimos. Por defecto, el precio del servicio. */
+            unitAmount?: number;
+        };
+        SalesReportDto: {
+            /** @description Reservas atendidas pagadas en la app (céntimos). */
+            appAmount: number;
+            /** @description Ticket promedio (céntimos). */
+            averageTicket: number;
+            /** @description Vacío si el plan no incluye reportes completos. */
+            byBarber: components["schemas"]["ReportBarberDto"][];
+            byDay: components["schemas"]["ReportDayDto"][];
+            /** @description Ventas en el local por medio de pago. */
+            byMethod: components["schemas"]["ReportMethodDto"][];
+            /** @description Vacío si el plan no incluye reportes completos. */
+            byService: components["schemas"]["ReportServiceDto"][];
+            /** @description Atenciones (reservas atendidas + ventas). */
+            count: number;
+            /** Format: date-time */
+            from: string;
+            /** @description El plan incluye reportes completos. */
+            full: boolean;
+            /** @description Ventas en el local (céntimos). */
+            localAmount: number;
+            /** @description Clientes que vinieron por primera vez en el periodo. */
+            newClients: number;
+            /** @description Clientes que ya habían venido antes. */
+            returningClients: number;
+            /** Format: date-time */
+            to: string;
+            totalAmount: number;
+        };
         SearchPageDto: {
             /** @description true si se alcanzó el tope de barberías evaluadas por petición antes de llenar la página (filtros de disponibilidad). Puede haber más resultados con nextCursor. */
             evaluationLimitReached: boolean;
@@ -6407,13 +8267,19 @@ export type components = {
             categoryId: string;
             /** @example haircut */
             categoryKey: string;
+            description: string | null;
+            hairTypes: components["schemas"]["HairType"][];
             /** Format: uuid */
             id: string;
             /** @example fade_low */
             key: string;
+            /** @enum {string|null} */
+            maintenance: "LOW" | "MEDIUM" | "HIGH" | null;
             /** @example Degradado bajo */
             name: string;
             sortOrder: number;
+            /** @enum {string|null} */
+            vibe: "CLASSIC" | "MODERN" | null;
         };
         SessionUserDto: {
             emailVerified: boolean;
@@ -6421,9 +8287,27 @@ export type components = {
             /** Format: uuid */
             id: string;
             roles: components["schemas"]["Role"][];
+            /** @example ana.perez */
+            username: string;
         };
         SetBarberServicesDto: {
             serviceIds: string[];
+        };
+        SetEntitlementsDto: {
+            reason: string;
+            /**
+             * @description Clave → valor. LIMIT: número o null (ilimitado). TOGGLE: 1 o 0. Las claves omitidas se quitan (no incluidas).
+             * @example {
+             *       "barbers": 6,
+             *       "gallery_photos": 150,
+             *       "promotions": 1,
+             *       "memberships": 0,
+             *       "messages_month": null
+             *     }
+             */
+            values: {
+                [key: string]: number | null;
+            };
         };
         SetProfileSpecialtiesDto: {
             /** @description Ids de estilos activos (máximo 10). */
@@ -6432,6 +8316,110 @@ export type components = {
         SetSpecialtiesDto: {
             /** @description Estilos (hasta 5). */
             styleIds: string[];
+        };
+        ShopClientDetailDto: {
+            /** Format: date-time */
+            createdAt: string;
+            /** @example Ana */
+            displayName: string;
+            /** Format: date-time */
+            firstVisitAt: string | null;
+            /** Format: uuid */
+            id: string;
+            isRegular: boolean;
+            /** Format: date-time */
+            lastVisitAt: string | null;
+            notes: string | null;
+            phone: string | null;
+            /** @description Preferencias (corte, máquina, etc.). */
+            preferences: string | null;
+            score: number;
+            /** @enum {string} */
+            tier: "NONE" | "BRONZE" | "SILVER" | "GOLD";
+            /** @description Céntimos gastados (en la ventana del ranking). */
+            totalSpent: number;
+            /** @description Usuario en la app (si tiene cuenta). */
+            username: string | null;
+            /** @description Últimas 30 visitas (reservas atendidas y ventas). */
+            visits: components["schemas"]["ClientVisitDto"][];
+            visitsCount: number;
+        };
+        ShopClientDto: {
+            /** Format: date-time */
+            createdAt: string;
+            /** @example Ana */
+            displayName: string;
+            /** Format: date-time */
+            firstVisitAt: string | null;
+            /** Format: uuid */
+            id: string;
+            isRegular: boolean;
+            /** Format: date-time */
+            lastVisitAt: string | null;
+            notes: string | null;
+            phone: string | null;
+            /** @description Preferencias (corte, máquina, etc.). */
+            preferences: string | null;
+            score: number;
+            /** @enum {string} */
+            tier: "NONE" | "BRONZE" | "SILVER" | "GOLD";
+            /** @description Céntimos gastados (en la ventana del ranking). */
+            totalSpent: number;
+            /** @description Usuario en la app (si tiene cuenta). */
+            username: string | null;
+            visitsCount: number;
+        };
+        ShopMemberDto: {
+            credits: number;
+            /** Format: date-time */
+            currentPeriodEnd: string | null;
+            /** Format: uuid */
+            membershipId: string;
+            planName: string;
+            /** @enum {string} */
+            status: "PENDING" | "ACTIVE" | "PAST_DUE" | "CANCELED" | "EXPIRED";
+            /** @description Usuario de la app del cliente. */
+            username: string;
+        };
+        SimilarFacePhotoDto: {
+            barberName: string | null;
+            /** Format: uuid */
+            barberProfileId: string | null;
+            /** Format: uuid */
+            barbershopId: string;
+            barbershopName: string;
+            /** @description Etiqueta confirmada por el barbero. */
+            confirmed: boolean;
+            /** @description Metros hasta la barbería (redondeados). */
+            distanceMeters: number;
+            /** @enum {string|null} */
+            faceShape: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
+            /** Format: uuid */
+            id: string;
+            /** @description Foto de demostración (stock): muéstrala como "Ejemplo". */
+            isDemo: boolean;
+            largeUrl: string;
+            /** @description De una cara de la misma forma que la del cliente. */
+            sameFaceShape: boolean;
+            /**
+             * Format: uuid
+             * @description Para "reservar este corte".
+             */
+            serviceId: string | null;
+            /** @description Parecido de la cara de la foto con la del cliente (0 a 1). */
+            similarity: number;
+            /** @description Claves de los cortes de la foto. */
+            styleKeys: string[];
+            thumbUrl: string;
+        };
+        SimilarFacesDto: {
+            lat: number;
+            /** @default 12 */
+            limit: number;
+            lng: number;
+            /** @description Medidas tomadas en el teléfono (no se guardan). */
+            measurements: components["schemas"]["FaceMeasurementsDto"];
+            radiusKm?: number;
         };
         SlotDto: {
             barberIds: string[];
@@ -6458,6 +8446,30 @@ export type components = {
             thumbUrl: string;
             /** @description Imagen grande (1600 px de ancho). */
             url: string;
+        };
+        SponsorPackageDto: {
+            /** @example crecimiento */
+            code: string;
+            /** @example PEN */
+            currency: string;
+            description: string | null;
+            /** @description Días que dura la campaña desde el pago. */
+            durationDays: number;
+            /** Format: uuid */
+            id: string;
+            /** @description Impresiones incluidas (null: sin tope). */
+            impressionsLimit: number | null;
+            isActive: boolean;
+            /** @example Crecimiento */
+            name: string;
+            /** @description Anuncios (espacios) que admite la campaña. */
+            placementsLimit: number;
+            /**
+             * @description Céntimos.
+             * @example 150000
+             */
+            priceAmount: number;
+            sortOrder: number;
         };
         StaffPersonDto: {
             fullName: string;
@@ -6539,6 +8551,8 @@ export type components = {
             roles: ("CLIENT" | "BARBER" | "OWNER" | "SUPPORT" | "ADMIN")[];
             /** @enum {string} */
             status: "ACTIVE" | "DISABLED";
+            /** @example ana.perez */
+            username: string;
         };
         StartConversationDto: {
             /** Format: uuid */
@@ -6551,6 +8565,17 @@ export type components = {
              */
             kind: "CLIENT" | "PROFESSIONAL";
         };
+        StyleInteractionDto: {
+            /**
+             * Format: uuid
+             * @description Foto vista o guardada.
+             */
+            imageId?: string;
+            /** @enum {string} */
+            kind: "VIEW" | "SAVE" | "BOOK";
+            /** @description Clave del corte. */
+            styleKey?: string;
+        };
         StyleRefDto: {
             /** Format: uuid */
             id: string;
@@ -6558,6 +8583,54 @@ export type components = {
             key: string;
             /** @example Degradado bajo */
             name: string;
+        };
+        /**
+         * @description Clásico o moderno.
+         * @enum {string}
+         */
+        StyleVibe: "CLASSIC" | "MODERN";
+        SubscribeDto: {
+            /**
+             * @default MONTHLY
+             * @enum {string}
+             */
+            interval: "MONTHLY" | "YEARLY";
+            /** @example pro */
+            planCode: string;
+            /**
+             * @description true: reemplaza la suscripción vigente (cambio de plan). Si no, 409 SUBSCRIPTION_EXISTS.
+             * @default false
+             */
+            replace: boolean;
+        };
+        SubscriptionDto: {
+            cancelAtPeriodEnd: boolean;
+            /** @description Enlace de pago (solo mientras está PENDING). La app no lo abre: se envía por correo. */
+            checkoutUrl: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            currency: string;
+            /** Format: date-time */
+            currentPeriodEnd: string | null;
+            /**
+             * Format: date-time
+             * @description Con pago atrasado: fin del periodo de gracia.
+             */
+            graceUntil: string | null;
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            interval: "MONTHLY" | "YEARLY";
+            /** @description Precio desde la próxima renovación. */
+            nextPriceAmount: number | null;
+            /** Format: date-time */
+            nextPriceFrom: string | null;
+            plan: components["schemas"]["PlanDto"];
+            priceAmount: number;
+            /** @enum {string} */
+            status: "PENDING" | "TRIALING" | "ACTIVE" | "PAST_DUE" | "CANCELED" | "EXPIRED";
+            /** Format: date-time */
+            trialEndsAt: string | null;
         };
         SupportAccessDto: {
             /** @description Solo vale para /support/tickets y /me/support/tickets. */
@@ -6757,6 +8830,15 @@ export type components = {
              */
             status?: "DRAFT" | "ACTIVE" | "PAUSED" | "ENDED";
         };
+        UpdateCatalogItemDto: {
+            /**
+             * Format: uuid
+             * @description Foto de portada.
+             */
+            coverImageId?: string | null;
+            /** @description Clave del estilo (null lo quita). */
+            styleKey?: string | null;
+        };
         UpdateCategoryDto: {
             /** @description false la desactiva (nunca se borra). */
             isActive?: boolean;
@@ -6765,12 +8847,31 @@ export type components = {
         };
         UpdateGalleryImageDto: {
             caption?: string | null;
+            /**
+             * @description Forma de cara de la persona (la marca el barbero). Con estilos, la foto queda como etiqueta confirmada y sirve para recomendar cortes a caras parecidas.
+             * @enum {string|null}
+             */
+            faceShape?: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
             /** @description true la destaca (hasta 6 por barbero, images.pinned_max_per_barber). */
             pinned?: boolean;
             /** Format: uuid */
             serviceId?: string | null;
             /** @description Reemplaza los estilos (hasta 3). */
             styleIds?: string[];
+        };
+        UpdateInvoicingConfigDto: {
+            /** @description NUBEFACT: RUTA de la cuenta (https). */
+            apiUrl?: string;
+            enabled: boolean;
+            /** @enum {string} */
+            provider: "FAKE" | "NUBEFACT";
+            /**
+             * @description Serie de boletas (B + 3 letras o números).
+             * @example B001
+             */
+            series: string;
+            /** @description NUBEFACT: TOKEN de la cuenta. */
+            token?: string;
         };
         UpdateJobPostingDto: {
             /** Format: date-time */
@@ -6787,11 +8888,39 @@ export type components = {
             styleIds?: string[];
             title?: string;
         };
+        UpdateMembershipPlanDto: {
+            /** @description Solo para membresías nuevas. */
+            creditsPerPeriod?: number;
+            description?: string | null;
+            /** @description false: deja de venderse (las vigentes siguen). */
+            isActive?: boolean;
+            name?: string;
+            /** @description Solo para membresías nuevas; las vigentes conservan su precio. */
+            priceAmount?: number;
+            serviceIds?: string[];
+        };
         UpdatePlacementDto: {
             actionUrl?: string | null;
             imageUrl?: string | null;
             priority?: number;
             title?: string;
+        };
+        UpdatePlanDto: {
+            commissionBp?: number | null;
+            description?: string | null;
+            /** @description false: no admite suscripciones nuevas. */
+            isActive?: boolean;
+            isDefault?: boolean;
+            /** @description false: se deja de ofrecer (sus suscriptores siguen). */
+            isVisible?: boolean;
+            name?: string;
+            /** @description Nuevo precio mensual. Las suscripciones vigentes lo pagan desde su renovación, con aviso previo. */
+            priceMonthly?: number;
+            priceYearly?: number | null;
+            /** @description Motivo (auditoría). */
+            reason: string;
+            sortOrder?: number;
+            trialDays?: number;
         };
         UpdateProductDto: {
             actionUrl?: string;
@@ -6809,6 +8938,13 @@ export type components = {
              * @example 1995-04-23
              */
             birthDate?: string | null;
+            /**
+             * @description Recordar mi forma de cara (dato biométrico): exige faceShapeConsent=true. null la borra.
+             * @enum {string|null}
+             */
+            faceShape?: "OVAL" | "ROUND" | "SQUARE" | "OBLONG" | "HEART" | "DIAMOND" | null;
+            /** @description Consentimiento expreso para guardar la forma de cara (obligatorio para guardarla). */
+            faceShapeConsent?: boolean;
             /** @example Ana Pérez */
             fullName?: string;
             /** @description null lo elimina. Solo para sugerir estilos; nunca lo ven las barberías. */
@@ -6819,6 +8955,11 @@ export type components = {
              */
             phone?: string | null;
             preferences?: components["schemas"]["NotificationPreferencesDto"];
+            /**
+             * @description Cambiar el nombre de usuario (una vez cada 30 días).
+             * @example ana.perez
+             */
+            username?: string;
         };
         UpdatePromotionDto: {
             /** Format: date-time */
@@ -6863,17 +9004,43 @@ export type components = {
                 [key: string]: unknown;
             };
         };
+        UpdateShopClientDto: {
+            /** @description true: lo archiva (deja de contar en el límite del plan). */
+            archived?: boolean;
+            displayName?: string;
+            isRegular?: boolean;
+            notes?: string | null;
+            phone?: string | null;
+            preferences?: string | null;
+        };
         UpdateSponsorDto: {
             contact?: string | null;
             isActive?: boolean;
             logoUrl?: string | null;
             name?: string;
         };
-        UpdateStyleDto: {
-            /** @description false lo oculta de la app y de la búsqueda (no se borra). */
+        UpdateSponsorPackageDto: {
+            description?: string | null;
+            durationDays?: number;
+            impressionsLimit?: number | null;
             isActive?: boolean;
             name?: string;
+            placementsLimit?: number;
+            /** @description Solo para compras nuevas. */
+            priceAmount?: number;
             sortOrder?: number;
+        };
+        UpdateStyleDto: {
+            description?: string | null;
+            hairTypes?: components["schemas"]["HairType"][];
+            /** @description false lo oculta de la app y de la búsqueda (no se borra). */
+            isActive?: boolean;
+            /** @enum {string|null} */
+            maintenance?: "LOW" | "MEDIUM" | "HIGH" | null;
+            name?: string;
+            sortOrder?: number;
+            /** @enum {string|null} */
+            vibe?: "CLASSIC" | "MODERN" | null;
         };
         UpdateTicketStatusDto: {
             /** @description Obligatorio al cerrar un ticket que no está resuelto. */
@@ -6892,6 +9059,34 @@ export type components = {
             /** @example Especialista en degradados */
             headline?: string | null;
             yearsExperience?: number | null;
+        };
+        UpsertFaceShapeRuleDto: {
+            faceShape: components["schemas"]["FaceShape"];
+            /** @description Por qué (se muestra al cliente). */
+            note?: string;
+            /** @description Motivo del cambio (auditoría). */
+            reason: string;
+            score: number;
+            /** Format: uuid */
+            styleId: string;
+            /** @description true: revisada con barberos o con evidencia. */
+            validated?: boolean;
+        };
+        UseFeaturedDaysDto: {
+            days: number;
+            /**
+             * Format: date-time
+             * @description Inicio (por defecto, ahora).
+             */
+            startsAt?: string;
+        };
+        UsernameAvailabilityDto: {
+            available: boolean;
+            /**
+             * @description Motivo cuando no está disponible.
+             * @enum {string|null}
+             */
+            reason: "INVALID" | "RESERVED" | "TAKEN" | null;
         };
         VerdictResultDto: {
             /** @description Si este veredicto suspendió la barbería. */
@@ -6938,6 +9133,9 @@ export type components = {
              * @description MP4, MOV o WebM; hasta 30 s y 50 MB.
              */
             file: string;
+        };
+        VoidSaleDto: {
+            reason: string;
         };
         WebhookReceiptDto: {
             /** @description true si el evento ya se había recibido (no se aplica de nuevo). */
@@ -7682,6 +9880,48 @@ export interface operations {
             };
         };
     };
+    FaceShapeRulesAdminController_list_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FaceShapeRuleDto"][];
+                };
+            };
+        };
+    };
+    FaceShapeRulesAdminController_upsert_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertFaceShapeRuleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FaceShapeRuleDto"];
+                };
+            };
+        };
+    };
     FeaturedAdminController_list_v1: {
         parameters: {
             query?: {
@@ -7933,6 +10173,43 @@ export interface operations {
             };
         };
     };
+    SponsorPackagesAdminController_cancelPurchase_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackagePurchaseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     AdminOperationsController_refund_v1: {
         parameters: {
             query?: never;
@@ -8040,6 +10317,244 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CampaignDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PlansAdminController_list_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlanDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PlansAdminController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePlanDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlanDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PlansAdminController_remove_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminReasonDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PlansAdminController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePlanDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlanDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PlansAdminController_setEntitlements_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetEntitlementsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminPlanDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PlansAdminController_catalog_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EntitlementDefinitionDto"][];
                 };
             };
             403: {
@@ -8800,6 +11315,121 @@ export interface operations {
             };
         };
     };
+    SponsorPackagesAdminController_list_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SponsorPackageDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorPackagesAdminController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSponsorPackageDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SponsorPackageDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorPackagesAdminController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSponsorPackageDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SponsorPackageDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     SponsorsAdminController_list_v1: {
         parameters: {
             query?: never;
@@ -8993,6 +11623,84 @@ export interface operations {
             };
         };
     };
+    SponsorPackagesAdminController_purchases_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackagePurchaseDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorPackagesAdminController_createPurchase_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePackagePurchaseDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PackagePurchaseDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     SponsorsAdminController_products_v1: {
         parameters: {
             query?: never;
@@ -9133,6 +11841,161 @@ export interface operations {
                 };
             };
             503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SubscriptionsAdminController_list_v1: {
+        parameters: {
+            query?: {
+                barbershopId?: string;
+                status?: "PENDING" | "TRIALING" | "ACTIVE" | "PAST_DUE" | "CANCELED" | "EXPIRED";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminSubscriptionDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SubscriptionsAdminController_cancel_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscriptionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminReasonDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminSubscriptionDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SubscriptionsAdminController_extend_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                subscriptionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExtendSubscriptionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminSubscriptionDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SubscriptionsAdminController_summary_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BillingSummaryDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -9371,9 +12234,11 @@ export interface operations {
     };
     AdminUsersController_find_v1: {
         parameters: {
-            query: {
+            query?: {
                 /** @description Correo exacto. */
-                email: string;
+                email?: string;
+                /** @description Nombre de usuario exacto. */
+                username?: string;
             };
             header?: never;
             path?: never;
@@ -10374,6 +13239,35 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TermsDto"];
+                };
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    AuthController_usernameAvailable_v1: {
+        parameters: {
+            query: {
+                username: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsernameAvailabilityDto"];
                 };
             };
             429: {
@@ -11583,6 +14477,49 @@ export interface operations {
             };
         };
     };
+    ShopController_commission_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                barberId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BarberCommissionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarberCommissionDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     ImagesController_uploadGallery_v1: {
         parameters: {
             query?: never;
@@ -12070,6 +15007,588 @@ export interface operations {
             };
         };
     };
+    ShopController_cash_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashSessionDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_closeCash_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CloseCashDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashSessionDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_cashHistory_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashSessionDto"][];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_openCash_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpenCashDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashSessionDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description CASH_SESSION_OPEN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_listCatalog_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItemDto"][];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_updateCatalog_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                serviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCatalogItemDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItemDto"][];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_importItem_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportCatalogItemDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogItemDto"][];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_sources_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CatalogSourceDto"][];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_listClients_v1: {
+        parameters: {
+            query?: {
+                /** @description Busca por nombre o usuario. */
+                q?: string;
+                regular?: boolean;
+                sort?: "recent" | "score" | "name";
+                tier?: "NONE" | "BRONZE" | "SILVER" | "GOLD";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopClientDto"][];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_createClient_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateShopClientDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopClientDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_client_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                clientId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopClientDetailDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_updateClient_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                clientId: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateShopClientDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopClientDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_ranking_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RankingDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_recompute_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RankingDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     ImagesController_setCover_v1: {
         parameters: {
             query?: never;
@@ -12152,6 +15671,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BarbershopMediaDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopPlanController_featured_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UseFeaturedDaysDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeaturedFromPlanDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
             404: {
@@ -12278,6 +15839,86 @@ export interface operations {
                 };
             };
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_invoicing_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvoicingConfigDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_setInvoicing_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateInvoicingConfigDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvoicingConfigDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -12531,6 +16172,169 @@ export interface operations {
             };
         };
     };
+    BarbershopMembershipsController_members_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShopMemberDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopMembershipsController_publicPlans_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipPlanDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopMembershipsController_create_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMembershipPlanDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagedMembershipPlanDto"];
+                };
+            };
+            /** @description PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopMembershipsController_update_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMembershipPlanDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagedMembershipPlanDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopMembershipsController_managed_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ManagedMembershipPlanDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     BarbershopsController_setOwnerDocument_v1: {
         parameters: {
             query?: never;
@@ -12560,6 +16364,106 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopPlanController_plan_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopPlanDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopPlanController_activeBarbers_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActiveBarbersDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BarbershopPlanDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopPlanController_badges_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicPlanBadgesDto"];
                 };
             };
             404: {
@@ -12826,6 +16730,92 @@ export interface operations {
             };
         };
     };
+    ShopController_report_v1: {
+        parameters: {
+            query: {
+                /** @description Desde (incluido). */
+                from: string;
+                /** @description Hasta (excluido). Máximo 366 días. */
+                to: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesReportDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_reportCsv_v1: {
+        parameters: {
+            query: {
+                /** @description Desde (incluido). */
+                from: string;
+                /** @description Hasta (excluido). Máximo 366 días. */
+                to: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": string;
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     BarbershopsController_review_v1: {
         parameters: {
             query?: never;
@@ -12917,6 +16907,224 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PublicReviewPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_listSales_v1: {
+        parameters: {
+            query?: {
+                barberId?: string;
+                /** @description Desde (incluido). Por defecto, hoy en Lima. */
+                from?: string;
+                /** @description Hasta (excluido). */
+                to?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaleDto"][];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_createSale_v1: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description UUID: reintentar no duplica la venta. */
+                "Idempotency-Key": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSaleDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaleDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_sale_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                saleId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaleDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_retryInvoice_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                saleId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaleDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ShopController_voidSale_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                saleId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VoidSaleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SaleDto"];
+                };
+            };
+            /** @description PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
             404: {
@@ -13089,6 +17297,148 @@ export interface operations {
                 };
             };
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopPlanController_current_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopPlanController_subscribe_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubscribeDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description SUBSCRIPTION_EXISTS */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description BILLING_UNAVAILABLE */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopPlanController_cancel_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelSubscriptionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    BarbershopPlanController_sync_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionDto"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -13332,6 +17682,35 @@ export interface operations {
             };
         };
     };
+    BillingController_webhook_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WebhookReceiptDto"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     BookingsController_create_v1: {
         parameters: {
             query?: never;
@@ -13398,6 +17777,51 @@ export interface operations {
                 };
             };
             429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyMembershipsController_pay_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                bookingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PayWithMembershipDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @example CONFIRMED */
+                        status?: string;
+                    };
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description NO_MEMBERSHIP_CREDITS, MEMBERSHIP_NOT_APPLICABLE */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -13843,6 +18267,37 @@ export interface operations {
                 };
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    RecommendationsController_classify_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FaceMeasurementsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FaceShapeResultDto"];
+                };
+            };
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -15605,6 +20060,52 @@ export interface operations {
             };
         };
     };
+    MyMembershipsController_subscribe_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                planId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description BILLING_UNAVAILABLE */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     MessageReportsController_report_v1: {
         parameters: {
             query?: never;
@@ -15717,6 +20218,118 @@ export interface operations {
                 content?: never;
             };
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    PlansController_list_v1: {
+        parameters: {
+            query?: {
+                audience?: "BARBERSHOP" | "BARBER";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDto"][];
+                };
+            };
+        };
+    };
+    RecommendationsController_recommend_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RecommendHaircutsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HaircutRecommendationDto"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    InteractionsController_interaction_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StyleInteractionDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    RecommendationsController_similar_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SimilarFacesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimilarFacePhotoDto"][];
+                };
+            };
+            400: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -16163,6 +20776,91 @@ export interface operations {
                 };
             };
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyMembershipsController_mine_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyMembershipsController_cancel_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                membershipId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    MyMembershipsController_sync_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                membershipId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MembershipDto"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { updateSessionUser } from '@/shared/api';
-import { applyServerErrors } from '@/shared/ui';
+import { isApiError, updateSessionUser } from '@/shared/api';
+import { applyServerErrors, translateErrorMessage } from '@/shared/ui';
 import { formatPeruMobile, peruMobileDigits } from '@/shared/lib';
 import { profileKeys, updateProfile, type Profile } from '../api/profileApi';
 import {
@@ -19,6 +19,7 @@ const valuesOf = (profile: Profile): EditProfileForm => ({
   phone: profile.phone ?? '',
   birthDate: birthDateFromIso(profile.birthDate),
   gender: profile.gender ?? '',
+  username: profile.username,
 });
 
 export function useEditProfile({ onSaved }: { onSaved: () => void }) {
@@ -27,7 +28,7 @@ export function useEditProfile({ onSaved }: { onSaved: () => void }) {
   const form = useForm<EditProfileForm>({
     resolver: zodResolver(editProfileSchema),
     mode: 'onTouched',
-    defaultValues: { fullName: '', phone: '', birthDate: '', gender: '' },
+    defaultValues: { fullName: '', phone: '', birthDate: '', gender: '', username: '' },
   });
   const [generalError, setGeneralError] = useState<string | null>(null);
 
@@ -36,7 +37,7 @@ export function useEditProfile({ onSaved }: { onSaved: () => void }) {
     if (loaded) form.reset(valuesOf(loaded));
     // Only when the saved values change, not on every refetch of the same profile.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaded?.fullName, loaded?.phone, loaded?.birthDate, loaded?.gender, form]);
+  }, [loaded?.fullName, loaded?.phone, loaded?.birthDate, loaded?.gender, loaded?.username, form]);
 
   const mutation = useMutation({
     mutationFn: (values: EditProfileForm) => {
@@ -46,6 +47,10 @@ export function useEditProfile({ onSaved }: { onSaved: () => void }) {
         phone: digits ? formatPeruMobile(digits) : null,
         birthDate: values.birthDate.trim() ? birthDateToIso(values.birthDate) : null,
         gender: values.gender || null,
+        // Only when it changed: it can change once every 30 days.
+        ...(values.username.trim().toLowerCase() !== loaded?.username
+          ? { username: values.username.trim().toLowerCase() }
+          : {}),
       });
     },
     onSuccess: (profile: Profile) => {
@@ -53,8 +58,22 @@ export function useEditProfile({ onSaved }: { onSaved: () => void }) {
       updateSessionUser({ fullName: profile.fullName });
       onSaved();
     },
-    onError: (error) =>
-      setGeneralError(applyServerErrors(error, form.setError, ['fullName', 'phone', 'birthDate', 'gender'])),
+    onError: (error) => {
+      if (
+        isApiError(error) &&
+        (error.code === 'USERNAME_TAKEN' || error.code === 'USERNAME_CHANGE_TOO_SOON')
+      ) {
+        form.setError(
+          'username',
+          { type: 'server', message: translateErrorMessage(error) },
+          { shouldFocus: true },
+        );
+        return;
+      }
+      setGeneralError(
+        applyServerErrors(error, form.setError, ['fullName', 'phone', 'birthDate', 'gender', 'username']),
+      );
+    },
   });
 
   const submit = form.handleSubmit((values) => {
@@ -62,5 +81,17 @@ export function useEditProfile({ onSaved }: { onSaved: () => void }) {
     mutation.mutate(values);
   });
 
-  return { query, form, submit, isSubmitting: mutation.isPending, generalError };
+  /** A future date while the username cannot change yet (null: it can). */
+  const changeableAt =
+    loaded?.usernameChangeableAt && new Date(loaded.usernameChangeableAt) > new Date()
+      ? loaded.usernameChangeableAt
+      : null;
+  return {
+    query,
+    form,
+    submit,
+    isSubmitting: mutation.isPending,
+    generalError,
+    usernameChangeableAt: changeableAt,
+  };
 }

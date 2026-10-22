@@ -7,7 +7,7 @@
     "VALIDATION_ERROR": "Revisa los datos marcados.",
     "MALFORMED_JSON": "Ocurrió un error en la aplicación. Inténtalo de nuevo.",
     "UNAUTHORIZED": "Tu sesión venció. Inicia sesión de nuevo.",
-    "INVALID_CREDENTIALS": "Correo o contraseña incorrectos.",
+    "INVALID_CREDENTIALS": "Usuario, correo o contraseña incorrectos.",
     "INVALID_REFRESH_TOKEN": "Tu sesión terminó. Inicia sesión de nuevo.",
     "INVALID_SIGNATURE": "No pudimos verificar el pago. Inténtalo de nuevo.",
     "FORBIDDEN": "No tienes permiso para hacer esto.",
@@ -67,7 +67,9 @@
     "CONVERSATION_BLOCKED": "Esta conversación está bloqueada.",
     "ALREADY_APPLIED": "Ya postulaste a esta oferta (o ya trabajas en esa barbería).",
     "JOB_POSTING_CLOSED": "Esta oferta ya cerró.",
-    "VIDEO_LIMIT_REACHED": "Llegaste al máximo de videos. Borra uno para subir otro."
+    "VIDEO_LIMIT_REACHED": "Llegaste al máximo de videos. Borra uno para subir otro.",
+    "USERNAME_TAKEN": "Ese usuario ya está en uso.",
+    "USERNAME_CHANGE_TOO_SOON": "Todavía no puedes cambiar tu usuario."
   },
   "fields": {
     "required": "Este campo es obligatorio.",

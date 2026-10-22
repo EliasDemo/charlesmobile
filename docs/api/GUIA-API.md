@@ -71,10 +71,14 @@ Cabecera en cada petición autenticada: `Authorization: Bearer <accessToken>`.
 ### Flujo
 
 1. **Términos:** `GET /auth/terms` devuelve la versión vigente.
-2. **Registro:** `POST /auth/register` con `{ fullName, email, password, phone?, acceptTerms: true, declaresAdult: true, termsVersion }`.
+2. **Registro:** `POST /auth/register` con `{ username, fullName, email, password, phone?, acceptTerms: true, declaresAdult: true, termsVersion }`.
+   - `username` (obligatorio): 3 a 20 caracteres; minúsculas, números, punto y guion bajo; sin empezar ni terminar en punto o guion bajo y sin dos seguidos. Se guarda en minúsculas. Es **público**: es lo que otras personas ven en lugar del nombre real.
+   - Para validar mientras se escribe: `GET /auth/username-available?username=…` → `{ available, reason }` con `reason` `INVALID`, `RESERVED`, `TAKEN` o `null`.
+   - Usuario ocupado: 409 `USERNAME_TAKEN`. Formato inválido: 400 `VALIDATION_ERROR` en `username`; reservado (contiene "charles", "admin", "soporte"…): 400 con `constraints: ["usernameReserved"]`.
+   - `fullName` es el nombre real: solo lo ven la propia persona, la barbería (únicamente el nombre de pila) y el personal.
    - Responde **202** siempre, exista o no el correo, para no revelar cuentas (ADR 0003).
    - La contraseña tiene de 10 a 128 caracteres y no puede ser una contraseña común.
-3. **Inicio de sesión:** `POST /auth/login` con `{ email, password }`. Devuelve `{ tokenType, accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt, user }`; `user` incluye los roles.
+3. **Inicio de sesión:** `POST /auth/login` con `{ login, password }`, donde `login` es el nombre de usuario **o** el correo (con "@" se toma como correo). `{ email, password }` sigue funcionando pero está obsoleto. Devuelve `{ tokenType, accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt, user }`; `user` incluye `username` y los roles.
 4. **Verificación de correo:** llega un código de 6 dígitos (en desarrollo, en Redis).
    - Confirmación: `POST /auth/email-verification/confirm` con `{ code }` y sesión iniciada.
    - Pedir otro código: `POST /auth/email-verification/request`.
@@ -87,7 +91,7 @@ Cabecera en cada petición autenticada: `Authorization: Bearer <accessToken>`.
 7. **Recuperar la contraseña:**
    - pedir el código: `POST /auth/password-reset/request` con `{ email }` (respuesta idéntica exista o no la cuenta);
    - confirmar: `POST /auth/password-reset/confirm` con `{ email, code, newPassword }`, que **cierra todas las sesiones**.
-8. **Perfil:** `GET /users/me` y `PATCH /users/me`, para nombre, teléfono, preferencias, fecha de nacimiento y género; foto con `PUT`/`DELETE /users/me/photo`; contraseña con `POST /users/me/password`. El correo no se cambia en el MVP. Detalle en [`PERFIL.md`](PERFIL.md). Promociones, cupones y anuncios: [`PROMOCIONES.md`](PROMOCIONES.md). Perfil profesional del barbero, mensajes, bolsa de trabajo y videos: [`CARRERA.md`](CARRERA.md).
+8. **Perfil:** `GET /users/me` y `PATCH /users/me`, para nombre, teléfono, preferencias, fecha de nacimiento y género; foto con `PUT`/`DELETE /users/me/photo`; contraseña con `POST /users/me/password`. El correo no se cambia en el MVP. Detalle en [`PERFIL.md`](PERFIL.md). Promociones, cupones y anuncios: [`PROMOCIONES.md`](PROMOCIONES.md). Perfil profesional del barbero, mensajes, bolsa de trabajo y videos: [`CARRERA.md`](CARRERA.md). Recomendación por forma de cara: [`FORMA-DE-CARA.md`](FORMA-DE-CARA.md).
 
 ### Qué hacer ante un 401
 
@@ -95,7 +99,7 @@ Cabecera en cada petición autenticada: `Authorization: Bearer <accessToken>`.
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | 401 `UNAUTHORIZED` en una petición normal        | Renovar una vez (_single-flight_) y reintentar la petición. Si la renovación falla, cerrar sesión localmente y llevar al inicio de sesión. |
 | 401 `INVALID_REFRESH_TOKEN` al renovar           | Sesión terminada (vencida, cerrada o revocada). Borrar los tokens e ir al inicio de sesión.                                                |
-| 401 `INVALID_CREDENTIALS` en el inicio de sesión | "Correo o contraseña incorrectos." No distingas cuál de los dos.                                                                           |
+| 401 `INVALID_CREDENTIALS` en el inicio de sesión | "Usuario, correo o contraseña incorrectos." No distingas cuál.                                                                             |
 
 **Roles que cambian:** si el usuario crea una barbería o lo vinculan como barbero, sus roles cambian. Las respuestas lo indican (`ownerRoleGranted`, `barberRoleGranted`). Para ver los roles nuevos en el JWT, **renueva la sesión** (`/auth/refresh`).
 
@@ -125,7 +129,9 @@ Todos los errores tienen la misma forma:
 | `VALIDATION_ERROR`                      | 400       | Datos inválidos                                                                           | Marcar los campos de `details[].field`.                                              |
 | `MALFORMED_JSON`                        | 400       | Cuerpo no es JSON                                                                         | Error de la app: registrar.                                                          |
 | `UNAUTHORIZED`                          | 401       | Falta o venció el token de acceso                                                         | Renovar y reintentar (ver §2).                                                       |
-| `INVALID_CREDENTIALS`                   | 401       | Correo o contraseña incorrectos                                                           | "Correo o contraseña incorrectos."                                                   |
+| `INVALID_CREDENTIALS`                   | 401       | Usuario, correo o contraseña incorrectos                                                  | "Usuario, correo o contraseña incorrectos."                                          |
+| `USERNAME_TAKEN`                        | 409       | Nombre de usuario en uso (registro o cambio)                                              | "Ese usuario ya está en uso." Marcar el campo.                                       |
+| `USERNAME_CHANGE_TOO_SOON`              | 409       | Cambió el usuario hace menos de 30 días; `details[0].nextChangeAt`                        | "Podrás cambiarlo de nuevo el …"                                                     |
 | `INVALID_REFRESH_TOKEN`                 | 401       | Sesión terminada                                                                          | Ir al inicio de sesión.                                                              |
 | `INVALID_SIGNATURE`                     | 401       | Firma del resultado de pago inválida                                                      | Error de integración: reintentar la verificación o mostrar un error genérico.        |
 | `FORBIDDEN`                             | 403       | Sin permiso para esa acción                                                               | Mostrar `message`; ocultar la acción en la interfaz.                                 |

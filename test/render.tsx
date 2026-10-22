@@ -38,6 +38,13 @@ export function signIn(user: Partial<NonNullable<ReturnType<typeof useSession.ge
   useSession.setState({
     status: 'authenticated',
     accessToken: 'access-1',
-    user: { id: 'u1', fullName: 'Ana Pérez', emailVerified: true, roles: ['CLIENT'], ...user },
+    user: {
+      id: 'u1',
+      fullName: 'Ana Pérez',
+      username: 'ana.perez',
+      emailVerified: true,
+      roles: ['CLIENT'],
+      ...user,
+    },
   });
 }

@@ -8,7 +8,9 @@ const error = (code: string, details: Record<string, unknown>[] = [], requestId 
 describe('translateError', () => {
   it('translates by code, never by the backend text', () => {
     expect(translateError(error('SLOT_NOT_AVAILABLE')).message).toBe(errorsEs.codes.SLOT_NOT_AVAILABLE);
-    expect(translateError(error('INVALID_CREDENTIALS')).message).toBe('Correo o contraseña incorrectos.');
+    expect(translateError(error('INVALID_CREDENTIALS')).message).toBe(
+      'Usuario, correo o contraseña incorrectos.',
+    );
   });
 
   it('has a Spanish text for every code documented in the API guide', () => {

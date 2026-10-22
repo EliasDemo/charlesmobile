@@ -24,6 +24,12 @@ export const editProfileSchema = z.object({
     error: 'profile:birthDateInvalid',
   }),
   gender: z.enum(['', 'MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY']),
+  /** Same rules as sign-up (USUARIO.md). */
+  username: z
+    .string()
+    .refine((v) => /^(?![._])(?!.*[._]{2})[a-z0-9._]{3,20}(?<![._])$/.test(v.trim().toLowerCase()), {
+      error: 'validation.usernameInvalid',
+    }),
 });
 export type EditProfileForm = z.infer<typeof editProfileSchema>;
 

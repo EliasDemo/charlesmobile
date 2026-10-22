@@ -7,7 +7,7 @@
     "VALIDATION_ERROR": "Check the highlighted fields.",
     "MALFORMED_JSON": "Something went wrong in the app. Please try again.",
     "UNAUTHORIZED": "Your session expired. Sign in again.",
-    "INVALID_CREDENTIALS": "Wrong email or password.",
+    "INVALID_CREDENTIALS": "Wrong username, email or password.",
     "INVALID_REFRESH_TOKEN": "Your session ended. Sign in again.",
     "INVALID_SIGNATURE": "We couldn't verify the payment. Please try again.",
     "FORBIDDEN": "You don't have permission to do this.",
@@ -67,7 +67,9 @@
     "CONVERSATION_BLOCKED": "This conversation is blocked.",
     "ALREADY_APPLIED": "You already applied to this job (or you already work at that barbershop).",
     "JOB_POSTING_CLOSED": "This job posting is closed.",
-    "VIDEO_LIMIT_REACHED": "You reached the video limit. Delete one to upload another."
+    "VIDEO_LIMIT_REACHED": "You reached the video limit. Delete one to upload another.",
+    "USERNAME_TAKEN": "That username is already taken.",
+    "USERNAME_CHANGE_TOO_SOON": "You can't change your username yet."
   },
   "fields": {
     "required": "This field is required.",

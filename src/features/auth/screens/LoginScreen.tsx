@@ -50,16 +50,16 @@ export function LoginScreen({
       {generalError ? <Notice tone="danger" message={generalError} /> : null}
       <Controller
         control={form.control}
-        name="email"
+        name="login"
         render={({ field, fieldState }) => (
           <TextField
-            label={t('fields.email')}
-            placeholder={t('fields.emailPlaceholder')}
+            label={t('fields.login')}
+            placeholder={t('fields.loginPlaceholder')}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
-            autoComplete="email"
-            textContentType="emailAddress"
+            autoComplete="username"
+            textContentType="username"
             returnKeyType="next"
             value={field.value}
             onChangeText={field.onChange}

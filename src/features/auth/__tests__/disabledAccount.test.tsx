@@ -24,7 +24,7 @@ describe('disabled account login', () => {
       useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled }),
     );
     await act(async () => {
-      result.current.form.setValue('email', 'deshabilitada@example.com');
+      result.current.form.setValue('login', 'deshabilitada@example.com');
       result.current.form.setValue('password', 'una-clave-larga');
       await result.current.submit();
     });

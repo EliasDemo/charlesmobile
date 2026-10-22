@@ -193,7 +193,7 @@ export function ReviewItem({
   return (
     <View style={[styles.review, { borderColor: theme.colors.border }]}>
       <View style={styles.reviewHeader}>
-        <Text variant="bodyStrong">{review.authorName}</Text>
+        <Text variant="bodyStrong">{`@${review.authorName}`}</Text>
         <Text
           variant="label"
           color="warning"

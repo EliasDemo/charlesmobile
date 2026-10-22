@@ -15,7 +15,7 @@ describe('birth date', () => {
   });
 
   it('is optional, like the gender', () => {
-    const base = { fullName: 'Ana Pérez', phone: '' };
+    const base = { fullName: 'Ana Pérez', phone: '', username: 'ana.perez' };
     expect(editProfileSchema.safeParse({ ...base, birthDate: '', gender: '' }).success).toBe(true);
     expect(editProfileSchema.safeParse({ ...base, birthDate: '99/99/1995', gender: '' }).success).toBe(false);
     expect(editProfileSchema.safeParse({ ...base, birthDate: '', gender: 'PREFER_NOT_TO_SAY' }).success).toBe(

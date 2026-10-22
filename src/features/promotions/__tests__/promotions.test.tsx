@@ -23,6 +23,7 @@ const promotion = (overrides: Partial<S['PromotionDto']> = {}): S['PromotionDto'
   maxPerUser: null,
   daysOfWeek: [2],
   requiresCoupon: false,
+  minTier: null,
   isActive: true,
   status: 'ACTIVE',
   redemptions: 3,

@@ -24,8 +24,13 @@ const code = z
   .trim()
   .regex(/^\d{6}$/, { error: 'validation.codeInvalid' });
 
+/** Username rules (USUARIO.md): 3 to 20, lowercase, numbers, "." and "_", not at the ends nor doubled. */
+export const USERNAME_PATTERN = /^(?![._])(?!.*[._]{2})[a-z0-9._]{3,20}(?<![._])$/;
+export const usernameOk = (value: string) => USERNAME_PATTERN.test(value.trim().toLowerCase());
+
 export const loginSchema = z.object({
-  email,
+  /** Username or email (with "@" it is taken as an email). */
+  login: z.string().trim().min(1, { error: 'validation.loginRequired' }),
   password: z.string().min(1, { error: 'validation.passwordRequired' }),
 });
 export type LoginForm = z.infer<typeof loginSchema>;
@@ -39,6 +44,7 @@ export const registerSchema = z
       .min(2, { error: 'validation.fullNameTooShort' })
       .max(120, { error: 'validation.fullNameTooLong' }),
     email,
+    username: z.string().refine(usernameOk, { error: 'validation.usernameInvalid' }),
     password,
     phone: z.string().refine((value) => value.trim() === '' || peruMobileDigits(value) !== null, {
       error: 'validation.phoneInvalid',

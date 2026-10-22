@@ -99,5 +99,7 @@
     "submit": "Change password",
     "done": "Password changed. We signed you out on your other devices.",
     "required": "Enter your current password."
-  }
+  },
+  "usernameHint": "You can change it once every 30 days.",
+  "usernameLocked": "You can change it on {{date}}."
 }

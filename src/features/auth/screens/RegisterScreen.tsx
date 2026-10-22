@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form';
-import { Linking } from 'react-native';
+import { Linking, StyleSheet } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { sizes } from '@/shared/theme';
+import { sizes, spacing } from '@/shared/theme';
 import {
   BrandImage,
   Button,
@@ -27,9 +27,8 @@ export interface RegisterScreenProps extends UseRegisterOptions {
 export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
   const { t } = useTranslation('auth');
   const errorText = useFieldErrorText('auth');
-  const { form, submit, isSubmitting, generalError, terms, termsUrl, privacyUrl } = useRegister({
-    onSuccess,
-  });
+  const reg = useRegister({ onSuccess });
+  const { form, submit, isSubmitting, generalError, terms, termsUrl, privacyUrl } = reg;
 
   if (!terms.data) {
     return (
@@ -62,6 +61,7 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
             autoCapitalize="words"
             autoComplete="name"
             textContentType="name"
+            hint={t('fields.fullNameHint')}
             value={field.value}
             onChangeText={field.onChange}
             onBlur={field.onBlur}
@@ -87,6 +87,46 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
             onBlur={field.onBlur}
             ref={field.ref}
             error={errorText(fieldState.error?.message)}
+          />
+        )}
+      />
+      <Controller
+        control={form.control}
+        name="username"
+        render={({ field, fieldState }) => (
+          <TextField
+            label={t('fields.username')}
+            placeholder={t('fields.usernamePlaceholder')}
+            autoCapitalize="none"
+            autoCorrect={false}
+            autoComplete="username-new"
+            textContentType="username"
+            maxLength={20}
+            value={field.value}
+            onChangeText={(text) => field.onChange(text.toLowerCase().replace(/\s/g, ''))}
+            onBlur={field.onBlur}
+            ref={field.ref}
+            prefix={
+              <Text color="textSecondary" style={styles.at}>
+                @
+              </Text>
+            }
+            error={
+              errorText(fieldState.error?.message) ??
+              (reg.usernameStatus === 'TAKEN' ||
+              reg.usernameStatus === 'RESERVED' ||
+              reg.usernameStatus === 'INVALID'
+                ? t(`username.${reg.usernameStatus}`)
+                : undefined)
+            }
+            hint={
+              reg.usernameStatus === 'available'
+                ? t('username.available')
+                : reg.usernameStatus === 'checking'
+                  ? t('username.checking')
+                  : t('fields.usernameHint')
+            }
+            testID="username-input"
           />
         )}
       />
@@ -180,3 +220,5 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({ at: { paddingLeft: spacing.md } });

@@ -47,6 +47,7 @@ export function ProfileScreen(props: ProfileScreenProps) {
                 <Monogram name={profile.fullName} size={sizes.avatar} imageUrl={profile.photoUrl} />
                 <View style={styles.flex}>
                   <Text variant="subtitle">{profile.fullName}</Text>
+                  <Text color="primary">{`@${profile.username}`}</Text>
                   <Text color="textSecondary" selectable>
                     {profile.email}
                   </Text>

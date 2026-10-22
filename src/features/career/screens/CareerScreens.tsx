@@ -477,7 +477,7 @@ export function PublicCareerProfileScreen({
                       <Stars rating={r.rating} />
                       {r.comment ? <Text>{r.comment}</Text> : null}
                       <Text variant="caption" color="textSecondary">
-                        {[r.clientName, r.serviceName, r.barbershopName].filter(Boolean).join(' · ')}
+                        {[`@${r.clientName}`, r.serviceName, r.barbershopName].filter(Boolean).join(' · ')}
                       </Text>
                     </Card>
                   ))

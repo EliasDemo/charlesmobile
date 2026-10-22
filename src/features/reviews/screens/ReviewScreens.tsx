@@ -168,7 +168,7 @@ export function ShopReviewsScreen({ shopId }: { shopId: string }) {
         empty={{ title: t('shop.empty'), message: t('shop.emptyMessage'), icon: 'star-outline' }}
         renderItem={({ item }) => (
           <ReviewCard
-            title={item.authorName}
+            title={`@${item.authorName}`}
             review={item}
             status={item.status}
             hiddenResponse={item.responseStatus === 'HIDDEN'}

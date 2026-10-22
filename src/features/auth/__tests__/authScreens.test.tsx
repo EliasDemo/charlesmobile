@@ -28,16 +28,16 @@ const loginProps = () => ({
 describe('LoginScreen', () => {
   it('validates when leaving a field and shows the error next to it', async () => {
     await renderWithProviders(<LoginScreen {...loginProps()} />);
-    const email = screen.getByLabelText(auth.fields.email);
-    await fireEvent.changeText(email, 'no-es-correo');
-    await fireEvent(email, 'blur');
-    expect(await screen.findByText(auth.validation.emailInvalid)).toBeTruthy();
+    const login = screen.getByLabelText(auth.fields.login);
+    await fireEvent.changeText(login, '  ');
+    await fireEvent(login, 'blur');
+    expect(await screen.findByText(auth.validation.loginRequired)).toBeTruthy();
   });
 
   it('shows the generic credentials error', async () => {
     mockApi({ 'POST /api/v1/auth/login': apiError(401, 'INVALID_CREDENTIALS') });
     await renderWithProviders(<LoginScreen {...loginProps()} />);
-    await fireEvent.changeText(screen.getByLabelText(auth.fields.email), 'ana@example.com');
+    await fireEvent.changeText(screen.getByLabelText(auth.fields.login), 'ana@example.com');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'mala-clave');
     await fireEvent.press(screen.getByRole('button', { name: auth.login.submit }));
     expect(await screen.findByText(errors.codes.INVALID_CREDENTIALS)).toBeTruthy();
@@ -46,7 +46,7 @@ describe('LoginScreen', () => {
   it('disables the button while the account is locked', async () => {
     mockApi({ 'POST /api/v1/auth/login': apiError(429, 'ACCOUNT_LOCKED', [{ retryAfterSeconds: 65 }]) });
     await renderWithProviders(<LoginScreen {...loginProps()} />);
-    await fireEvent.changeText(screen.getByLabelText(auth.fields.email), 'ana@example.com');
+    await fireEvent.changeText(screen.getByLabelText(auth.fields.login), 'ana@example.com');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'mala-clave');
     await fireEvent.press(screen.getByRole('button', { name: auth.login.submit }));
     expect(await screen.findByText(/1:05/)).toBeTruthy();
@@ -57,7 +57,7 @@ describe('LoginScreen', () => {
     mockApi({ 'POST /api/v1/auth/login': { body: tokens() } });
     const props = loginProps();
     await renderWithProviders(<LoginScreen {...props} />);
-    await fireEvent.changeText(screen.getByLabelText(auth.fields.email), 'ana@example.com');
+    await fireEvent.changeText(screen.getByLabelText(auth.fields.login), 'ana@example.com');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'buena-clave');
     await fireEvent.press(screen.getByRole('button', { name: auth.login.submit }));
     // The email typed goes on to "Verifica tu correo" (the session does not carry it).
@@ -148,6 +148,7 @@ describe('RegisterScreen', () => {
     await screen.findByText(auth.register.terms);
     await fireEvent.changeText(screen.getByLabelText(auth.fields.fullName), 'Ana Pérez');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.email), 'ana@example.com');
+    await fireEvent.changeText(screen.getByTestId('username-input'), 'Ana.Perez');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.password), 'Una-Clave-Larga1');
     await fireEvent.changeText(screen.getByLabelText(auth.fields.confirmPassword), 'Una-Clave-Larga1');
     await fireEvent.press(screen.getByRole('checkbox', { name: auth.register.adult }));

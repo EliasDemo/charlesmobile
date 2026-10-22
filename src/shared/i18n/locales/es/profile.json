@@ -99,5 +99,7 @@
     "submit": "Cambiar contraseña",
     "done": "Contraseña cambiada. Cerramos tu sesión en los demás dispositivos.",
     "required": "Escribe tu contraseña actual."
-  }
+  },
+  "usernameHint": "Lo puedes cambiar una vez cada 30 días.",
+  "usernameLocked": "Podrás cambiarlo el {{date}}."
 }

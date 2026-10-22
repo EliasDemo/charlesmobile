@@ -1,6 +1,8 @@
 import { Controller } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
+import { env } from '@/shared/config';
+import { formatLongDate } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
 import {
   Button,
@@ -21,7 +23,9 @@ const GENDERS = ['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY'] as const;
 export function EditProfileScreen({ onSaved }: { onSaved: () => void }) {
   const { t } = useTranslation('profile');
   const errorText = useFieldErrorText('auth');
-  const { query, form, submit, isSubmitting, generalError } = useEditProfile({ onSaved });
+  const { query, form, submit, isSubmitting, generalError, usernameChangeableAt } = useEditProfile({
+    onSaved,
+  });
   return (
     <Screen>
       <QueryView query={query}>
@@ -40,6 +44,36 @@ export function EditProfileScreen({ onSaved }: { onSaved: () => void }) {
                   textContentType="name"
                   value={field.value}
                   onChangeText={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                  error={errorText(fieldState.error?.message)}
+                />
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="username"
+              render={({ field, fieldState }) => (
+                <TextField
+                  label={t('fields.username', { ns: 'auth' })}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  maxLength={20}
+                  editable={!usernameChangeableAt}
+                  prefix={
+                    <Text color="textSecondary" style={styles.at}>
+                      @
+                    </Text>
+                  }
+                  hint={
+                    usernameChangeableAt
+                      ? t('usernameLocked', {
+                          date: formatLongDate(usernameChangeableAt, env.defaultTimeZone),
+                        })
+                      : t('usernameHint')
+                  }
+                  value={field.value}
+                  onChangeText={(text) => field.onChange(text.toLowerCase().replace(/\s/g, ''))}
                   onBlur={field.onBlur}
                   ref={field.ref}
                   error={errorText(fieldState.error?.message)}
@@ -119,5 +153,6 @@ export function EditProfileScreen({ onSaved }: { onSaved: () => void }) {
 
 const styles = StyleSheet.create({
   group: { gap: spacing.sm },
+  at: { paddingLeft: spacing.md },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
 });

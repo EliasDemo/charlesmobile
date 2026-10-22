@@ -36,7 +36,7 @@ describe('useLogin', () => {
     const { result } = await renderHookWithProviders(() =>
       useLogin({ onSuccess, onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
-    await fill(result.current.form, { email: 'ana@example.com', password: 'secreta' });
+    await fill(result.current.form, { login: 'ana@example.com', password: 'secreta' });
     await act(() => result.current.submit());
 
     await waitFor(() =>
@@ -46,7 +46,7 @@ describe('useLogin', () => {
       ),
     );
     expect(api.callsTo('POST', '/api/v1/auth/login')[0]!.body).toEqual({
-      email: 'ana@example.com',
+      login: 'ana@example.com',
       password: 'secreta',
       deviceName: 'samsung SM-A546E',
     });
@@ -59,7 +59,7 @@ describe('useLogin', () => {
     const { result } = await renderHookWithProviders(() =>
       useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
-    await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
+    await fill(result.current.form, { login: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
     await waitFor(() => expect(result.current.generalError).toBe(errors.codes.INVALID_CREDENTIALS));
     expect(useSession.getState().status).toBe('anonymous');
@@ -72,7 +72,7 @@ describe('useLogin', () => {
     const { result } = await renderHookWithProviders(() =>
       useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
-    await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
+    await fill(result.current.form, { login: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
     await waitFor(() => expect(result.current.lockedSeconds).toBe(90));
     expect(result.current.generalError).toBeNull();
@@ -84,7 +84,7 @@ describe('useLogin', () => {
     const { result } = await renderHookWithProviders(() =>
       useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
-    await fill(result.current.form, { email: 'ana@example.com', password: 'mala' });
+    await fill(result.current.form, { login: 'ana@example.com', password: 'mala' });
     await act(() => result.current.submit());
     await waitFor(() => expect(result.current.lockedWithoutTime).toBe(true));
   });
@@ -94,10 +94,10 @@ describe('useLogin', () => {
     const { result } = await renderHookWithProviders(() =>
       useLogin({ onSuccess: jest.fn(), onPendingDeletion: jest.fn(), onDisabled: jest.fn() }),
     );
-    await fill(result.current.form, { email: 'nope', password: '' });
+    await fill(result.current.form, { login: ' ', password: '' });
     await act(() => result.current.submit());
     expect(api.calls).toHaveLength(0);
-    expect(result.current.form.getFieldState('email').error?.message).toBe('validation.emailInvalid');
+    expect(result.current.form.getFieldState('login').error?.message).toBe('validation.loginRequired');
   });
 });
 
@@ -105,12 +105,37 @@ describe('useRegister', () => {
   const valid = {
     fullName: ' Ana Pérez ',
     email: 'ana@example.com',
+    username: 'ana.perez',
     password: 'Una-Clave-Larga1',
     confirmPassword: 'Una-Clave-Larga1',
     phone: '987654321',
     declaresAdult: true,
     acceptTerms: true,
   };
+
+  it('tells whether the username is free, and marks it when the backend says it is taken', async () => {
+    let free = true;
+    mockApi({
+      'GET /api/v1/auth/terms': { body: { version: '2026-10', termsUrl: null, privacyUrl: null } },
+      'GET /api/v1/auth/username-available': () => ({
+        body: free ? { available: true, reason: null } : { available: false, reason: 'RESERVED' },
+      }),
+      'POST /api/v1/auth/register': apiError(409, 'USERNAME_TAKEN'),
+    });
+    const { result } = await renderHookWithProviders(() => useRegister({ onSuccess: jest.fn() }));
+    await waitFor(() => expect(result.current.terms.data?.version).toBe('2026-10'));
+    expect(result.current.usernameStatus).toBe('idle');
+    await fill(result.current.form, valid);
+    await waitFor(() => expect(result.current.usernameStatus).toBe('available'), { timeout: 3000 });
+    free = false;
+    await fill(result.current.form, { username: 'charles' });
+    await waitFor(() => expect(result.current.usernameStatus).toBe('RESERVED'), { timeout: 3000 });
+    await fill(result.current.form, { username: 'ana.perez2' });
+    await act(() => result.current.submit());
+    await waitFor(() =>
+      expect(result.current.form.getFieldState('username').error?.message).toBe('Ya está en uso'),
+    );
+  });
 
   it('sends the accepted terms version and the phone in the backend format', async () => {
     const api = mockApi({
@@ -127,6 +152,7 @@ describe('useRegister', () => {
     expect(api.callsTo('POST', '/api/v1/auth/register')[0]!.body).toEqual({
       fullName: 'Ana Pérez',
       email: 'ana@example.com',
+      username: 'ana.perez',
       password: 'Una-Clave-Larga1',
       phone: '+51 987 654 321',
       acceptTerms: true,

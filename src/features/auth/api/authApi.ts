@@ -51,3 +51,9 @@ export const fetchDeletionStatus = (token: string): Promise<DeletionStatus> =>
 /** Only works with the restricted token: cancels the pending deletion. */
 export const cancelDeletion = (token: string): Promise<DeletionStatus> =>
   unwrap(api.DELETE('/api/v1/me/account/deletion', withToken(token)));
+
+export type UsernameAvailability = components['schemas']['UsernameAvailabilityDto'];
+
+/** Whether a username is free while the person types it (call it ~400 ms after the last key). */
+export const checkUsername = (username: string): Promise<UsernameAvailability> =>
+  unwrap(api.GET('/api/v1/auth/username-available', { params: { query: { username } } }));

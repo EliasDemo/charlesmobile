@@ -60,7 +60,7 @@ describe('api client', () => {
       accessTokenExpiresAt: '2030-01-01T00:00:00.000Z',
       refreshToken: 'r',
       refreshTokenExpiresAt: '2030-01-01T00:00:00.000Z',
-      user: { id: 'u', fullName: 'Ana', emailVerified: true, roles: ['CLIENT'] },
+      user: { id: 'u', fullName: 'Ana', username: 'ana', emailVerified: true, roles: ['CLIENT'] },
     });
     const unauthorized = (code: string) =>
       new Response(JSON.stringify({ code, message: 'x', details: [], requestId: 'r' }), { status: 401 });

@@ -33,13 +33,13 @@ describe('login of an account pending deletion', () => {
       useLogin({ onSuccess: jest.fn(), onPendingDeletion, onDisabled: jest.fn() }),
     );
     await act(async () => {
-      result.current.form.setValue('email', 'ana@example.com');
+      result.current.form.setValue('login', 'ana@example.com');
       result.current.form.setValue('password', 'clave');
     });
     await act(() => result.current.submit());
     await waitFor(() => expect(onPendingDeletion).toHaveBeenCalled());
     expect(api.callsTo('POST', '/api/v1/auth/support-access')[0]!.body).toEqual({
-      email: 'ana@example.com',
+      login: 'ana@example.com',
       password: 'clave',
     });
     expect(useRestrictedAccess.getState().token).toBe('restricted-1');
