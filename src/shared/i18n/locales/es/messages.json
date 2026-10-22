@@ -48,5 +48,38 @@
     "hintShop": "Pregunta lo que necesites. La barbería te responderá por aquí.",
     "hintBarber": "Escríbele sobre trabajo. Te responderá por aquí.",
     "limit": "Hasta {{max}} caracteres."
+  },
+  "tabs": {
+    "label": "Tipo de conversación",
+    "withUnread": "{{label}} ({{count}})",
+    "me": {
+      "CLIENT": "Social",
+      "PROFESSIONAL": "Profesional"
+    },
+    "shop": {
+      "CLIENT": "Clientes",
+      "PROFESSIONAL": "Profesional"
+    }
+  },
+  "kindLabel": {
+    "me": {
+      "CLIENT": "Barbería",
+      "PROFESSIONAL": "Laboral"
+    },
+    "shop": {
+      "CLIENT": "Cliente",
+      "PROFESSIONAL": "Barbero · laboral"
+    }
+  },
+  "context": {
+    "me": {
+      "CLIENT": "Responde el equipo de la barbería: el dueño o un administrador.",
+      "PROFESSIONAL": "Conversación laboral: responde el dueño o un administrador."
+    },
+    "shop": {
+      "CLIENT": "Consulta de un cliente. Tú no puedes escribirle primero.",
+      "PROFESSIONAL": "Conversación laboral con un barbero."
+    },
+    "seeProfile": "Ver perfil profesional"
   }
 }

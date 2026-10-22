@@ -1,3 +1,4 @@
+import { Text } from 'react-native';
 import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { apiError, barbershop, businessHours, mockApi, tokens } from '@test/mockApi';
 import { renderWithProviders, resetAppState, signIn } from '@test/render';
@@ -63,6 +64,18 @@ describe('ShopHomeScreen', () => {
     expect(await screen.findByText(texts.home.emptyTitle)).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: texts.home.create }));
     expect(homeProps.onCreate).toHaveBeenCalled();
+  });
+
+  it('puts the job board first for a barber without a barbershop', async () => {
+    mockApi({
+      'GET /api/v1/me/barbershops': { body: { items: [], nextCursor: null } },
+      'GET /api/v1/me/barber': { body: { items: [] } },
+    });
+    const jobBoardSlot = jest.fn((variant: string) => <Text>{`board-${variant}`}</Text>);
+    await renderWithProviders(<ShopHomeScreen {...homeProps} jobBoardSlot={jobBoardSlot} />);
+    expect(await screen.findByText('board-primary')).toBeTruthy();
+    expect(screen.getByText(texts.home.ownShopTitle)).toBeTruthy();
+    expect(screen.queryByText(texts.home.emptyTitle)).toBeNull();
   });
 
   it('shows the managed barbershop and opens its sections', async () => {

@@ -133,5 +133,16 @@
     "commissionLine": "{{percent}} % de comisión",
     "requirementsTitle": "Requisitos:",
     "processTitle": "Proceso:"
+  },
+  "board": {
+    "title": "Bolsa laboral",
+    "subtleHint": "Ofertas de otras barberías",
+    "intro": "Ofertas de barberías que buscan barberos. Postula en dos toques.",
+    "nearby": "Ofertas cerca de ti, en {{area}}.",
+    "emptyArea": "Aún no hay ofertas en tu distrito. Mira todas las ofertas.",
+    "all": "Ver todas las ofertas",
+    "profile": "Mi perfil profesional",
+    "createProfile": "Crea tu perfil profesional",
+    "createProfileHint": "Es lo que ven las barberías cuando postulas."
   }
 }

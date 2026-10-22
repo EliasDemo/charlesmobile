@@ -5,18 +5,26 @@ import { sizes, spacing, useTheme } from '@/shared/theme';
 import { Badge, Card, Monogram, RatingLabel, StatusPill, Text } from '@/shared/ui';
 import type { BarberProfile, PortfolioItem } from '../api/careerApi';
 
-/** Position in the ranking, or how to enter it (3 reviews): `rank: null` is not an error. */
+/** Position in the ranking; before 3 reviews, a positive "Nuevo talento" (never "out of the ranking"). */
 export function RankText({ rank }: { rank: number | null }) {
   const { t } = useTranslation('career');
+  if (rank === null) return <Badge tone="primary" label={t('newTalent')} />;
   return (
-    <Text variant="bodyStrong" color={rank ? 'primary' : 'textSecondary'}>
-      {rank ? t('rank', { rank }) : t('rankPending')}
+    <Text variant="bodyStrong" color="primary">
+      {t('rank', { rank })}
     </Text>
   );
 }
 
 /** Photo, name, headline and the numbers of a barber's career (their own, across barbershops). */
-export function CareerHeader({ profile }: { profile: BarberProfile }) {
+export function CareerHeader({
+  profile,
+  own = false,
+}: {
+  profile: BarberProfile;
+  /** The barber's own profile: the progress card says the rest (no rank line here). */
+  own?: boolean;
+}) {
   const { t } = useTranslation('career');
   return (
     <Card>
@@ -25,14 +33,12 @@ export function CareerHeader({ profile }: { profile: BarberProfile }) {
         <View style={styles.flex}>
           <Text variant="title">{profile.displayName}</Text>
           {profile.headline ? <Text color="textSecondary">{profile.headline}</Text> : null}
-          <RankText rank={profile.rank} />
+          {own ? null : <RankText rank={profile.rank} />}
         </View>
       </View>
       {profile.ratingAverage !== null ? (
         <RatingLabel average={profile.ratingAverage} count={profile.ratingCount} variant="bodyStrong" />
-      ) : (
-        <Text color="textSecondary">{t('noReviews')}</Text>
-      )}
+      ) : null}
       <View style={styles.facts}>
         <Text variant="caption" color="textSecondary">
           {t('attended', { count: profile.attendedCount })}

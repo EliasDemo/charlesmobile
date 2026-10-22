@@ -1,4 +1,5 @@
-export { useInviteBarber } from './hooks/useJobs';
+export { useHasApplied, useInviteBarber } from './hooks/useJobs';
+export { JobBoardCard, type JobBoardCardProps } from './components/JobBoardCard';
 export {
   ApplicantsScreen,
   InviteBarberButton,

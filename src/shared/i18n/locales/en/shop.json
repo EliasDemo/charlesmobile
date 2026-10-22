@@ -78,7 +78,9 @@
       "business": "Business",
       "marketing": "Marketing",
       "settings": "Settings"
-    }
+    },
+    "ownShopTitle": "Do you have your own barbershop?",
+    "ownShopText": "Open it on Charles or work independently with your own schedule."
   },
   "status": {
     "OPEN": "Open",

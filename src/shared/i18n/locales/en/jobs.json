@@ -133,5 +133,16 @@
     "commissionLine": "{{percent}} % commission",
     "requirementsTitle": "Requirements:",
     "processTitle": "Process:"
+  },
+  "board": {
+    "title": "Job board",
+    "subtleHint": "Offers from other barbershops",
+    "intro": "Barbershops looking for barbers. Apply in two taps.",
+    "nearby": "Offers near you, in {{area}}.",
+    "emptyArea": "No offers in your district yet. See all offers.",
+    "all": "See all offers",
+    "profile": "My professional profile",
+    "createProfile": "Create your professional profile",
+    "createProfileHint": "It is what barbershops see when you apply."
   }
 }

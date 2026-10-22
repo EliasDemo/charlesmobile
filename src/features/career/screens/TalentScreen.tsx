@@ -63,7 +63,7 @@ function BarberCard({
           <Text variant="subtitle">{barber.displayName}</Text>
           {barber.headline ? <Text color="textSecondary">{barber.headline}</Text> : null}
           <Text variant="caption" color={barber.rank ? 'primary' : 'textMuted'}>
-            {barber.rank ? t('rank', { rank: barber.rank }) : t('rankPending')}
+            {barber.rank ? t('rank', { rank: barber.rank }) : t('newTalent')}
           </Text>
         </View>
         <Icon name="chevron-forward" size={sizes.icon} color={theme.colors.textMuted} />

@@ -16,6 +16,7 @@ import {
   Monogram,
   Notice,
   Screen,
+  SegmentedControl,
   StatusPill,
   Text,
   TextField,
@@ -23,7 +24,13 @@ import {
 } from '@/shared/ui';
 import type { Conversation, Mailbox, Message, ReportReason } from '../api/messagingApi';
 import { ChatBubble, Composer, DaySeparator, dayLabel } from '../components/ChatParts';
-import { MESSAGE_MAX, useChat, useConversations, useStartConversation } from '../hooks/useMessaging';
+import {
+  MESSAGE_MAX,
+  useChat,
+  useConversationTabs,
+  useConversations,
+  useStartConversation,
+} from '../hooks/useMessaging';
 import { useResolvedMailbox } from '../hooks/useResolvedMailbox';
 
 const REASONS: ReportReason[] = ['SPAM', 'HARASSMENT', 'INAPPROPRIATE', 'SCAM', 'OTHER'];
@@ -46,12 +53,28 @@ export function ConversationsScreen({
 }) {
   const { t } = useTranslation('messages');
   const theme = useTheme();
-  const list = useConversations(mailbox);
+  const tabs = useConversationTabs(useConversations(mailbox));
+  const side = mailbox.kind === 'me' ? 'me' : 'shop';
   return (
     <Screen scroll={false} edges={['top', 'left', 'right']}>
       <Text variant="title">{t('title')}</Text>
+      {tabs.showTabs ? (
+        <SegmentedControl
+          label={t('tabs.label')}
+          hideLabel
+          value={tabs.tab}
+          onChange={tabs.setTab}
+          options={(['CLIENT', 'PROFESSIONAL'] as const).map((kind) => ({
+            value: kind,
+            label:
+              tabs.unread(kind) > 0
+                ? t('tabs.withUnread', { label: t(`tabs.${side}.${kind}`), count: tabs.unread(kind) })
+                : t(`tabs.${side}.${kind}`),
+          }))}
+        />
+      ) : null}
       <InfiniteList
-        query={list}
+        query={tabs.list}
         keyExtractor={(c) => c.id}
         empty={{
           title: t('empty'),
@@ -71,7 +94,13 @@ export function ConversationsScreen({
             }
             title={item.counterpart.name ?? t('unknown')}
             subtitle={item.lastMessagePreview ?? ''}
-            details={[{ icon: 'time', text: when(item.lastMessageAt) }]}
+            details={[
+              {
+                icon: item.kind === 'PROFESSIONAL' ? 'briefcase' : side === 'me' ? 'storefront' : 'person',
+                text: t(`kindLabel.${side}.${item.kind}`),
+              },
+              { icon: 'time', text: when(item.lastMessageAt) },
+            ]}
             trailing={
               item.blocked ? (
                 <View accessible accessibilityLabel={t('blocked')}>
@@ -89,7 +118,16 @@ export function ConversationsScreen({
 }
 
 /** A chat. `mailbox` absent: opened from a notice, the side is found from the conversation. */
-export function ChatScreen({ mailbox, conversationId }: { mailbox?: Mailbox; conversationId: string }) {
+export function ChatScreen({
+  mailbox,
+  conversationId,
+  onOpenBarberProfile,
+}: {
+  mailbox?: Mailbox;
+  conversationId: string;
+  /** The other side is a barber with a professional profile (work conversations). */
+  onOpenBarberProfile?: (profileId: string) => void;
+}) {
   const { t } = useTranslation('messages');
   const resolved = useResolvedMailbox(conversationId, mailbox);
   if (resolved.status === 'loading') return <LoadingState />;
@@ -100,10 +138,24 @@ export function ChatScreen({ mailbox, conversationId }: { mailbox?: Mailbox; con
       </Screen>
     );
   }
-  return <Chat mailbox={resolved.mailbox} conversationId={conversationId} />;
+  return (
+    <Chat
+      mailbox={resolved.mailbox}
+      conversationId={conversationId}
+      onOpenBarberProfile={onOpenBarberProfile}
+    />
+  );
 }
 
-function Chat({ mailbox, conversationId }: { mailbox: Mailbox; conversationId: string }) {
+function Chat({
+  mailbox,
+  conversationId,
+  onOpenBarberProfile,
+}: {
+  mailbox: Mailbox;
+  conversationId: string;
+  onOpenBarberProfile?: (profileId: string) => void;
+}) {
   const { t } = useTranslation('messages');
   const theme = useTheme();
   const chat = useChat(mailbox, conversationId);
@@ -111,6 +163,7 @@ function Chat({ mailbox, conversationId }: { mailbox: Mailbox; conversationId: s
   const [reason, setReason] = useState<ReportReason>('SPAM');
   const [confirmBlock, setConfirmBlock] = useState(false);
   const conversation = chat.conversation;
+  const profileId = conversation?.counterpart.barberProfileId ?? null;
 
   if (chat.query.isPending) return <LoadingState />;
   if (chat.query.isError && !chat.messages) {
@@ -137,9 +190,24 @@ function Chat({ mailbox, conversationId }: { mailbox: Mailbox; conversationId: s
             size={sizes.avatarSmall}
             imageUrl={conversation.counterpart.photoUrl}
           />
-          <Text variant="bodyStrong" style={styles.fill} numberOfLines={1}>
-            {conversation.counterpart.name ?? t('unknown')}
-          </Text>
+          <View style={styles.fill}>
+            <Text variant="bodyStrong" numberOfLines={1}>
+              {conversation.counterpart.name ?? t('unknown')}
+            </Text>
+            <Text variant="caption" color="textSecondary">
+              {t(`context.${mailbox.kind === 'me' ? 'me' : 'shop'}.${conversation.kind}`)}
+            </Text>
+            {profileId && onOpenBarberProfile ? (
+              <Text
+                variant="label"
+                color="primary"
+                accessibilityRole="link"
+                onPress={() => onOpenBarberProfile(profileId)}
+              >
+                {t('context.seeProfile')}
+              </Text>
+            ) : null}
+          </View>
           {!conversation.blocked || conversation.blockedByMe ? (
             <Button
               label={conversation.blocked ? t('chat.unblock') : t('chat.block')}

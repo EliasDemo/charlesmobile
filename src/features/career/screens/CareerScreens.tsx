@@ -21,6 +21,7 @@ import {
   InfoCard,
   ListRow,
   Monogram,
+  Celebration,
   Notice,
   QueryView,
   Screen,
@@ -35,6 +36,8 @@ import {
 } from '@/shared/ui';
 import type { PortfolioItem, RankedBarber, RankingFilters, Workplace } from '../api/careerApi';
 import { CareerHeader, PortfolioGrid, RankText } from '../components/CareerParts';
+import { CareerProgressCard } from '../components/CareerProgress';
+import { careerSteps, useRankCelebration } from '../hooks/useCareerProgress';
 import {
   CAPTION_MAX,
   PORTFOLIO_STYLES_MAX,
@@ -86,6 +89,8 @@ export interface MyCareerProfileScreenProps {
   onApplications: () => void;
   /** "Mis videos" (from the videos feature). */
   videos?: (profileId: string) => ReactNode;
+  /** Has applied to a job at least once (from the jobs feature); undefined hides that step. */
+  hasApplied?: boolean;
 }
 
 /** "Mi perfil profesional": what follows the barber across barbershops. */
@@ -96,11 +101,13 @@ export function MyCareerProfileScreen(props: MyCareerProfileScreenProps) {
   const portfolio = usePortfolio(mine.data?.id ?? '');
   const remove = useDeletePortfolioItem();
   const leave = useLeaveWorkplace();
+  const celebrating = useRankCelebration(mine.data?.rank);
   const [removing, setRemoving] = useState<PortfolioItem | null>(null);
   const [leaving, setLeaving] = useState<Workplace | null>(null);
 
   return (
     <Screen>
+      <Celebration visible={celebrating} />
       <QueryView
         query={mine}
         isEmpty={(profile) => profile === null}
@@ -116,7 +123,23 @@ export function MyCareerProfileScreen(props: MyCareerProfileScreenProps) {
           const past = profile!.workplaces.filter((w) => !w.current);
           return (
             <View style={styles.content}>
-              <CareerHeader profile={profile!} />
+              <CareerHeader profile={profile!} own />
+              {celebrating ? (
+                <Notice tone="success" message={t('progress.entered', { rank: profile!.rank })} />
+              ) : null}
+              <CareerProgressCard
+                profile={profile!}
+                steps={careerSteps(profile!, portfolio.items?.length ?? 0, props.hasApplied).map((step) => ({
+                  ...step,
+                  onPress: {
+                    photo: photo.available ? photo.choose : props.onEdit,
+                    specialties: props.onSpecialties,
+                    portfolio: props.onAddCut,
+                    available: props.onEdit,
+                    applied: props.onJobs,
+                  }[step.key],
+                }))}
+              />
               {photo.message ? <Notice tone="warning" message={photo.message} /> : null}
               {photo.available ? (
                 <View style={styles.row}>

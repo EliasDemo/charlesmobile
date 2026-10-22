@@ -110,5 +110,23 @@
     "national": "En todo el Perú",
     "worksAt": "Trabaja en {{shops}}",
     "topNational": "Top del Perú"
+  },
+  "newTalent": "Nuevo talento",
+  "progress": {
+    "title": "Tu camino al ranking",
+    "reviews_one": "Te falta {{count}} valoración para entrar. ¡Ya casi!",
+    "reviews_other": "Te faltan {{count}} valoraciones para entrar. Cada cliente que atiendes puede valorarte.",
+    "reviewsCount": "{{current}} de {{total}} valoraciones",
+    "stepsTitle": "Destaca tu perfil ({{done}} de {{total}})",
+    "stepsHint": "Un perfil completo aparece mejor ante las barberías y los clientes.",
+    "allDone": "¡Perfil completo! Las barberías ven lo mejor de ti.",
+    "entered": "¡Entraste al ranking! Puesto #{{rank}}.",
+    "steps": {
+      "photo": "Sube una foto tuya",
+      "specialties": "Elige tus especialidades",
+      "portfolio": "Sube 3 cortes a tu portafolio",
+      "available": "Indica si estás disponible para trabajar",
+      "applied": "Postula a tu primera oferta"
+    }
   }
 }

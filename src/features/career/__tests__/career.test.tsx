@@ -68,8 +68,13 @@ describe('MyCareerProfileScreen', () => {
       'GET /api/v1/barber-profiles/{id}/portfolio': { body: emptyPage },
       'POST /api/v1/me/barber-profile/workplaces/{barberId}/leave': apiError(409, 'HAS_FUTURE_BOOKINGS'),
     });
-    await renderWithProviders(<MyCareerProfileScreen {...myProps()} />);
-    expect(await screen.findByText(texts.rankPending)).toBeTruthy();
+    const props = myProps();
+    await renderWithProviders(<MyCareerProfileScreen {...props} />);
+    // No "out of the ranking": the way in, and steps the barber controls.
+    expect(await screen.findByText(texts.progress.title)).toBeTruthy();
+    expect(screen.queryByText(texts.rankPending)).toBeNull();
+    await fireEvent.press(screen.getByTestId('career-step-specialties'));
+    expect(props.onSpecialties).toHaveBeenCalled();
     await fireEvent.press(screen.getByRole('button', { name: texts.workplaces.leave }));
     // Confirmation sheet first, then the backend's answer.
     const buttons = screen.getAllByRole('button', { name: texts.workplaces.leave });
@@ -162,7 +167,7 @@ describe('RankingScreen', () => {
     });
     await renderWithProviders(<RankingScreen availableOnly onOpen={jest.fn()} />);
     expect(await screen.findByText('#1 Julián')).toBeTruthy();
-    expect(screen.getByText(texts.rankPending)).toBeTruthy();
+    expect(screen.getByText(texts.newTalent)).toBeTruthy();
     const call = api.calls.find((c) => c.path === '/api/v1/barbers/ranking')!;
     expect(call).toBeTruthy();
     await waitFor(() => expect(api.fetchMock).toHaveBeenCalled());

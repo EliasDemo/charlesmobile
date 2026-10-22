@@ -23,7 +23,12 @@ export function useShopHome() {
     enabled: isBarber,
   });
 
+  const activeProfiles = (barberProfiles.data ?? []).filter((p) => p.isActive);
   return {
+    /** A barber (or someone in barbershop mode) without a barbershop: looking for work. */
+    seeking: mine.data !== undefined && shops.length === 0 && activeProfiles.length === 0,
+    /** Works as a barber somewhere and does not run a barbershop. */
+    employed: shops.length === 0 && activeProfiles.length > 0,
     mine,
     shops,
     currentId,

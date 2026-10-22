@@ -14,6 +14,7 @@ import {
   setBlocked,
   startWithBarber,
   startWithBarbershop,
+  type Conversation,
   type ConversationPage,
   type Mailbox,
   type MessagePage,
@@ -54,6 +55,27 @@ export function useConversations(mailbox: Mailbox) {
     isRefetching: query.isRefetching,
     fetchNextPage: query.fetchNextPage,
     refetch: query.refetch,
+  };
+}
+
+export type ConversationTab = Conversation['kind'];
+
+/**
+ * "Social" (clients and barbershops) and "Profesional" (work: invitations, applications). The tabs
+ * only appear when the account has conversations of both kinds; otherwise everything is listed.
+ */
+export function useConversationTabs(list: ReturnType<typeof useConversations>) {
+  const [tab, setTab] = useState<ConversationTab>('CLIENT');
+  const items = list.items ?? [];
+  const has = (kind: ConversationTab) => items.some((c) => c.kind === kind);
+  const showTabs = has('CLIENT') && has('PROFESSIONAL');
+  const unread = (kind: ConversationTab) => items.filter((c) => c.kind === kind && c.unread > 0).length;
+  return {
+    showTabs,
+    tab,
+    setTab,
+    unread,
+    list: showTabs && list.items ? { ...list, items: list.items.filter((c) => c.kind === tab) } : list,
   };
 }
 

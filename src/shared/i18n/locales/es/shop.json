@@ -78,7 +78,9 @@
       "business": "Negocio",
       "marketing": "Marketing",
       "settings": "Configuración"
-    }
+    },
+    "ownShopTitle": "¿Tienes tu propia barbería?",
+    "ownShopText": "Ábrela en Charles o trabaja como independiente con tu propia agenda."
   },
   "status": {
     "OPEN": "Abierta",

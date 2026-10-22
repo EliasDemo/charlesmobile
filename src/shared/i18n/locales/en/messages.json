@@ -48,5 +48,38 @@
     "hintShop": "Ask whatever you need. The barbershop will reply here.",
     "hintBarber": "Write about work. They'll reply here.",
     "limit": "Up to {{max}} characters."
+  },
+  "tabs": {
+    "label": "Conversation type",
+    "withUnread": "{{label}} ({{count}})",
+    "me": {
+      "CLIENT": "Social",
+      "PROFESSIONAL": "Work"
+    },
+    "shop": {
+      "CLIENT": "Clients",
+      "PROFESSIONAL": "Work"
+    }
+  },
+  "kindLabel": {
+    "me": {
+      "CLIENT": "Barbershop",
+      "PROFESSIONAL": "Work"
+    },
+    "shop": {
+      "CLIENT": "Client",
+      "PROFESSIONAL": "Barber · work"
+    }
+  },
+  "context": {
+    "me": {
+      "CLIENT": "The barbershop team answers: the owner or a manager.",
+      "PROFESSIONAL": "Work conversation: the owner or a manager answers."
+    },
+    "shop": {
+      "CLIENT": "A client question. You cannot write to them first.",
+      "PROFESSIONAL": "Work conversation with a barber."
+    },
+    "seeProfile": "See professional profile"
   }
 }

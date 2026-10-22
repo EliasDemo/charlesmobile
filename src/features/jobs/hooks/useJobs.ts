@@ -259,3 +259,9 @@ export function useInviteBarber(shopId: string | null) {
     error,
   };
 }
+
+/** Has this account applied to any job (a step of "Destaca tu perfil")? undefined while loading. */
+export function useHasApplied(enabled = true) {
+  const query = useQuery({ queryKey: jobKeys.mine, queryFn: fetchMyApplications, enabled });
+  return query.data === undefined ? undefined : query.data.length > 0;
+}

@@ -58,6 +58,11 @@ export interface ShopHomeScreenProps {
   bottomSlot?: ReactNode;
   /** "Hoy" at the top of the panel: register, sales and a quick "Nueva venta" (business feature). */
   todaySlot?: (shopId: string) => ReactNode;
+  /**
+   * "Bolsa laboral" for barbers: `primary` (no barbershop yet, looking for work: shown first) or
+   * `subtle` (already working somewhere: a quiet entry at the end). Owners do not get it.
+   */
+  jobBoardSlot?: (variant: 'primary' | 'subtle') => ReactNode;
   onCreate: () => void;
   onInvitations: () => void;
   onOpen: (shopId: string, section: ShopSection) => void;
@@ -124,6 +129,7 @@ export function ShopHomeScreen({
   headerRight,
   bottomSlot,
   todaySlot,
+  jobBoardSlot,
 }: ShopHomeScreenProps) {
   const { t } = useTranslation('shop');
   const home = useShopHome();
@@ -142,7 +148,16 @@ export function ShopHomeScreen({
       <QueryView query={home.mine} skeletonCount={2}>
         {() => (
           <View style={styles.content}>
-            {home.shops.length === 0 && home.barberProfiles.length === 0 ? (
+            {home.seeking && jobBoardSlot ? (
+              <>
+                {jobBoardSlot('primary')}
+                <Card style={styles.header}>
+                  <Text variant="bodyStrong">{t('home.ownShopTitle')}</Text>
+                  <Text color="textSecondary">{t('home.ownShopText')}</Text>
+                  <Button label={t('home.create')} variant="secondary" icon="add-circle" onPress={onCreate} />
+                </Card>
+              </>
+            ) : home.shops.length === 0 && home.barberProfiles.length === 0 ? (
               <EmptyState
                 icon="storefront-outline"
                 title={t('home.emptyTitle')}
@@ -300,6 +315,7 @@ export function ShopHomeScreen({
                 </TileGrid>
               </View>
             ) : null}
+            {home.employed && jobBoardSlot ? jobBoardSlot('subtle') : null}
             <View style={styles.actions}>
               {home.shops.length > 0 ? (
                 <Button label={t('home.create')} variant="secondary" icon="add-circle" onPress={onCreate} />

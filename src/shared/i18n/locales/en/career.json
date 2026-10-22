@@ -110,5 +110,23 @@
     "national": "All of Peru",
     "worksAt": "Works at {{shops}}",
     "topNational": "Top of Peru"
+  },
+  "newTalent": "New talent",
+  "progress": {
+    "title": "Your way into the ranking",
+    "reviews_one": "{{count}} more review to get in. Almost there!",
+    "reviews_other": "{{count}} more reviews to get in. Every client you serve can review you.",
+    "reviewsCount": "{{current}} of {{total}} reviews",
+    "stepsTitle": "Make your profile stand out ({{done}} of {{total}})",
+    "stepsHint": "A complete profile looks better to barbershops and clients.",
+    "allDone": "Profile complete! Barbershops see your best.",
+    "entered": "You are in the ranking! Position #{{rank}}.",
+    "steps": {
+      "photo": "Upload a photo of you",
+      "specialties": "Choose your specialties",
+      "portfolio": "Upload 3 cuts to your portfolio",
+      "available": "Say if you are available for work",
+      "applied": "Apply to your first job"
+    }
   }
 }

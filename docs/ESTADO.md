@@ -346,6 +346,8 @@ Contrato estable del backend (commit a4b17a4), `pnpm sync:api` del 2026-10-15. G
 - **Esperando al backend:** pestaña **Comunidad** (Explorar · Comunidad · Reservas · Mensajes · Perfil): publicaciones de barberías y barberos (promoción, evento, trabajo, aviso), feed Para ti / Cerca / Siguiendo, me gusta, comentarios con respuestas, compartir, guardar, seguir, eventos, reportar y bloquear (obligatorio para las tiendas), y me gusta y foto del autor en las valoraciones. Pedido completo enviado al usuario el 2026-10-22. Los clientes solo interactúan al inicio (pendiente de confirmar).
 - Enlaces universales para abrir publicaciones compartidas: cambio nativo, pendiente de aprobación.
 
+- **Barbero (2026-10-22):** "Mi barbería" muestra la **bolsa laboral** primero al barbero sin barbería (ofertas de su distrito, postulaciones, perfil) y discreta al que ya trabaja; el dueño no la ve. **Mensajes** separados en Social · Profesional (solo si hay de ambos), con quién responde (dueño o administrador) y "Ver perfil profesional" en lo laboral. **Ranking sin desmotivar:** el perfil propio muestra "Tu camino al ranking" (0/3) y pasos para destacar; "Nuevo talento" en vez de "fuera del ranking"; celebración al entrar.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |

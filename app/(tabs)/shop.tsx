@@ -1,12 +1,27 @@
 import { router } from 'expo-router';
 import { AdSlot } from '@/features/ads';
 import { TodaySummary } from '@/features/business';
+import { useMyCareerProfile } from '@/features/career';
+import { JobBoardCard } from '@/features/jobs';
 import { NotificationBell } from '@/features/notifications';
 import { ShopHomeScreen } from '@/features/shop-management';
 
 export default function ShopHomeRoute() {
+  const career = useMyCareerProfile();
+  const profile = career.data ?? null;
   return (
     <ShopHomeScreen
+      jobBoardSlot={(variant) => (
+        <JobBoardCard
+          variant={variant}
+          area={profile?.district ?? undefined}
+          hasProfile={profile !== null}
+          onOpenJobs={() => router.push('/jobs')}
+          onOpenJob={(id) => router.push({ pathname: '/jobs/[id]', params: { id } })}
+          onApplications={() => router.push('/jobs/applications')}
+          onProfile={() => router.push(profile ? '/career' : '/career/edit')}
+        />
+      )}
       headerRight={<NotificationBell onPress={() => router.push('/notifications')} />}
       todaySlot={(shopId) => (
         <TodaySummary

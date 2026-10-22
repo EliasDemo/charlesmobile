@@ -52,6 +52,35 @@ describe('ConversationsScreen', () => {
     expect(onOpen).toHaveBeenCalledWith(expect.objectContaining({ id: 'c1' }));
   });
 
+  it('separates social and work conversations when there are both', async () => {
+    mockApi({
+      'GET /api/v1/me/conversations': {
+        body: page([
+          conversation(),
+          conversation({
+            id: 'c2',
+            kind: 'PROFESSIONAL',
+            counterpart: { id: 'shop-2', name: 'Barbería Norte', photoUrl: null, barberProfileId: null },
+            unread: 0,
+          }),
+        ]),
+      },
+    });
+    await renderWithProviders(<ConversationsScreen mailbox={ME} onOpen={jest.fn()} />);
+    expect(await screen.findByText('Barbería Demo')).toBeTruthy();
+    expect(screen.queryByText('Barbería Norte')).toBeNull();
+    await fireEvent.press(screen.getByText(texts.tabs.me.PROFESSIONAL));
+    expect(await screen.findByText('Barbería Norte')).toBeTruthy();
+    expect(screen.queryByText('Barbería Demo')).toBeNull();
+  });
+
+  it('does not show the tabs with a single kind', async () => {
+    mockApi({ 'GET /api/v1/me/conversations': { body: page([conversation()]) } });
+    await renderWithProviders(<ConversationsScreen mailbox={ME} onOpen={jest.fn()} />);
+    expect(await screen.findByText('Barbería Demo')).toBeTruthy();
+    expect(screen.queryByText(texts.tabs.me.PROFESSIONAL)).toBeNull();
+  });
+
   it('explains how to start when there are none', async () => {
     mockApi({ 'GET /api/v1/me/conversations': { body: page([]) } });
     await renderWithProviders(<ConversationsScreen mailbox={ME} onOpen={jest.fn()} />);
