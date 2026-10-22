@@ -378,7 +378,7 @@ Contrato estable del backend (commit a4b17a4), `pnpm sync:api` del 2026-10-15. G
 
 ## Compilación instalada y cambios nativos pendientes de compilar
 
-**Compilación de desarrollo:** la del 2026-10-12 (EAS build 93f04a0d, APK en expo.dev), con todos los módulos de la compilación única **salvo la clave de Google Maps y Firebase** (no había variables en EAS): mapa y push reales quedan para una compilación siguiente cuando se carguen. La anterior era la de M1 (commit `cbce85b`).
+**Compilación de desarrollo:** la del 2026-10-22 (EAS build 1a6bdc32: audio, sonido de notificaciones, detector de rostro, videos y expo-asset). La anterior, 2026-10-12 (EAS build 93f04a0d), con todos los módulos de la compilación única **salvo la clave de Google Maps y Firebase** (no había variables en EAS): mapa y push reales quedan para una compilación siguiente cuando se carguen. La anterior era la de M1 (commit `cbce85b`).
 
 Cambios nativos aprobados que todavía **no están** en esa compilación. Se aplicarán en la próxima, que el usuario decide cuándo lanzar:
 
