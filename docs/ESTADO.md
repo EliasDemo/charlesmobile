@@ -340,6 +340,12 @@ Contrato estable del backend (commit a4b17a4), `pnpm sync:api` del 2026-10-15. G
 - **Diseño**: panel de la barbería con "Hoy" y secciones agrupadas; chat con burbujas, días y barra con botón circular; bienvenida nueva (degradados, paralaje, elegir cómo usar Charles); recorrido guiado; Ajustes (sonidos, vibración, tutorial, permisos, versión); sonidos propios generados (`assets/sounds`); espacio reservado del mapa.
 - **Diferencias a reportar al backend:** `NotificationResourceDto.type` no incluye `subscription` ni `membership` (la app usa el `type` del aviso). Pedido pendiente: distrito/provincia y cercanía en ranking y empleos, campos de pago y requisitos en ofertas, oferta directa, `readiness`.
 
+## Comunidad y cuenta bajo demanda — 2026-10-22
+
+- **Hecho (sin compilar):** hoja "Crea tu cuenta / Inicia sesión" (`askForAccount` + `AuthPromptHost` en `shared/ui`) al reservar, escribir, guardar favorita, postular o suscribirse; vuelve a la pantalla de origen. Al reservar, cada barbero muestra foto, estrellas, "Ver perfil y reseñas" (`profileId`) y "Mejor valorado" (mayor promedio de la API con 3+ valoraciones; solo resalta).
+- **Esperando al backend:** pestaña **Comunidad** (Explorar · Comunidad · Reservas · Mensajes · Perfil): publicaciones de barberías y barberos (promoción, evento, trabajo, aviso), feed Para ti / Cerca / Siguiendo, me gusta, comentarios con respuestas, compartir, guardar, seguir, eventos, reportar y bloquear (obligatorio para las tiendas), y me gusta y foto del autor en las valoraciones. Pedido completo enviado al usuario el 2026-10-22. Los clientes solo interactúan al inicio (pendiente de confirmar).
+- Enlaces universales para abrir publicaciones compartidas: cambio nativo, pendiente de aprobación.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
