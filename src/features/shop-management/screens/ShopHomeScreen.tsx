@@ -21,6 +21,7 @@ import {
   type IconName,
 } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
+import { ReadinessCard } from '../components/ReadinessCard';
 import { useShopHome } from '../hooks/useShopHome';
 import { REVIEW_STATES } from '../hooks/useShopReview';
 
@@ -163,6 +164,19 @@ export function ShopHomeScreen({
                         label={t(`status.${shop.status}`)}
                       />
                     </Card>
+                    <ReadinessCard
+                      shop={shop}
+                      onFix={(target) =>
+                        onOpen(
+                          shop.id,
+                          target === 'review' && REVIEW_STATES.includes(shop.status)
+                            ? 'review'
+                            : target === 'review'
+                              ? 'status'
+                              : target,
+                        )
+                      }
+                    />
                     {shop.status === 'PENDING_REVIEW' ? (
                       <Notice tone="info" message={t('home.pendingReview')} />
                     ) : null}

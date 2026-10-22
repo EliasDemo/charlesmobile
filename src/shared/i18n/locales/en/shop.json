@@ -205,7 +205,17 @@
     "outside_one": "Hours saved. {{count}} future booking falls outside the new hours and is kept.",
     "outside_other": "Hours saved. {{count}} future bookings fall outside the new hours and are kept.",
     "invalidWindow": "Check the ranges: each must end after it starts and not overlap another.",
-    "readOnly": "Only managers can change your hours."
+    "readOnly": "Only managers can change your hours.",
+    "quick": "Quick hours",
+    "templates": {
+      "weekdays": "Mon–Fri 9–19",
+      "monSat": "Mon–Sat 9–20",
+      "everyDay": "Every day 10–20"
+    },
+    "addBreak": "+ Break 13–14",
+    "copyWeekdays": "Copy to Mon–Fri",
+    "copyAll": "Copy to all",
+    "toggleDay": "Open or close on {{day}}"
   },
   "blocks": {
     "title": "Blocks",
@@ -332,5 +342,30 @@
     "deleteMessage": "It will no longer show in the gallery. This can't be undone.",
     "deleteConfirm": "Yes, delete",
     "limit": "Up to 60 photos per barber and 6 highlighted."
+  },
+  "readiness": {
+    "title": "Booking isn't possible yet",
+    "subtitle": "Your clients won't see slots until you complete this:",
+    "ok": {
+      "published": "Barbershop published and open",
+      "hours": "Opening hours",
+      "services": "Available services",
+      "barbers": "Active barbers",
+      "barberServices": "Every barber has services"
+    },
+    "missing": {
+      "published": "The barbershop is not published or it is closed.",
+      "hours": "It has no opening hours.",
+      "services": "There are no available services.",
+      "barbers": "There are no active barbers.",
+      "barberServices": "No services assigned: {{names}}. No slots will show with them."
+    },
+    "fix": {
+      "published": "See review and status",
+      "hours": "Set hours",
+      "services": "Add services",
+      "barbers": "Add barbers",
+      "barberServices": "Assign services"
+    }
   }
 }

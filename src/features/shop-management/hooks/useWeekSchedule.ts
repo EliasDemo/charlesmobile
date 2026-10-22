@@ -23,6 +23,39 @@ const DEFAULT_WINDOW: Window = { start: '09:00', end: '18:00' };
 
 export type Week = Record<number, Window[]>;
 
+export type ScheduleTemplate = 'weekdays' | 'monSat' | 'everyDay';
+
+/** Common weeks, applied in one tap (then each day can be adjusted). */
+export const TEMPLATES: Record<ScheduleTemplate, { days: number[]; window: Window }> = {
+  weekdays: { days: [1, 2, 3, 4, 5], window: { start: '09:00', end: '19:00' } },
+  monSat: { days: [1, 2, 3, 4, 5, 6], window: { start: '09:00', end: '20:00' } },
+  everyDay: { days: [0, 1, 2, 3, 4, 5, 6], window: { start: '10:00', end: '20:00' } },
+};
+
+/** Times offered to choose from: every 30 minutes of the day. */
+export const TIME_OPTIONS: string[] = Array.from(
+  { length: 48 },
+  (_, i) => `${String(Math.floor(i / 2)).padStart(2, '0')}:${i % 2 ? '30' : '00'}`,
+);
+
+/** A break in the middle of a window: "09:00–19:00" + lunch → "09:00–13:00" and "14:00–19:00". */
+export function withBreak(windows: Window[], start = '13:00', end = '14:00'): Window[] {
+  const target = windows.find(
+    (w) => toMinutes(w.start) < toMinutes(start) && toMinutes(w.end) > toMinutes(end),
+  );
+  if (!target) return windows;
+  return windows
+    .flatMap((w) =>
+      w === target
+        ? [
+            { start: w.start, end: start },
+            { start: end, end: w.end },
+          ]
+        : [w],
+    )
+    .sort((a, b) => toMinutes(a.start) - toMinutes(b.start));
+}
+
 export function toWeek(days: DaySchedule[]): Week {
   const week: Week = {};
   for (const d of WEEK_ORDER) week[d] = [];
@@ -118,6 +151,17 @@ export function useWeekSchedule(
       const last = windows[windows.length - 1];
       update(day, [...windows, last ? { start: last.end, end: last.end } : DEFAULT_WINDOW]);
     },
+    /** Same hours on the given days (all, or Monday to Friday). */
+    copyDay: (from: number, to: readonly number[]) =>
+      setWeek({
+        ...(week ?? {}),
+        ...Object.fromEntries(to.map((d) => [d, (week?.[from] ?? []).map((w) => ({ ...w }))])),
+      }),
+    applyTemplate: (template: ScheduleTemplate) => {
+      const { days, window } = TEMPLATES[template];
+      setWeek(Object.fromEntries(WEEK_ORDER.map((d) => [d, days.includes(d) ? [{ ...window }] : []])));
+    },
+    addBreak: (day: number) => update(day, withBreak(week?.[day] ?? [])),
     removeWindow: (day: number, index: number) =>
       update(
         day,

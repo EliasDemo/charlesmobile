@@ -205,7 +205,17 @@
     "outside_one": "Horario guardado. {{count}} reserva futura queda fuera del horario nuevo y se mantiene.",
     "outside_other": "Horario guardado. {{count}} reservas futuras quedan fuera del horario nuevo y se mantienen.",
     "invalidWindow": "Revisa las franjas: cada una debe terminar después de empezar y no cruzarse con otra.",
-    "readOnly": "Solo los responsables pueden cambiar tu horario."
+    "readOnly": "Solo los responsables pueden cambiar tu horario.",
+    "quick": "Horario rápido",
+    "templates": {
+      "weekdays": "Lun–Vie 9–19",
+      "monSat": "Lun–Sáb 9–20",
+      "everyDay": "Todos los días 10–20"
+    },
+    "addBreak": "+ Descanso 13–14",
+    "copyWeekdays": "Copiar a lun–vie",
+    "copyAll": "Copiar a todos",
+    "toggleDay": "Abrir o cerrar el {{day}}"
   },
   "blocks": {
     "title": "Bloqueos",
@@ -332,5 +342,30 @@
     "deleteMessage": "Dejará de verse en la galería. No se puede deshacer.",
     "deleteConfirm": "Sí, borrar",
     "limit": "Hasta 60 fotos por barbero y 6 destacadas."
+  },
+  "readiness": {
+    "title": "Aún no se puede reservar",
+    "subtitle": "Tus clientes no verán turnos hasta completar esto:",
+    "ok": {
+      "published": "Barbería publicada y abierta",
+      "hours": "Horario de atención",
+      "services": "Servicios disponibles",
+      "barbers": "Barberos activos",
+      "barberServices": "Todos los barberos tienen servicios"
+    },
+    "missing": {
+      "published": "La barbería no está publicada o está cerrada.",
+      "hours": "No tiene horario de atención.",
+      "services": "No hay servicios disponibles.",
+      "barbers": "No hay barberos activos.",
+      "barberServices": "Sin servicios asignados: {{names}}. No aparecerán turnos con ellos."
+    },
+    "fix": {
+      "published": "Ver revisión y estado",
+      "hours": "Poner horario",
+      "services": "Agregar servicios",
+      "barbers": "Agregar barberos",
+      "barberServices": "Asignar servicios"
+    }
   }
 }
