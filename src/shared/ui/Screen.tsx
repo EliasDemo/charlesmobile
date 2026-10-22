@@ -1,7 +1,8 @@
-import type { ReactNode } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, type ReactNode } from 'react';
+import { RefreshControl, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
 import { sizes, spacing, useTheme } from '@/shared/theme';
+import { useKeyboardHeight } from './keyboard';
 import { useTabBarSpace } from './tabBarSpace';
 
 export interface ScreenProps {
@@ -23,13 +24,27 @@ export function Screen({
 }: ScreenProps) {
   const theme = useTheme();
   const tabBar = useTabBarSpace();
+  const keyboard = useKeyboardHeight();
+  const scrollRef = useRef<ScrollView>(null);
+  // The keyboard must never cover the field being typed in: room at the end, and scroll to it.
+  useEffect(() => {
+    if (!scroll || keyboard === 0) return undefined;
+    const timer = setTimeout(() => {
+      const input = TextInput.State.currentlyFocusedInput();
+      if (input) scrollRef.current?.scrollResponderScrollNativeHandleToKeyboard(input, KEYBOARD_GAP, true);
+    }, KEYBOARD_SETTLE_MS);
+    return () => clearTimeout(timer);
+  }, [scroll, keyboard]);
+  const bottom = keyboard > 0 ? keyboard + spacing.lg : tabBar ? spacing.lg + tabBar : null;
   const content = (
-    <View style={[styles.content, tabBar ? { paddingBottom: spacing.lg + tabBar } : null]}>{children}</View>
+    <View style={[styles.content, bottom !== null ? { paddingBottom: bottom } : null]}>{children}</View>
   );
   return (
     <SafeAreaView edges={edges} style={[styles.root, { backgroundColor: theme.colors.background }]}>
       {scroll ? (
         <ScrollView
+          ref={scrollRef}
+          keyboardDismissMode="interactive"
           contentContainerStyle={styles.scroll}
           keyboardShouldPersistTaps="handled"
           refreshControl={
@@ -51,6 +66,10 @@ export function Screen({
     </SafeAreaView>
   );
 }
+
+/** Space between the focused field and the keyboard (room for its error line). */
+const KEYBOARD_GAP = spacing.xxxl * 2;
+const KEYBOARD_SETTLE_MS = 50;
 
 const styles = StyleSheet.create({
   root: { flex: 1 },

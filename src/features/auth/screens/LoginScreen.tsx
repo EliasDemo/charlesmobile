@@ -8,6 +8,7 @@ import {
   Notice,
   PasswordField,
   Screen,
+  useKeyboardVisible,
   Text,
   TextField,
   useFieldErrorText,
@@ -37,9 +38,13 @@ export function LoginScreen({
     onDisabled,
   });
   const locked = lockedSeconds > 0;
+  // The header gives its room to the fields while typing.
+  const keyboardOpen = useKeyboardVisible();
   return (
     <Screen>
-      <BrandImage imageKeys={['auth-background']} fallbackIcon="cut" height={sizes.cover} />
+      {keyboardOpen ? null : (
+        <BrandImage imageKeys={['auth-background']} fallbackIcon="cut" height={sizes.cover} />
+      )}
       <Text variant="title">{t('login.title')}</Text>
       <Text color="textSecondary">{t('login.subtitle')}</Text>
       {notice ? <Notice tone="success" message={t(`login.${notice}`)} /> : null}
@@ -61,6 +66,8 @@ export function LoginScreen({
             autoComplete="username"
             textContentType="username"
             returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => form.setFocus('password')}
             value={field.value}
             onChangeText={field.onChange}
             onBlur={field.onBlur}

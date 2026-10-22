@@ -13,6 +13,7 @@ import {
   PasswordField,
   PhoneField,
   Screen,
+  useKeyboardVisible,
   Text,
   TextField,
   translateErrorMessage,
@@ -29,6 +30,8 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
   const errorText = useFieldErrorText('auth');
   const reg = useRegister({ onSuccess });
   const { form, submit, isSubmitting, generalError, terms, termsUrl, privacyUrl } = reg;
+  // The header gives its room to the fields while typing.
+  const keyboardOpen = useKeyboardVisible();
 
   if (!terms.data) {
     return (
@@ -48,7 +51,9 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
 
   return (
     <Screen>
-      <BrandImage imageKeys={['auth-background']} fallbackIcon="cut" height={sizes.cover} />
+      {keyboardOpen ? null : (
+        <BrandImage imageKeys={['auth-background']} fallbackIcon="cut" height={sizes.cover} />
+      )}
       <Text variant="title">{t('register.title')}</Text>
       <Text color="textSecondary">{t('register.subtitle')}</Text>
       {generalError ? <Notice tone="danger" message={generalError} /> : null}
@@ -65,6 +70,9 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
             value={field.value}
             onChangeText={field.onChange}
             onBlur={field.onBlur}
+            returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => form.setFocus('email')}
             ref={field.ref}
             error={errorText(fieldState.error?.message)}
           />
@@ -85,6 +93,9 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
             value={field.value}
             onChangeText={field.onChange}
             onBlur={field.onBlur}
+            returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => form.setFocus('username')}
             ref={field.ref}
             error={errorText(fieldState.error?.message)}
           />
@@ -105,6 +116,9 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
             value={field.value}
             onChangeText={(text) => field.onChange(text.toLowerCase().replace(/\s/g, ''))}
             onBlur={field.onBlur}
+            returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => form.setFocus('password')}
             ref={field.ref}
             prefix={
               <Text color="textSecondary" style={styles.at}>
@@ -140,6 +154,9 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
             value={field.value}
             onChangeText={field.onChange}
             onBlur={field.onBlur}
+            returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => form.setFocus('confirmPassword')}
             ref={field.ref}
             error={errorText(fieldState.error?.message)}
             footer={<PasswordChecklist password={field.value} />}
@@ -156,6 +173,9 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
             value={field.value}
             onChangeText={field.onChange}
             onBlur={field.onBlur}
+            returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => form.setFocus('phone')}
             ref={field.ref}
             error={errorText(fieldState.error?.message)}
           />
