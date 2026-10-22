@@ -74,7 +74,7 @@
     "take": "Tomar foto",
     "caption": "Descripción (opcional)",
     "styles": "Estilos (hasta {{max}})",
-    "consent": "La persona fotografiada aceptó que se publique",
+    "consent": "La persona de la foto aceptó que se publique y que se use para recomendar cortes",
     "upload": "Publicar corte"
   },
   "workplaces": {

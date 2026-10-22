@@ -12,6 +12,7 @@ export default function ExploreRoute() {
       onOpenFilters={() => router.push('/search-filters')}
       onOpenBarbers={() => router.push('/barbers')}
       onOpenJobs={() => router.push('/jobs')}
+      onOpenFace={() => router.push('/face')}
       headerRight={<NotificationBell onPress={() => router.push('/notifications')} />}
       homeBanner={<AdSlot slot="home_banner" onOpenSponsor={openSponsor} />}
       resultsTop={<AdSlot slot="search_top" onOpenSponsor={openSponsor} />}

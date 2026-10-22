@@ -15,6 +15,7 @@ export default function PublicLayout() {
       <Stack.Screen name="barbershop/[id]/gallery" options={{ title: t('title', { ns: 'gallery' }) }} />
       <Stack.Screen name="barbershop/[id]/reviews" options={{ title: t('nav.reviews') }} />
       <Stack.Screen name="account-deleted" options={{ headerShown: false }} />
+      <Stack.Screen name="face" options={{ title: t('title', { ns: 'face' }) }} />
       <Stack.Screen name="barbers" options={{ title: t('ranking.title', { ns: 'career' }) }} />
       <Stack.Screen name="barber/[id]" options={{ title: t('profileTitle', { ns: 'career' }) }} />
       <Stack.Screen name="jobs/index" options={{ title: t('jobs', { ns: 'search' }) }} />

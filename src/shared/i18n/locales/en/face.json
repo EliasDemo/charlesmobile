@@ -1,0 +1,56 @@
+{
+  "title": "Cuts for your face",
+  "entry": "Cuts for your face",
+  "consent": {
+    "title": "Discover the cuts that suit you best",
+    "message": "We'll analyze your face on your phone to suggest cuts. The photo is not uploaded or stored: we only send 4 measurements.",
+    "accept": "I agree, continue"
+  },
+  "scan": {
+    "title": "Take a selfie",
+    "tip1": "Facing the camera, without sunglasses or a cap.",
+    "tip2": "In good light and with your hair off your forehead, if you can.",
+    "tip3": "Only your face in the photo.",
+    "take": "Take selfie",
+    "unavailable": "Face analysis will arrive with the next version of the app.",
+    "denied": "We need the camera to analyze your face. Turn it on in your phone settings.",
+    "noFace": "We couldn't see your face well. Try facing the camera, with more light.",
+    "cancelled": ""
+  },
+  "prefs": {
+    "title": "Anything else we should know?",
+    "optional": "Everything is optional; it helps refine the suggestions.",
+    "hair": "Your hair",
+    "vibe": "Your style",
+    "maintenance": "Maintenance",
+    "location": "We'll use your location only to show photos and barbers nearby. It isn't stored.",
+    "see": "See my cuts"
+  },
+  "hair": { "STRAIGHT": "Straight", "WAVY": "Wavy", "CURLY": "Curly", "COILY": "Coily" },
+  "vibe": { "CLASSIC": "Classic", "MODERN": "Modern" },
+  "maintenance": { "LOW": "Low maintenance", "MEDIUM": "Medium maintenance", "HIGH": "High maintenance" },
+  "shapes": {
+    "OVAL": "Oval",
+    "ROUND": "Round",
+    "SQUARE": "Square",
+    "OBLONG": "Oblong",
+    "HEART": "Heart",
+    "DIAMOND": "Diamond"
+  },
+  "result": {
+    "yourShape": "Your face looks",
+    "confidence": "Confidence: {{percent}} %",
+    "alsoCould": "Your face could also be: {{shapes}}",
+    "match": "{{percent}} % match",
+    "notValidated": "suggestion under review",
+    "example": "Example",
+    "profile": "See profile",
+    "book": "Book this cut",
+    "bookAt": "Book at {{name}}",
+    "nearest": "The nearest one at {{distance}}",
+    "rememberConsent": "I agree that Charles remembers my face shape to suggest cuts (I can delete it anytime).",
+    "remember": "Remember my face shape",
+    "remembered": "We saved your face shape",
+    "again": "Scan again"
+  }
+}

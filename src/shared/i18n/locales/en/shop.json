@@ -337,7 +337,7 @@
     "upload": "Upload photo",
     "uploadTitle": "New photo",
     "who": "Barber",
-    "consent": "The person in the photo agreed to publish it",
+    "consent": "The person in the photo agreed to publish it and to use it to recommend cuts",
     "caption": "Description (optional)",
     "styles": "Styles (up to 3)",
     "service": "Service for \"Book this style\" (optional)",

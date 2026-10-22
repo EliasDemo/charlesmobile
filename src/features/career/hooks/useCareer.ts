@@ -11,7 +11,15 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { isApiError, nextPageParam, refreshSession } from '@/shared/api';
 import { i18n } from '@/shared/i18n';
-import { photoForm, photosAvailable, pickPhoto, type PhotoSource, type PickedPhoto } from '@/shared/lib';
+import {
+  measurePhoto,
+  measurementFields,
+  photoForm,
+  photosAvailable,
+  pickPhoto,
+  type PhotoSource,
+  type PickedPhoto,
+} from '@/shared/lib';
 import { applyServerErrors, showToast, translateErrorMessage } from '@/shared/ui';
 import {
   careerKeys,
@@ -213,8 +221,11 @@ export function usePortfolioUpload({ onUploaded }: { onUploaded: () => void }) {
   const [consent, setConsent] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const upload = useMutation({
-    mutationFn: () => {
-      const fields: Record<string, string> = { consent: 'true' };
+    mutationFn: async () => {
+      const fields: Record<string, string> = {
+        consent: 'true',
+        ...measurementFields(await measurePhoto(photo!.uri)),
+      };
       if (caption.trim()) fields.caption = caption.trim();
       if (styleIds.length) fields.styleIds = styleIds.join(',');
       return uploadPortfolioItem(photoForm(photo!, fields));

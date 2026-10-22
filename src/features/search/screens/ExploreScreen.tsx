@@ -27,6 +27,8 @@ export interface ExploreScreenProps {
   /** "Barberos" (ranking) and "Empleos". */
   onOpenBarbers?: () => void;
   onOpenJobs?: () => void;
+  /** "Cortes para tu cara". */
+  onOpenFace?: () => void;
   /** Sponsor spaces: on the start page, and above the results of a search. */
   homeBanner?: ReactNode;
   resultsTop?: ReactNode;
@@ -38,6 +40,7 @@ export function ExploreScreen({
   headerRight,
   onOpenBarbers,
   onOpenJobs,
+  onOpenFace,
   homeBanner,
   resultsTop,
 }: ExploreScreenProps) {
@@ -83,6 +86,7 @@ export function ExploreScreen({
           label={store.view === 'list' ? t('viewMap') : t('viewList')}
           onPress={() => store.setView(store.view === 'list' ? 'map' : 'list')}
         />
+        {onOpenFace ? <Chip label={t('face')} onPress={onOpenFace} /> : null}
         {onOpenBarbers ? <Chip label={t('barbers')} onPress={onOpenBarbers} /> : null}
         {onOpenJobs ? <Chip label={t('jobs')} onPress={onOpenJobs} /> : null}
       </ScrollView>

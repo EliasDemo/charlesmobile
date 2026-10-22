@@ -2,7 +2,15 @@ import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-q
 import { useState } from 'react';
 import { nextPageParam, translateError } from '@/shared/api';
 import { i18n } from '@/shared/i18n';
-import { photoForm, photosAvailable, pickPhoto, type PhotoSource, type PickedPhoto } from '@/shared/lib';
+import {
+  measurePhoto,
+  measurementFields,
+  photoForm,
+  photosAvailable,
+  pickPhoto,
+  type PhotoSource,
+  type PickedPhoto,
+} from '@/shared/lib';
 import { showToast } from '@/shared/ui';
 import {
   deleteBarberPhoto,
@@ -170,8 +178,12 @@ export function useGalleryUpload({
     else setMessage(pickMessage(result.status));
   };
   const upload = useMutation({
-    mutationFn: () => {
-      const fields: Record<string, string> = { consent: 'true' };
+    mutationFn: async () => {
+      // The 4 face measurements, computed on the phone (never the face points).
+      const fields: Record<string, string> = {
+        consent: 'true',
+        ...measurementFields(await measurePhoto(photo!.uri)),
+      };
       if (caption.trim()) fields.caption = caption.trim();
       if (styleIds.length) fields.styleIds = styleIds.join(',');
       if (serviceId) fields.serviceId = serviceId;

@@ -63,3 +63,12 @@ export {
   type PickVideoResult,
   type PickedVideo,
 } from './video';
+export {
+  faceScanAvailable,
+  measureFace,
+  measurePhoto,
+  measurementFields,
+  scanFace,
+  type FaceMeasurements,
+  type FaceScanResult,
+} from './face';
