@@ -328,6 +328,18 @@ Contrato estable del backend (commit a4b17a4), `pnpm sync:api` del 2026-10-15. G
 - **Videos (`features/videos`):** subir (recorte a 30 s en el selector, compresión, progreso), "Procesando…" consultando cada 4 s, fallos explicados, carrusel con póster y reproductor al tocar, borrar y reportar. Necesita la compilación nueva: hasta entonces lo dice.
 - Pruebas: `promotions`, `messaging`, `career`, `jobs`, `ads`, `videos` y el cupón en `booking`. Probado contra el backend local (2026-10-15): los endpoints responden como dice la documentación.
 
+## A la par del backend (a25c96d) y rediseño — 2026-10-22 (código terminado; falta la prueba del usuario)
+
+- **Usuario** (`USUARIO.md`): registro con usuario y disponibilidad, inicio con usuario o correo, `@usuario` en perfil, valoraciones y mensajes; cambio cada 30 días.
+- **Horarios**: resumen de la semana, plantillas, horas de una lista cada 30 min, descansos (varias ventanas), copiar a otros días. **"Aún no se puede reservar"** en el panel: publicada, horario, servicios, barberos activos y barberos sin servicios (la causa típica de "no aparecen turnos").
+- **Planes** (`/plan`, `/plans`, suscripción por correo sin botón de compra, sync al volver, barberos activos, destacados, insignia Verificada) y aviso global `PLAN_LIMIT_REACHED`/`PLAN_FEATURE_NOT_INCLUDED` → "Ver mi plan".
+- **Membresías**: planes en la barbería, suscribirse (pago en la app), Mis membresías, pagar con crédito, gestión y miembros.
+- **Panel de negocio**: caja, venta en el local (Idempotency-Key, `CASH_SESSION_REQUIRED`, boleta con documento desde S/ 700), ventas (anular, reintentar boleta, PDF), clientes y ranking por niveles, catálogo de cortes, reportes con comisiones y CSV compartido, boletas (token enviado al servidor, no se guarda).
+- **Forma de cara**: consentimiento, selfie medida en el teléfono (ML Kit, solo 4 medidas), recomendaciones con fotos y barberos cerca, recordar la forma con consentimiento, medidas al subir fotos a galería y portafolio.
+- **Bolsa laboral**: selector de distrito (lista fija Perú), "Barberos disponibles" por distrito → provincia → Perú con podio, oferta en 3 pasos (pago, conversable, requisitos, proceso; dentro de `compensationText`/`description` mientras el backend no tenga campos) con vista previa, filtros compactos.
+- **Diseño**: panel de la barbería con "Hoy" y secciones agrupadas; chat con burbujas, días y barra con botón circular; bienvenida nueva (degradados, paralaje, elegir cómo usar Charles); recorrido guiado; Ajustes (sonidos, vibración, tutorial, permisos, versión); sonidos propios generados (`assets/sounds`); espacio reservado del mapa.
+- **Diferencias a reportar al backend:** `NotificationResourceDto.type` no incluye `subscription` ni `membership` (la app usa el `type` del aviso). Pedido pendiente: distrito/provincia y cercanía en ranking y empleos, campos de pago y requisitos en ofertas, oferta directa, `readiness`.
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |
@@ -383,6 +395,8 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 | Instalados para usar **después de compilar** (aprobados el 2026-10-11 como "compilación única"): `expo-image` (caché de fotos), `react-native-reanimated` 4 + `react-native-worklets` + `react-native-gesture-handler` (deslizar citas), `lottie-react-native` (celebración), `expo-blur`, `expo-linear-gradient`, `expo-calendar` (plugin: agregar la cita al calendario), `expo-web-browser` (plugin), `expo-clipboard`, `expo-store-review`, `expo-updates` (`runtimeVersion` = versión de la app; activo fuera de desarrollo), `react-native-ssl-public-key-pinning` (M11), `@sentry/react-native` (M11, apagado) | Cada función se conecta y se prueba con la compilación instalada | **No se importan todavía** en el código (salvo los protegidos): la app actual no los necesita |
 | **Videos (Fase 13, aprobado el 2026-10-12):** `expo-video` 57.0.5 (reproducir) y `react-native-compressor` 2.0.3 (comprimir antes de subir); el recorte a 30 s lo limita `expo-image-picker` (`videoMaxDuration`) | Subir y ver videos de 30 s | **No se importan todavía**: la sección de videos se hará con carga opcional del módulo |
 | `react-native-nitro-modules` 0.37.1 (lo necesita `react-native-compressor`) | Comprimir videos | `videoUploadAvailable()` es false: la pantalla lo explica |
+| `expo-audio` 57.0.5 y sonido de notificación (`expo-notifications` con `sounds`, canales Reservas, Mensajes, Pagos, Promociones) | Sonidos en la app y aviso con sonido propio | Silencio; canales con el sonido por defecto |
+| `@react-native-ml-kit/face-detection` 2.0.1 (sin dependencias ni scripts, MIT) | Forma de cara en el teléfono | La pantalla explica que llega con la próxima versión |
 | Colores de la pantalla de carga nativa (`#F4F6F8` / `#0D1015`) y `backgroundColor` | Splash con la paleta nueva | Ya se ve la pantalla de carga animada en JavaScript |
 
 ### Guía de la compilación única (la lanza el usuario)
