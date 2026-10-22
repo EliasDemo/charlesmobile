@@ -3,7 +3,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Text } from '@/shared/ui';
+import { Icon, Text } from '@/shared/ui';
 
 interface Coordinates {
   latitude: number;
@@ -28,7 +28,28 @@ export function LocationPicker({
 }) {
   const theme = useTheme();
   const { t } = useTranslation('shop');
-  if (!env.mapsEnabled) return null;
+  if (!env.mapsEnabled) {
+    // Room kept for the map: it appears when the build has the Maps key.
+    return (
+      <View
+        style={[
+          styles.map,
+          styles.placeholder,
+          {
+            borderRadius: theme.radius.lg,
+            borderColor: theme.colors.border,
+            backgroundColor: theme.colors.primarySoft,
+          },
+        ]}
+        testID="map-placeholder"
+      >
+        <Icon name="map" size={sizes.iconLarge} color={theme.colors.primary} />
+        <Text align="center" color="textSecondary">
+          {t('form.mapSoon')}
+        </Text>
+      </View>
+    );
+  }
   const pin = value ?? LIMA;
   return (
     <View style={styles.root}>
@@ -57,5 +78,6 @@ export function LocationPicker({
 
 const styles = StyleSheet.create({
   root: { gap: spacing.sm },
+  placeholder: { alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg },
   map: { height: sizes.mapPreview, overflow: 'hidden', borderWidth: StyleSheet.hairlineWidth },
 });

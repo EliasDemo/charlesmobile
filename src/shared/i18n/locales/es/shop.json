@@ -121,7 +121,8 @@
     "invalidUrl": "Escribe una dirección que empiece con https://",
     "min2": "Escribe al menos 2 caracteres.",
     "min5": "Escribe al menos 5 caracteres.",
-    "pinHint": "Mantén presionado o arrastra el pin hasta la puerta de tu barbería."
+    "pinHint": "Mantén presionado o arrastra el pin hasta la puerta de tu barbería.",
+    "mapSoon": "Aquí verás el mapa para marcar la puerta exacta. Mientras tanto, usa \"Usar mi ubicación\" estando en el local."
   },
   "statusForm": {
     "title": "Estado de atención",
