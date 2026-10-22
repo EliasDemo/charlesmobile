@@ -94,5 +94,44 @@
   "about": "Sobre el puesto",
   "applyTitle": "Postula a esta oferta",
   "filterType": "Tipo de trabajo",
-  "filterStyle": "Especialidad"
+  "filterStyle": "Especialidad",
+  "wizard": {
+    "step": "Paso {{step}} de {{total}}",
+    "position": "El puesto",
+    "titlePlaceholder": "Ej. Barbero con experiencia en degradados",
+    "conditions": "Condiciones",
+    "amount": "Pago (S/, opcional)",
+    "periods": {
+      "MONTH": "al mes",
+      "WEEK": "a la semana",
+      "DAY": "al día",
+      "SERVICE": "por servicio"
+    },
+    "commission": "Comisión por servicio (%, opcional)",
+    "commissionHint": "Si pagas por comisión, escribe el porcentaje.",
+    "negotiable": "Pago conversable",
+    "negotiableHint": "Los barberos sabrán que pueden negociar.",
+    "negotiableShort": "conversable",
+    "requirements": "Requisitos y proceso",
+    "requirement": "Requisito {{n}}",
+    "requirementPlaceholder": "Ej. 2 años de experiencia",
+    "addRequirement": "Agregar requisito",
+    "process": "Proceso de selección",
+    "processes": {
+      "INTERVIEW": "Entrevista",
+      "TRIAL": "Prueba práctica",
+      "DIRECT": "Contratación directa"
+    },
+    "about": "Sobre el puesto",
+    "aboutPlaceholder": "Horario, ambiente, beneficios…",
+    "preview": "Así lo verán los barberos",
+    "previewHint": "Revisa y publica.",
+    "yourShop": "Tu barbería",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "payLine": "{{amount}} {{period}}",
+    "commissionLine": "{{percent}} % de comisión",
+    "requirementsTitle": "Requisitos:",
+    "processTitle": "Proceso:"
+  }
 }

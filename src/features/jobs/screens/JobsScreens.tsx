@@ -12,6 +12,7 @@ import {
   Card,
   Chip,
   ConfirmDialog,
+  DistrictPicker,
   FilterButton,
   FilterGroup,
   FilterSheet,
@@ -22,7 +23,6 @@ import {
   Notice,
   QueryView,
   Screen,
-  SearchField,
   StatusPill,
   Text,
   TextField,
@@ -94,12 +94,7 @@ export function JobsScreen({
             ) : null}
             <View style={styles.searchRow}>
               <View style={styles.flex}>
-                <SearchField
-                  label={t('area')}
-                  placeholder={t('areaPlaceholder')}
-                  value={area}
-                  onChangeText={setArea}
-                />
+                <DistrictPicker label={t('area')} value={area} onChange={setArea} allowAll />
               </View>
               <FilterButton
                 active={Number(Boolean(type)) + Number(Boolean(style))}

@@ -192,5 +192,11 @@
     "withCount_other": "Filters · {{count}}",
     "clear": "Clear",
     "apply": "See results"
+  },
+  "district": {
+    "none": "Not chosen",
+    "all": "All of Peru",
+    "choose": "Choose your district",
+    "search": "Search district"
   }
 }

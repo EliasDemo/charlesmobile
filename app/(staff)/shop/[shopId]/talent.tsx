@@ -1,15 +1,25 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { RankingScreen } from '@/features/career';
-import { InviteBarberButton } from '@/features/jobs';
+import { TalentScreen } from '@/features/career';
+import { StaffBarberActions } from '@/features/jobs';
 
-/** "Buscar barberos": available ones, each with "Invitar". */
+/** "Barberos disponibles": nearby first, each with "Escribir" and "Invitar". */
 export default function TalentRoute() {
   const { shopId } = useLocalSearchParams<{ shopId: string }>();
   return (
-    <RankingScreen
-      availableOnly
+    <TalentScreen
       onOpen={(id) => router.push({ pathname: '/barber/[id]', params: { id } })}
-      renderAction={(barber) => <InviteBarberButton shopId={shopId} profileId={barber.id} />}
+      renderActions={(barber) => (
+        <StaffBarberActions
+          shopId={shopId}
+          profileId={barber.id}
+          onWrite={() =>
+            router.push({
+              pathname: '/messages/new',
+              params: { shopId, barberProfileId: barber.id, name: barber.displayName },
+            })
+          }
+        />
+      )}
     />
   );
 }

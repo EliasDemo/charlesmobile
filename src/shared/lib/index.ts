@@ -72,3 +72,4 @@ export {
   type FaceMeasurements,
   type FaceScanResult,
 } from './face';
+export { PERU_DISTRICTS, provinceOf } from './peru';

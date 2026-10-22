@@ -9,3 +9,4 @@ export {
   ShopJobsScreen,
   StaffBarberActions,
 } from './screens/JobsScreens';
+export { JobWizardScreen } from './screens/JobWizardScreen';

@@ -51,6 +51,10 @@ export interface ThemeColors {
   primary: string;
   primaryPressed: string;
   onPrimary: string;
+  /** Ranking medals (1st, 2nd, 3rd). */
+  medalGold: string;
+  medalSilver: string;
+  medalBronze: string;
   primarySoft: string;
   danger: string;
   dangerPressed: string;
@@ -94,6 +98,9 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     primary: palette.copper600,
     primaryPressed: palette.copper700,
     onPrimary: palette.neutral0,
+    medalGold: '#C9921A',
+    medalSilver: '#7D8791',
+    medalBronze: '#A0612E',
     primarySoft: palette.copper50,
     danger: palette.red600,
     dangerPressed: palette.red700,
@@ -126,6 +133,9 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     primary: palette.copper300,
     primaryPressed: palette.copper200,
     onPrimary: palette.neutral900,
+    medalGold: '#E8B84A',
+    medalSilver: '#B9C2CB',
+    medalBronze: '#D08A50',
     primarySoft: '#2E1D12',
     danger: palette.red400,
     dangerPressed: palette.red300,

@@ -94,5 +94,44 @@
   "about": "About the job",
   "applyTitle": "Apply to this job",
   "filterType": "Kind of job",
-  "filterStyle": "Specialty"
+  "filterStyle": "Specialty",
+  "wizard": {
+    "step": "Step {{step}} of {{total}}",
+    "position": "The position",
+    "titlePlaceholder": "E.g. Barber with fade experience",
+    "conditions": "Conditions",
+    "amount": "Pay (S/, optional)",
+    "periods": {
+      "MONTH": "per month",
+      "WEEK": "per week",
+      "DAY": "per day",
+      "SERVICE": "per service"
+    },
+    "commission": "Commission per service (%, optional)",
+    "commissionHint": "If you pay by commission, write the percentage.",
+    "negotiable": "Negotiable pay",
+    "negotiableHint": "Barbers will know they can negotiate.",
+    "negotiableShort": "negotiable",
+    "requirements": "Requirements and process",
+    "requirement": "Requirement {{n}}",
+    "requirementPlaceholder": "E.g. 2 years of experience",
+    "addRequirement": "Add requirement",
+    "process": "Selection process",
+    "processes": {
+      "INTERVIEW": "Interview",
+      "TRIAL": "Practical test",
+      "DIRECT": "Direct hire"
+    },
+    "about": "About the job",
+    "aboutPlaceholder": "Hours, atmosphere, benefits…",
+    "preview": "This is how barbers will see it",
+    "previewHint": "Review and post.",
+    "yourShop": "Your barbershop",
+    "back": "Back",
+    "next": "Next",
+    "payLine": "{{amount}} {{period}}",
+    "commissionLine": "{{percent}} % commission",
+    "requirementsTitle": "Requirements:",
+    "processTitle": "Process:"
+  }
 }

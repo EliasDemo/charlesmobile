@@ -1,10 +1,10 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { JobFormScreen } from '@/features/jobs';
+import { JobWizardScreen } from '@/features/jobs';
 
 export default function NewJobRoute() {
   const { shopId } = useLocalSearchParams<{ shopId: string }>();
   return (
-    <JobFormScreen
+    <JobWizardScreen
       shopId={shopId}
       onSaved={(jobId) =>
         router.replace({ pathname: '/shop/[shopId]/jobs/[jobId]', params: { shopId, jobId } })

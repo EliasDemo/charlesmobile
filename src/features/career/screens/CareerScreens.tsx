@@ -10,6 +10,7 @@ import {
   Button,
   Card,
   Checkbox,
+  DistrictPicker,
   Chip,
   ConfirmDialog,
   EmptyState,
@@ -268,7 +269,13 @@ export function CareerProfileFormScreen({ onSaved }: { onSaved: () => void }) {
               keyboardType="number-pad"
               maxLength={2}
             />
-            <FormField control={f.form.control} name="district" label={t('form.district')} maxLength={60} />
+            <Controller
+              control={f.form.control}
+              name="district"
+              render={({ field }) => (
+                <DistrictPicker label={t('form.district')} value={field.value} onChange={field.onChange} />
+              )}
+            />
             <Controller
               control={f.form.control}
               name="availableForWork"
@@ -533,7 +540,7 @@ export function RankingScreen({
           setDistrict('');
         }}
       >
-        <TextField label={t('ranking.district')} value={district} onChangeText={setDistrict} maxLength={60} />
+        <DistrictPicker label={t('ranking.district')} value={district} onChange={setDistrict} allowAll />
         <FilterGroup title={t('specialties.title')}>
           <Chip label={t('allStyles')} selected={!style} onPress={() => setStyle(undefined)} />
           {(styleList.data ?? []).map((s) => (

@@ -99,5 +99,16 @@
     "rating": "{{average}} ({{count}})",
     "availableInfo": "Barbers available for work."
   },
-  "profileTitle": "Barber profile"
+  "profileTitle": "Barber profile",
+  "talent": {
+    "intro": "Barbers looking for work. Those in your district first.",
+    "district": "Your district",
+    "top": "Top of {{district}}",
+    "inDistrict": "Available in {{district}}",
+    "noneHere": "No barbers available in {{district}} yet",
+    "inProvince": "In the rest of {{province}}",
+    "national": "All of Peru",
+    "worksAt": "Works at {{shops}}",
+    "topNational": "Top of Peru"
+  }
 }

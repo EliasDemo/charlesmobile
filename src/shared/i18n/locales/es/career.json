@@ -99,5 +99,16 @@
     "rating": "{{average}} ({{count}})",
     "availableInfo": "Barberos disponibles para trabajar."
   },
-  "profileTitle": "Perfil del barbero"
+  "profileTitle": "Perfil del barbero",
+  "talent": {
+    "intro": "Barberos que buscan trabajo. Primero los de tu distrito.",
+    "district": "Tu distrito",
+    "top": "Top de {{district}}",
+    "inDistrict": "Disponibles en {{district}}",
+    "noneHere": "Aún no hay barberos disponibles en {{district}}",
+    "inProvince": "En el resto de {{province}}",
+    "national": "En todo el Perú",
+    "worksAt": "Trabaja en {{shops}}",
+    "topNational": "Top del Perú"
+  }
 }

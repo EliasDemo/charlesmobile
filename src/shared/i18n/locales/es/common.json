@@ -192,5 +192,11 @@
     "withCount_other": "Filtros · {{count}}",
     "clear": "Limpiar",
     "apply": "Ver resultados"
+  },
+  "district": {
+    "none": "Sin elegir",
+    "all": "Todo el Perú",
+    "choose": "Elige tu distrito",
+    "search": "Buscar distrito"
   }
 }

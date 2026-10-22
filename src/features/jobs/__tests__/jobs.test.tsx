@@ -4,7 +4,7 @@ import { renderWithProviders, resetAppState, signIn } from '@test/render';
 import type { components } from '@/shared/api';
 import errors from '@/shared/i18n/locales/es/errors.json';
 import texts from '@/shared/i18n/locales/es/jobs.json';
-import { ApplicantsScreen, JobScreen, JobsScreen, MyApplicationsScreen } from '..';
+import { ApplicantsScreen, JobScreen, JobsScreen, JobWizardScreen, MyApplicationsScreen } from '..';
 
 type S = components['schemas'];
 
@@ -163,5 +163,40 @@ describe('ApplicantsScreen', () => {
     await fireEvent.press(buttons[buttons.length - 1]!);
     await waitFor(() => expect(onHired).toHaveBeenCalled());
     expect(api.calls.find((c) => c.method === 'POST')!.body).toEqual({ status: 'HIRED' });
+  });
+});
+
+describe('JobWizardScreen', () => {
+  it('builds the posting in 3 steps and writes pay, requirements and process into its texts', async () => {
+    const api = mockApi({
+      'GET /api/v1/service-styles': { body: [] },
+      'GET /api/v1/barbershops/{barbershopId}/jobs': { body: [] },
+      'POST /api/v1/barbershops/{barbershopId}/jobs': { status: 201, body: posting() },
+    });
+    const onSaved = jest.fn();
+    await renderWithProviders(<JobWizardScreen shopId="shop-1" onSaved={onSaved} />);
+    await fireEvent.changeText(screen.getByLabelText(texts.form.title), 'Barbero de fin de semana');
+    await fireEvent.press(screen.getByRole('button', { name: texts.wizard.next }));
+    await fireEvent.changeText(screen.getByLabelText(texts.wizard.amount), '1500');
+    await fireEvent(screen.getByRole('switch', { name: texts.wizard.negotiable }), 'valueChange', true);
+    await fireEvent.press(screen.getByRole('button', { name: texts.wizard.next }));
+    await fireEvent.changeText(screen.getByLabelText('Requisito 1'), '2 años de experiencia');
+    await fireEvent.changeText(
+      screen.getByLabelText(texts.wizard.about),
+      'Sábados y domingos, buen ambiente.',
+    );
+    await fireEvent.press(screen.getByRole('button', { name: texts.wizard.next }));
+    expect(screen.getByText(texts.wizard.preview)).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: texts.form.publish }));
+    await waitFor(() => expect(onSaved).toHaveBeenCalled());
+    const body = api.calls.find((c) => c.method === 'POST')!.body as {
+      compensationText: string;
+      description: string;
+    };
+    expect(body.compensationText).toMatch(
+      /1,500\.00 al mes · conversable|1500\.00 al mes · conversable|1 500,00 al mes · conversable/,
+    );
+    expect(body.description).toContain('• 2 años de experiencia');
+    expect(body.description).toContain('Proceso: Entrevista');
   });
 });
