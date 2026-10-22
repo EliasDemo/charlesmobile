@@ -69,7 +69,17 @@
     "JOB_POSTING_CLOSED": "Esta oferta ya cerró.",
     "VIDEO_LIMIT_REACHED": "Llegaste al máximo de videos. Borra uno para subir otro.",
     "USERNAME_TAKEN": "Ese usuario ya está en uso.",
-    "USERNAME_CHANGE_TOO_SOON": "Todavía no puedes cambiar tu usuario."
+    "USERNAME_CHANGE_TOO_SOON": "Todavía no puedes cambiar tu usuario.",
+    "PLAN_LIMIT_REACHED": "Llegaste al límite de tu plan.",
+    "PLAN_FEATURE_NOT_INCLUDED": "Esta función no está incluida en tu plan.",
+    "SUBSCRIPTION_EXISTS": "Ya tienes una suscripción activa.",
+    "BILLING_UNAVAILABLE": "El sistema de pagos no responde. Inténtalo en unos minutos.",
+    "CASH_SESSION_REQUIRED": "Abre la caja para registrar pagos en efectivo.",
+    "CASH_SESSION_OPEN": "Ya hay una caja abierta.",
+    "SALE_ALREADY_VOIDED": "Esta venta ya fue anulada.",
+    "INVOICING_NOT_CONFIGURED": "Configura las boletas antes de emitirlas.",
+    "NO_MEMBERSHIP_CREDITS": "No te quedan créditos en esta membresía.",
+    "MEMBERSHIP_NOT_APPLICABLE": "Esta membresía no sirve para esta reserva."
   },
   "fields": {
     "required": "Este campo es obligatorio.",

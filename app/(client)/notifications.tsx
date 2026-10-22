@@ -22,6 +22,11 @@ export default function NotificationsRoute() {
           router.push({ pathname: '/messages/[id]', params: { id: target.id, resolve: '1' } });
         }
         if (target.kind === 'myApplications') router.push('/jobs/applications');
+        if (target.kind === 'myPlan') {
+          useAppMode.getState().setMode('shop');
+          router.push('/my-plan');
+        }
+        if (target.kind === 'myMemberships') router.push('/memberships');
       }}
     />
   );

@@ -23,6 +23,7 @@ const profileProps = () => ({
   onEditProfile: jest.fn(),
   onChangePassword: jest.fn(),
   onCareer: jest.fn(),
+  onMemberships: jest.fn(),
   onPreferences: jest.fn(),
   onFavorites: jest.fn(),
   onHelp: jest.fn(),

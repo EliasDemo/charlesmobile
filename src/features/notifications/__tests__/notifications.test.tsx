@@ -48,6 +48,10 @@ describe('notificationTarget', () => {
     const resource = { type: 'job_application' as const, id: 'a' };
     expect(notificationTarget(resource, 'JOB_APPLICATION_RECEIVED')).toEqual({ kind: 'shopJobs' });
     expect(notificationTarget(resource, 'JOB_APPLICATION_UPDATED')).toEqual({ kind: 'myApplications' });
+    expect(notificationTarget({ type: 'account', id: null }, 'PLAN_UPDATE')).toEqual({ kind: 'myPlan' });
+    expect(notificationTarget({ type: 'account', id: null }, 'MEMBERSHIP_UPDATE')).toEqual({
+      kind: 'myMemberships',
+    });
   });
 });
 

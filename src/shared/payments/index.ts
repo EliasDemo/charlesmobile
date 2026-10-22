@@ -6,3 +6,4 @@ export {
   type ClientPaymentAction,
 } from './PaymentProvider';
 export { WebCheckout, checkoutAvailable } from './WebCheckout';
+export { openPaymentPage } from './paymentPage';

@@ -69,7 +69,17 @@
     "JOB_POSTING_CLOSED": "This job posting is closed.",
     "VIDEO_LIMIT_REACHED": "You reached the video limit. Delete one to upload another.",
     "USERNAME_TAKEN": "That username is already taken.",
-    "USERNAME_CHANGE_TOO_SOON": "You can't change your username yet."
+    "USERNAME_CHANGE_TOO_SOON": "You can't change your username yet.",
+    "PLAN_LIMIT_REACHED": "You reached your plan's limit.",
+    "PLAN_FEATURE_NOT_INCLUDED": "This feature isn't included in your plan.",
+    "SUBSCRIPTION_EXISTS": "You already have an active subscription.",
+    "BILLING_UNAVAILABLE": "The payment system isn't responding. Try again in a few minutes.",
+    "CASH_SESSION_REQUIRED": "Open the cash register to record cash payments.",
+    "CASH_SESSION_OPEN": "A cash register is already open.",
+    "SALE_ALREADY_VOIDED": "This sale was already voided.",
+    "INVOICING_NOT_CONFIGURED": "Set up receipts before issuing them.",
+    "NO_MEMBERSHIP_CREDITS": "You have no credits left in this membership.",
+    "MEMBERSHIP_NOT_APPLICABLE": "This membership can't be used for this booking."
   },
   "fields": {
     "required": "This field is required.",

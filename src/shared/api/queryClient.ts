@@ -1,7 +1,8 @@
 import NetInfo from '@react-native-community/netinfo';
-import { QueryClient, focusManager, onlineManager } from '@tanstack/react-query';
+import { MutationCache, QueryClient, focusManager, onlineManager } from '@tanstack/react-query';
 import { AppState, type AppStateStatus } from 'react-native';
 import { isApiError } from './errors';
+import { notePlanLimit } from './planLimit';
 
 /**
  * Retries already happen inside the API fetch (network, 503 retryable, 429), so queries only
@@ -9,6 +10,7 @@ import { isApiError } from './errors';
  */
 export function createQueryClient(): QueryClient {
   return new QueryClient({
+    mutationCache: new MutationCache({ onError: notePlanLimit }),
     defaultOptions: {
       queries: {
         staleTime: 30_000,

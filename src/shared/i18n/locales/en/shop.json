@@ -32,7 +32,9 @@
       "promotions": "Promotions",
       "jobs": "Job postings",
       "talent": "Find barbers",
-      "videos": "Shop videos"
+      "videos": "Shop videos",
+      "plan": "My plan",
+      "memberships": "Memberships"
     },
     "asBarber": "As a barber",
     "myBlocks": "My blocks at {{name}}",
@@ -54,7 +56,9 @@
       "promotions": "Discounts and coupons",
       "jobs": "Post and choose applicants",
       "talent": "Barbers available",
-      "videos": "30-second videos"
+      "videos": "30-second videos",
+      "plan": "Usage, limits and subscription",
+      "memberships": "Monthly plans with credits"
     }
   },
   "status": {

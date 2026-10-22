@@ -21,6 +21,8 @@ import career from './locales/es/career.json';
 import jobs from './locales/es/jobs.json';
 import videos from './locales/es/videos.json';
 import ads from './locales/es/ads.json';
+import plans from './locales/es/plans.json';
+import memberships from './locales/es/memberships.json';
 import type devTexts from './locales/es/dev.json';
 import en_common from './locales/en/common.json';
 import en_errors from './locales/en/errors.json';
@@ -43,6 +45,8 @@ import en_career from './locales/en/career.json';
 import en_jobs from './locales/en/jobs.json';
 import en_videos from './locales/en/videos.json';
 import en_ads from './locales/en/ads.json';
+import en_plans from './locales/en/plans.json';
+import en_memberships from './locales/en/memberships.json';
 import { onLanguageChange } from './language';
 
 export const defaultNS = 'common';
@@ -69,6 +73,8 @@ export const resources = {
     jobs,
     videos,
     ads,
+    plans,
+    memberships,
   },
   en: {
     common: en_common,
@@ -92,6 +98,8 @@ export const resources = {
     jobs: en_jobs,
     videos: en_videos,
     ads: en_ads,
+    plans: en_plans,
+    memberships: en_memberships,
   },
 } as const;
 

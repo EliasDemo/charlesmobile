@@ -15,6 +15,7 @@ export default function ProfileRoute() {
       onEditProfile={() => router.push('/profile/edit')}
       onChangePassword={() => router.push('/profile/password')}
       onCareer={() => router.push('/career')}
+      onMemberships={() => router.push('/memberships')}
       onPreferences={() => router.push('/profile/preferences')}
       onFavorites={() => router.push('/profile/favorites')}
       onHelp={() => router.push('/support')}

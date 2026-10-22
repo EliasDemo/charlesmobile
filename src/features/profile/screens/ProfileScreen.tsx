@@ -13,6 +13,7 @@ export interface ProfileScreenProps {
   onChangePassword: () => void;
   /** "Mi perfil profesional" (barbers, or anyone who wants to become one). */
   onCareer: () => void;
+  onMemberships: () => void;
   onPreferences: () => void;
   onFavorites: () => void;
   onHelp: () => void;
@@ -99,6 +100,7 @@ export function ProfileScreen(props: ProfileScreenProps) {
                 {t('sections.settings')}
               </Text>
               <ListRow icon="heart" title={t('favorites')} onPress={props.onFavorites} />
+              <ListRow icon="card" title={t('title', { ns: 'memberships' })} onPress={props.onMemberships} />
               <ListRow icon="star" title={t('mine.title', { ns: 'reviews' })} onPress={props.onMyReviews} />
               <ListRow icon="settings" title={t('preferences.title')} onPress={props.onPreferences} />
               <ListRow icon="help-buoy" title={t('title', { ns: 'support' })} onPress={props.onHelp} />

@@ -181,6 +181,8 @@ export type NotificationTarget =
   | { kind: 'conversation'; id: string }
   | { kind: 'myApplications' }
   | { kind: 'shopJobs' }
+  | { kind: 'myPlan' }
+  | { kind: 'myMemberships' }
   | { kind: 'inbox' };
 
 /**
@@ -189,6 +191,9 @@ export type NotificationTarget =
  * side of a job application: received by the barbershop, or updated for the barber.
  */
 export function notificationTarget(resource: NotificationResource, type?: string): NotificationTarget {
+  // Plans and memberships are recognized by the notice type (Fases 15 y 16).
+  if (type === 'PLAN_UPDATE') return { kind: 'myPlan' };
+  if (type === 'MEMBERSHIP_UPDATE') return { kind: 'myMemberships' };
   if (resource.type === 'booking' && resource.id) return { kind: 'booking', id: resource.id };
   if (resource.type === 'review' && resource.id) return { kind: 'shopReviews', shopId: resource.id };
   if (resource.type === 'barbershop' || resource.type === 'review') return { kind: 'shop' };

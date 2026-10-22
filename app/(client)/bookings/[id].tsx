@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { AdSlot } from '@/features/ads';
 import { BookingScreen } from '@/features/booking';
+import { PayWithCreditButton } from '@/features/memberships';
 
 export default function BookingRoute() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -15,6 +16,9 @@ export default function BookingRoute() {
       onHelp={(bookingId) => router.push({ pathname: '/support/new', params: { bookingId } })}
       onReview={(bookingId) => router.push({ pathname: '/reviews/new', params: { bookingId } })}
       onEditReview={(id) => router.push({ pathname: '/reviews/[id]', params: { id } })}
+      pendingSlot={(b) => (
+        <PayWithCreditButton bookingId={b.id} barbershopId={b.barbershopId} onPaid={b.refresh} />
+      )}
       successSlot={
         <AdSlot
           slot="booking_success"

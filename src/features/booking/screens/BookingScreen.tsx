@@ -32,6 +32,8 @@ export interface BookingScreenProps {
   onEditReview: (reviewId: string) => void;
   /** Sponsor space shown once the booking is confirmed ("booking_success"). */
   successSlot?: ReactNode;
+  /** Other ways to pay a pending booking ("Pagar con crédito" of a membership). */
+  pendingSlot?: (booking: { id: string; barbershopId: string; refresh: () => void }) => ReactNode;
 }
 
 export function BookingScreen({
@@ -43,6 +45,7 @@ export function BookingScreen({
   onReview,
   onEditReview,
   successSlot,
+  pendingSlot,
 }: BookingScreenProps) {
   const { t } = useTranslation('booking');
   const data = useBooking(id);
@@ -107,6 +110,11 @@ export function BookingScreen({
                     fullWidth
                   />
                 ) : null}
+                {pendingSlot?.({
+                  id: booking.id,
+                  barbershopId: booking.barbershop.id,
+                  refresh: () => void data.query.refetch(),
+                })}
                 <Text variant="caption" color="textSecondary">
                   {t('detail.pendingExplain')}
                 </Text>

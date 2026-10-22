@@ -24,6 +24,7 @@ import {
   ErrorFallback,
   NavigationThemeRoot,
   OfflineBanner,
+  PlanLimitNotice,
   SystemBars,
   ToastHost,
   useStackScreenOptions,
@@ -66,6 +67,10 @@ function AppStack() {
     } else if (target.kind === 'conversation') {
       router.push({ pathname: '/messages/[id]', params: { id: target.id, resolve: '1' } });
     } else if (target.kind === 'myApplications') router.push('/jobs/applications');
+    else if (target.kind === 'myPlan') {
+      useAppMode.getState().setMode('shop');
+      router.push('/my-plan');
+    } else if (target.kind === 'myMemberships') router.push('/memberships');
     else if (target.kind === 'shopJobs') {
       useAppMode.getState().setMode('shop');
       router.navigate('/shop');
@@ -92,6 +97,12 @@ function AppStack() {
         <Stack.Screen name="+not-found" options={{ title: t('notFound.title') }} />
       </Stack>
       <ToastHost />
+      <PlanLimitNotice
+        onSeePlan={() => {
+          useAppMode.getState().setMode('shop');
+          router.push('/my-plan');
+        }}
+      />
     </>
   );
 }

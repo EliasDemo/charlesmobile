@@ -39,7 +39,9 @@ export type ShopSection =
   | 'promotions'
   | 'jobs'
   | 'talent'
-  | 'videos';
+  | 'videos'
+  | 'plan'
+  | 'memberships';
 
 export interface ShopHomeScreenProps {
   /** Action on the right of the title (the notifications bell, given by the route). */
@@ -79,8 +81,10 @@ const SECTIONS: ShopSection[] = [
   'videos',
   'reviews',
   'promotions',
+  'memberships',
   'jobs',
   'talent',
+  'plan',
   'status',
   'members',
   'details',
@@ -101,6 +105,8 @@ const SECTION_ICON: Record<ShopSection, IconName> = {
   jobs: 'briefcase',
   talent: 'person-add',
   videos: 'videocam',
+  plan: 'rocket',
+  memberships: 'card',
 };
 
 export function ShopHomeScreen({

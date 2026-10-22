@@ -80,3 +80,4 @@ export { NumberStepper, type NumberStepperProps } from './NumberStepper';
 export { PhoneField, type PhoneFieldProps } from './PhoneField';
 export { PasswordChecklist } from './PasswordChecklist';
 export { FilterButton, FilterGroup, FilterSheet } from './FilterSheet';
+export { PlanLimitNotice } from './PlanLimitNotice';
