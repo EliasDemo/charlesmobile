@@ -85,5 +85,5 @@ export { PlanLimitNotice } from './PlanLimitNotice';
 export { DistrictPicker } from './DistrictPicker';
 export { TourOverlay, TourTarget, useFirstTimeTour } from './Tour';
 export { UnlockHost, showUnlocked, type Unlock, type UnlockItem } from './UnlockSheet';
-export { useKeyboardHeight, useKeyboardVisible } from './keyboard';
+export { KeyboardRoot, keyboardController, useKeyboardHeight, useKeyboardVisible } from './keyboard';
 export { BrandHeader } from './BrandHeader';

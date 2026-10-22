@@ -25,6 +25,7 @@ import {
   AuthPromptHost,
   BrandSplash,
   ErrorFallback,
+  KeyboardRoot,
   NavigationThemeRoot,
   OfflineBanner,
   PlanLimitNotice,
@@ -167,16 +168,18 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={rootStyle}>
       <SafeAreaProvider>
-        <ThemeProvider>
-          {ready ? (
-            <NavigationThemeRoot>
-              <QueryClientProvider client={queryClient}>
-                <AppStack />
-              </QueryClientProvider>
-            </NavigationThemeRoot>
-          ) : null}
-          {splashDone ? null : <BrandSplash ready={ready} onDone={finishSplash} />}
-        </ThemeProvider>
+        <KeyboardRoot>
+          <ThemeProvider>
+            {ready ? (
+              <NavigationThemeRoot>
+                <QueryClientProvider client={queryClient}>
+                  <AppStack />
+                </QueryClientProvider>
+              </NavigationThemeRoot>
+            ) : null}
+            {splashDone ? null : <BrandSplash ready={ready} onDone={finishSplash} />}
+          </ThemeProvider>
+        </KeyboardRoot>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

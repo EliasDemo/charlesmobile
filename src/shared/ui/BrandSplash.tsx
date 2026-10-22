@@ -48,7 +48,7 @@ export function BrandSplash({ ready, onDone }: { ready: boolean; onDone: () => v
       style={[
         StyleSheet.absoluteFill,
         styles.center,
-        { backgroundColor: theme.colors.background, opacity: layerOpacity },
+        { backgroundColor: theme.colors.brand, opacity: layerOpacity },
       ]}
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
@@ -69,7 +69,7 @@ export function BrandSplash({ ready, onDone }: { ready: boolean; onDone: () => v
 }
 
 /** Same width as the native splash image (app.config.ts, expo-splash-screen imageWidth). */
-const SPLASH_LOGO = sizes.illustration + sizes.iconLarge;
+const SPLASH_LOGO = sizes.splashLogo;
 
 const styles = StyleSheet.create({
   center: { alignItems: 'center', justifyContent: 'center' },

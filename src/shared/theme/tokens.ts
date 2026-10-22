@@ -234,6 +234,8 @@ export const sizes = {
   mapPreview: 320,
   illustration: 120,
   welcomeImage: 320,
+  /** The emblem on the splash (app.config.ts expo-splash-screen imageWidth). */
+  splashLogo: 200,
   /** Unread counter on the notifications bell. */
   badge: 18,
 } as const;

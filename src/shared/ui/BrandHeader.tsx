@@ -1,7 +1,6 @@
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Icon } from './Icon';
 import { useKeyboardVisible } from './keyboard';
 import { Text } from './Text';
 
@@ -29,20 +28,7 @@ export function BrandHeader() {
         },
       ]}
     >
-      <View
-        style={[
-          styles.emblem,
-          {
-            width: emblem,
-            height: emblem,
-            borderRadius: emblem / 2,
-            borderColor: theme.colors.brandAccent,
-            backgroundColor: theme.colors.brand,
-          },
-        ]}
-      >
-        <Icon name="cut" size={emblem * EMBLEM_ICON} color={theme.colors.onBrand} />
-      </View>
+      <Image source={EMBLEM} style={{ width: emblem, height: emblem }} resizeMode="contain" />
       <View style={compact ? styles.flex : styles.center}>
         <Text variant={compact ? 'subtitle' : 'display'} color="onBrand" align={compact ? 'left' : 'center'}>
           {t('appName')}
@@ -64,12 +50,12 @@ export function BrandHeader() {
 }
 
 const CURVE = sizes.avatarLarge;
-const EMBLEM_ICON = 0.45;
+// The brand emblem (copper portrait on navy), from the visual identity.
+const EMBLEM = require('../../../assets/brand/emblem.png') as number;
 
 const styles = StyleSheet.create({
   full: { alignItems: 'center', gap: spacing.md, paddingVertical: spacing.xl, paddingHorizontal: spacing.lg },
   compact: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.md },
-  emblem: { alignItems: 'center', justifyContent: 'center', borderWidth: 2 },
   center: { alignItems: 'center', gap: spacing.xs },
   flex: { flex: 1 },
   rule: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },

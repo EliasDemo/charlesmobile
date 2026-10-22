@@ -23,7 +23,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
   // Root background before React draws (avoids a white flash); matches the dark background token.
-  backgroundColor: '#0D1015',
+  backgroundColor: '#0C111C',
   ios: {
     supportsTablet: false,
     bundleIdentifier: isDevelopment ? `${BASE_ID}.dev` : BASE_ID,
@@ -39,7 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     package: isDevelopment ? `${BASE_ID}.dev` : BASE_ID,
     adaptiveIcon: {
-      backgroundColor: '#0D1015',
+      backgroundColor: '#18264A',
       foregroundImage: './assets/android-icon-foreground.png',
       backgroundImage: './assets/android-icon-background.png',
       monochromeImage: './assets/android-icon-monochrome.png',
@@ -54,9 +54,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'expo-splash-screen',
       {
         image: './assets/splash-icon.png',
-        imageWidth: 160,
-        backgroundColor: '#F4F6F8',
-        dark: { backgroundColor: '#0D1015' },
+        imageWidth: 200,
+        // Brand navy in light and dark: the emblem is designed on it.
+        backgroundColor: '#18264A',
+        dark: { backgroundColor: '#18264A' },
       },
     ],
     'expo-font',
@@ -73,7 +74,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     // The notification sound is bundled into the app (Android channels use it).
-    ['expo-notifications', { sounds: ['./assets/sounds/notify.wav'] }],
+    // White silhouette (Android tints it); the brand copper as its color.
+    [
+      'expo-notifications',
+      { sounds: ['./assets/sounds/notify.wav'], icon: './assets/notification-icon.png', color: '#C88B52' },
+    ],
     // Transparent edge-to-edge navigation bar whose button color follows the app theme.
     ['expo-navigation-bar', { enforceContrast: false }],
     [

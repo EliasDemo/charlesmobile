@@ -413,6 +413,8 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 | `expo-audio` 57.0.5 y sonido de notificación (`expo-notifications` con `sounds`, canales Reservas, Mensajes, Pagos, Promociones) | Sonidos en la app y aviso con sonido propio | Silencio; canales con el sonido por defecto |
 | `@react-native-ml-kit/face-detection` 2.0.1 (sin dependencias ni scripts, MIT) | Forma de cara en el teléfono | La pantalla explica que llega con la próxima versión |
 | Colores de la pantalla de carga nativa (`#F4F6F8` / `#0D1015`) y `backgroundColor` | Splash con la paleta nueva | Ya se ve la pantalla de carga animada en JavaScript |
+| **Identidad visual Charles (2026-10-22):** ícono, ícono adaptativo de Android (emblema sobre azul marino `#18264A`), monocromo, splash nativo azul marino con el emblema, ícono y color de notificaciones (`expo-notifications`: `icon`, `color #C88B52`) | Ícono y pantalla de carga con la marca; notificaciones con la silueta | La pantalla de carga animada (JavaScript) y el login ya muestran el emblema |
+| `react-native-keyboard-controller` 1.21.9 (aprobado el 2026-10-22) | `KeyboardProvider` y `KeyboardAwareScrollView` en `Screen`: el campo activo siempre visible | `keyboardController()` es null: `Screen` deja espacio y desplaza a mano |
 
 ### Guía de la compilación única (la lanza el usuario)
 
