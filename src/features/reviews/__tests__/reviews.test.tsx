@@ -16,6 +16,9 @@ type S = components['schemas'];
 const mine = (overrides: Partial<S['MyReviewDto']> = {}): S['MyReviewDto'] => ({
   id: 'r1',
   rating: 4,
+  authorPhotoUrl: null,
+  likes: 0,
+  likedByMe: false,
   comment: 'Muy buen corte',
   authorName: 'Ana P.',
   serviceName: 'Corte clásico',
@@ -33,6 +36,9 @@ const mine = (overrides: Partial<S['MyReviewDto']> = {}): S['MyReviewDto'] => ({
 const managed = (overrides: Partial<S['ManagedReviewDto']> = {}): S['ManagedReviewDto'] => ({
   id: 'r1',
   rating: 5,
+  authorPhotoUrl: null,
+  likes: 0,
+  likedByMe: false,
   comment: 'Excelente',
   authorName: 'Ana P.',
   serviceName: 'Corte clásico',

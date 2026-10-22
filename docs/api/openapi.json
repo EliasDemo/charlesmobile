@@ -5721,6 +5721,50 @@
         "tags": ["availability"]
       }
     },
+    "/api/v1/barbershops/{id}/readiness": {
+      "get": {
+        "operationId": "ReadinessController_get_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadinessDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: ¿se puede reservar? y, si no, por qué",
+        "tags": ["availability"]
+      }
+    },
     "/api/v1/search/barbershops": {
       "get": {
         "description": "Solo barberías visibles. La ubicación enviada se usa solo para esta consulta: no se guarda ni se registra.",
@@ -6330,6 +6374,99 @@
           }
         },
         "summary": "RF-PAG-002: aviso firmado de la pasarela (IPN). Idempotente por evento.",
+        "tags": ["payments"]
+      }
+    },
+    "/api/v1/barbershops/{id}/seller-account": {
+      "get": {
+        "operationId": "SellerAccountsController_status_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SellerAccountDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Estado de la cuenta de Mercado Pago vinculada (cobro directo)",
+        "tags": ["payments"]
+      },
+      "delete": {
+        "operationId": "SellerAccountsController_disconnect_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER: desvincular (los pagos vuelven a la cuenta de Charles)",
+        "tags": ["payments"]
+      }
+    },
+    "/api/v1/barbershops/{id}/seller-account/connect": {
+      "post": {
+        "operationId": "SellerAccountsController_connect_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SellerConnectDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER: enlace para vincular la cuenta de Mercado Pago de la barbería",
         "tags": ["payments"]
       }
     },
@@ -12885,13 +13022,55 @@
             }
           },
           {
-            "name": "sort",
+            "name": "province",
+            "required": false,
+            "in": "query",
+            "description": "Provincia (lista fija; sin tildes ni mayúsculas).",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "example": "San Roman",
+              "type": "string"
+            }
+          },
+          {
+            "name": "lat",
+            "required": false,
+            "in": "query",
+            "description": "Con lng: barberos cerca de este punto (y su distancia).",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "lng",
             "required": false,
             "in": "query",
             "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "radiusKm",
+            "required": false,
+            "in": "query",
+            "description": "Radio en km (con lat y lng).",
+            "schema": {
+              "minimum": 1,
+              "maximum": 200,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "distance: el más cercano primero (requiere lat y lng).",
+            "schema": {
               "default": "ranking",
               "type": "string",
-              "enum": ["ranking", "newest"]
+              "enum": ["ranking", "newest", "distance"]
             }
           }
         ],
@@ -13972,6 +14151,67 @@
             }
           },
           {
+            "name": "ubigeo",
+            "required": false,
+            "in": "query",
+            "description": "Distrito (UBIGEO) de la oferta.",
+            "schema": {
+              "example": "211101",
+              "type": "string"
+            }
+          },
+          {
+            "name": "province",
+            "required": false,
+            "in": "query",
+            "description": "Provincia (lista fija).",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "example": "San Roman",
+              "type": "string"
+            }
+          },
+          {
+            "name": "lat",
+            "required": false,
+            "in": "query",
+            "description": "Con lng: ofertas cerca de este punto (y su distancia).",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "lng",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "radiusKm",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 200,
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "distance: la más cercana primero (requiere lat y lng; sin paginación, hasta 50).",
+            "schema": {
+              "default": "recent",
+              "type": "string",
+              "enum": ["recent", "distance"]
+            }
+          },
+          {
             "name": "cursor",
             "required": false,
             "in": "query",
@@ -14544,6 +14784,323 @@
           }
         ],
         "summary": "OWNER o MANAGER: invitar a un barbero desde su perfil profesional",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/job-offers": {
+      "post": {
+        "operationId": "JobOffersController_create_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobOfferDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOfferDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Ya trabaja aquí o ya tiene una oferta pendiente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: ofrecer trabajo directamente a un barbero (por su perfil)",
+        "tags": ["jobs"]
+      },
+      "get": {
+        "operationId": "JobOffersController_list_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JobOfferDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: ofertas directas enviadas (100 más recientes)",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/barbershops/{barbershopId}/job-offers/{offerId}/withdraw": {
+      "post": {
+        "operationId": "JobOffersController_withdraw_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offerId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOfferDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: retirar una oferta pendiente",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/me/job-offers": {
+      "get": {
+        "operationId": "JobOffersController_mine_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JobOfferDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Barbero: ofertas de trabajo que recibí",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/me/job-offers/{offerId}/accept": {
+      "post": {
+        "operationId": "JobOffersController_accept_v1",
+        "parameters": [
+          {
+            "name": "offerId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerJobOfferDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOfferDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Barbero: aceptar (entro al equipo de la barbería)",
+        "tags": ["jobs"]
+      }
+    },
+    "/api/v1/me/job-offers/{offerId}/reject": {
+      "post": {
+        "operationId": "JobOffersController_reject_v1",
+        "parameters": [
+          {
+            "name": "offerId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnswerJobOfferDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOfferDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Barbero: rechazar",
         "tags": ["jobs"]
       }
     },
@@ -15459,6 +16016,61 @@
         "tags": ["plans"]
       }
     },
+    "/api/v1/barbershops/{id}/subscription/pay-with-balance": {
+      "post": {
+        "description": "Solo para planes contratados con paymentMethod=BALANCE. 409 INSUFFICIENT_BALANCE si no alcanza.",
+        "operationId": "BarbershopPlanController_payWithBalance_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "INSUFFICIENT_BALANCE",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo OWNER: pagar con el saldo a favor el periodo siguiente (o recuperar un plan vencido)",
+        "tags": ["plans"]
+      }
+    },
     "/api/v1/barbershops/{id}/subscription/cancel": {
       "post": {
         "operationId": "BarbershopPlanController_cancel_v1",
@@ -16264,6 +16876,281 @@
           }
         ],
         "summary": "Solo ADMIN: sumar días de cortesía",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/barbershops/{id}/balance": {
+      "get": {
+        "operationId": "BalanceController_get_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: saldo a favor (disponible, pendiente y cobrado directo)",
+        "tags": ["balance"]
+      }
+    },
+    "/api/v1/barbershops/{id}/statement": {
+      "get": {
+        "operationId": "BalanceController_statement_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "description": "Por defecto, hace 30 días.",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "description": "Por defecto, ahora.",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: estado de cuenta (cobros, comisiones, devoluciones y movimientos)",
+        "tags": ["balance"]
+      }
+    },
+    "/api/v1/admin/balances": {
+      "get": {
+        "operationId": "BalanceAdminController_list_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminBalanceDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: saldo de cada barbería (para liquidar)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/balances/{barbershopId}/movements": {
+      "get": {
+        "operationId": "BalanceAdminController_movements_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BalanceMovementDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: movimientos del saldo de una barbería",
+        "tags": ["admin"]
+      },
+      "post": {
+        "operationId": "BalanceAdminController_create_v1",
+        "parameters": [
+          {
+            "name": "barbershopId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBalanceMovementDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceMovementDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: registrar una transferencia (PAYOUT) o un ajuste",
         "tags": ["admin"]
       }
     },
@@ -18253,6 +19140,201 @@
         "tags": ["shop"]
       }
     },
+    "/api/v1/barbershops/{id}/reports/monthly": {
+      "get": {
+        "operationId": "ShopController_monthly_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "months",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 24,
+              "default": 12,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MonthlyReportDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Ventas por mes (app y local), crecimiento, mejor y peor mes, servicios en alza",
+        "tags": ["shop"]
+      }
+    },
+    "/api/v1/barbershops/{id}/reports/heatmap": {
+      "get": {
+        "operationId": "ShopController_heatmap_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "days",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 7,
+              "maximum": 365,
+              "default": 90,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HeatmapDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Días y horas con más atenciones, y horas tranquilas (plan con reportes completos)",
+        "tags": ["shop"]
+      }
+    },
+    "/api/v1/barbershops/{id}/reports/market": {
+      "get": {
+        "operationId": "ShopController_market_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "radiusKm",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 30,
+              "default": 5,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "PLAN_LIMIT_REACHED o PLAN_FEATURE_NOT_INCLUDED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Tu barbería frente a su zona: precios, valoración y cortes más pedidos (promedios)",
+        "tags": ["shop"]
+      }
+    },
     "/api/v1/barbershops/{id}/reports/sales.csv": {
       "get": {
         "operationId": "ShopController_reportCsv_v1",
@@ -18397,6 +19479,3048 @@
         ],
         "summary": "Solo OWNER: comisión del barbero sobre sus atenciones (para reportes)",
         "tags": ["shop"]
+      }
+    },
+    "/api/v1/feed": {
+      "get": {
+        "description": "forYou: interacción y frescura (30 días). nearby: exige lat/lng (radiusKm, def. 30). following: barberías y perfiles que sigo (vacío sin sesión). Cursor opaco.",
+        "operationId": "CommunityController_feed_v1",
+        "parameters": [
+          {
+            "name": "tab",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "forYou",
+              "type": "string",
+              "enum": ["forYou", "nearby", "following"]
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["PROMOTION", "EVENT", "WORK", "ANNOUNCEMENT"]
+            }
+          },
+          {
+            "name": "lat",
+            "required": false,
+            "in": "query",
+            "description": "nearby: obligatorio (con lng).",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "lng",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "radiusKm",
+            "required": false,
+            "in": "query",
+            "description": "nearby: radio en km.",
+            "schema": {
+              "minimum": 1,
+              "maximum": 200,
+              "default": 30,
+              "type": "number"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor (opaco).",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Feed de la comunidad (sin sesión también)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts/media": {
+      "post": {
+        "description": "multipart/form-data, campo `file`: JPEG, PNG o WebP hasta 10 MB (HEIC: convertir en la app). Se eliminan los metadatos (EXIF y GPS) y se guarda en WebP. Luego envía su id en mediaIds (máx. 10 por publicación).",
+        "operationId": "CommunityController_uploadMedia_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/PostMediaUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadedPostMediaDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Subir una foto para una publicación (antes de publicar)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts": {
+      "post": {
+        "description": "PROMOTION puede enlazar promotionId (de la barbería). EVENT exige event. WORK admite barberProfileId y serviceId. 400 CONTENT_NOT_ALLOWED con palabras no permitidas.",
+        "operationId": "CommunityController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Publicar (como barbería si envías barbershopId; si no, como mi perfil profesional)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts/{id}": {
+      "get": {
+        "operationId": "CommunityController_one_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Una publicación",
+        "tags": ["community"]
+      },
+      "patch": {
+        "operationId": "CommunityController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Editar (autor: creador, OWNER/MANAGER de la barbería o dueño del perfil)",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_remove_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Borrar (autor)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts/{id}/pin": {
+      "put": {
+        "operationId": "CommunityController_pin_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PinPostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fijar o soltar en el perfil del autor",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/barbershops/{id}/posts": {
+      "get": {
+        "operationId": "CommunityController_byShop_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["PROMOTION", "EVENT", "WORK", "ANNOUNCEMENT"]
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Publicaciones de una barbería (fijadas primero)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/professional-profiles/{id}/posts": {
+      "get": {
+        "operationId": "CommunityController_byProfile_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["PROMOTION", "EVENT", "WORK", "ANNOUNCEMENT"]
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Publicaciones de un perfil profesional (fijadas primero)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts/{id}/like": {
+      "put": {
+        "operationId": "CommunityController_like_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LikeStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Me gusta (idempotente)",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_unlike_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LikeStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar me gusta (idempotente)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts/{id}/save": {
+      "put": {
+        "operationId": "CommunityController_save_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaveStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Guardar (idempotente)",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_unsave_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SaveStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar de guardados (idempotente)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/me/saved-posts": {
+      "get": {
+        "operationId": "CommunityController_saved_v1",
+        "parameters": [
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis publicaciones guardadas",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts/{id}/share": {
+      "post": {
+        "operationId": "CommunityController_share_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Contar un compartido (devuelve el enlace)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts/{id}/attendance": {
+      "put": {
+        "operationId": "CommunityController_attendance_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AttendanceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttendanceStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "EVENT_FULL: sin cupos o terminado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Asistencia a un evento: INTERESTED, GOING o NONE (respeta el cupo)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/posts/{id}/comments": {
+      "get": {
+        "operationId": "CommunityController_comments_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "parentId",
+            "required": false,
+            "in": "query",
+            "description": "Respuestas de este comentario. Sin él: primer nivel.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Comentarios (primer nivel, fijados primero) o respuestas de uno (parentId)",
+        "tags": ["community"]
+      },
+      "post": {
+        "description": "Para responder a una respuesta: el mismo parentId y mentionUserId.",
+        "operationId": "CommunityController_comment_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "COMMENTS_DISABLED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Comentar o responder (máximo 2 niveles)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/comments/{id}": {
+      "patch": {
+        "operationId": "CommunityController_updateComment_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCommentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Editar mi comentario",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_removeComment_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Borrar un comentario (su autor o el autor de la publicación)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/comments/{id}/pin": {
+      "put": {
+        "operationId": "CommunityController_pinComment_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PinCommentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fijar un comentario (autor de la publicación)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/comments/{id}/like": {
+      "put": {
+        "operationId": "CommunityController_likeComment_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LikeStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Me gusta en un comentario (idempotente)",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_unlikeComment_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LikeStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar me gusta de un comentario (idempotente)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/reviews/{id}/like": {
+      "put": {
+        "operationId": "CommunityController_likeReview_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LikeStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Me gusta en una valoración (idempotente)",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_unlikeReview_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LikeStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar me gusta de una valoración (idempotente)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/barbershops/{id}/follow": {
+      "get": {
+        "operationId": "CommunityController_shopFollowState_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Seguidores de la barbería (y si la sigo)",
+        "tags": ["community"]
+      },
+      "put": {
+        "operationId": "CommunityController_followShop_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Seguir una barbería (idempotente)",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_unfollowShop_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Dejar de seguir una barbería (idempotente)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/professional-profiles/{id}/follow": {
+      "get": {
+        "operationId": "CommunityController_profileFollowState_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Seguidores del perfil profesional (y si lo sigo)",
+        "tags": ["community"]
+      },
+      "put": {
+        "operationId": "CommunityController_followProfile_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Seguir un perfil profesional (idempotente)",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_unfollowProfile_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FollowStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Dejar de seguir un perfil profesional (idempotente)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/users/{id}/block": {
+      "put": {
+        "operationId": "CommunityController_block_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlockStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Bloquear una cuenta: se oculta su contenido en todo, en ambos sentidos",
+        "tags": ["community"]
+      },
+      "delete": {
+        "operationId": "CommunityController_unblock_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlockStateDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Desbloquear (idempotente)",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/me/blocks": {
+      "get": {
+        "operationId": "CommunityController_blocks_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BlockedUserDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "BLOCKED: hay un bloqueo con el autor.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "POST_HIDDEN: retirada u oculta por reportes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cuentas que bloqueé",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/reports": {
+      "post": {
+        "description": "Idempotente. Con N reportes de personas distintas el contenido se oculta hasta revisarlo.",
+        "operationId": "ContentReportsController_report_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContentReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reportar una publicación, un comentario o una cuenta",
+        "tags": ["community"]
+      }
+    },
+    "/api/v1/admin/community/reports": {
+      "get": {
+        "operationId": "CommunityAdminController_list_v1",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "OPEN",
+              "type": "string",
+              "enum": ["OPEN", "DISMISSED", "ACTIONED"]
+            }
+          },
+          {
+            "name": "targetType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["POST", "COMMENT", "USER"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminContentReportDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "ADMIN o SUPPORT: reportes de la comunidad (los 200 más recientes)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/community/reports/{id}/resolve": {
+      "post": {
+        "operationId": "CommunityAdminController_resolve_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminContentReportDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "ADMIN o SUPPORT: descartar, retirar o restaurar (todos los reportes del mismo contenido)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/locations/departments": {
+      "get": {
+        "operationId": "LocationsController_departments_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Departamentos del Perú",
+        "tags": ["locations"]
+      }
+    },
+    "/api/v1/locations/provinces": {
+      "get": {
+        "operationId": "LocationsController_provinces_v1",
+        "parameters": [
+          {
+            "name": "department",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "example": "Puno",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProvinceDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Provincias (de un departamento, o todas)",
+        "tags": ["locations"]
+      }
+    },
+    "/api/v1/locations/districts": {
+      "get": {
+        "operationId": "LocationsController_districts_v1",
+        "parameters": [
+          {
+            "name": "department",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "example": "Puno",
+              "type": "string"
+            }
+          },
+          {
+            "name": "province",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "example": "San Roman",
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Busca por nombre del distrito (sin tildes).",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DistrictDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Distritos (filtra por departamento, provincia o nombre; máximo 300)",
+        "tags": ["locations"]
+      }
+    },
+    "/api/v1/locations/districts/{ubigeo}": {
+      "get": {
+        "operationId": "LocationsController_district_v1",
+        "parameters": [
+          {
+            "name": "ubigeo",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DistrictDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Un distrito por su UBIGEO",
+        "tags": ["locations"]
       }
     }
   },
@@ -19112,6 +23236,11 @@
       "CreateBarbershopDto": {
         "type": "object",
         "properties": {
+          "ubigeo": {
+            "type": "string",
+            "example": "211101",
+            "description": "Distrito (UBIGEO del INEI, ver /locations). Si no se envía, se toma el más cercano a latitude/longitude."
+          },
           "name": {
             "type": "string",
             "example": "Barbería Central",
@@ -19173,6 +23302,29 @@
           }
         },
         "required": ["name", "address", "latitude", "longitude", "phone"]
+      },
+      "LocationDto": {
+        "type": "object",
+        "properties": {
+          "ubigeo": {
+            "type": "string",
+            "example": "211101",
+            "description": "Código UBIGEO del distrito (INEI)."
+          },
+          "district": {
+            "type": "string",
+            "example": "Juliaca"
+          },
+          "province": {
+            "type": "string",
+            "example": "San Roman"
+          },
+          "department": {
+            "type": "string",
+            "example": "Puno"
+          }
+        },
+        "required": ["ubigeo", "district", "province", "department"]
       },
       "BarbershopType": {
         "type": "string",
@@ -19286,6 +23438,16 @@
             "type": "string",
             "example": "America/Lima"
           },
+          "location": {
+            "nullable": true,
+            "description": "Distrito, provincia y departamento.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDto"
+              }
+            ]
+          },
           "type": {
             "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).",
             "allOf": [
@@ -19374,6 +23536,7 @@
           "latitude",
           "longitude",
           "timezone",
+          "location",
           "type",
           "phone",
           "status",
@@ -19393,6 +23556,11 @@
       "CreateIndependentDto": {
         "type": "object",
         "properties": {
+          "ubigeo": {
+            "type": "string",
+            "example": "211101",
+            "description": "Distrito (UBIGEO del INEI, ver /locations). Si no se envía, se toma el más cercano a latitude/longitude."
+          },
           "name": {
             "type": "string",
             "example": "Barbería Central",
@@ -19493,6 +23661,16 @@
             "type": "string",
             "example": "America/Lima"
           },
+          "location": {
+            "nullable": true,
+            "description": "Distrito, provincia y departamento.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDto"
+              }
+            ]
+          },
           "type": {
             "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).",
             "allOf": [
@@ -19590,6 +23768,7 @@
           "latitude",
           "longitude",
           "timezone",
+          "location",
           "type",
           "phone",
           "status",
@@ -19634,6 +23813,16 @@
           "timezone": {
             "type": "string",
             "example": "America/Lima"
+          },
+          "location": {
+            "nullable": true,
+            "description": "Distrito, provincia y departamento.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDto"
+              }
+            ]
           },
           "type": {
             "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).",
@@ -19698,6 +23887,7 @@
           "latitude",
           "longitude",
           "timezone",
+          "location",
           "type",
           "phone",
           "status",
@@ -19713,6 +23903,11 @@
       "UpdateBarbershopDto": {
         "type": "object",
         "properties": {
+          "ubigeo": {
+            "type": "string",
+            "example": "211101",
+            "description": "Distrito (UBIGEO del INEI, ver /locations). Si no se envía, se toma el más cercano a latitude/longitude."
+          },
           "name": {
             "type": "string",
             "example": "Barbería Central",
@@ -19792,6 +23987,16 @@
           "timezone": {
             "type": "string",
             "example": "America/Lima"
+          },
+          "location": {
+            "nullable": true,
+            "description": "Distrito, provincia y departamento.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDto"
+              }
+            ]
           },
           "type": {
             "description": "BARBERSHOP: barbería. INDEPENDENT: barbero independiente (un solo barbero).",
@@ -19877,6 +24082,7 @@
           "latitude",
           "longitude",
           "timezone",
+          "location",
           "type",
           "phone",
           "status",
@@ -20783,6 +24989,19 @@
               }
             ]
           },
+          "likes": {
+            "type": "number",
+            "description": "Me gusta de la comunidad."
+          },
+          "likedByMe": {
+            "type": "boolean",
+            "description": "Con sesión: si le di me gusta."
+          },
+          "authorPhotoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Foto de perfil del autor (null si no tiene)."
+          },
           "bookingId": {
             "type": "string",
             "format": "uuid"
@@ -20810,6 +25029,9 @@
           "createdAt",
           "editedAt",
           "response",
+          "likes",
+          "likedByMe",
+          "authorPhotoUrl",
           "bookingId",
           "barbershop",
           "status",
@@ -20895,6 +25117,19 @@
                 "$ref": "#/components/schemas/ReviewResponseDto"
               }
             ]
+          },
+          "likes": {
+            "type": "number",
+            "description": "Me gusta de la comunidad."
+          },
+          "likedByMe": {
+            "type": "boolean",
+            "description": "Con sesión: si le di me gusta."
+          },
+          "authorPhotoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Foto de perfil del autor (null si no tiene)."
           }
         },
         "required": [
@@ -20906,7 +25141,10 @@
           "barber",
           "createdAt",
           "editedAt",
-          "response"
+          "response",
+          "likes",
+          "likedByMe",
+          "authorPhotoUrl"
         ]
       },
       "PublicReviewPageDto": {
@@ -20976,6 +25214,19 @@
               }
             ]
           },
+          "likes": {
+            "type": "number",
+            "description": "Me gusta de la comunidad."
+          },
+          "likedByMe": {
+            "type": "boolean",
+            "description": "Con sesión: si le di me gusta."
+          },
+          "authorPhotoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Foto de perfil del autor (null si no tiene)."
+          },
           "status": {
             "description": "VISIBLE; UNDER_REVIEW (reportada, sigue visible); HIDDEN (oculta por soporte).",
             "allOf": [
@@ -21008,6 +25259,9 @@
           "createdAt",
           "editedAt",
           "response",
+          "likes",
+          "likedByMe",
+          "authorPhotoUrl",
           "status",
           "responseStatus",
           "canRespond"
@@ -22355,6 +26609,62 @@
         },
         "required": ["startAt", "endAt", "type"]
       },
+      "ReadinessIssueDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "NOT_PUBLISHED",
+              "NO_BUSINESS_HOURS",
+              "NO_SERVICES",
+              "NO_ACTIVE_BARBERS",
+              "BARBER_WITHOUT_SERVICES",
+              "INVITATION_PENDING",
+              "BARBERS_SUSPENDED_BY_PLAN"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["BLOCKING", "WARNING"],
+            "description": "BLOCKING impide reservar; WARNING es un aviso."
+          },
+          "message": {
+            "type": "string",
+            "description": "Texto para mostrar al dueño."
+          },
+          "barberId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "barberName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["code", "severity", "message", "barberId", "barberName"]
+      },
+      "ReadinessDto": {
+        "type": "object",
+        "properties": {
+          "ready": {
+            "type": "boolean",
+            "description": "Se puede reservar: publicada, con horario, servicios y al menos un barbero listo."
+          },
+          "bookableBarbers": {
+            "type": "number",
+            "description": "Barberos que ya reciben reservas (activos y con servicios)."
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReadinessIssueDto"
+            }
+          }
+        },
+        "required": ["ready", "bookableBarbers", "issues"]
+      },
       "SearchRatingDto": {
         "type": "object",
         "properties": {
@@ -22850,6 +27160,45 @@
           }
         },
         "required": ["received", "duplicate"]
+      },
+      "SellerAccountDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["NOT_CONNECTED", "PENDING", "CONNECTED", "REVOKED"],
+            "description": "CONNECTED: los pagos de reservas van directo a la cuenta de la barbería."
+          },
+          "provider": {
+            "type": "string",
+            "example": "MERCADOPAGO"
+          },
+          "providerUserId": {
+            "type": "string",
+            "nullable": true,
+            "description": "ID de la cuenta en Mercado Pago."
+          },
+          "connectedAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          }
+        },
+        "required": ["status", "provider", "providerUserId", "connectedAt"]
+      },
+      "SellerConnectDto": {
+        "type": "object",
+        "properties": {
+          "authorizationUrl": {
+            "type": "string",
+            "description": "Abrir en el navegador: el dueño autoriza en Mercado Pago y vuelve."
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["authorizationUrl", "expiresAt"]
       },
       "CreateBookingDto": {
         "type": "object",
@@ -26909,6 +31258,16 @@
             "type": "string",
             "nullable": true
           },
+          "location": {
+            "nullable": true,
+            "description": "Distrito de la lista fija.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDto"
+              }
+            ]
+          },
           "availableForWork": {
             "type": "boolean"
           },
@@ -26955,6 +31314,7 @@
           "photoUrl",
           "yearsExperience",
           "district",
+          "location",
           "availableForWork",
           "ratingAverage",
           "ratingCount",
@@ -26999,6 +31359,12 @@
             "maxLength": 60,
             "example": "Miraflores",
             "minLength": 2
+          },
+          "ubigeo": {
+            "type": "string",
+            "nullable": true,
+            "example": "211101",
+            "description": "Distrito de la lista fija (UBIGEO, ver /locations). Reemplaza a `district` (texto libre)."
           },
           "availableForWork": {
             "type": "boolean",
@@ -27141,6 +31507,16 @@
             "type": "string",
             "nullable": true
           },
+          "location": {
+            "nullable": true,
+            "description": "Distrito de la lista fija.",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDto"
+              }
+            ]
+          },
           "ratingAverage": {
             "type": "number",
             "nullable": true
@@ -27157,6 +31533,11 @@
           },
           "availableForWork": {
             "type": "boolean"
+          },
+          "distanceKm": {
+            "type": "number",
+            "nullable": true,
+            "description": "Km desde el punto pedido (lat/lng): su barbería actual o el centro de su distrito."
           },
           "specialties": {
             "type": "array",
@@ -27179,11 +31560,13 @@
           "headline",
           "photoUrl",
           "district",
+          "location",
           "ratingAverage",
           "ratingCount",
           "attendedCount",
           "score",
           "availableForWork",
+          "distanceKm",
           "specialties",
           "currentBarbershops"
         ]
@@ -27248,6 +31631,19 @@
           "createdAt": {
             "format": "date-time",
             "type": "string"
+          },
+          "likes": {
+            "type": "number",
+            "description": "Me gusta de la comunidad."
+          },
+          "likedByMe": {
+            "type": "boolean",
+            "description": "Con sesión: si le di me gusta."
+          },
+          "authorPhotoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Foto de perfil del autor (null si no tiene)."
           }
         },
         "required": [
@@ -27257,7 +31653,10 @@
           "clientName",
           "barbershopName",
           "serviceName",
-          "createdAt"
+          "createdAt",
+          "likes",
+          "likedByMe",
+          "authorPhotoUrl"
         ]
       },
       "ProfileReviewPageDto": {
@@ -27633,6 +32032,56 @@
               "$ref": "#/components/schemas/StyleRefDto"
             }
           },
+          "payMin": {
+            "type": "number",
+            "nullable": true
+          },
+          "payMax": {
+            "type": "number",
+            "nullable": true
+          },
+          "payType": {
+            "type": "string",
+            "enum": ["FIXED", "COMMISSION", "MIXED", "PER_SERVICE"],
+            "nullable": true
+          },
+          "payPeriod": {
+            "type": "string",
+            "enum": ["DAY", "WEEK", "BIWEEKLY", "MONTH", "PER_SERVICE"],
+            "nullable": true
+          },
+          "negotiable": {
+            "type": "boolean"
+          },
+          "location": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDto"
+              }
+            ]
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "selectionProcess": {
+            "type": "string",
+            "enum": ["INTERVIEW", "TRIAL", "DIRECT"],
+            "nullable": true
+          },
+          "schedule": {
+            "type": "string",
+            "nullable": true
+          },
+          "distanceKm": {
+            "type": "number",
+            "nullable": true,
+            "description": "Km desde el punto pedido (lat/lng)."
+          },
           "status": {
             "type": "string",
             "enum": ["OPEN", "CLOSED"],
@@ -27666,6 +32115,16 @@
           "employmentType",
           "compensationText",
           "styles",
+          "payMin",
+          "payMax",
+          "payType",
+          "payPeriod",
+          "negotiable",
+          "location",
+          "requirements",
+          "selectionProcess",
+          "schedule",
+          "distanceKm",
           "status",
           "closesAt",
           "applicationsCount",
@@ -27788,6 +32247,62 @@
       "CreateJobPostingDto": {
         "type": "object",
         "properties": {
+          "payMin": {
+            "type": "number",
+            "nullable": true,
+            "description": "Pago mínimo (céntimos).",
+            "example": 120000
+          },
+          "payMax": {
+            "type": "number",
+            "nullable": true,
+            "description": "Pago máximo (céntimos).",
+            "example": 200000
+          },
+          "payType": {
+            "type": "string",
+            "enum": ["FIXED", "COMMISSION", "MIXED", "PER_SERVICE"],
+            "nullable": true,
+            "description": "Fijo, comisión, mixto o por servicio."
+          },
+          "payPeriod": {
+            "type": "string",
+            "enum": ["DAY", "WEEK", "BIWEEKLY", "MONTH", "PER_SERVICE"],
+            "nullable": true
+          },
+          "schedule": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200,
+            "example": "Lunes a sábado de 9:00 a 20:00",
+            "minLength": 2
+          },
+          "negotiable": {
+            "type": "boolean",
+            "description": "El pago es negociable."
+          },
+          "ubigeo": {
+            "type": "string",
+            "nullable": true,
+            "example": "211101",
+            "description": "Distrito (UBIGEO). Por defecto, el de la barbería."
+          },
+          "requirements": {
+            "description": "Requisitos (hasta 20).",
+            "example": ["2 años de experiencia", "Manejo de fades"],
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "minLength": 2
+            }
+          },
+          "selectionProcess": {
+            "type": "string",
+            "enum": ["INTERVIEW", "TRIAL", "DIRECT"],
+            "nullable": true,
+            "description": "Entrevista, prueba práctica o contratación directa."
+          },
           "title": {
             "type": "string",
             "minLength": 5,
@@ -27828,6 +32343,62 @@
       "UpdateJobPostingDto": {
         "type": "object",
         "properties": {
+          "payMin": {
+            "type": "number",
+            "nullable": true,
+            "description": "Pago mínimo (céntimos).",
+            "example": 120000
+          },
+          "payMax": {
+            "type": "number",
+            "nullable": true,
+            "description": "Pago máximo (céntimos).",
+            "example": 200000
+          },
+          "payType": {
+            "type": "string",
+            "enum": ["FIXED", "COMMISSION", "MIXED", "PER_SERVICE"],
+            "nullable": true,
+            "description": "Fijo, comisión, mixto o por servicio."
+          },
+          "payPeriod": {
+            "type": "string",
+            "enum": ["DAY", "WEEK", "BIWEEKLY", "MONTH", "PER_SERVICE"],
+            "nullable": true
+          },
+          "schedule": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200,
+            "example": "Lunes a sábado de 9:00 a 20:00",
+            "minLength": 2
+          },
+          "negotiable": {
+            "type": "boolean",
+            "description": "El pago es negociable."
+          },
+          "ubigeo": {
+            "type": "string",
+            "nullable": true,
+            "example": "211101",
+            "description": "Distrito (UBIGEO). Por defecto, el de la barbería."
+          },
+          "requirements": {
+            "description": "Requisitos (hasta 20).",
+            "example": ["2 años de experiencia", "Manejo de fades"],
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "minLength": 2
+            }
+          },
+          "selectionProcess": {
+            "type": "string",
+            "enum": ["INTERVIEW", "TRIAL", "DIRECT"],
+            "nullable": true,
+            "description": "Entrevista, prueba práctica o contratación directa."
+          },
           "title": {
             "type": "string",
             "minLength": 5,
@@ -27903,6 +32474,171 @@
           }
         },
         "required": ["barberId"]
+      },
+      "CreateJobOfferDto": {
+        "type": "object",
+        "properties": {
+          "payMin": {
+            "type": "number",
+            "nullable": true,
+            "description": "Pago mínimo (céntimos).",
+            "example": 120000
+          },
+          "payMax": {
+            "type": "number",
+            "nullable": true,
+            "description": "Pago máximo (céntimos).",
+            "example": 200000
+          },
+          "payType": {
+            "type": "string",
+            "enum": ["FIXED", "COMMISSION", "MIXED", "PER_SERVICE"],
+            "nullable": true,
+            "description": "Fijo, comisión, mixto o por servicio."
+          },
+          "payPeriod": {
+            "type": "string",
+            "enum": ["DAY", "WEEK", "BIWEEKLY", "MONTH", "PER_SERVICE"],
+            "nullable": true
+          },
+          "schedule": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200,
+            "example": "Lunes a sábado de 9:00 a 20:00",
+            "minLength": 2
+          },
+          "barberProfileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Perfil profesional del barbero."
+          },
+          "title": {
+            "type": "string",
+            "example": "Barbero para el turno tarde",
+            "minLength": 3,
+            "maxLength": 100
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1
+          },
+          "employmentType": {
+            "type": "string",
+            "enum": ["FULL_TIME", "PART_TIME", "WEEKENDS", "COMMISSION", "FREELANCE"]
+          },
+          "expiresInDays": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 30,
+            "default": 7,
+            "description": "Días para responder."
+          }
+        },
+        "required": ["barberProfileId", "title", "employmentType"]
+      },
+      "JobOfferDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershop": {
+            "$ref": "#/components/schemas/JobBarbershopDto"
+          },
+          "barberProfileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barberName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "employmentType": {
+            "type": "string",
+            "enum": ["FULL_TIME", "PART_TIME", "WEEKENDS", "COMMISSION", "FREELANCE"]
+          },
+          "payMin": {
+            "type": "number",
+            "nullable": true
+          },
+          "payMax": {
+            "type": "number",
+            "nullable": true
+          },
+          "payType": {
+            "type": "string",
+            "enum": ["FIXED", "COMMISSION", "MIXED", "PER_SERVICE"],
+            "nullable": true
+          },
+          "payPeriod": {
+            "type": "string",
+            "enum": ["DAY", "WEEK", "BIWEEKLY", "MONTH", "PER_SERVICE"],
+            "nullable": true
+          },
+          "schedule": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN", "EXPIRED"]
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "respondedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "responseNote": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "barbershop",
+          "barberProfileId",
+          "barberName",
+          "title",
+          "message",
+          "employmentType",
+          "payMin",
+          "payMax",
+          "payType",
+          "payPeriod",
+          "schedule",
+          "status",
+          "expiresAt",
+          "respondedAt",
+          "responseNote",
+          "createdAt"
+        ]
+      },
+      "AnswerJobOfferDto": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 1
+          }
+        }
       },
       "VideoDto": {
         "type": "object",
@@ -28921,6 +33657,12 @@
             "type": "boolean",
             "default": false,
             "description": "true: reemplaza la suscripción vigente (cambio de plan). Si no, 409 SUBSCRIPTION_EXISTS."
+          },
+          "paymentMethod": {
+            "type": "string",
+            "enum": ["GATEWAY", "BALANCE"],
+            "default": "GATEWAY",
+            "description": "GATEWAY: enlace de pago por correo (Mercado Pago). BALANCE: se paga al instante con el saldo a favor de la barbería (sin prueba gratis) y se renueva sola con el saldo; si no alcanza, queda PAST_DUE. 409 INSUFFICIENT_BALANCE si no alcanza."
           }
         },
         "required": ["planCode"]
@@ -29436,6 +34178,231 @@
           }
         },
         "required": ["reason", "days"]
+      },
+      "BalanceDto": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "number",
+            "description": "Saldo a favor disponible (céntimos): se puede liquidar o usar para pagar el plan."
+          },
+          "pending": {
+            "type": "number",
+            "description": "Cobrado por Charles de reservas aún no atendidas (se libera al atender)."
+          },
+          "paidDirect": {
+            "type": "number",
+            "description": "Cobrado directo en tu cuenta de Mercado Pago (no pasa por el saldo)."
+          },
+          "currency": {
+            "type": "string",
+            "example": "PEN"
+          },
+          "sellerConnected": {
+            "type": "boolean",
+            "description": "true si la barbería tiene su cuenta de Mercado Pago vinculada."
+          }
+        },
+        "required": ["available", "pending", "paidDirect", "currency", "sellerConnected"]
+      },
+      "StatementLineDto": {
+        "type": "object",
+        "properties": {
+          "at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "BOOKING",
+              "BOOKING_DIRECT",
+              "REFUND",
+              "MEMBERSHIP",
+              "SUBSCRIPTION_PAYMENT",
+              "PAYOUT",
+              "ADJUSTMENT"
+            ],
+            "description": "BOOKING: reserva cobrada por Charles (suma al saldo al atenderse). BOOKING_DIRECT: cobrada en tu cuenta de Mercado Pago (informativa). REFUND: devolución. MEMBERSHIP: cobro de membresía. SUBSCRIPTION_PAYMENT: plan pagado con saldo. PAYOUT: transferencia de Charles. ADJUSTMENT: ajuste."
+          },
+          "description": {
+            "type": "string"
+          },
+          "gross": {
+            "type": "number",
+            "description": "Monto cobrado al cliente (céntimos; 0 en movimientos)."
+          },
+          "commission": {
+            "type": "number",
+            "description": "Comisión de Charles (céntimos)."
+          },
+          "net": {
+            "type": "number",
+            "description": "Efecto en tu saldo (con signo; 0 si no lo afecta)."
+          },
+          "payee": {
+            "type": "string",
+            "enum": ["PLATFORM", "SELLER", "NONE"],
+            "description": "Quién recibió el dinero."
+          },
+          "state": {
+            "type": "string",
+            "enum": ["AVAILABLE", "PENDING", "INFO"]
+          },
+          "bookingId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "at",
+          "kind",
+          "description",
+          "gross",
+          "commission",
+          "net",
+          "payee",
+          "state",
+          "bookingId"
+        ]
+      },
+      "StatementDto": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "$ref": "#/components/schemas/BalanceDto"
+          },
+          "from": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "to": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "gross": {
+            "type": "number",
+            "description": "Total cobrado en el periodo (céntimos)."
+          },
+          "commission": {
+            "type": "number",
+            "description": "Comisiones de Charles en el periodo."
+          },
+          "net": {
+            "type": "number",
+            "description": "Neto de la barbería en el periodo."
+          },
+          "lines": {
+            "description": "Del más reciente al más antiguo (máx. 500).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatementLineDto"
+            }
+          }
+        },
+        "required": ["balance", "from", "to", "gross", "commission", "net", "lines"]
+      },
+      "AdminBalanceDto": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "number",
+            "description": "Saldo a favor disponible (céntimos): se puede liquidar o usar para pagar el plan."
+          },
+          "pending": {
+            "type": "number",
+            "description": "Cobrado por Charles de reservas aún no atendidas (se libera al atender)."
+          },
+          "paidDirect": {
+            "type": "number",
+            "description": "Cobrado directo en tu cuenta de Mercado Pago (no pasa por el saldo)."
+          },
+          "currency": {
+            "type": "string",
+            "example": "PEN"
+          },
+          "sellerConnected": {
+            "type": "boolean",
+            "description": "true si la barbería tiene su cuenta de Mercado Pago vinculada."
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "lastPayoutAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "available",
+          "pending",
+          "paidDirect",
+          "currency",
+          "sellerConnected",
+          "barbershopId",
+          "barbershopName",
+          "lastPayoutAt"
+        ]
+      },
+      "BalanceMovementDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["SUBSCRIPTION_PAYMENT", "PAYOUT", "ADJUSTMENT"]
+          },
+          "amount": {
+            "type": "number"
+          },
+          "reference": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["id", "type", "amount", "reference", "note", "createdAt"]
+      },
+      "CreateBalanceMovementDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["PAYOUT", "ADJUSTMENT"]
+          },
+          "amount": {
+            "type": "number",
+            "description": "Céntimos. PAYOUT: monto transferido (positivo; se descuenta). ADJUSTMENT: con signo."
+          },
+          "reference": {
+            "type": "string",
+            "maxLength": 120,
+            "description": "N.º de operación de la transferencia.",
+            "minLength": 1
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": ["type", "amount"]
       },
       "MembershipPlanServiceDto": {
         "type": "object",
@@ -30735,6 +35702,244 @@
           "full"
         ]
       },
+      "MonthReportDto": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string",
+            "example": "2026-10"
+          },
+          "appAmount": {
+            "type": "number"
+          },
+          "localAmount": {
+            "type": "number"
+          },
+          "totalAmount": {
+            "type": "number"
+          },
+          "count": {
+            "type": "number"
+          },
+          "averageTicket": {
+            "type": "number"
+          },
+          "newClients": {
+            "type": "number"
+          },
+          "returningClients": {
+            "type": "number"
+          },
+          "growthPct": {
+            "type": "number",
+            "nullable": true,
+            "description": "% contra el mes anterior."
+          }
+        },
+        "required": [
+          "month",
+          "appAmount",
+          "localAmount",
+          "totalAmount",
+          "count",
+          "averageTicket",
+          "newClients",
+          "returningClients",
+          "growthPct"
+        ]
+      },
+      "ServiceTrendDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "current": {
+            "type": "number",
+            "description": "Atenciones del último mes."
+          },
+          "previous": {
+            "type": "number",
+            "description": "Atenciones del mes anterior."
+          },
+          "changePct": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": ["name", "current", "previous", "changePct"]
+      },
+      "MonthlyReportDto": {
+        "type": "object",
+        "properties": {
+          "months": {
+            "description": "Del más antiguo al actual.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MonthReportDto"
+            }
+          },
+          "bestMonth": {
+            "type": "string",
+            "nullable": true,
+            "example": "2026-08"
+          },
+          "worstMonth": {
+            "type": "string",
+            "nullable": true
+          },
+          "monthlyAverage": {
+            "type": "number",
+            "description": "Promedio mensual (céntimos)."
+          },
+          "yearOverYearPct": {
+            "type": "number",
+            "nullable": true,
+            "description": "% del mes actual contra el mismo mes del año pasado."
+          },
+          "serviceTrends": {
+            "description": "Servicios que más suben y bajan.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceTrendDto"
+            }
+          }
+        },
+        "required": [
+          "months",
+          "bestMonth",
+          "worstMonth",
+          "monthlyAverage",
+          "yearOverYearPct",
+          "serviceTrends"
+        ]
+      },
+      "HeatmapCellDto": {
+        "type": "object",
+        "properties": {
+          "weekday": {
+            "type": "number",
+            "description": "0 = domingo … 6 = sábado."
+          },
+          "hour": {
+            "type": "number",
+            "description": "Hora de Lima (0–23)."
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": ["weekday", "hour", "count"]
+      },
+      "HeatmapDto": {
+        "type": "object",
+        "properties": {
+          "cells": {
+            "description": "Solo celdas con atenciones.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HeatmapCellDto"
+            }
+          },
+          "busiestWeekday": {
+            "type": "number",
+            "nullable": true
+          },
+          "busiestHour": {
+            "type": "number",
+            "nullable": true
+          },
+          "quietSlots": {
+            "description": "Horas abiertas con menos movimiento (para promociones).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HeatmapCellDto"
+            }
+          },
+          "days": {
+            "type": "number"
+          }
+        },
+        "required": ["cells", "busiestWeekday", "busiestHour", "quietSlots", "days"]
+      },
+      "MarketStyleDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": ["key", "name", "count"]
+      },
+      "MarketDto": {
+        "type": "object",
+        "properties": {
+          "radiusKm": {
+            "type": "number"
+          },
+          "competitors": {
+            "type": "number",
+            "description": "Otras barberías visibles en el radio."
+          },
+          "zoneHaircutPrice": {
+            "type": "number",
+            "nullable": true,
+            "description": "Precio promedio del corte en la zona (céntimos)."
+          },
+          "myHaircutPrice": {
+            "type": "number",
+            "nullable": true,
+            "description": "Tu precio promedio de corte."
+          },
+          "zoneRating": {
+            "type": "number",
+            "nullable": true,
+            "description": "Valoración promedio de la zona."
+          },
+          "myRating": {
+            "type": "number",
+            "nullable": true
+          },
+          "myRatingRank": {
+            "type": "number",
+            "nullable": true,
+            "description": "Tu puesto por valoración en la zona (1 = mejor)."
+          },
+          "topStyles": {
+            "description": "Cortes más reservados en la zona (90 días).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MarketStyleDto"
+            }
+          },
+          "location": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/LocationDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "radiusKm",
+          "competitors",
+          "zoneHaircutPrice",
+          "myHaircutPrice",
+          "zoneRating",
+          "myRating",
+          "myRatingRank",
+          "topStyles",
+          "location"
+        ]
+      },
       "BarberCommissionDto": {
         "type": "object",
         "properties": {
@@ -30746,6 +35951,882 @@
           }
         },
         "required": ["commissionBp"]
+      },
+      "PostAuthorDto": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["BARBERSHOP", "PROFESSIONAL"]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID de la barbería o del perfil profesional."
+          },
+          "name": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "verified": {
+            "type": "boolean",
+            "description": "Barbería con insignia \"Verificada\" de su plan."
+          },
+          "followers": {
+            "type": "number"
+          }
+        },
+        "required": ["kind", "id", "name", "photoUrl", "verified", "followers"]
+      },
+      "PostMediaDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "thumbUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "width": {
+            "type": "number",
+            "nullable": true
+          },
+          "height": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": ["id", "url", "thumbUrl", "width", "height"]
+      },
+      "PostPromotionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["PERCENTAGE", "FIXED_AMOUNT"]
+          },
+          "value": {
+            "type": "number"
+          },
+          "endsAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "name", "type", "value", "endsAt"]
+      },
+      "PostEventDto": {
+        "type": "object",
+        "properties": {
+          "startsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endsAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          },
+          "address": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number",
+            "nullable": true
+          },
+          "lng": {
+            "type": "number",
+            "nullable": true
+          },
+          "capacity": {
+            "type": "number",
+            "nullable": true
+          },
+          "going": {
+            "type": "number"
+          },
+          "interested": {
+            "type": "number"
+          },
+          "full": {
+            "type": "boolean",
+            "description": "Sin cupo disponible para GOING."
+          }
+        },
+        "required": [
+          "startsAt",
+          "endsAt",
+          "address",
+          "lat",
+          "lng",
+          "capacity",
+          "going",
+          "interested",
+          "full"
+        ]
+      },
+      "PostCountsDto": {
+        "type": "object",
+        "properties": {
+          "likes": {
+            "type": "number"
+          },
+          "comments": {
+            "type": "number"
+          },
+          "shares": {
+            "type": "number"
+          }
+        },
+        "required": ["likes", "comments", "shares"]
+      },
+      "PostDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["PROMOTION", "EVENT", "WORK", "ANNOUNCEMENT"]
+          },
+          "author": {
+            "$ref": "#/components/schemas/PostAuthorDto"
+          },
+          "body": {
+            "type": "string"
+          },
+          "media": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostMediaDto"
+            }
+          },
+          "promotion": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PostPromotionDto"
+              }
+            ]
+          },
+          "event": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PostEventDto"
+              }
+            ]
+          },
+          "barberProfileId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "serviceId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/PostCountsDto"
+          },
+          "distanceKm": {
+            "type": "number",
+            "nullable": true,
+            "description": "Con lat/lng en el feed."
+          },
+          "commentsDisabled": {
+            "type": "boolean"
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "shareUrl": {
+            "type": "string",
+            "description": "Enlace para compartir (página web con vista previa)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "editedAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          },
+          "likedByMe": {
+            "type": "boolean",
+            "description": "Con sesión."
+          },
+          "savedByMe": {
+            "type": "boolean"
+          },
+          "followingAuthor": {
+            "type": "boolean"
+          },
+          "myEventStatus": {
+            "type": "string",
+            "enum": ["INTERESTED", "GOING", "NONE"]
+          },
+          "canEdit": {
+            "type": "boolean"
+          },
+          "canDelete": {
+            "type": "boolean"
+          },
+          "canPin": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "author",
+          "body",
+          "media",
+          "promotion",
+          "event",
+          "barberProfileId",
+          "serviceId",
+          "counts",
+          "distanceKm",
+          "commentsDisabled",
+          "pinned",
+          "shareUrl",
+          "createdAt",
+          "editedAt",
+          "likedByMe",
+          "savedByMe",
+          "followingAuthor",
+          "myEventStatus",
+          "canEdit",
+          "canDelete",
+          "canPin"
+        ]
+      },
+      "PostPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "PostMediaUploadDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        },
+        "required": ["file"]
+      },
+      "UploadedPostMediaDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "thumbUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "width": {
+            "type": "number",
+            "nullable": true
+          },
+          "height": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": ["id", "url", "thumbUrl", "width", "height"]
+      },
+      "PostEventInputDto": {
+        "type": "object",
+        "properties": {
+          "startsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "endsAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 3
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lng": {
+            "type": "number"
+          },
+          "capacity": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100000,
+            "description": "Cupo (personas que van). Sin cupo: ilimitado."
+          }
+        },
+        "required": ["startsAt", "address"]
+      },
+      "CreatePostDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["PROMOTION", "EVENT", "WORK", "ANNOUNCEMENT"]
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Publicar como esta barbería (OWNER o MANAGER). Sin él, como mi perfil profesional."
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1
+          },
+          "mediaIds": {
+            "maxItems": 10,
+            "description": "IDs de fotos subidas antes con POST /posts/media (en ese orden).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "promotionId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "PROMOTION: promoción existente de la barbería."
+          },
+          "event": {
+            "description": "Obligatorio en EVENT.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PostEventInputDto"
+              }
+            ]
+          },
+          "barberProfileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "WORK: perfil del barbero que hizo el corte."
+          },
+          "serviceId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "WORK: servicio para \"reservar este estilo\"."
+          },
+          "commentsDisabled": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": ["type", "body"]
+      },
+      "UpdatePostDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1
+          },
+          "mediaIds": {
+            "maxItems": 10,
+            "description": "Reemplaza las fotos.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "event": {
+            "$ref": "#/components/schemas/PostEventInputDto"
+          },
+          "commentsDisabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PinPostDto": {
+        "type": "object",
+        "properties": {
+          "pinned": {
+            "type": "boolean",
+            "description": "true: fija la publicación arriba en el perfil del autor."
+          }
+        },
+        "required": ["pinned"]
+      },
+      "LikeStateDto": {
+        "type": "object",
+        "properties": {
+          "liked": {
+            "type": "boolean"
+          },
+          "likes": {
+            "type": "number"
+          }
+        },
+        "required": ["liked", "likes"]
+      },
+      "SaveStateDto": {
+        "type": "object",
+        "properties": {
+          "saved": {
+            "type": "boolean"
+          }
+        },
+        "required": ["saved"]
+      },
+      "ShareStateDto": {
+        "type": "object",
+        "properties": {
+          "shares": {
+            "type": "number"
+          },
+          "shareUrl": {
+            "type": "string"
+          }
+        },
+        "required": ["shares", "shareUrl"]
+      },
+      "AttendanceDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["INTERESTED", "GOING", "NONE"]
+          }
+        },
+        "required": ["status"]
+      },
+      "AttendanceStateDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["INTERESTED", "GOING", "NONE"]
+          },
+          "going": {
+            "type": "number"
+          },
+          "interested": {
+            "type": "number"
+          },
+          "capacity": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": ["status", "going", "interested", "capacity"]
+      },
+      "CommentAuthorDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "username": {
+            "type": "string",
+            "description": "Nombre de usuario."
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["userId", "username", "photoUrl"]
+      },
+      "CommentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "postId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "parentId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "author": {
+            "$ref": "#/components/schemas/CommentAuthorDto"
+          },
+          "authorIsOfficial": {
+            "type": "boolean",
+            "description": "Lo escribió el autor de la publicación (la barbería o el barbero)."
+          },
+          "mention": {
+            "nullable": true,
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CommentAuthorDto"
+              }
+            ]
+          },
+          "body": {
+            "type": "string"
+          },
+          "likes": {
+            "type": "number"
+          },
+          "replies": {
+            "type": "number"
+          },
+          "likedByMe": {
+            "type": "boolean"
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "editedAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          },
+          "canEdit": {
+            "type": "boolean"
+          },
+          "canDelete": {
+            "type": "boolean",
+            "description": "Su autor o el autor de la publicación."
+          },
+          "canPin": {
+            "type": "boolean",
+            "description": "Solo el autor de la publicación (comentarios de primer nivel)."
+          }
+        },
+        "required": [
+          "id",
+          "postId",
+          "parentId",
+          "author",
+          "authorIsOfficial",
+          "mention",
+          "body",
+          "likes",
+          "replies",
+          "likedByMe",
+          "pinned",
+          "createdAt",
+          "editedAt",
+          "canEdit",
+          "canDelete",
+          "canPin"
+        ]
+      },
+      "CommentPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "CreateCommentDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1
+          },
+          "parentId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Comentario de primer nivel al que responde. Para responder a una respuesta, usa su mismo padre y mentionUserId."
+          },
+          "mentionUserId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Cuenta mencionada (recibe aviso)."
+          }
+        },
+        "required": ["body"]
+      },
+      "UpdateCommentDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1
+          }
+        },
+        "required": ["body"]
+      },
+      "PinCommentDto": {
+        "type": "object",
+        "properties": {
+          "pinned": {
+            "type": "boolean"
+          }
+        },
+        "required": ["pinned"]
+      },
+      "FollowStateDto": {
+        "type": "object",
+        "properties": {
+          "following": {
+            "type": "boolean"
+          },
+          "followers": {
+            "type": "number"
+          }
+        },
+        "required": ["following", "followers"]
+      },
+      "BlockStateDto": {
+        "type": "object",
+        "properties": {
+          "blocked": {
+            "type": "boolean"
+          }
+        },
+        "required": ["blocked"]
+      },
+      "BlockedUserDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "username": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "blockedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["userId", "username", "photoUrl", "blockedAt"]
+      },
+      "CreateContentReportDto": {
+        "type": "object",
+        "properties": {
+          "targetType": {
+            "type": "string",
+            "enum": ["post", "comment", "user"]
+          },
+          "targetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["SPAM", "OFFENSIVE", "HARASSMENT", "NUDITY", "VIOLENCE", "FALSE_INFO", "OTHER"]
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": ["targetType", "targetId", "reason"]
+      },
+      "AdminContentReportDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "targetType": {
+            "type": "string",
+            "enum": ["POST", "COMMENT", "USER"]
+          },
+          "targetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["SPAM", "OFFENSIVE", "HARASSMENT", "NUDITY", "VIOLENCE", "FALSE_INFO", "OTHER"]
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OPEN", "DISMISSED", "ACTIONED"]
+          },
+          "reporter": {
+            "type": "string",
+            "description": "Usuario que reporta."
+          },
+          "openReports": {
+            "type": "number",
+            "description": "Reportes abiertos del mismo objetivo."
+          },
+          "preview": {
+            "type": "string",
+            "description": "Texto del contenido (o el usuario reportado)."
+          },
+          "targetAuthor": {
+            "type": "string",
+            "nullable": true,
+            "description": "Autor del contenido (usuario)."
+          },
+          "targetState": {
+            "type": "string",
+            "enum": ["VISIBLE", "HIDDEN", "REMOVED", "DELETED"]
+          },
+          "photos": {
+            "description": "Fotos (publicaciones).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resolution": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "targetType",
+          "targetId",
+          "reason",
+          "note",
+          "status",
+          "reporter",
+          "openReports",
+          "preview",
+          "targetAuthor",
+          "targetState",
+          "photos",
+          "resolution",
+          "createdAt"
+        ]
+      },
+      "ResolveReportDto": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": ["DISMISS", "REMOVE", "RESTORE"],
+            "description": "DISMISS: sin infracción (si estaba oculto por reportes, vuelve a verse). REMOVE: retira el contenido. RESTORE: vuelve a mostrar un contenido retirado. En reportes de cuentas, REMOVE no aplica (usar Cuentas)."
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 3
+          }
+        },
+        "required": ["action", "reason"]
+      },
+      "ProvinceDto": {
+        "type": "object",
+        "properties": {
+          "department": {
+            "type": "string",
+            "example": "Puno"
+          },
+          "province": {
+            "type": "string",
+            "example": "San Roman"
+          }
+        },
+        "required": ["department", "province"]
+      },
+      "DistrictDto": {
+        "type": "object",
+        "properties": {
+          "ubigeo": {
+            "type": "string",
+            "example": "211101"
+          },
+          "department": {
+            "type": "string",
+            "example": "Puno"
+          },
+          "province": {
+            "type": "string",
+            "example": "San Roman"
+          },
+          "district": {
+            "type": "string",
+            "example": "Juliaca"
+          },
+          "latitude": {
+            "type": "number",
+            "nullable": true
+          },
+          "longitude": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": ["ubigeo", "department", "province", "district", "latitude", "longitude"]
       }
     }
   }

@@ -158,6 +158,7 @@ export const barbershop = (
 ): Schemas['BarbershopPublicDto'] => ({
   id: SHOP_ID,
   logoUrl: null,
+  location: null,
   coverUrl: null,
   coverThumbUrl: null,
   name: 'Barbería Demo Miraflores',
@@ -218,6 +219,9 @@ export const review = (overrides: Partial<Schemas['PublicReviewDto']> = {}): Sch
   rating: 5,
   comment: 'Excelente corte',
   authorName: 'Ana R.',
+  authorPhotoUrl: null,
+  likes: 0,
+  likedByMe: false,
   serviceName: 'Corte clásico',
   barber: { id: '01990000-0000-7000-8000-0000000000ca', displayName: 'Barbero Demo' },
   createdAt: '2030-01-07T14:00:00.000Z',

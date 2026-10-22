@@ -75,3 +75,20 @@ Ventanas para probar (valores por defecto):
 | No-show                | 15 min después del inicio | 24 h después            |
 | Corregir (responsable) | —                         | 48 h después del inicio |
 | Cancelar (barbería)    | —                         | antes del inicio        |
+
+## Demo de Juliaca (Comunidad, saldo, empleos)
+
+`pnpm --filter api dev:demo-juliaca --photos <carpeta> --confirm-wipe` **borra** la base de desarrollo y la llena con 10 barberías de Juliaca y 49 cuentas. Las fotos son de ejemplo, solo para la demo. La contraseña es la misma `SEED_USER_PASSWORD`; la tabla completa de cuentas se entrega aparte y nunca va al repositorio.
+
+| Para probar                                                        | Entrar como                                                                    |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Feed, comentarios, me gusta, guardados, membresía                  | `diego.quispe` (cliente; sigue barberías y tiene membresía en El Imperial)     |
+| Publicar como barbería, comentario fijado, reportes de comentarios | `rolando.quispe` (dueño de Barbería El Imperial: promoción fijada y trabajos)  |
+| Evento con cupo (15) y asistentes                                  | `kevin.mamani` (dueño de Fade House Juliaca)                                   |
+| Evento sin cupo                                                    | `nilo.huaricallo` (Estilo Andino Barber)                                       |
+| Publicar como perfil profesional                                   | `yeison.larico` (barbero independiente)                                        |
+| Ofertas directas de trabajo                                        | `ruth.condori` (pendiente) y `kevin.torres` (rechazada)                        |
+| Plan pagado con saldo a favor                                      | `wilber.ccama` (Barber Club Santa Bárbara)                                     |
+| Revisar reportes en el panel web                                   | `admin.demo` → página **Comunidad** (hay un comentario de spam con 2 reportes) |
+
+Para "Cerca de ti", usa el centro de Juliaca: `lat=-15.4975&lng=-70.1315`.

@@ -30,7 +30,7 @@ export const subscribe = (id: string, planCode: string, interval: BillingInterva
   unwrap(
     api.POST('/api/v1/barbershops/{id}/subscription', {
       params: { path: { id } },
-      body: { planCode, interval, replace },
+      body: { planCode, interval, replace, paymentMethod: 'GATEWAY' },
     }),
   );
 

@@ -212,6 +212,16 @@ export function JobWizardScreen({ shopId, onSaved }: { shopId: string; onSaved: 
           <JobCard
             job={{
               id: 'preview',
+              distanceKm: null,
+              location: null,
+              negotiable: false,
+              payMin: null,
+              payMax: null,
+              payType: null,
+              payPeriod: null,
+              requirements: [],
+              schedule: null,
+              selectionProcess: null,
               barbershop: {
                 id: shopId,
                 name: t('wizard.yourShop'),

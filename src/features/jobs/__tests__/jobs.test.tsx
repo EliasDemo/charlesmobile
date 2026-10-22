@@ -10,6 +10,16 @@ type S = components['schemas'];
 
 const posting = (overrides: Partial<S['JobPostingDto']> = {}): S['JobPostingDto'] => ({
   id: 'j1',
+  distanceKm: null,
+  location: null,
+  negotiable: false,
+  payMin: null,
+  payMax: null,
+  payType: null,
+  payPeriod: null,
+  requirements: [],
+  schedule: null,
+  selectionProcess: null,
   barbershop: {
     id: 'shop-1',
     name: 'Barbería Demo',

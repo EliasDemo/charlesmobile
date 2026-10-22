@@ -10,6 +10,7 @@ type S = components['schemas'];
 
 const profile = (overrides: Partial<S['BarberProfileDto']> = {}): S['BarberProfileDto'] => ({
   id: 'bp1',
+  location: null,
   displayName: 'Julián',
   headline: 'Especialista en degradados',
   bio: null,

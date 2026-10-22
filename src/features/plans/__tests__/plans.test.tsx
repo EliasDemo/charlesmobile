@@ -92,6 +92,7 @@ describe('PlansScreen', () => {
       planCode: 'pro',
       interval: 'MONTHLY',
       replace: true,
+      paymentMethod: 'GATEWAY',
     });
   });
 });
