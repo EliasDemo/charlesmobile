@@ -30,5 +30,9 @@ export async function loadWelcomeSeen(): Promise<void> {
 export const WELCOME_PAGES = [
   { key: 'find', icon: 'search' },
   { key: 'book', icon: 'calendar' },
+  { key: 'face', icon: 'happy' },
   { key: 'manage', icon: 'heart' },
 ] as const;
+
+/** How the person wants to use Charles (the last welcome page). */
+export type WelcomeChoice = 'client' | 'shop' | 'barber';

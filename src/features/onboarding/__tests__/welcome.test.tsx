@@ -16,8 +16,10 @@ describe('welcome', () => {
     const onDone = jest.fn();
     await renderWithProviders(<WelcomeScreen onDone={onDone} />);
     expect(screen.getByText(texts.pages.find.title)).toBeTruthy();
+    // "Saltar" goes to the last page, where the person chooses how to use Charles.
     await fireEvent.press(screen.getByText(texts.skip));
-    expect(onDone).toHaveBeenCalled();
+    await fireEvent.press(screen.getByText(texts.choose.client));
+    expect(onDone).toHaveBeenCalledWith('client');
     expect(useWelcomeStore.getState().seen).toBe(true);
     expect(SecureStore.setItemAsync).toHaveBeenCalledWith('charles.welcomeSeen', 'true');
   });
@@ -28,15 +30,14 @@ describe('welcome', () => {
     expect(useWelcomeStore.getState().seen).toBe(true);
   });
 
-  it('goes page by page and ends with "Empezar"', async () => {
+  it('goes page by page and ends choosing how to use Charles', async () => {
     const onDone = jest.fn();
     await renderWithProviders(<WelcomeScreen onDone={onDone} />);
-    expect(screen.getByLabelText('Página 1 de 3')).toBeTruthy();
-    await fireEvent.press(screen.getByText(texts.next));
-    await fireEvent.press(screen.getByText(texts.next));
-    expect(screen.getByLabelText('Página 3 de 3')).toBeTruthy();
-    await fireEvent.press(screen.getByText(texts.start));
-    expect(onDone).toHaveBeenCalled();
+    expect(screen.getByLabelText('Página 1 de 5')).toBeTruthy();
+    for (let i = 0; i < 4; i++) await fireEvent.press(screen.getByText(texts.next));
+    expect(screen.getByLabelText('Página 5 de 5')).toBeTruthy();
+    await fireEvent.press(screen.getByText(texts.choose.shop));
+    expect(onDone).toHaveBeenCalledWith('shop');
   });
 
   it('counts a storage error as seen, so it never blocks the app', async () => {

@@ -198,5 +198,11 @@
     "all": "Todo el Perú",
     "choose": "Elige tu distrito",
     "search": "Buscar distrito"
+  },
+  "tour": {
+    "step": "{{current}} de {{total}}",
+    "skip": "Saltar",
+    "next": "Siguiente",
+    "done": "Entendido"
   }
 }

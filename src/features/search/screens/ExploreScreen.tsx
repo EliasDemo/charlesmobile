@@ -12,6 +12,8 @@ import {
   SearchField,
   Text,
   ScreenTitle,
+  TourTarget,
+  useFirstTimeTour,
 } from '@/shared/ui';
 import { ResultCard } from '../components/ResultCard';
 import { SearchMap } from '../components/SearchMap';
@@ -50,28 +52,41 @@ export function ExploreScreen({
   const results = useSearchResults();
   const nearMe = useNearMe();
   const categories = useCategories();
+  useFirstTimeTour(
+    'explore',
+    [
+      { target: 'explore.search', key: 'search' },
+      { target: 'explore.nearMe', key: 'nearMe' },
+      { target: 'explore.face', key: 'face' },
+    ],
+    'tour',
+  );
 
   const header = (
     <View style={styles.header}>
       <ScreenTitle title={t('title')} right={headerRight} />
-      <SearchField
-        value={store.text}
-        onChangeText={store.setText}
-        placeholder={t('placeholder')}
-        label={t('fieldLabel')}
-      />
+      <TourTarget id="explore.search">
+        <SearchField
+          value={store.text}
+          onChangeText={store.setText}
+          placeholder={t('placeholder')}
+          label={t('fieldLabel')}
+        />
+      </TourTarget>
       {results.textTooShort ? (
         <Text variant="caption" color="textSecondary">
           {t('minChars')}
         </Text>
       ) : null}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
-        <Chip
-          label={nearMe.active ? t('nearMeActive') : t('nearMe')}
-          selected={nearMe.active}
-          onPress={nearMe.active ? nearMe.stop : nearMe.start}
-          accessibilityHint={nearMe.active ? t('nearMeOff') : undefined}
-        />
+        <TourTarget id="explore.nearMe">
+          <Chip
+            label={nearMe.active ? t('nearMeActive') : t('nearMe')}
+            selected={nearMe.active}
+            onPress={nearMe.active ? nearMe.stop : nearMe.start}
+            accessibilityHint={nearMe.active ? t('nearMeOff') : undefined}
+          />
+        </TourTarget>
         <Chip
           label={
             results.activeFilters > 0 ? t('filtersActive', { count: results.activeFilters }) : t('filters')
@@ -86,7 +101,11 @@ export function ExploreScreen({
           label={store.view === 'list' ? t('viewMap') : t('viewList')}
           onPress={() => store.setView(store.view === 'list' ? 'map' : 'list')}
         />
-        {onOpenFace ? <Chip label={t('face')} onPress={onOpenFace} /> : null}
+        {onOpenFace ? (
+          <TourTarget id="explore.face">
+            <Chip label={t('face')} onPress={onOpenFace} />
+          </TourTarget>
+        ) : null}
         {onOpenBarbers ? <Chip label={t('barbers')} onPress={onOpenBarbers} /> : null}
         {onOpenJobs ? <Chip label={t('jobs')} onPress={onOpenJobs} /> : null}
       </ScrollView>

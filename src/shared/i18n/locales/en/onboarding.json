@@ -15,6 +15,20 @@
     "manage": {
       "title": "Everything in one place",
       "text": "Your appointments, your reminders and your favorite barbershops."
+    },
+    "face": {
+      "title": "Cuts for your face",
+      "text": "One selfie and we suggest the cuts that suit you best, with real photos near you."
     }
+  },
+  "choose": {
+    "title": "How will you use Charles?",
+    "text": "You can change it anytime from your profile.",
+    "client": "I want to book",
+    "clientText": "Find barbershops, book and pay in seconds.",
+    "shop": "I have a barbershop",
+    "shopText": "Schedule, register, clients, team and more.",
+    "barber": "I'm a barber",
+    "barberText": "Your profile, your ranking and job offers."
   }
 }

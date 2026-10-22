@@ -1,0 +1,30 @@
+{
+  "explore": {
+    "search": {
+      "title": "Search anything",
+      "text": "Type a barbershop name or a service, like \"fade\"."
+    },
+    "nearMe": {
+      "title": "Barbershops near you",
+      "text": "Tap here to sort by distance. We only use your location while searching."
+    },
+    "filters": {
+      "title": "Refine your search",
+      "text": "Price, open now, rating and more."
+    },
+    "face": {
+      "title": "Cuts for your face",
+      "text": "One selfie and we suggest the cuts that suit you best."
+    }
+  },
+  "shop": {
+    "today": {
+      "title": "Your day at a glance",
+      "text": "Today's sales, the register and the button to record a sale."
+    },
+    "groups": {
+      "title": "Everything in order",
+      "text": "Team, business, marketing and settings, each in its group."
+    }
+  }
+}

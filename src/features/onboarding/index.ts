@@ -1,2 +1,2 @@
 export { WelcomeScreen } from './screens/WelcomeScreen';
-export { loadWelcomeSeen, useWelcomeStore } from './hooks/useWelcome';
+export { loadWelcomeSeen, useWelcomeStore, type WelcomeChoice } from './hooks/useWelcome';

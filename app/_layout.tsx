@@ -28,6 +28,7 @@ import {
   PlanLimitNotice,
   SystemBars,
   ToastHost,
+  TourOverlay,
   useStackScreenOptions,
 } from '@/shared/ui';
 
@@ -98,6 +99,7 @@ function AppStack() {
         <Stack.Screen name="+not-found" options={{ title: t('notFound.title') }} />
       </Stack>
       <ToastHost />
+      <TourOverlay />
       <PlanLimitNotice
         onSeePlan={() => {
           useAppMode.getState().setMode('shop');

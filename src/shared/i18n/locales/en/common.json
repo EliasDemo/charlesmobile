@@ -198,5 +198,11 @@
     "all": "All of Peru",
     "choose": "Choose your district",
     "search": "Search district"
+  },
+  "tour": {
+    "step": "{{current}} of {{total}}",
+    "skip": "Skip",
+    "next": "Next",
+    "done": "Got it"
   }
 }

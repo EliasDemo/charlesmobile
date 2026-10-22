@@ -19,6 +19,8 @@ import {
   Text,
   TileGrid,
   type IconName,
+  TourTarget,
+  useFirstTimeTour,
 } from '@/shared/ui';
 import type { ManagedShop } from '../api/shopApi';
 import { ReadinessCard } from '../components/ReadinessCard';
@@ -125,6 +127,14 @@ export function ShopHomeScreen({
 }: ShopHomeScreenProps) {
   const { t } = useTranslation('shop');
   const home = useShopHome();
+  useFirstTimeTour(
+    'shop',
+    [
+      { target: 'shop.today', key: 'today' },
+      { target: 'shop.groups', key: 'groups' },
+    ],
+    'tour',
+  );
   const theme = useTheme();
   return (
     <Screen edges={['top', 'left', 'right']}>
@@ -199,7 +209,7 @@ export function ShopHomeScreen({
                     {shop.status === 'SUSPENDED' ? (
                       <Notice tone="danger" message={t('home.suspended')} />
                     ) : null}
-                    {todaySlot?.(shop.id)}
+                    <TourTarget id="shop.today">{todaySlot?.(shop.id)}</TourTarget>
                     {REVIEW_STATES.includes(shop.status) ? (
                       <ActionTile
                         icon={SECTION_ICON.review}
@@ -211,9 +221,11 @@ export function ShopHomeScreen({
                     ) : null}
                     {GROUPS.map((group, g) => (
                       <View key={group.key} style={styles.section}>
-                        <Text variant="label" color="textSecondary">
-                          {t(`home.groups.${group.key}`)}
-                        </Text>
+                        <TourTarget id={g === 1 ? 'shop.groups' : `shop.group.${group.key}`}>
+                          <Text variant="label" color="textSecondary">
+                            {t(`home.groups.${group.key}`)}
+                          </Text>
+                        </TourTarget>
                         <TileGrid>
                           {group.sections.map((section, index) => (
                             <FadeIn key={section} index={g * 3 + index} style={styles.cell}>

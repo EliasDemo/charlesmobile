@@ -15,6 +15,20 @@
     "manage": {
       "title": "Todo en un lugar",
       "text": "Tus citas, tus recordatorios y tus barberías favoritas."
+    },
+    "face": {
+      "title": "Cortes para tu cara",
+      "text": "Una selfie y te sugerimos los cortes que mejor te quedan, con fotos reales cerca de ti."
     }
+  },
+  "choose": {
+    "title": "¿Cómo usarás Charles?",
+    "text": "Puedes cambiarlo cuando quieras desde tu perfil.",
+    "client": "Quiero reservar",
+    "clientText": "Busca barberías, reserva y paga en segundos.",
+    "shop": "Tengo una barbería",
+    "shopText": "Agenda, caja, clientes, equipo y más.",
+    "barber": "Soy barbero",
+    "barberText": "Tu perfil, tu ranking y ofertas de trabajo."
   }
 }

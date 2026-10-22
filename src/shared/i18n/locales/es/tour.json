@@ -1,0 +1,30 @@
+{
+  "explore": {
+    "search": {
+      "title": "Busca lo que quieras",
+      "text": "Escribe el nombre de una barbería o un servicio, como \"degradado\"."
+    },
+    "nearMe": {
+      "title": "Barberías cerca de ti",
+      "text": "Toca aquí para ordenar por distancia. Solo usamos tu ubicación al buscar."
+    },
+    "filters": {
+      "title": "Afina la búsqueda",
+      "text": "Precio, abiertas ahora, valoración y más."
+    },
+    "face": {
+      "title": "Cortes para tu cara",
+      "text": "Una selfie y te sugerimos los cortes que mejor te quedan."
+    }
+  },
+  "shop": {
+    "today": {
+      "title": "Tu día de un vistazo",
+      "text": "Lo vendido hoy, la caja y el botón para registrar una venta."
+    },
+    "groups": {
+      "title": "Todo ordenado",
+      "text": "Equipo, negocio, marketing y configuración, cada uno en su grupo."
+    }
+  }
+}

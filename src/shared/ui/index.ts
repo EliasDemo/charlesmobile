@@ -82,3 +82,4 @@ export { PasswordChecklist } from './PasswordChecklist';
 export { FilterButton, FilterGroup, FilterSheet } from './FilterSheet';
 export { PlanLimitNotice } from './PlanLimitNotice';
 export { DistrictPicker } from './DistrictPicker';
+export { TourOverlay, TourTarget, useFirstTimeTour } from './Tour';
