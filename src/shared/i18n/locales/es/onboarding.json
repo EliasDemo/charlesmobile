@@ -5,20 +5,24 @@
   "page": "Página {{current}} de {{total}}",
   "pages": {
     "find": {
-      "title": "Encuentra tu barbería",
-      "text": "Cerca de ti o por el servicio que buscas, con precios y valoraciones."
+      "title": "Encuentra",
+      "text": "Cerca de ti o por el servicio que buscas, con precios y valoraciones.",
+      "titleAccent": "tu barbería"
     },
     "book": {
-      "title": "Reserva en segundos",
-      "text": "Elige barbero, día y turno. Sin llamadas ni esperas."
+      "title": "Reserva",
+      "text": "Elige barbero, día y turno. Sin llamadas ni esperas.",
+      "titleAccent": "en segundos"
     },
     "manage": {
-      "title": "Todo en un lugar",
-      "text": "Tus citas, tus recordatorios y tus barberías favoritas."
+      "title": "Todo",
+      "text": "Tus citas, tus recordatorios y tus barberías favoritas.",
+      "titleAccent": "en un lugar"
     },
     "face": {
-      "title": "Cortes para tu cara",
-      "text": "Una selfie y te sugerimos los cortes que mejor te quedan, con fotos reales cerca de ti."
+      "title": "Cortes",
+      "text": "Una selfie y te sugerimos los cortes que mejor te quedan, con fotos reales cerca de ti.",
+      "titleAccent": "para tu cara"
     }
   },
   "choose": {

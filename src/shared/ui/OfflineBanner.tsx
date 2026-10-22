@@ -4,7 +4,8 @@ import { Pressable, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useIsOnline } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
-import { spacing, touchTarget, useTheme } from '@/shared/theme';
+import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
+import { Icon } from './Icon';
 import { Text } from './Text';
 
 /** Visible notice while offline; tapping re-checks connectivity. */
@@ -24,19 +25,27 @@ export function OfflineBanner() {
       accessibilityHint={t('offline.retry')}
       accessibilityLiveRegion="polite"
       onPress={recheck}
-      style={[styles.banner, { backgroundColor: theme.colors.warning, paddingTop: insets.top + spacing.xs }]}
+      style={[styles.banner, { backgroundColor: theme.colors.brand, paddingTop: insets.top + spacing.xs }]}
     >
-      <Text variant="label" color="onStatus" align="center">
+      <Icon name="cloud-offline" size={sizes.icon} color={theme.colors.brandAccent} />
+      <Text variant="label" color="onBrand" align="center" style={styles.flex}>
         {t('offline.banner')}
+      </Text>
+      <Text variant="label" color="brandAccent">
+        {t('offline.retryShort')}
       </Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
+  flex: { flexShrink: 1 },
   banner: {
     minHeight: touchTarget,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
+    gap: spacing.sm,
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.xs,
   },

@@ -1,14 +1,12 @@
 import { Controller } from 'react-hook-form';
 import { useTranslation } from '@/shared/i18n';
-import { sizes } from '@/shared/theme';
 import { formatDuration } from '@/shared/lib';
 import {
-  BrandImage,
+  BrandHeader,
   Button,
   Notice,
   PasswordField,
   Screen,
-  useKeyboardVisible,
   Text,
   TextField,
   useFieldErrorText,
@@ -38,13 +36,9 @@ export function LoginScreen({
     onDisabled,
   });
   const locked = lockedSeconds > 0;
-  // The header gives its room to the fields while typing.
-  const keyboardOpen = useKeyboardVisible();
   return (
     <Screen>
-      {keyboardOpen ? null : (
-        <BrandImage imageKeys={['auth-background']} fallbackIcon="cut" height={sizes.cover} />
-      )}
+      <BrandHeader />
       <Text variant="title">{t('login.title')}</Text>
       <Text color="textSecondary">{t('login.subtitle')}</Text>
       {notice ? <Notice tone="success" message={t(`login.${notice}`)} /> : null}

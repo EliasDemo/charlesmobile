@@ -17,7 +17,10 @@
   "offline": {
     "banner": "Sin conexión. Mostramos lo último que cargamos.",
     "retry": "Reintentar conexión",
-    "savedAt": "Sin conexión · datos de las {{time}}"
+    "savedAt": "Sin conexión · datos de las {{time}}",
+    "title": "Sin conexión",
+    "hint": "Revisa el wifi o tus datos. Te mostramos lo último que cargamos cuando lo hay.",
+    "retryShort": "Reintentar"
   },
   "crash": {
     "title": "Esta pantalla tuvo un problema",
@@ -270,5 +273,8 @@
       "open": "Abrir la barbería",
       "openText": "Envíala a revisión y empieza a aparecer en Explorar."
     }
+  },
+  "brand": {
+    "tagline": "Reservas para barberías"
   }
 }

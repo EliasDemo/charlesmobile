@@ -1,31 +1,39 @@
 // Design tokens. The brand lives here: change the palette in one place.
 
 const palette = {
-  // Renewed copper: warmer and brighter, the brand color.
-  copper50: '#FDF1E8',
-  copper100: '#FBE2D0',
-  copper200: '#F7C4A0',
-  copper300: '#F2A06B',
-  copper400: '#E8823F',
-  copper500: '#C8641F',
-  copper600: '#A5501A',
-  copper700: '#843F15',
-  // Cool neutrals (light) and blue-tinted near-black (dark): cleaner, more modern.
+  // Classic barbershop: copper / brass as the accent (actions), deep navy as the brand.
+  copper50: '#FBF3EA',
+  copper100: '#F4E2CF',
+  copper200: '#E9C7A2',
+  copper300: '#DDAA76',
+  copper400: '#C88B52',
+  copper500: '#A86F3A',
+  copper600: '#8C5A2C',
+  copper700: '#6E4521',
+  navy50: '#EEF1F7',
+  navy100: '#D6DDEA',
+  navy300: '#8C9BBA',
+  navy500: '#3A4F7A',
+  navy700: '#1F3157',
+  navy800: '#18264A',
+  navy900: '#101A35',
+  // Warm neutrals (cream and sand in light; charcoal with a navy tint in dark).
   neutral0: '#FFFFFF',
-  neutral25: '#FAFBFC',
-  neutral50: '#F4F6F8',
-  neutral100: '#EAEDF1',
-  neutral200: '#D9DEE5',
-  neutral300: '#C1C8D2',
-  neutral400: '#98A2B3',
-  neutral500: '#667085',
-  neutral600: '#475467',
-  neutral700: '#2B3340',
-  neutral750: '#232933',
-  neutral800: '#1B2029',
-  neutral850: '#151920',
-  neutral900: '#0D1015',
-  ink: '#101828',
+  cream: '#FFFDF9',
+  neutral25: '#FAF7F2',
+  neutral50: '#F4EFE7',
+  neutral100: '#EAE3D8',
+  neutral200: '#DDD3C4',
+  neutral300: '#C5B9A7',
+  neutral400: '#9C9182',
+  neutral500: '#6E665B',
+  neutral600: '#4E483F',
+  neutral700: '#2B3242',
+  neutral750: '#222938',
+  neutral800: '#1A2030',
+  neutral850: '#141A27',
+  neutral900: '#0C111C',
+  ink: '#14213D',
   red300: '#FDA29B',
   red400: '#F97066',
   red600: '#C4320A',
@@ -51,6 +59,13 @@ export interface ThemeColors {
   primary: string;
   primaryPressed: string;
   onPrimary: string;
+  /** Brand surfaces (headers, hero areas): deep navy, with its text color. */
+  brand: string;
+  onBrand: string;
+  /** Copper accent on the navy brand surfaces. */
+  brandAccent: string;
+  /** Second color of two-tone titles ("Tu día / de un vistazo"). */
+  accentText: string;
   /** Ranking medals (1st, 2nd, 3rd). */
   medalGold: string;
   medalSilver: string;
@@ -88,7 +103,7 @@ export type StatusTone = 'pending' | 'success' | 'neutral' | 'danger';
 export const colors: Record<ColorScheme, ThemeColors> = {
   light: {
     background: palette.neutral50,
-    surface: palette.neutral0,
+    surface: palette.cream,
     surfaceElevated: palette.neutral0,
     surfaceMuted: palette.neutral25,
     border: palette.neutral200,
@@ -98,6 +113,10 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     primary: palette.copper600,
     primaryPressed: palette.copper700,
     onPrimary: palette.neutral0,
+    brand: palette.navy800,
+    onBrand: palette.cream,
+    brandAccent: palette.copper300,
+    accentText: palette.copper600,
     medalGold: '#C9921A',
     medalSilver: '#7D8791',
     medalBronze: '#A0612E',
@@ -110,8 +129,8 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     warning: palette.amber700,
     onStatus: palette.neutral0,
     focus: palette.copper500,
-    backdrop: 'rgba(16, 24, 40, 0.45)',
-    shadow: 'rgba(16, 24, 40, 0.10)',
+    backdrop: 'rgba(16, 26, 53, 0.5)',
+    shadow: 'rgba(20, 33, 61, 0.10)',
     statusPendingBg: '#FFF4E0',
     statusPendingFg: '#93370D',
     statusSuccessBg: '#DCFAE6',
@@ -127,16 +146,20 @@ export const colors: Record<ColorScheme, ThemeColors> = {
     surfaceElevated: palette.neutral800,
     surfaceMuted: palette.neutral750,
     border: palette.neutral700,
-    textPrimary: '#F2F4F7',
+    textPrimary: '#F5F0E8',
     textSecondary: palette.neutral300,
     textMuted: palette.neutral400,
     primary: palette.copper300,
     primaryPressed: palette.copper200,
     onPrimary: palette.neutral900,
+    brand: palette.navy800,
+    onBrand: palette.cream,
+    brandAccent: palette.copper300,
+    accentText: palette.copper300,
     medalGold: '#E8B84A',
     medalSilver: '#B9C2CB',
     medalBronze: '#D08A50',
-    primarySoft: '#2E1D12',
+    primarySoft: '#2A1F14',
     danger: palette.red400,
     dangerPressed: palette.red300,
     disabledBackground: palette.neutral700,
@@ -174,6 +197,8 @@ export const spacing = {
 export const radius = { sm: 8, md: 12, lg: 18, xl: 24, pill: 999 } as const;
 
 export const fontFamily = {
+  /** Elegant serif for big titles only; the rest stays in Inter. */
+  serif: 'PlayfairDisplay_700Bold',
   regular: 'Inter_400Regular',
   medium: 'Inter_500Medium',
   semibold: 'Inter_600SemiBold',
@@ -181,8 +206,8 @@ export const fontFamily = {
 } as const;
 
 export const typography = {
-  hero: { fontFamily: fontFamily.bold, fontSize: 40, lineHeight: 48 },
-  display: { fontFamily: fontFamily.bold, fontSize: 30, lineHeight: 36 },
+  hero: { fontFamily: fontFamily.serif, fontSize: 40, lineHeight: 48 },
+  display: { fontFamily: fontFamily.serif, fontSize: 30, lineHeight: 38 },
   title: { fontFamily: fontFamily.semibold, fontSize: 22, lineHeight: 28 },
   subtitle: { fontFamily: fontFamily.semibold, fontSize: 17, lineHeight: 24 },
   body: { fontFamily: fontFamily.regular, fontSize: 16, lineHeight: 24 },

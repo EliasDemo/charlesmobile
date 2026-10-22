@@ -17,7 +17,10 @@
   "offline": {
     "banner": "You are offline. Showing what we loaded last.",
     "retry": "Retry connection",
-    "savedAt": "Offline · data from {{time}}"
+    "savedAt": "Offline · data from {{time}}",
+    "title": "No connection",
+    "hint": "Check your wifi or data. We show what we loaded last when there is something.",
+    "retryShort": "Retry"
   },
   "crash": {
     "title": "This screen had a problem",
@@ -270,5 +273,8 @@
       "open": "Open the barbershop",
       "openText": "Send it to review and start showing in Explore."
     }
+  },
+  "brand": {
+    "tagline": "Barbershop bookings"
   }
 }

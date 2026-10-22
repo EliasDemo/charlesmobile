@@ -348,6 +348,13 @@ Contrato estable del backend (commit a4b17a4), `pnpm sync:api` del 2026-10-15. G
 
 - **Barbero (2026-10-22):** "Mi barbería" muestra la **bolsa laboral** primero al barbero sin barbería (ofertas de su distrito, postulaciones, perfil) y discreta al que ya trabaja; el dueño no la ve. **Mensajes** separados en Social · Profesional (solo si hay de ambos), con quién responde (dueño o administrador) y "Ver perfil profesional" en lo laboral. **Ranking sin desmotivar:** el perfil propio muestra "Tu camino al ranking" (0/3) y pasos para destacar; "Nuevo talento" en vez de "fuera del ranking"; celebración al entrar.
 
+- **Tutorial, teclado y diseño (2026-10-22):**
+  - El tutorial mide cada paso al mostrarlo, omite lo que no está a la vista y pone el globo al costado con una flecha.
+  - Hojas de "Desbloqueaste…" al pasar a modo barbería (dueño o barbero), al crear la barbería y al activar un plan pagado (lo que incluye el plan, según la API).
+  - El teclado ya no tapa campos: `Screen` deja espacio y desplaza hasta el campo activo; login y registro tienen "Siguiente" entre campos.
+  - Paleta azul marino y cobre con fondos crema, titulares en Playfair Display, ilustraciones de marca en los estados vacío y error, estado sin conexión propio, cabecera de marca en login y registro, y bienvenida con titulares en dos tonos y marco en arco.
+- **Pendiente para la compilación única:** `react-native-keyboard-controller` (aprobado el 2026-10-22) y el logo (ícono adaptativo, splash, ícono de notificaciones).
+
 ## Pantallas actuales
 
 | Ruta | Pantalla | Estado |

@@ -37,6 +37,10 @@ export const TEXT_PAIRS: readonly [ColorToken, ColorToken][] = [
   ['onStatus', 'danger'],
   ['onStatus', 'dangerPressed'],
   ['primary', 'primarySoft'],
+  ['onBrand', 'brand'],
+  ['brandAccent', 'brand'],
+  ['accentText', 'background'],
+  ['accentText', 'surface'],
   ['onDisabled', 'disabledBackground'],
   // Offline banner.
   ['onStatus', 'warning'],

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { useIsOnline } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
 import { Button } from './Button';
@@ -61,11 +62,22 @@ export interface ErrorStateProps {
 
 export function ErrorState({ title, message, onRetry, retrying, children }: ErrorStateProps) {
   const { t } = useTranslation();
+  // Without connection the cause is clear: say so, with its own illustration.
+  const offline = !useIsOnline();
   return (
     <View style={styles.center} accessibilityLiveRegion="polite" testID="error-state">
+      <Illustration
+        icon={offline ? 'cloud-offline' : 'construct'}
+        accents={offline ? ['wifi', 'cut', 'sparkles'] : ['cut', 'build', 'sparkles']}
+      />
       <Text variant="subtitle" align="center">
-        {title ?? t('states.errorTitle')}
+        {title ?? (offline ? t('offline.title') : t('states.errorTitle'))}
       </Text>
+      {offline ? (
+        <Text color="textSecondary" align="center">
+          {t('offline.hint')}
+        </Text>
+      ) : null}
       <Text color="textSecondary" align="center" selectable>
         {message}
       </Text>

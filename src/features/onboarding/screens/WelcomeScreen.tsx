@@ -106,10 +106,32 @@ export function WelcomeScreen({ onDone }: { onDone: (choice: WelcomeChoice) => v
             </View>
           ) : (
             <Page index={i} width={width} scrollX={scrollX} reduce={reduce}>
-              <BrandImage imageKeys={[`welcome-${item.key}`]} fallbackIcon={item.icon} height={imageHeight} />
+              <View
+                style={[
+                  styles.arch,
+                  {
+                    height: imageHeight,
+                    borderTopLeftRadius: imageHeight,
+                    borderTopRightRadius: imageHeight,
+                    borderBottomLeftRadius: theme.radius.xl,
+                    borderBottomRightRadius: theme.radius.xl,
+                    borderColor: theme.colors.accentText,
+                  },
+                ]}
+              >
+                <BrandImage
+                  imageKeys={[`welcome-${item.key}`]}
+                  fallbackIcon={item.icon}
+                  height={imageHeight}
+                />
+              </View>
               <View style={styles.texts}>
                 <Text variant="display" align="center">
                   {t(`pages.${item.key as (typeof WELCOME_PAGES)[number]['key']}.title`)}
+                  {'\n'}
+                  <Text variant="display" color="accentText">
+                    {t(`pages.${item.key as (typeof WELCOME_PAGES)[number]['key']}.titleAccent`)}
+                  </Text>
                 </Text>
                 <Text color="textSecondary" align="center">
                   {t(`pages.${item.key as (typeof WELCOME_PAGES)[number]['key']}.text`)}
@@ -240,6 +262,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   page: { flex: 1, justifyContent: 'center', gap: spacing.lg, paddingHorizontal: spacing.xl },
   texts: { gap: spacing.md },
+  arch: { overflow: 'hidden', borderWidth: 2, width: '86%', alignSelf: 'center' },
   bottom: {
     gap: spacing.lg,
     paddingHorizontal: spacing.xl,

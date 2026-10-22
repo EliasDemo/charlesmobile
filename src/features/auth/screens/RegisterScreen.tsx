@@ -1,9 +1,9 @@
 import { Controller } from 'react-hook-form';
 import { Linking, StyleSheet } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { sizes, spacing } from '@/shared/theme';
+import { spacing } from '@/shared/theme';
 import {
-  BrandImage,
+  BrandHeader,
   Button,
   Checkbox,
   ErrorState,
@@ -13,7 +13,6 @@ import {
   PasswordField,
   PhoneField,
   Screen,
-  useKeyboardVisible,
   Text,
   TextField,
   translateErrorMessage,
@@ -30,8 +29,6 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
   const errorText = useFieldErrorText('auth');
   const reg = useRegister({ onSuccess });
   const { form, submit, isSubmitting, generalError, terms, termsUrl, privacyUrl } = reg;
-  // The header gives its room to the fields while typing.
-  const keyboardOpen = useKeyboardVisible();
 
   if (!terms.data) {
     return (
@@ -51,9 +48,7 @@ export function RegisterScreen({ onSuccess, onLogin }: RegisterScreenProps) {
 
   return (
     <Screen>
-      {keyboardOpen ? null : (
-        <BrandImage imageKeys={['auth-background']} fallbackIcon="cut" height={sizes.cover} />
-      )}
+      <BrandHeader />
       <Text variant="title">{t('register.title')}</Text>
       <Text color="textSecondary">{t('register.subtitle')}</Text>
       {generalError ? <Notice tone="danger" message={generalError} /> : null}

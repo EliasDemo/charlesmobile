@@ -12,6 +12,9 @@ type TextColor = keyof Pick<
   | 'warning'
   | 'onPrimary'
   | 'onStatus'
+  | 'onBrand'
+  | 'accentText'
+  | 'brandAccent'
 >;
 
 export interface TextProps extends RNTextProps {

@@ -5,20 +5,24 @@
   "page": "Page {{current}} of {{total}}",
   "pages": {
     "find": {
-      "title": "Find your barbershop",
-      "text": "Near you or by the service you want, with prices and reviews."
+      "title": "Find",
+      "text": "Near you or by the service you want, with prices and reviews.",
+      "titleAccent": "your barbershop"
     },
     "book": {
-      "title": "Book in seconds",
-      "text": "Choose barber, day and time. No calls, no waiting."
+      "title": "Book",
+      "text": "Choose barber, day and time. No calls, no waiting.",
+      "titleAccent": "in seconds"
     },
     "manage": {
-      "title": "Everything in one place",
-      "text": "Your appointments, your reminders and your favorite barbershops."
+      "title": "Everything",
+      "text": "Your appointments, your reminders and your favorite barbershops.",
+      "titleAccent": "in one place"
     },
     "face": {
-      "title": "Cuts for your face",
-      "text": "One selfie and we suggest the cuts that suit you best, with real photos near you."
+      "title": "Cuts",
+      "text": "One selfie and we suggest the cuts that suit you best, with real photos near you.",
+      "titleAccent": "for your face"
     }
   },
   "choose": {

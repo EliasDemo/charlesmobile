@@ -15,7 +15,7 @@ describe('welcome', () => {
     expect(useWelcomeStore.getState().seen).toBe(false);
     const onDone = jest.fn();
     await renderWithProviders(<WelcomeScreen onDone={onDone} />);
-    expect(screen.getByText(texts.pages.find.title)).toBeTruthy();
+    expect(screen.getByText(texts.pages.find.titleAccent)).toBeTruthy();
     // "Saltar" goes to the last page, where the person chooses how to use Charles.
     await fireEvent.press(screen.getByText(texts.skip));
     await fireEvent.press(screen.getByText(texts.choose.client));
