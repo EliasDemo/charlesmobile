@@ -72,7 +72,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           'Charles usa tu ubicación solo para mostrarte barberías cercanas. No la guardamos.',
       },
     ],
-    'expo-notifications',
+    // The notification sound is bundled into the app (Android channels use it).
+    ['expo-notifications', { sounds: ['./assets/sounds/notify.wav'] }],
     // Transparent edge-to-edge navigation bar whose button color follows the app theme.
     ['expo-navigation-bar', { enforceContrast: false }],
     [

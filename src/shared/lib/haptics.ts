@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import { requireOptionalNativeModule } from 'expo';
+import { useAppSettings } from './appSettings';
 
 export type HapticKind = 'success' | 'warning' | 'light';
 
@@ -8,7 +9,7 @@ export type HapticKind = 'success' | 'warning' | 'light';
  * haptics module yet, or when the device cannot vibrate.
  */
 export function haptic(kind: HapticKind = 'light') {
-  if (!requireOptionalNativeModule('ExpoHaptics')) return;
+  if (!useAppSettings.getState().haptics || !requireOptionalNativeModule('ExpoHaptics')) return;
   const run =
     kind === 'light'
       ? Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)

@@ -186,7 +186,9 @@ describe('preferences', () => {
   it('shows the notification channels with the "coming soon" note', async () => {
     signIn();
     mockApi({ 'GET /api/v1/users/me': { body: profile() } });
-    await renderWithProviders(<PreferencesScreen />);
+    await renderWithProviders(
+      <PreferencesScreen onReplayTutorial={jest.fn()} onChangePassword={jest.fn()} onHelp={jest.fn()} />,
+    );
     expect(await screen.findByLabelText(texts.preferences.channels.PUSH)).toBeTruthy();
     expect(screen.getByText(texts.preferences.notificationsSoon)).toBeTruthy();
     expect(screen.getByLabelText(texts.preferences.channels.PUSH).props.value).toBe(false);
@@ -230,7 +232,9 @@ describe('preferences', () => {
   it('changes the theme and remembers it after a restart', async () => {
     signIn();
     mockApi({ 'GET /api/v1/users/me': { body: profile() } });
-    const view = await renderWithProviders(<PreferencesScreen />);
+    const view = await renderWithProviders(
+      <PreferencesScreen onReplayTutorial={jest.fn()} onChangePassword={jest.fn()} onHelp={jest.fn()} />,
+    );
     await screen.findByLabelText(texts.preferences.channels.PUSH);
     await fireEvent.press(screen.getByRole('radio', { name: texts.preferences.themeLight }));
     expect(useThemePreference.getState().preference).toBe('light');

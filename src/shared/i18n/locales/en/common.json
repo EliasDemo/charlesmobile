@@ -38,7 +38,7 @@
     "forgotPassword": "Recover password",
     "resetPassword": "New password",
     "editProfile": "Edit profile",
-    "preferences": "Preferences",
+    "preferences": "Settings",
     "filters": "Filters",
     "barbershop": "Barbershop",
     "service": "Service",
@@ -119,8 +119,24 @@
     "searchMore": "Search for more results",
     "searchMoreHint": "No matches yet, but there may be more."
   },
-  "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-  "daysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  "days": [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ],
+  "daysShort": [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat"
+  ],
   "date": {
     "today": "Today",
     "tomorrow": "Tomorrow",
@@ -161,7 +177,20 @@
       "November",
       "December"
     ],
-    "monthsShort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "monthsShort": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
     "showMonth": "Show calendar",
     "showDays": "Show days",
     "addToCalendar": "Add to my calendar",

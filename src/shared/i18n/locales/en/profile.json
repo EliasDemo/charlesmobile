@@ -21,7 +21,7 @@
     "phoneHint": "Peruvian mobile. Leave it empty to remove it."
   },
   "preferences": {
-    "title": "Preferences",
+    "title": "Settings",
     "theme": "Theme",
     "themeSystem": "System",
     "themeLight": "Light",
@@ -101,5 +101,22 @@
     "required": "Enter your current password."
   },
   "usernameHint": "You can change it once every 30 days.",
-  "usernameLocked": "You can change it on {{date}}."
+  "usernameLocked": "You can change it on {{date}}.",
+  "settings": {
+    "title": "Settings",
+    "feedback": "Sounds and vibration",
+    "sounds": "App sounds",
+    "soundsHint": "When a booking is confirmed, a message is sent or something fails.",
+    "soundsSoon": "Coming with the next version of the app.",
+    "haptics": "Vibration",
+    "hapticsHint": "A light vibration when confirming.",
+    "help": "Help",
+    "tutorial": "See the tutorial again",
+    "support": "Help center",
+    "privacy": "Privacy and security",
+    "permissions": "Phone permissions",
+    "permissionsHint": "Location, camera, photos and notifications are changed in the phone settings.",
+    "about": "About",
+    "version": "Version"
+  }
 }

@@ -26,6 +26,7 @@ export {
   type PickedPhoto,
 } from './photos';
 export {
+  ensureNotificationChannels,
   getPushPermission,
   getPushToken,
   onPushTapped,
@@ -73,3 +74,5 @@ export {
   type FaceScanResult,
 } from './face';
 export { PERU_DISTRICTS, provinceOf } from './peru';
+export { loadAppSettings, useAppSettings, type AppSettings } from './appSettings';
+export { playSound, soundsAvailable, type SoundKind } from './sound';

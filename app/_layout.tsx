@@ -17,7 +17,8 @@ import { loadAppMode, useAppMode } from '@/features/shop-management';
 import { loadWelcomeSeen, useWelcomeStore } from '@/features/onboarding';
 import { bootstrapSession, queryClient, startQueryListeners } from '@/shared/api';
 import { env } from '@/shared/config';
-import { loadLanguagePreference, useTranslation } from '@/shared/i18n';
+import { i18n, loadLanguagePreference, useTranslation } from '@/shared/i18n';
+import { ensureNotificationChannels, loadAppSettings } from '@/shared/lib';
 import { ThemeProvider, loadThemePreference } from '@/shared/theme';
 import {
   BrandSplash,
@@ -124,6 +125,14 @@ export default function RootLayout() {
       loadLanguagePreference(),
       loadWelcomeSeen(),
       loadAppMode(),
+      loadAppSettings(),
+      ensureNotificationChannels({
+        default: i18n.t('notifications:channels.default'),
+        bookings: i18n.t('notifications:channels.bookings'),
+        messages: i18n.t('notifications:channels.messages'),
+        payments: i18n.t('notifications:channels.payments'),
+        promotions: i18n.t('notifications:channels.promotions'),
+      }),
     ]).finally(() => setSessionReady(true));
   }, []);
 

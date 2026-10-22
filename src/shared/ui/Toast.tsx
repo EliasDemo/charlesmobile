@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { AccessibilityInfo, Animated, Easing, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { create } from 'zustand';
-import { haptic } from '@/shared/lib';
+import { haptic, playSound } from '@/shared/lib';
 import { sizes, spacing, useTheme, type StatusTone } from '@/shared/theme';
 import { Icon, type IconName } from './Icon';
 import { SuccessCheck, useReduceMotion } from './motion';
@@ -20,6 +20,7 @@ const useToastStore = create<ToastState>((set) => ({
   toast: null,
   show: (message, tone = 'success') => {
     haptic(tone === 'success' ? 'success' : 'warning');
+    playSound(tone === 'success' ? 'success' : 'error');
     set({ toast: { id: Date.now(), message, tone } });
   },
   hide: () => set({ toast: null }),

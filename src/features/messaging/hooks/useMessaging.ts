@@ -2,6 +2,7 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import { useState } from 'react';
 import { isApiError, nextPageParam, useSession } from '@/shared/api';
 import { i18n } from '@/shared/i18n';
+import { playSound } from '@/shared/lib';
 import { showToast, translateErrorMessage } from '@/shared/ui';
 import {
   fetchConversations,
@@ -86,6 +87,7 @@ export function useChat(mailbox: Mailbox, conversationId: string) {
   const send = useMutation({
     mutationFn: (body: string) => sendMessage(mailbox, conversationId, body),
     onSuccess: () => {
+      playSound('message');
       setDraft('');
       refresh();
       void queryClient.invalidateQueries({ queryKey: messageKeys.conversations(mailbox) });

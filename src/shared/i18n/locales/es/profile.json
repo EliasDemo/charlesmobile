@@ -21,7 +21,7 @@
     "phoneHint": "Celular de Perú. Déjalo vacío para quitarlo."
   },
   "preferences": {
-    "title": "Preferencias",
+    "title": "Ajustes",
     "theme": "Tema",
     "themeSystem": "Sistema",
     "themeLight": "Claro",
@@ -101,5 +101,22 @@
     "required": "Escribe tu contraseña actual."
   },
   "usernameHint": "Lo puedes cambiar una vez cada 30 días.",
-  "usernameLocked": "Podrás cambiarlo el {{date}}."
+  "usernameLocked": "Podrás cambiarlo el {{date}}.",
+  "settings": {
+    "title": "Ajustes",
+    "feedback": "Sonidos y vibración",
+    "sounds": "Sonidos de la app",
+    "soundsHint": "Al confirmar una reserva, enviar un mensaje o si algo falla.",
+    "soundsSoon": "Llegan con la próxima versión de la app.",
+    "haptics": "Vibración",
+    "hapticsHint": "Una vibración leve al confirmar.",
+    "help": "Ayuda",
+    "tutorial": "Ver el tutorial otra vez",
+    "support": "Centro de ayuda",
+    "privacy": "Privacidad y seguridad",
+    "permissions": "Permisos del teléfono",
+    "permissionsHint": "Ubicación, cámara, fotos y notificaciones se cambian en los ajustes del teléfono.",
+    "about": "Acerca de",
+    "version": "Versión"
+  }
 }

@@ -14,5 +14,12 @@
     "accept": "Yes, notify me"
   },
   "blocked": "Notifications are turned off for Charles on your phone. You'll still see everything in Notifications.",
-  "openSettings": "Open settings"
+  "openSettings": "Open settings",
+  "channels": {
+    "default": "General notices",
+    "bookings": "Bookings",
+    "messages": "Messages",
+    "payments": "Payments",
+    "promotions": "Promotions"
+  }
 }

@@ -14,5 +14,12 @@
     "accept": "Sí, avisarme"
   },
   "blocked": "Las notificaciones están desactivadas para Charles en tu teléfono. Igual verás todo en Avisos.",
-  "openSettings": "Abrir ajustes"
+  "openSettings": "Abrir ajustes",
+  "channels": {
+    "default": "Avisos generales",
+    "bookings": "Reservas",
+    "messages": "Mensajes",
+    "payments": "Pagos",
+    "promotions": "Promociones"
+  }
 }

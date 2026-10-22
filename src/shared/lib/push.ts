@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 
 /** Same meaning as the location permission: explain first while `undetermined`. */
 export type PushPermission = 'granted' | 'undetermined' | 'denied' | 'blocked';
@@ -50,3 +50,31 @@ export function onPushTapped(callback: (data: PushData) => void): () => void {
 }
 
 export const openSystemSettings = () => void Linking.openSettings();
+
+/** Android channels: the person can tune each one in the phone settings; they share our sound. */
+const CHANNELS = [
+  { id: 'default', importance: 'DEFAULT' },
+  { id: 'bookings', importance: 'HIGH' },
+  { id: 'messages', importance: 'HIGH' },
+  { id: 'payments', importance: 'HIGH' },
+  { id: 'promotions', importance: 'LOW' },
+] as const;
+
+/**
+ * Creates the notification channels (Android 8+), each with the app's sound (bundled by the
+ * expo-notifications plugin). Before the next build the sound file is not there and Android
+ * uses the default one; the channels still work.
+ */
+export async function ensureNotificationChannels(names?: Record<string, string>): Promise<void> {
+  if (Platform.OS !== 'android') return;
+  await Promise.all(
+    CHANNELS.map((c) =>
+      Notifications.setNotificationChannelAsync(c.id, {
+        name: names?.[c.id] ?? c.id,
+        importance: Notifications.AndroidImportance[c.importance],
+        sound: 'notify.wav',
+        vibrationPattern: [0, 180, 120, 180],
+      }),
+    ),
+  ).catch(() => undefined);
+}
