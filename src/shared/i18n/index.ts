@@ -23,6 +23,7 @@ import videos from './locales/es/videos.json';
 import ads from './locales/es/ads.json';
 import plans from './locales/es/plans.json';
 import memberships from './locales/es/memberships.json';
+import business from './locales/es/business.json';
 import type devTexts from './locales/es/dev.json';
 import en_common from './locales/en/common.json';
 import en_errors from './locales/en/errors.json';
@@ -47,6 +48,7 @@ import en_videos from './locales/en/videos.json';
 import en_ads from './locales/en/ads.json';
 import en_plans from './locales/en/plans.json';
 import en_memberships from './locales/en/memberships.json';
+import en_business from './locales/en/business.json';
 import { onLanguageChange } from './language';
 
 export const defaultNS = 'common';
@@ -75,6 +77,7 @@ export const resources = {
     ads,
     plans,
     memberships,
+    business,
   },
   en: {
     common: en_common,
@@ -100,6 +103,7 @@ export const resources = {
     ads: en_ads,
     plans: en_plans,
     memberships: en_memberships,
+    business: en_business,
   },
 } as const;
 

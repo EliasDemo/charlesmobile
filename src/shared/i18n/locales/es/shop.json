@@ -34,7 +34,13 @@
       "talent": "Buscar barberos",
       "videos": "Videos del local",
       "plan": "Mi plan",
-      "memberships": "Membresías"
+      "memberships": "Membresías",
+      "cash": "Caja",
+      "sales": "Ventas",
+      "clients": "Clientes",
+      "catalog": "Catálogo de cortes",
+      "reports": "Reportes",
+      "invoicing": "Boletas"
     },
     "asBarber": "Como barbero",
     "myBlocks": "Mis bloqueos en {{name}}",
@@ -58,7 +64,13 @@
       "talent": "Barberos disponibles",
       "videos": "Videos de 30 segundos",
       "plan": "Uso, límites y suscripción",
-      "memberships": "Planes mensuales con créditos"
+      "memberships": "Planes mensuales con créditos",
+      "cash": "Abrir, cerrar y cuadrar",
+      "sales": "Ventas en el local",
+      "clients": "Fichas y ranking",
+      "catalog": "Fotos como servicios",
+      "reports": "Ventas y comisiones",
+      "invoicing": "Boleta electrónica"
     }
   },
   "status": {

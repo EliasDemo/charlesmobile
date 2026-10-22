@@ -34,7 +34,13 @@
       "talent": "Find barbers",
       "videos": "Shop videos",
       "plan": "My plan",
-      "memberships": "Memberships"
+      "memberships": "Memberships",
+      "cash": "Cash register",
+      "sales": "Sales",
+      "clients": "Clients",
+      "catalog": "Cuts catalog",
+      "reports": "Reports",
+      "invoicing": "Receipts"
     },
     "asBarber": "As a barber",
     "myBlocks": "My blocks at {{name}}",
@@ -58,7 +64,13 @@
       "talent": "Barbers available",
       "videos": "30-second videos",
       "plan": "Usage, limits and subscription",
-      "memberships": "Monthly plans with credits"
+      "memberships": "Monthly plans with credits",
+      "cash": "Open, close and balance",
+      "sales": "In-shop sales",
+      "clients": "Profiles and ranking",
+      "catalog": "Photos as services",
+      "reports": "Sales and commissions",
+      "invoicing": "Electronic receipts"
     }
   },
   "status": {

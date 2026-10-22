@@ -47,6 +47,15 @@ export default function StaffLayout() {
       <Stack.Screen name="shop/[shopId]/plan" options={{ title: t('home.sections.plan') }} />
       <Stack.Screen name="shop/[shopId]/plans" options={{ title: t('seePlans', { ns: 'plans' }) }} />
       <Stack.Screen name="shop/[shopId]/memberships" options={{ title: t('home.sections.memberships') }} />
+      <Stack.Screen name="shop/[shopId]/cash" options={{ title: t('home.sections.cash') }} />
+      <Stack.Screen name="shop/[shopId]/sales/index" options={{ title: t('home.sections.sales') }} />
+      <Stack.Screen name="shop/[shopId]/sales/new" options={{ title: t('sale.new', { ns: 'business' }) }} />
+      <Stack.Screen name="shop/[shopId]/sales/[saleId]" options={{ title: t('home.sections.sales') }} />
+      <Stack.Screen name="shop/[shopId]/clients/index" options={{ title: t('home.sections.clients') }} />
+      <Stack.Screen name="shop/[shopId]/clients/[clientId]" options={{ title: t('home.sections.clients') }} />
+      <Stack.Screen name="shop/[shopId]/catalog" options={{ title: t('home.sections.catalog') }} />
+      <Stack.Screen name="shop/[shopId]/reports" options={{ title: t('home.sections.reports') }} />
+      <Stack.Screen name="shop/[shopId]/invoicing" options={{ title: t('home.sections.invoicing') }} />
       <Stack.Screen name="my-plan" options={{ title: t('home.sections.plan') }} />
       <Stack.Screen name="shop/[shopId]/talent" options={{ title: t('home.sections.talent') }} />
       <Stack.Screen name="shop/[shopId]/videos" options={{ title: t('home.sections.videos') }} />

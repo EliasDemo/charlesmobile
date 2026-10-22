@@ -39,3 +39,13 @@ export function formatMoney({ amount, currency }: Money, options: MoneyFormatOpt
   const digits = formatterFor(currency, {}).resolvedOptions().maximumFractionDigits ?? 2;
   return formatterFor(currency, options).format(amount / 10 ** digits);
 }
+
+/**
+ * Soles typed by a person ("25", "25.50", "25,5") → céntimos for the API, or null if it is not an
+ * amount. A unit change for inputs, never a price calculation.
+ */
+export function parseSoles(text: string): number | null {
+  const raw = text.trim().replace(',', '.');
+  if (!/^\d+(\.\d{1,2})?$/.test(raw)) return null;
+  return Math.round(Number(raw) * 100);
+}

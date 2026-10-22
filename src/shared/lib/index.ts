@@ -1,4 +1,4 @@
-export { formatMoney, type Money } from './money';
+export { formatMoney, parseSoles, type Money } from './money';
 export {
   dayOfWeekIn,
   daysAround,
