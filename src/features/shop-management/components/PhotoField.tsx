@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing } from '@/shared/theme';
-import { BrandImage, Button, Card, Monogram, Notice, Text } from '@/shared/ui';
+import { ConfirmButton, BrandImage, Button, Card, Monogram, Notice, Text } from '@/shared/ui';
 import { usePhoto, type PhotoKind } from '../hooks/usePhotos';
 
 /**
@@ -50,12 +50,18 @@ export function PhotoField({
             disabled={p.busy}
           />
           {url ? (
-            <Button
+            <ConfirmButton
               label={t('photos.remove')}
               variant="ghost"
               icon="trash"
-              onPress={p.remove}
+              onConfirm={p.remove}
               disabled={p.busy}
+              confirm={{
+                title: t('confirm.removePhotoTitle', { ns: 'common' }),
+                message: t('confirm.removePhotoMessage', { ns: 'common' }),
+                confirmLabel: t('confirm.removePhoto', { ns: 'common' }),
+                destructive: true,
+              }}
             />
           ) : null}
         </View>

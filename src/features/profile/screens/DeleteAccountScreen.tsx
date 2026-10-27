@@ -5,7 +5,7 @@ import { useTranslation } from '@/shared/i18n';
 import { formatLongDate, formatMoney, formatShortDate, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
 import {
-  Button,
+  ConfirmButton,
   Card,
   InfoCard,
   Notice,
@@ -57,12 +57,19 @@ export function DeleteAccountScreen({ onDeleted }: { onDeleted: (scheduledFor: s
                     />
                   )}
                 />
-                <Button
+                <ConfirmButton
                   label={t('deletion.confirm')}
                   variant="danger"
-                  onPress={() => void deletion.submit()}
+                  onConfirm={() => void deletion.submit()}
                   loading={deletion.isSubmitting}
                   fullWidth
+                  confirm={{
+                    title: t('deletion.finalTitle'),
+                    message: t('deletion.finalMessage'),
+                    confirmLabel: t('deletion.confirm'),
+                    destructive: true,
+                    icon: 'trash',
+                  }}
                 />
               </View>
             ) : null}

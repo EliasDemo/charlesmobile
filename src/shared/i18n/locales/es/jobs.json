@@ -218,6 +218,8 @@
     "mineCount_one": "Ofertas para ti ({{count}} nueva)",
     "mineCount_other": "Ofertas para ti ({{count}} nuevas)",
     "sent": "Ofertas enviadas",
-    "currency": "S/"
+    "currency": "S/",
+    "withdrawTitle": "¿Retirar la oferta?",
+    "withdrawMessage": "El barbero ya no podrá aceptarla. Si cambias de idea, tendrás que enviarle una nueva."
   }
 }

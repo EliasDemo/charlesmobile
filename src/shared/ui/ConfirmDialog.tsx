@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -26,6 +26,8 @@ export interface ConfirmDialogProps {
   /** Extra content between the message and the buttons (for example, a required reason). */
   children?: ReactNode;
   confirmDisabled?: boolean;
+  /** Says "No se puede deshacer" under the title. By default, every destructive action. */
+  irreversible?: boolean;
 }
 
 /**
@@ -44,10 +46,13 @@ export function ConfirmDialog({
   icon,
   children,
   confirmDisabled,
+  irreversible = destructive,
 }: ConfirmDialogProps) {
   const theme = useTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  // The content scrolls on small phones (long reasons, notes): the buttons always stay in view.
+  const { height } = useWindowDimensions();
   // Drag the sheet down to dismiss it (like the close button); it springs back if released early.
   const dragY = useSharedValue(0);
   const dismiss = () => {
@@ -107,10 +112,46 @@ export function ConfirmDialog({
                   <Text variant="title" align="center">
                     {title}
                   </Text>
-                  <Text color="textSecondary" align="center">
-                    {message}
-                  </Text>
-                  {children}
+                  {irreversible ? (
+                    <View
+                      style={[
+                        styles.irreversible,
+                        { backgroundColor: theme.colors.statusDangerBg, borderRadius: theme.radius.pill },
+                      ]}
+                    >
+                      <Icon
+                        name="warning"
+                        size={theme.typography.caption.fontSize}
+                        color={theme.colors.statusDangerFg}
+                      />
+                      <Text variant="caption" color="danger">
+                        {t('confirm.irreversible')}
+                      </Text>
+                    </View>
+                  ) : null}
+                  <ScrollView
+                    style={{ maxHeight: height * MAX_CONTENT_RATIO }}
+                    contentContainerStyle={styles.body}
+                    keyboardShouldPersistTaps="handled"
+                    showsVerticalScrollIndicator={false}
+                  >
+                    <View
+                      style={[
+                        styles.message,
+                        {
+                          backgroundColor: destructive
+                            ? theme.colors.statusDangerBg
+                            : theme.colors.surfaceMuted,
+                          borderRadius: theme.radius.md,
+                        },
+                      ]}
+                    >
+                      <Text color="textPrimary" align="center">
+                        {message}
+                      </Text>
+                    </View>
+                    {children}
+                  </ScrollView>
                   <View style={styles.actions}>
                     <Button
                       label={confirmLabel}
@@ -125,7 +166,7 @@ export function ConfirmDialog({
                     />
                     <Button
                       label={t('actions.cancel')}
-                      variant="ghost"
+                      variant="secondary"
                       onPress={onCancel}
                       disabled={loading}
                       fullWidth
@@ -142,6 +183,7 @@ export function ConfirmDialog({
 }
 
 const DRAG_ACTIVATION = 12;
+const MAX_CONTENT_RATIO = 0.45;
 const DRAG_TO_CLOSE = 120;
 
 const styles = StyleSheet.create({
@@ -164,4 +206,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   actions: { gap: spacing.sm, marginTop: spacing.sm },
+  body: { gap: spacing.md },
+  message: { padding: spacing.md },
+  irreversible: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xxs,
+  },
 });

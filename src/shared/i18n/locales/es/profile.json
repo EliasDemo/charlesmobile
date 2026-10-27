@@ -70,7 +70,9 @@
     "wrongPassword": "La contraseña no es correcta.",
     "doneTitle": "Pediste eliminar tu cuenta",
     "doneMessage": "Tu cuenta se eliminará el {{date}}. Te enviamos un correo. Si cambias de opinión, inicia sesión antes de esa fecha y cancela la eliminación.",
-    "goHome": "Ir al inicio"
+    "goHome": "Ir al inicio",
+    "finalTitle": "¿Eliminar tu cuenta?",
+    "finalMessage": "Se cerrará tu sesión en todos tus dispositivos y se cancelarán tus reservas activas. Tienes un plazo para arrepentirte; después, se borran tus datos."
   },
   "photo": {
     "title": "Foto de perfil",
@@ -128,5 +130,6 @@
     "toShopHint": "Agenda, reservas y gestión de tu barbería",
     "toClientHint": "Vuelve a buscar y reservar como cliente"
   },
-  "version": "Charles · versión {{version}}"
+  "version": "Charles · versión {{version}}",
+  "deleteAccountHint": "Ver qué pasa con tus datos y reservas"
 }

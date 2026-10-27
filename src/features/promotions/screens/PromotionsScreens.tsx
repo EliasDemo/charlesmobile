@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Controller, useWatch, type Control, type FieldValues, type Path } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { useServicesQuery } from '@/features/barbershop';
@@ -5,6 +6,7 @@ import { useTranslation } from '@/shared/i18n';
 import { formatMoney, formatShortDate } from '@/shared/lib';
 import { spacing, type StatusTone } from '@/shared/theme';
 import {
+  ConfirmDialog,
   Button,
   Card,
   Chip,
@@ -364,13 +366,11 @@ export function PromotionScreen({ shopId, promotionId }: { shopId: string; promo
                     <Text color="textSecondary">{t('coupons.empty')}</Text>
                   ) : null}
                   {promotion.coupons.map((coupon) => (
-                    <ListRow
+                    <CouponRow
                       key={coupon.id}
-                      icon="ticket"
-                      title={coupon.code}
-                      value={t('coupons.uses', { count: coupon.redemptions })}
-                      onPress={() => p.removeCoupon(coupon.id)}
-                      destructive
+                      code={coupon.code}
+                      uses={t('coupons.uses', { count: coupon.redemptions })}
+                      onRemove={() => p.removeCoupon(coupon.id)}
                     />
                   ))}
                   <Text variant="caption" color="textSecondary">
@@ -408,3 +408,26 @@ const styles = StyleSheet.create({
   group: { gap: spacing.sm },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
 });
+
+/** A coupon of the promotion; removing it asks first (people may already have it). */
+function CouponRow({ code, uses, onRemove }: { code: string; uses: string; onRemove: () => void }) {
+  const { t } = useTranslation('promotions');
+  const [asking, setAsking] = useState(false);
+  return (
+    <>
+      <ListRow icon="ticket" title={code} value={uses} onPress={() => setAsking(true)} destructive />
+      <ConfirmDialog
+        visible={asking}
+        title={t('coupons.removeTitle', { code })}
+        message={t('coupons.removeMessage')}
+        confirmLabel={t('coupons.remove')}
+        destructive
+        onConfirm={() => {
+          setAsking(false);
+          onRemove();
+        }}
+        onCancel={() => setAsking(false)}
+      />
+    </>
+  );
+}

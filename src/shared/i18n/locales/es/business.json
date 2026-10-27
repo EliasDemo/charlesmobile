@@ -53,8 +53,16 @@
     "open": "Abrir caja",
     "history": "Cierres anteriores",
     "noHistory": "Aún no hay cierres",
-    "historyLine": "Ventas {{total}} · diferencia {{difference}}",
-    "closedSummary": "Se esperaba {{expected}} y contaste {{counted}}. Diferencia: {{difference}}."
+    "historyLine": "{{from}}–{{to}} · {{sales}} · {{total}}",
+    "closedSummary": "Se esperaba {{expected}} y contaste {{counted}}. Diferencia: {{difference}}.",
+    "expectedHint": "Apertura más las ventas en efectivo de este turno.",
+    "openingHint": "Si empiezas sin efectivo, déjalo vacío.",
+    "confirmTitle": "¿Cerrar la caja?",
+    "confirmMessage": "Se esperaba {{expected}} y contaste S/ {{counted}}. Al cerrar se guarda la diferencia y ya no se puede cambiar.",
+    "closedExact": "Caja cerrada: todo cuadra",
+    "closedWithDifference": "Caja cerrada con diferencia",
+    "exact": "Cuadra",
+    "differenceShort": "Dif. {{amount}}"
   },
   "sale": {
     "new": "Nueva venta",
@@ -122,7 +130,9 @@
       "BOOKING": "Reserva",
       "SALE": "Venta en el local"
     },
-    "archive": "Archivar cliente"
+    "archive": "Archivar cliente",
+    "archiveTitle": "¿Archivar este cliente?",
+    "archiveMessage": "Dejará de aparecer en tu lista de clientes. Sus visitas y ventas se conservan."
   },
   "catalog": {
     "title": "Catálogo de cortes",

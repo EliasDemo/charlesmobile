@@ -36,6 +36,7 @@ export { useSurfaceStyle } from './surface';
 export { Text, type TextProps } from './Text';
 export { TextField, type TextFieldProps } from './TextField';
 export { Checkbox, type CheckboxProps } from './Checkbox';
+export { ConfirmButton, type ConfirmButtonProps } from './ConfirmButton';
 export { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
 export { useCommunityNavigation } from './communityNavigation';
 export { AuthPromptHost, askForAccount, type AuthPromptHostProps, type AuthPromptReason } from './AuthPrompt';

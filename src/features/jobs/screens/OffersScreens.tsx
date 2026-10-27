@@ -5,6 +5,7 @@ import { useTranslation } from '@/shared/i18n';
 import { formatShortDate, parseSoles } from '@/shared/lib';
 import { sizes, spacing } from '@/shared/theme';
 import {
+  ConfirmButton,
   Button,
   Card,
   Chip,
@@ -175,11 +176,17 @@ export function ShopOffersScreen({ shopId }: { shopId: string }) {
             {list.map((offer) => (
               <OfferCard key={offer.id} offer={offer} side="shop">
                 {offer.status === 'PENDING' ? (
-                  <Button
+                  <ConfirmButton
                     label={t('offers.withdraw')}
                     variant="ghost"
-                    onPress={() => o.withdraw(offer.id)}
+                    onConfirm={() => o.withdraw(offer.id)}
                     loading={o.withdrawingId === offer.id}
+                    confirm={{
+                      title: t('offers.withdrawTitle'),
+                      message: t('offers.withdrawMessage'),
+                      confirmLabel: t('offers.withdraw'),
+                      destructive: true,
+                    }}
                   />
                 ) : null}
               </OfferCard>

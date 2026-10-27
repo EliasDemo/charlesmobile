@@ -70,7 +70,9 @@
     "wrongPassword": "The password is not correct.",
     "doneTitle": "You asked to delete your account",
     "doneMessage": "Your account will be deleted on {{date}}. We sent you an email. If you change your mind, sign in before that date and cancel the deletion.",
-    "goHome": "Go home"
+    "goHome": "Go home",
+    "finalTitle": "Delete your account?",
+    "finalMessage": "You'll be signed out on every device and your active bookings will be cancelled. You have a grace period to change your mind; after that, your data is deleted."
   },
   "photo": {
     "title": "Profile photo",
@@ -128,5 +130,6 @@
     "toShopHint": "Schedule, bookings and managing your barbershop",
     "toClientHint": "Go back to searching and booking as a client"
   },
-  "version": "Charles · version {{version}}"
+  "version": "Charles · version {{version}}",
+  "deleteAccountHint": "See what happens to your data and bookings"
 }

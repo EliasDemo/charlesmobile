@@ -64,6 +64,68 @@ describe('CashScreen', () => {
       expect(api.calls.find((c) => c.method === 'POST')!.body).toEqual({ openingAmount: 5000 }),
     );
   });
+
+  const session = (overrides: Partial<S['CashSessionDto']> = {}) =>
+    ({
+      id: 'c1',
+      openedAt: '2030-01-07T13:00:00.000Z',
+      closedAt: null,
+      openingAmount: 5000,
+      salesCount: 2,
+      salesTotal: 5000,
+      expectedAmount: 10000,
+      countedAmount: null,
+      difference: null,
+      note: null,
+      ...overrides,
+    }) as S['CashSessionDto'];
+
+  it('treats an empty answer as a closed register (not an error)', async () => {
+    mockApi({
+      'GET /api/v1/barbershops/{id}/cash': { status: 200 },
+      'GET /api/v1/barbershops/{id}/cash/history': { body: [] },
+    });
+    await renderWithProviders(<CashScreen shopId={SHOP} onNewSale={jest.fn()} />);
+    expect(await screen.findByText(texts.cash.closedTitle)).toBeTruthy();
+  });
+
+  it('closes only after confirming, with its own empty field, and shows the result', async () => {
+    let closed = false;
+    const api = mockApi({
+      'GET /api/v1/barbershops/{id}/cash': () => (closed ? apiError(404, 'NOT_FOUND') : { body: session() }),
+      'GET /api/v1/barbershops/{id}/cash/history': () => ({
+        // The open session is never listed as a past close.
+        body: closed
+          ? [session({ closedAt: '2030-01-07T23:00:00.000Z', countedAmount: 9500, difference: -500 })]
+          : [session()],
+      }),
+      'POST /api/v1/barbershops/{id}/cash/close': () => {
+        closed = true;
+        return {
+          status: 201,
+          body: session({ closedAt: '2030-01-07T23:00:00.000Z', countedAmount: 9500, difference: -500 }),
+        };
+      },
+    });
+    await renderWithProviders(<CashScreen shopId={SHOP} onNewSale={jest.fn()} />);
+    expect(await screen.findByTestId('cash-expected')).toBeTruthy();
+    expect(screen.getByText(texts.cash.noHistory)).toBeTruthy();
+    const field = screen.getByLabelText(texts.cash.counted);
+    expect(field.props.value).toBe('');
+
+    await fireEvent.changeText(field, '95');
+    await fireEvent.press(screen.getByRole('button', { name: texts.cash.close }));
+    // Asks first: nothing is sent yet.
+    expect(await screen.findByText(texts.cash.confirmTitle)).toBeTruthy();
+    expect(api.calls.some((c) => c.method === 'POST')).toBe(false);
+    await fireEvent.press(screen.getAllByRole('button', { name: texts.cash.close }).at(-1)!);
+    await waitFor(() =>
+      expect(api.calls.find((c) => c.method === 'POST')!.body).toEqual({ countedAmount: 9500 }),
+    );
+    expect(await screen.findByText(texts.cash.closedWithDifference)).toBeTruthy();
+    // The opening field starts empty, not with the counted amount.
+    expect(screen.getByLabelText(texts.cash.openingAmount).props.value).toBe('');
+  });
 });
 
 describe('NewSaleScreen', () => {

@@ -55,7 +55,8 @@ export function useCash(shopId: string) {
       try {
         return await fetchCash(shopId);
       } catch (error) {
-        if (isApiError(error) && error.status === 404) return null;
+        // Closed register: 404. A 200 with no body means the same (no open session), never an error.
+        if (isApiError(error) && (error.status === 404 || error.status === 200)) return null;
         throw error;
       }
     },
@@ -64,12 +65,17 @@ export function useCash(shopId: string) {
   const history = useQuery({
     queryKey: businessKeys.cashHistory(shopId),
     queryFn: () => fetchCashHistory(shopId),
+    // Only finished sessions: the open one has no count or difference yet. Newest first.
+    select: (sessions) =>
+      sessions.filter((s) => s.closedAt !== null).sort((a, b) => b.openedAt.localeCompare(a.openedAt)),
   });
   const [error, setError] = useState<string | null>(null);
   const refresh = () => void queryClient.invalidateQueries({ queryKey: businessKeys.all(shopId) });
   const open = useMutation({
     mutationFn: (amount: number) => openCash(shopId, amount),
     onSuccess: () => {
+      // A new day starts: the previous close summary no longer applies.
+      close.reset();
       refresh();
       showToast(i18n.t('business:cash.opened'));
     },
@@ -87,18 +93,20 @@ export function useCash(shopId: string) {
     query,
     history,
     error,
-    open: (soles: string) => {
+    open: (soles: string, onDone?: () => void) => {
       const cents = parseSoles(soles);
       if (cents === null) return setError(i18n.t('business:amountInvalid'));
       setError(null);
-      open.mutate(cents);
+      open.mutate(cents, { onSuccess: onDone });
     },
     isOpening: open.isPending,
-    close: (soles: string, note?: string) => {
+    /** Whether a counted amount can be sent (to enable "Cerrar caja" before confirming). */
+    isValidAmount: (soles: string) => parseSoles(soles) !== null,
+    close: (soles: string, note?: string, onDone?: () => void) => {
       const cents = parseSoles(soles);
       if (cents === null) return setError(i18n.t('business:amountInvalid'));
       setError(null);
-      close.mutate({ counted: cents, note });
+      close.mutate({ counted: cents, note }, { onSuccess: onDone });
     },
     isClosing: close.isPending,
     /** What the last close left (expected vs counted), to show after closing. */

@@ -110,6 +110,8 @@ describe('ProfileScreen', () => {
     await renderWithProviders(<ProfileScreen {...props} />);
     await screen.findByText('Ana Pérez');
     await fireEvent.press(screen.getByText(auth.logout.action));
+    expect(screen.getByText(auth.logout.singleTitle)).toBeTruthy();
+    await fireEvent.press(screen.getAllByText(auth.logout.action).at(-1)!);
     await waitFor(() => expect(props.onLoggedOut).toHaveBeenCalled());
     expect(api.callsTo('POST', '/api/v1/auth/logout')[0]!.body).toEqual({ allDevices: false });
   });

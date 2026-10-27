@@ -7,6 +7,7 @@ import {
   ActionTile,
   Button,
   Card,
+  ConfirmButton,
   ConfirmDialog,
   Icon,
   ListRow,
@@ -208,6 +209,13 @@ export function ProfileScreen(props: ProfileScreenProps) {
                 <ListRow icon="call" title={t('phone')} value={profile.phone ?? t('noPhone')} />
                 <ListRow icon="key" title={t('password.title')} onPress={props.onChangePassword} />
                 <ListRow icon="settings" title={t('preferences.title')} onPress={props.onPreferences} />
+                <ListRow
+                  icon="trash"
+                  title={t('deleteAccount')}
+                  subtitle={t('deleteAccountHint')}
+                  onPress={props.onDeleteAccount}
+                  destructive
+                />
               </Card>
             </Section>
 
@@ -227,11 +235,17 @@ export function ProfileScreen(props: ProfileScreenProps) {
       <Section title={t('sections.session')}>
         <Card>
           <View style={styles.session}>
-            <Button
+            <ConfirmButton
               label={t('logout.action', { ns: 'auth' })}
               icon="log-out-outline"
               variant="secondary"
-              onPress={logout.logout}
+              onConfirm={logout.logout}
+              confirm={{
+                title: t('logout.singleTitle', { ns: 'auth' }),
+                message: t('logout.singleMessage', { ns: 'auth' }),
+                confirmLabel: t('logout.action', { ns: 'auth' }),
+                icon: 'log-out-outline',
+              }}
               loading={logout.isLoggingOut && !logout.confirmingAll}
               disabled={logout.isLoggingOut}
               fullWidth
@@ -244,9 +258,6 @@ export function ProfileScreen(props: ProfileScreenProps) {
               fullWidth
             />
           </View>
-        </Card>
-        <Card>
-          <ListRow icon="trash" title={t('deleteAccount')} onPress={props.onDeleteAccount} destructive />
         </Card>
       </Section>
       <Text variant="caption" color="textMuted" align="center">

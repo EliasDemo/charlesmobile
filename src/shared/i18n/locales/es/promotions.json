@@ -67,6 +67,9 @@
     "codeHint": "De 4 a 20 letras o números.",
     "add": "Agregar cupón",
     "taken": "Ese código ya existe. Elige otro.",
-    "invalid": "Usa de 4 a 20 letras o números, sin espacios."
+    "invalid": "Usa de 4 a 20 letras o números, sin espacios.",
+    "removeTitle": "¿Eliminar el cupón {{code}}?",
+    "removeMessage": "Quienes lo tengan ya no podrán usarlo.",
+    "remove": "Eliminar cupón"
   }
 }

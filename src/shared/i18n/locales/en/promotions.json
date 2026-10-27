@@ -67,6 +67,9 @@
     "codeHint": "4 to 20 letters or numbers.",
     "add": "Add coupon",
     "taken": "That code already exists. Choose another one.",
-    "invalid": "Use 4 to 20 letters or numbers, no spaces."
+    "invalid": "Use 4 to 20 letters or numbers, no spaces.",
+    "removeTitle": "Delete coupon {{code}}?",
+    "removeMessage": "People who have it won't be able to use it.",
+    "remove": "Delete coupon"
   }
 }

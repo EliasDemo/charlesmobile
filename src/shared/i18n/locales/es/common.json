@@ -290,5 +290,11 @@
     "label_one": "Me gusta ({{count}})",
     "label_other": "Me gusta ({{count}})",
     "failed": "No pudimos guardar tu me gusta. Intenta de nuevo."
+  },
+  "confirm": {
+    "irreversible": "No se puede deshacer",
+    "removePhotoTitle": "¿Quitar la foto?",
+    "removePhotoMessage": "Se quitará de inmediato. Puedes subir otra cuando quieras.",
+    "removePhoto": "Quitar foto"
   }
 }

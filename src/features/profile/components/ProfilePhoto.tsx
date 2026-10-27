@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing } from '@/shared/theme';
-import { Button, Monogram, Notice, Text } from '@/shared/ui';
+import { ConfirmButton, Button, Monogram, Notice, Text } from '@/shared/ui';
 import { useProfilePhoto } from '../hooks/useProfilePhoto';
 
 /** The account photo with its actions; initials when there is none. */
@@ -27,12 +27,18 @@ export function ProfilePhoto({ name, photoUrl }: { name: string; photoUrl: strin
             disabled={photo.busy}
           />
           {photoUrl ? (
-            <Button
+            <ConfirmButton
               label={t('photo.remove')}
               variant="ghost"
               icon="trash"
-              onPress={photo.remove}
+              onConfirm={photo.remove}
               disabled={photo.busy}
+              confirm={{
+                title: t('confirm.removePhotoTitle', { ns: 'common' }),
+                message: t('confirm.removePhotoMessage', { ns: 'common' }),
+                confirmLabel: t('confirm.removePhoto', { ns: 'common' }),
+                destructive: true,
+              }}
             />
           ) : null}
         </View>

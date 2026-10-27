@@ -290,5 +290,11 @@
     "label_one": "Like ({{count}})",
     "label_other": "Like ({{count}})",
     "failed": "We could not save your like. Try again."
+  },
+  "confirm": {
+    "irreversible": "This can't be undone",
+    "removePhotoTitle": "Remove the photo?",
+    "removePhotoMessage": "It's removed right away. You can upload another one anytime.",
+    "removePhoto": "Remove photo"
   }
 }

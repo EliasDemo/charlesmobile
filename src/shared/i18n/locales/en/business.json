@@ -53,8 +53,16 @@
     "open": "Open register",
     "history": "Previous closings",
     "noHistory": "No closings yet",
-    "historyLine": "Sales {{total}} · difference {{difference}}",
-    "closedSummary": "Expected {{expected}} and you counted {{counted}}. Difference: {{difference}}."
+    "historyLine": "{{from}}–{{to}} · {{sales}} · {{total}}",
+    "closedSummary": "Expected {{expected}} and you counted {{counted}}. Difference: {{difference}}.",
+    "expectedHint": "Opening plus this shift's cash sales.",
+    "openingHint": "Leave it empty if you start with no cash.",
+    "confirmTitle": "Close the register?",
+    "confirmMessage": "Expected {{expected}} and you counted S/ {{counted}}. Closing saves the difference and it can't be changed.",
+    "closedExact": "Register closed: it balances",
+    "closedWithDifference": "Register closed with a difference",
+    "exact": "Balanced",
+    "differenceShort": "Diff. {{amount}}"
   },
   "sale": {
     "new": "New sale",
@@ -122,7 +130,9 @@
       "BOOKING": "Booking",
       "SALE": "In-shop sale"
     },
-    "archive": "Archive client"
+    "archive": "Archive client",
+    "archiveTitle": "Archive this client?",
+    "archiveMessage": "They'll stop showing in your client list. Their visits and sales are kept."
   },
   "catalog": {
     "title": "Cuts catalog",

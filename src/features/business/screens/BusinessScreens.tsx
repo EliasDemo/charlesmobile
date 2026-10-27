@@ -8,12 +8,14 @@ import { useTranslation } from '@/shared/i18n';
 import { formatShortDate, formatTime, useDebouncedValue } from '@/shared/lib';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import {
+  ConfirmButton,
   Badge,
   Button,
   Card,
   Chip,
   ConfirmDialog,
   EmptyState,
+  Icon,
   InfoCard,
   ListRow,
   Monogram,
@@ -57,95 +59,194 @@ const zone = env.defaultTimeZone;
 
 // --------------------------------------------------------------------------- Cash register
 
-/** "Caja": open it with the starting amount, see the day, and close it counting the money. */
+/**
+ * "Caja": open it with the starting cash, follow the shift, and close it counting the money. Opening
+ * and closing have their own fields, and closing asks first: it cannot be undone.
+ */
 export function CashScreen({ shopId, onNewSale }: { shopId: string; onNewSale: () => void }) {
   const { t } = useTranslation('business');
+  const theme = useTheme();
   const c = useCash(shopId);
-  const [amount, setAmount] = useState('');
+  const [opening, setOpening] = useState('');
+  const [counted, setCounted] = useState('');
   const [note, setNote] = useState('');
+  const [confirming, setConfirming] = useState(false);
   return (
     <Screen refreshing={c.query.isRefetching} onRefresh={() => void c.query.refetch()}>
       {c.error ? <Notice tone="danger" message={c.error} /> : null}
-      {c.lastClosed ? (
-        <Notice
-          tone={c.lastClosed.difference === 0 ? 'success' : 'warning'}
-          message={t('cash.closedSummary', {
-            expected: PEN(c.lastClosed.expectedAmount ?? 0),
-            counted: PEN(c.lastClosed.countedAmount ?? 0),
-            difference: PEN(c.lastClosed.difference ?? 0),
-          })}
-        />
-      ) : null}
       <QueryView query={c.query}>
         {(session) =>
           session ? (
             <View style={styles.content}>
-              <Badge label={t('cash.isOpen', { time: formatTime(session.openedAt, zone) })} tone="success" />
-              <StatRow>
-                <Stat label={t('cash.opening')} value={PEN(session.openingAmount)} />
-                <Stat
-                  label={t('cash.sales', { count: session.salesCount })}
-                  value={PEN(session.salesTotal)}
+              <View
+                style={[
+                  styles.cashHero,
+                  { backgroundColor: theme.colors.brand, borderRadius: theme.radius.xl },
+                ]}
+              >
+                <Badge
+                  label={t('cash.isOpen', { time: formatTime(session.openedAt, zone) })}
                   tone="success"
                 />
-                <Stat label={t('cash.expected')} value={PEN(session.expectedAmount ?? 0)} tone="primary" />
-              </StatRow>
+                <Text variant="label" color="brandAccent">
+                  {t('cash.expected')}
+                </Text>
+                <Text variant="hero" color="onBrand" testID="cash-expected">
+                  {PEN(session.expectedAmount)}
+                </Text>
+                <Text variant="caption" color="onBrand">
+                  {t('cash.expectedHint')}
+                </Text>
+                <View style={[styles.cashFacts, { borderTopColor: theme.colors.brandAccent }]}>
+                  <CashFact label={t('cash.opening')} value={PEN(session.openingAmount)} />
+                  <CashFact
+                    label={t('cash.sales', { count: session.salesCount })}
+                    value={PEN(session.salesTotal)}
+                  />
+                </View>
+              </View>
               <Button label={t('sale.new')} icon="add-circle" onPress={onNewSale} fullWidth />
               <Card>
                 <Text variant="subtitle">{t('cash.closeTitle')}</Text>
+                <Text color="textSecondary">{t('cash.countedHint')}</Text>
                 <TextField
                   label={t('cash.counted')}
-                  hint={t('cash.countedHint')}
-                  value={amount}
-                  onChangeText={setAmount}
+                  value={counted}
+                  onChangeText={setCounted}
                   keyboardType="decimal-pad"
                   maxLength={10}
                 />
                 <TextField label={t('cash.note')} value={note} onChangeText={setNote} maxLength={200} />
                 <Button
                   label={t('cash.close')}
+                  icon="lock-closed"
                   variant="secondary"
-                  onPress={() => c.close(amount, note)}
-                  loading={c.isClosing}
-                  disabled={!amount.trim()}
+                  onPress={() => setConfirming(true)}
+                  disabled={!c.isValidAmount(counted)}
+                  fullWidth
+                />
+              </Card>
+              <ConfirmDialog
+                visible={confirming}
+                icon="lock-closed"
+                title={t('cash.confirmTitle')}
+                message={t('cash.confirmMessage', {
+                  expected: PEN(session.expectedAmount),
+                  counted: counted.trim(),
+                })}
+                confirmLabel={t('cash.close')}
+                loading={c.isClosing}
+                onConfirm={() =>
+                  c.close(counted, note, () => {
+                    setConfirming(false);
+                    setCounted('');
+                    setNote('');
+                  })
+                }
+                onCancel={() => setConfirming(false)}
+              />
+            </View>
+          ) : (
+            <View style={styles.content}>
+              {c.lastClosed ? <ClosedSummary session={c.lastClosed} /> : null}
+              <Card>
+                <View style={styles.row}>
+                  <Icon name="lock-closed" size={sizes.icon} color={theme.colors.textSecondary} />
+                  <Text variant="subtitle" style={styles.flex}>
+                    {t('cash.closedTitle')}
+                  </Text>
+                </View>
+                <Text color="textSecondary">{t('cash.closedMessage')}</Text>
+                <TextField
+                  label={t('cash.openingAmount')}
+                  hint={t('cash.openingHint')}
+                  value={opening}
+                  onChangeText={setOpening}
+                  keyboardType="decimal-pad"
+                  maxLength={10}
+                />
+                <Button
+                  label={t('cash.open')}
+                  icon="lock-open"
+                  onPress={() => c.open(opening.trim() || '0', () => setOpening(''))}
+                  loading={c.isOpening}
+                  disabled={opening.trim() !== '' && !c.isValidAmount(opening)}
+                  fullWidth
                 />
               </Card>
             </View>
-          ) : (
-            <Card>
-              <Text variant="subtitle">{t('cash.closedTitle')}</Text>
-              <Text color="textSecondary">{t('cash.closedMessage')}</Text>
-              <TextField
-                label={t('cash.openingAmount')}
-                value={amount}
-                onChangeText={setAmount}
-                keyboardType="decimal-pad"
-                maxLength={10}
-              />
-              <Button label={t('cash.open')} onPress={() => c.open(amount || '0')} loading={c.isOpening} />
-            </Card>
           )
         }
       </QueryView>
       <Text variant="subtitle">{t('cash.history')}</Text>
       <QueryView query={c.history} isEmpty={(h) => h.length === 0} empty={{ title: t('cash.noHistory') }}>
         {(sessions) => (
-          <View style={styles.list}>
+          <Card>
             {sessions.map((s) => (
-              <ListRow
-                key={s.id}
-                icon="cash"
-                title={formatShortDate(s.openedAt, zone)}
-                value={t('cash.historyLine', {
-                  total: PEN(s.salesTotal),
-                  difference: PEN(s.difference ?? 0),
-                })}
-              />
+              <HistoryRow key={s.id} session={s} />
             ))}
-          </View>
+          </Card>
         )}
       </QueryView>
     </Screen>
+  );
+}
+
+type CashSessionView = NonNullable<ReturnType<typeof useCash>['lastClosed']>;
+
+function CashFact({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.flex}>
+      <Text variant="caption" color="onBrand" numberOfLines={1}>
+        {label}
+      </Text>
+      <Text variant="bodyStrong" color="onBrand">
+        {value}
+      </Text>
+    </View>
+  );
+}
+
+/** Right after closing: what was expected, what was counted and the difference, as the API computed. */
+function ClosedSummary({ session }: { session: CashSessionView }) {
+  const { t } = useTranslation('business');
+  const exact = session.difference === 0;
+  return (
+    <Notice
+      tone={exact ? 'success' : 'warning'}
+      title={exact ? t('cash.closedExact') : t('cash.closedWithDifference')}
+      message={t('cash.closedSummary', {
+        expected: PEN(session.expectedAmount),
+        counted: PEN(session.countedAmount ?? 0),
+        difference: PEN(session.difference ?? 0),
+      })}
+    />
+  );
+}
+
+/** A finished shift: the day and hours, what was sold, and the difference (green when exact). */
+function HistoryRow({ session }: { session: CashSessionView }) {
+  const { t } = useTranslation('business');
+  const theme = useTheme();
+  const exact = (session.difference ?? 0) === 0;
+  return (
+    <View style={[styles.historyRow, { borderBottomColor: theme.colors.border }]}>
+      <View style={styles.flex}>
+        <Text variant="bodyStrong">{formatShortDate(session.openedAt, zone)}</Text>
+        <Text variant="caption" color="textSecondary">
+          {t('cash.historyLine', {
+            from: formatTime(session.openedAt, zone),
+            to: session.closedAt ? formatTime(session.closedAt, zone) : '',
+            sales: t('cash.sales', { count: session.salesCount }),
+            total: PEN(session.salesTotal),
+          })}
+        </Text>
+      </View>
+      <Badge
+        label={exact ? t('cash.exact') : t('cash.differenceShort', { amount: PEN(session.difference ?? 0) })}
+        tone={exact ? 'success' : 'warning'}
+      />
+    </View>
   );
 }
 
@@ -718,7 +819,17 @@ export function ClientScreen({ shopId, clientId }: { shopId: string; clientId: s
                 value={`${formatShortDate(v.at, zone)} · ${PEN(v.totalAmount)}`}
               />
             ))}
-            <Button label={t('clients.archive')} variant="ghost" onPress={() => c.save({ archived: true })} />
+            <ConfirmButton
+              label={t('clients.archive')}
+              variant="ghost"
+              onConfirm={() => c.save({ archived: true })}
+              confirm={{
+                title: t('clients.archiveTitle'),
+                message: t('clients.archiveMessage'),
+                confirmLabel: t('clients.archive'),
+                icon: 'archive',
+              }}
+            />
           </View>
         )}
       </QueryView>
@@ -1058,6 +1169,21 @@ export function InvoicingScreen({ shopId }: { shopId: string }) {
 
 const styles = StyleSheet.create({
   content: { gap: spacing.md },
+  cashHero: { padding: spacing.xl, gap: spacing.xs },
+  cashFacts: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginTop: spacing.sm,
+    paddingTop: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  historyRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+    paddingVertical: spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
   list: { gap: spacing.sm },
   section: { gap: spacing.xs },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },

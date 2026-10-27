@@ -76,6 +76,8 @@ describe('DeleteAccountScreen', () => {
     await renderWithProviders(<DeleteAccountScreen onDeleted={jest.fn()} />);
     await fireEvent.changeText(await screen.findByLabelText(texts.deletion.password), 'mala');
     await fireEvent.press(screen.getByRole('button', { name: texts.deletion.confirm }));
+    // The last confirmation, after the password.
+    await fireEvent.press(screen.getAllByRole('button', { name: texts.deletion.confirm }).at(-1)!);
     expect(await screen.findByText(texts.deletion.wrongPassword)).toBeTruthy();
     expect(useSession.getState().status).toBe('authenticated');
   });
@@ -95,6 +97,8 @@ describe('DeleteAccountScreen', () => {
     await renderWithProviders(<DeleteAccountScreen onDeleted={onDeleted} />);
     await fireEvent.changeText(await screen.findByLabelText(texts.deletion.password), 'buena-clave');
     await fireEvent.press(screen.getByRole('button', { name: texts.deletion.confirm }));
+    // The last confirmation, after the password.
+    await fireEvent.press(screen.getAllByRole('button', { name: texts.deletion.confirm }).at(-1)!);
     await waitFor(() => expect(onDeleted).toHaveBeenCalledWith('2030-02-06T15:00:00.000Z'));
     expect(api.callsTo('POST', '/api/v1/me/account/deletion')[0]!.body).toEqual({ password: 'buena-clave' });
     expect(useSession.getState().status).toBe('anonymous');
@@ -120,6 +124,8 @@ describe('DeleteAccountScreen', () => {
     await renderWithProviders(<DeleteAccountScreen onDeleted={jest.fn()} />);
     await fireEvent.changeText(await screen.findByLabelText(texts.deletion.password), 'clave');
     await fireEvent.press(screen.getByRole('button', { name: texts.deletion.confirm }));
+    // The last confirmation, after the password.
+    await fireEvent.press(screen.getAllByRole('button', { name: texts.deletion.confirm }).at(-1)!);
     expect(await screen.findByText(texts.deletion.blockers.STAFF_ROLE)).toBeTruthy();
   });
 });

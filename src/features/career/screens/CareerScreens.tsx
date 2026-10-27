@@ -8,6 +8,7 @@ import { formatShortDate } from '@/shared/lib';
 import { env } from '@/shared/config';
 import { sizes, spacing } from '@/shared/theme';
 import {
+  ConfirmButton,
   Button,
   Card,
   Checkbox,
@@ -154,11 +155,17 @@ export function MyCareerProfileScreen(props: MyCareerProfileScreenProps) {
                     loading={photo.busy}
                   />
                   {profile!.photoUrl ? (
-                    <Button
+                    <ConfirmButton
                       label={t('photo.remove')}
                       variant="ghost"
-                      onPress={photo.remove}
+                      onConfirm={photo.remove}
                       disabled={photo.busy}
+                      confirm={{
+                        title: t('confirm.removePhotoTitle', { ns: 'common' }),
+                        message: t('confirm.removePhotoMessage', { ns: 'common' }),
+                        confirmLabel: t('confirm.removePhoto', { ns: 'common' }),
+                        destructive: true,
+                      }}
                     />
                   ) : null}
                 </View>
