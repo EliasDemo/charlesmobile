@@ -10,6 +10,7 @@ import {
   DealCard,
   FeaturedCarousel,
   ProductCard,
+  ProductGrid,
   Shelf,
   VideoTile,
 } from '../components/StoreParts';
@@ -47,6 +48,7 @@ export function StoreScreen({
     <Screen refreshing={store.query.isRefetching} onRefresh={() => void store.query.refetch()}>
       <View style={styles.content}>
         <BrandHero
+          compact
           eyebrow={t('store.eyebrow')}
           title={t(forShop ? 'store.heroShop' : 'store.hero')}
           subtitle={t(forShop ? 'store.introShop' : 'store.intro')}
@@ -70,14 +72,6 @@ export function StoreScreen({
           {(s) => (
             <View style={styles.content}>
               <FeaturedCarousel ads={store.featured.items} onOpen={store.featured.open} />
-              {s.deals.length > 0 ? (
-                <View style={styles.block}>
-                  <SectionHeading icon="pricetag" title={t('store.deals')} hint={t('store.dealsHint')} />
-                  {s.deals.map((deal) => (
-                    <DealCard key={deal.id} deal={deal} onOpenShop={onOpenBarbershop} />
-                  ))}
-                </View>
-              ) : null}
               {s.offers.length > 0 ? (
                 <View style={styles.block}>
                   <SectionHeading icon="flame" title={t('store.offers')} hint={t('store.offersHint')} />
@@ -93,12 +87,12 @@ export function StoreScreen({
                   </Shelf>
                 </View>
               ) : null}
-              {s.videos.length > 0 ? (
+              {s.deals.length > 0 ? (
                 <View style={styles.block}>
-                  <SectionHeading icon="play-circle" title={t('store.videos')} hint={t('store.videosHint')} />
+                  <SectionHeading icon="pricetag" title={t('store.deals')} hint={t('store.dealsHint')} />
                   <Shelf>
-                    {s.videos.map((v) => (
-                      <VideoTile key={v.id} video={v} />
+                    {s.deals.map((deal) => (
+                      <DealCard key={deal.id} deal={deal} onOpenShop={onOpenBarbershop} />
                     ))}
                   </Shelf>
                 </View>
@@ -113,6 +107,16 @@ export function StoreScreen({
                   </Shelf>
                 </View>
               ) : null}
+              {s.videos.length > 0 ? (
+                <View style={styles.block}>
+                  <SectionHeading icon="play-circle" title={t('store.videos')} hint={t('store.videosHint')} />
+                  <Shelf>
+                    {s.videos.map((v) => (
+                      <VideoTile key={v.id} video={v} />
+                    ))}
+                  </Shelf>
+                </View>
+              ) : null}
               {s.products.length > 0 ? (
                 <View style={styles.block}>
                   <SectionHeading
@@ -120,16 +124,7 @@ export function StoreScreen({
                     title={t('store.products')}
                     hint={t('store.productsHint')}
                   />
-                  <Shelf>
-                    {s.products.map((p) => (
-                      <ProductCard
-                        key={p.id}
-                        product={p}
-                        brand={{ name: p.sponsorName, logoUrl: p.sponsorLogoUrl }}
-                        onOpen={() => store.openProduct(p)}
-                      />
-                    ))}
-                  </Shelf>
+                  <ProductGrid products={s.products} onOpen={store.openProduct} />
                 </View>
               ) : null}
               <Notice tone="info" message={t('notSold')} />

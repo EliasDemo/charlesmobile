@@ -12,6 +12,7 @@ const zone = env.defaultTimeZone;
 const CARD_WIDTH = sizes.cover + spacing.xxxl;
 const VIDEO_WIDTH = sizes.cover * 0.75;
 const NOTCH = spacing.lg;
+const GRID_COLUMNS = 2;
 
 export const CATEGORY_ICON: Record<StoreCategory, IconName> = {
   COSMETICS: 'water',
@@ -110,16 +111,35 @@ export function CategoryPills({
   );
 }
 
-/** The featured ads: a full-width carousel with page dots. */
-export function FeaturedCarousel({ ads, onOpen }: { ads: Placement[]; onOpen: (ad: Placement) => void }) {
+/**
+ * Ads in a carousel: each card a bit narrower than the screen so the next one peeks out (it reads
+ * as "slide"), with page dots. Used by the store's featured space and the ad spaces in Explorar.
+ */
+export function FeaturedCarousel({
+  ads,
+  onOpen,
+  label,
+  onOpenSponsor,
+  testID,
+}: {
+  ads: Placement[];
+  onOpen: (ad: Placement) => void;
+  /** The advertising label ("Patrocinado" by default). */
+  label?: string;
+  /** Tapping the brand opens its page. */
+  onOpenSponsor?: (sponsorId: string) => void;
+  testID?: string;
+}) {
   const { t } = useTranslation('ads');
   const theme = useTheme();
   const { width } = useWindowDimensions();
-  const cardWidth = Math.min(width, sizes.maxContentWidth) - spacing.gutter * 2;
+  const full = Math.min(width, sizes.maxContentWidth) - spacing.gutter * 2;
+  // Alone it takes the whole width; with more, the next one peeks out.
+  const cardWidth = ads.length > 1 ? full - spacing.xxxl : full;
   const [index, setIndex] = useState(0);
   if (ads.length === 0) return null;
   return (
-    <View style={styles.featuredBox}>
+    <View style={styles.featuredBox} testID={testID}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -148,14 +168,23 @@ export function FeaturedCarousel({ ads, onOpen }: { ads: Placement[]; onOpen: (a
               {image ? <Image source={{ uri: image }} style={StyleSheet.absoluteFill} /> : null}
               <View style={[styles.featuredShade, { backgroundColor: theme.colors.backdrop }]}>
                 <View style={styles.inline}>
-                  <Monogram
-                    name={ad.sponsorName}
-                    size={sizes.avatarSmall / 1.5}
-                    imageUrl={ad.sponsorLogoUrl}
-                  />
-                  <Text variant="caption" color="onBrand" numberOfLines={1} style={styles.flex}>
-                    {ad.sponsorName}
-                  </Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={t('openSponsor', { name: ad.sponsorName })}
+                    onPress={onOpenSponsor ? () => onOpenSponsor(ad.sponsorId) : undefined}
+                    disabled={!onOpenSponsor}
+                    hitSlop={spacing.sm}
+                    style={[styles.inline, styles.flex]}
+                  >
+                    <Monogram
+                      name={ad.sponsorName}
+                      size={sizes.avatarSmall / 1.5}
+                      imageUrl={ad.sponsorLogoUrl}
+                    />
+                    <Text variant="caption" color="onBrand" numberOfLines={1} style={styles.flex}>
+                      {ad.sponsorName}
+                    </Text>
+                  </Pressable>
                   <View
                     style={[
                       styles.sponsored,
@@ -163,7 +192,7 @@ export function FeaturedCarousel({ ads, onOpen }: { ads: Placement[]; onOpen: (a
                     ]}
                   >
                     <Text variant="caption" color="onPrimary">
-                      {t('store.sponsored')}
+                      {label ?? t('store.sponsored')}
                     </Text>
                   </View>
                 </View>
@@ -217,11 +246,14 @@ export function ProductCard({
   brand,
   onOpen,
   wide = false,
+  width,
 }: {
   product: ProductLike;
   brand?: { name: string; logoUrl: string | null };
   onOpen: () => void;
   wide?: boolean;
+  /** Fixed width (a grid cell); by default the shelf width. */
+  width?: number;
 }) {
   const { t } = useTranslation('ads');
   const theme = useTheme();
@@ -231,7 +263,7 @@ export function ProductCard({
   const money = (amount: number) => formatMoney({ amount, currency: product.currency });
   return (
     <View
-      style={[styles.product, surface, wide ? styles.wide : { width: CARD_WIDTH }]}
+      style={[styles.product, surface, wide ? styles.wide : { width: width ?? CARD_WIDTH }]}
       testID={`product-${product.id}`}
     >
       <View
@@ -527,6 +559,7 @@ const styles = StyleSheet.create({
   flex: { flex: 1 },
   shrink: { flexShrink: 1 },
   grow: { flexGrow: 1 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   inline: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   shelf: { flexGrow: 0, marginHorizontal: -spacing.gutter },
   shelfContent: { paddingHorizontal: spacing.gutter, paddingVertical: spacing.xs, gap: spacing.sm },
@@ -600,7 +633,7 @@ const styles = StyleSheet.create({
   },
   video: { width: VIDEO_WIDTH, aspectRatio: 9 / 16, overflow: 'hidden', justifyContent: 'flex-end' },
   videoText: { padding: spacing.sm, gap: spacing.xxs },
-  deal: { flexDirection: 'row', alignItems: 'stretch', minHeight: touchTarget * 2 },
+  deal: { flexDirection: 'row', alignItems: 'stretch', minHeight: touchTarget * 2, width: sizes.cover * 1.8 },
   dealStub: {
     width: sizes.cover * 0.6,
     alignItems: 'center',
@@ -621,3 +654,29 @@ const styles = StyleSheet.create({
   dealBody: { flex: 1, padding: spacing.md, gap: spacing.xxs, justifyContent: 'center' },
   dealGo: { justifyContent: 'center', paddingRight: spacing.sm },
 });
+
+/** Products two per row (fills the screen width; never a horizontal scroll). */
+export function ProductGrid({
+  products,
+  onOpen,
+}: {
+  products: (ProductLike & { sponsorName: string; sponsorLogoUrl: string | null })[];
+  onOpen: (product: ProductLike) => void;
+}) {
+  const { width } = useWindowDimensions();
+  const inner = Math.min(width, sizes.maxContentWidth) - spacing.gutter * 2;
+  const cell = (inner - spacing.sm * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
+  return (
+    <View style={styles.grid}>
+      {products.map((p) => (
+        <ProductCard
+          key={p.id}
+          product={p}
+          width={cell}
+          brand={{ name: p.sponsorName, logoUrl: p.sponsorLogoUrl }}
+          onOpen={() => onOpen(p)}
+        />
+      ))}
+    </View>
+  );
+}
