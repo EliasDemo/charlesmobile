@@ -147,9 +147,7 @@
   },
   "near": {
     "label": "Más cerca",
-    "active": "Más cerca ✓",
-    "denied": "Sin tu ubicación mostramos las ofertas recientes. Puedes elegir un distrito.",
-    "failed": "No pudimos obtener tu ubicación. Intenta de nuevo."
+    "active": "Más cerca ✓"
   },
   "card": {
     "distance": "A {{km}} km · {{place}}"

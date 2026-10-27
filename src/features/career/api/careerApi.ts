@@ -17,6 +17,8 @@ export type RankingFilters = {
   q?: string;
   availableForWork?: boolean;
   sort?: 'ranking' | 'newest';
+  /** "Cerca de mí": nearest first, with their distance. */
+  near?: { latitude: number; longitude: number };
 };
 
 export const careerKeys = {
@@ -100,7 +102,11 @@ export const fetchRanking = (filters: RankingFilters, offset = 0): Promise<Ranki
           ...(filters.province ? { province: filters.province } : {}),
           ...(filters.q?.trim() ? { q: filters.q.trim() } : {}),
           ...(filters.availableForWork ? { availableForWork: true } : {}),
-          ...(filters.sort ? { sort: filters.sort } : {}),
+          ...(filters.near
+            ? { lat: filters.near.latitude, lng: filters.near.longitude, sort: 'distance' as const }
+            : filters.sort
+              ? { sort: filters.sort }
+              : {}),
         },
       },
     }),

@@ -147,9 +147,7 @@
   },
   "near": {
     "label": "Nearest",
-    "active": "Nearest ✓",
-    "denied": "Without your location we show recent offers. You can pick a district.",
-    "failed": "We could not get your location. Try again."
+    "active": "Nearest ✓"
   },
   "card": {
     "distance": "{{km}} km away · {{place}}"

@@ -97,7 +97,8 @@
     "empty": "No barbers match those filters",
     "line": "#{{rank}} {{name}}",
     "rating": "{{average}} ({{count}})",
-    "availableInfo": "Barbers available for work."
+    "availableInfo": "Barbers available for work.",
+    "distance": "{{km}} km away"
   },
   "profileTitle": "Barber profile",
   "talent": {

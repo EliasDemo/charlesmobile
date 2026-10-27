@@ -277,5 +277,11 @@
   },
   "brand": {
     "tagline": "Reservas para barberías"
+  },
+  "nearMe": {
+    "label": "Cerca de mí",
+    "active": "Cerca de mí ✓",
+    "denied": "Sin tu ubicación mostramos la lista normal. Puedes elegir un distrito.",
+    "failed": "No pudimos obtener tu ubicación. Intenta de nuevo."
   }
 }

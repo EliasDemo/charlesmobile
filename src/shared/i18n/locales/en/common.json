@@ -277,5 +277,11 @@
   },
   "brand": {
     "tagline": "Barbershop bookings"
+  },
+  "nearMe": {
+    "label": "Near me",
+    "active": "Near me ✓",
+    "denied": "Without your location we show the regular list. You can pick a district.",
+    "failed": "We could not get your location. Try again."
   }
 }

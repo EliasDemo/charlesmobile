@@ -88,3 +88,4 @@ export { UnlockHost, showUnlocked, type Unlock, type UnlockItem } from './Unlock
 export { KeyboardRoot, keyboardController, useKeyboardHeight, useKeyboardVisible } from './keyboard';
 export { BrandHeader } from './BrandHeader';
 export { BrandMap, mapAvailable, type BrandMapProps, type MapPin } from './BrandMap';
+export { useNearMe } from './useNearMe';

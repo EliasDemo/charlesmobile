@@ -29,6 +29,7 @@ import {
   TextField,
   useFieldErrorText,
   type TextFieldProps,
+  useNearMe,
 } from '@/shared/ui';
 import type { EmploymentType, JobApplication } from '../api/jobsApi';
 import {
@@ -47,7 +48,6 @@ import {
   useJobList,
   useMyApplications,
   useShopJobs,
-  useNearMe,
 } from '../hooks/useJobs';
 
 const zone = env.defaultTimeZone;
@@ -122,7 +122,7 @@ export function JobsScreen({
               <Chip
                 label={nearMe.near ? t('near.active') : t('near.label')}
                 selected={nearMe.near !== null}
-                onPress={nearMe.busy ? () => undefined : nearMe.toggle}
+                onPress={nearMe.toggle}
               />
             </View>
             {type || style ? (

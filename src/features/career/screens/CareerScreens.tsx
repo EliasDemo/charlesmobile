@@ -34,6 +34,7 @@ import {
   TextField,
   useFieldErrorText,
   type TextFieldProps,
+  useNearMe,
 } from '@/shared/ui';
 import type { PortfolioItem, RankedBarber, RankingFilters, Workplace } from '../api/careerApi';
 import { CareerHeader, PortfolioGrid, RankText } from '../components/CareerParts';
@@ -551,8 +552,10 @@ export function RankingScreen({
   const [q, setQ] = useState('');
   const [place, setPlace] = useState<Location | null>(null);
   const [style, setStyle] = useState<string | undefined>(undefined);
+  const nearMe = useNearMe();
   const filters: RankingFilters = {
     q,
+    near: nearMe.near ?? undefined,
     district: place?.district,
     style,
     availableForWork: availableOnly || undefined,
@@ -598,6 +601,15 @@ export function RankingScreen({
                 onPress={() => setFiltering(true)}
               />
             </View>
+            <View style={styles.row}>
+              <Chip
+                label={
+                  nearMe.near ? t('nearMe.active', { ns: 'common' }) : t('nearMe.label', { ns: 'common' })
+                }
+                selected={nearMe.near !== null}
+                onPress={nearMe.toggle}
+              />
+            </View>
           </View>
         }
         renderItem={({ item }) => (
@@ -623,6 +635,14 @@ export function RankingScreen({
                     ]
                   : []),
                 { icon: 'cut' as const, text: t('attended', { count: item.attendedCount }) },
+                ...(item.distanceKm != null
+                  ? [
+                      {
+                        icon: 'navigate' as const,
+                        text: t('ranking.distance', { km: item.distanceKm.toFixed(1) }),
+                      },
+                    ]
+                  : []),
                 ...(item.district ? [{ icon: 'location' as const, text: item.district }] : []),
               ]}
               trailing={item.rank === null ? <RankText rank={null} /> : undefined}
