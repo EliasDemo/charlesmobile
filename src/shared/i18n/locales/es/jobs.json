@@ -170,5 +170,9 @@
       "MIXED": "Fijo + comisión",
       "PER_SERVICE": "Por servicio"
     }
+  },
+  "detail": {
+    "requirements": "Requisitos",
+    "process": "Selección: {{process}}"
   }
 }

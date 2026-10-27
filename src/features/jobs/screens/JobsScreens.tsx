@@ -31,7 +31,13 @@ import {
   type TextFieldProps,
 } from '@/shared/ui';
 import type { EmploymentType, JobApplication } from '../api/jobsApi';
-import { ApplicationProgress, ApplicationStatusPill, JobCard, JobFact } from '../components/JobParts';
+import {
+  ApplicationProgress,
+  ApplicationStatusPill,
+  JobCard,
+  JobFact,
+  jobPayText,
+} from '../components/JobParts';
 import {
   EMPLOYMENT_TYPES,
   useApplicants,
@@ -192,10 +198,23 @@ export function JobScreen({
                 <Badge label={t(`types.${posting.employmentType}`)} tone="primary" />
                 {posting.status === 'CLOSED' ? <Badge label={t('shop.status.CLOSED')} /> : null}
               </View>
-              {posting.compensationText ? (
-                <JobFact icon="cash" text={posting.compensationText} strong />
+              {jobPayText(posting, t) ? <JobFact icon="cash" text={jobPayText(posting, t)!} strong /> : null}
+              {posting.compensationText ? <JobFact icon="cash" text={posting.compensationText} /> : null}
+              <JobFact
+                icon="location"
+                text={
+                  posting.location
+                    ? `${posting.barbershop.address} · ${posting.location.district}`
+                    : posting.barbershop.address
+                }
+              />
+              {posting.schedule ? <JobFact icon="calendar" text={posting.schedule} /> : null}
+              {posting.selectionProcess ? (
+                <JobFact
+                  icon="clipboard"
+                  text={t('detail.process', { process: t(`wizard.processes.${posting.selectionProcess}`) })}
+                />
               ) : null}
-              <JobFact icon="location" text={posting.barbershop.address} />
               {posting.closesAt ? (
                 <JobFact
                   icon="time"
@@ -204,6 +223,14 @@ export function JobScreen({
               ) : null}
               <JobFact icon="people" text={t('shop.applicants', { count: posting.applicationsCount })} />
             </Card>
+            {posting.requirements.length > 0 ? (
+              <View style={styles.section}>
+                <Text variant="subtitle">{t('detail.requirements')}</Text>
+                {posting.requirements.map((r) => (
+                  <JobFact key={r} icon="checkmark-circle" text={r} />
+                ))}
+              </View>
+            ) : null}
             {posting.styles.length > 0 ? (
               <View style={styles.section}>
                 <Text variant="subtitle">{t('wanted')}</Text>
