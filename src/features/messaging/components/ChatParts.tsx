@@ -1,8 +1,8 @@
-import { ActivityIndicator, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate, formatTime } from '@/shared/lib';
-import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
+import { sizes, spacing, useTheme } from '@/shared/theme';
 import { Icon, Text } from '@/shared/ui';
 import type { Message } from '../api/messagingApi';
 
@@ -115,78 +115,6 @@ export function ChatBubble({
   );
 }
 
-/** The writing bar: grows with the text, round send button, fixed at the bottom. */
-export function Composer({
-  value,
-  onChange,
-  onSend,
-  canSend,
-  sending,
-  disabled,
-  maxLength,
-}: {
-  value: string;
-  onChange: (text: string) => void;
-  onSend: () => void;
-  canSend: boolean;
-  sending: boolean;
-  disabled: boolean;
-  maxLength: number;
-}) {
-  const { t } = useTranslation('messages');
-  const theme = useTheme();
-  return (
-    <View
-      style={[
-        styles.composer,
-        { borderTopColor: theme.colors.border, backgroundColor: theme.colors.background },
-      ]}
-    >
-      <TextInput
-        value={value}
-        onChangeText={onChange}
-        placeholder={disabled ? t('chat.blockedShort') : t('chat.label')}
-        placeholderTextColor={theme.colors.textMuted}
-        multiline
-        maxLength={maxLength}
-        editable={!disabled}
-        accessibilityLabel={t('chat.label')}
-        maxFontSizeMultiplier={2}
-        style={[
-          theme.typography.body,
-          styles.input,
-          {
-            color: theme.colors.textPrimary,
-            backgroundColor: theme.colors.surface,
-            borderRadius: theme.radius.xl,
-          },
-        ]}
-        testID="chat-input"
-      />
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('chat.send')}
-        accessibilityState={{ disabled: !canSend || sending }}
-        disabled={!canSend || sending}
-        onPress={onSend}
-        style={[
-          styles.send,
-          {
-            backgroundColor: canSend ? theme.colors.primary : theme.colors.border,
-            borderRadius: touchTarget / 2,
-          },
-        ]}
-      >
-        {sending ? (
-          <ActivityIndicator color={theme.colors.onPrimary} />
-        ) : (
-          <Icon name="send" size={sizes.icon} color={theme.colors.onPrimary} />
-        )}
-      </Pressable>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   day: { alignItems: 'center', marginVertical: spacing.sm },
   dayPill: { paddingHorizontal: spacing.md, paddingVertical: spacing.xxs },
@@ -203,21 +131,4 @@ const styles = StyleSheet.create({
   removed: { fontStyle: 'italic' },
   meta: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end', gap: spacing.xxs },
   time: { opacity: 0.8 },
-  composer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  input: {
-    flex: 1,
-    minHeight: touchTarget,
-    maxHeight: touchTarget * 3,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.sm,
-  },
-  send: { width: touchTarget, height: touchTarget, alignItems: 'center', justifyContent: 'center' },
 });

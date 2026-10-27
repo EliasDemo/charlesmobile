@@ -1,5 +1,14 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Keyboard, Platform, TurboModuleRegistry, type KeyboardEvent } from 'react-native';
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TurboModuleRegistry,
+  View,
+  type KeyboardEvent,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 
 /**
  * Height of the on-screen keyboard (0 when hidden). With edge-to-edge on Android the window no
@@ -45,4 +54,37 @@ export function keyboardController(): KeyboardControllerLib | null {
 export function KeyboardRoot({ children }: { children: ReactNode }) {
   const lib = keyboardController();
   return lib ? <lib.KeyboardProvider>{children}</lib.KeyboardProvider> : <>{children}</>;
+}
+
+/**
+ * A screen with a field fixed at the bottom (chat, comments): it moves up with the keyboard. On
+ * Android (edge-to-edge) the window no longer shrinks, so without the library it leaves the room itself.
+ * `offset`: height above this view on iOS (a stack header).
+ */
+export function KeyboardAvoider({
+  children,
+  style,
+  offset = 0,
+}: {
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+  offset?: number;
+}) {
+  const lib = keyboardController();
+  const height = useKeyboardHeight();
+  if (lib) {
+    return (
+      <lib.KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={offset} style={style}>
+        {children}
+      </lib.KeyboardAvoidingView>
+    );
+  }
+  if (Platform.OS === 'ios') {
+    return (
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={offset} style={style}>
+        {children}
+      </KeyboardAvoidingView>
+    );
+  }
+  return <View style={[style, { paddingBottom: height }]}>{children}</View>;
 }

@@ -343,7 +343,9 @@ Contrato estable del backend (commit a4b17a4), `pnpm sync:api` del 2026-10-15. G
 ## Comunidad y cuenta bajo demanda — 2026-10-22
 
 - **Hecho (sin compilar):** hoja "Crea tu cuenta / Inicia sesión" (`askForAccount` + `AuthPromptHost` en `shared/ui`) al reservar, escribir, guardar favorita, postular o suscribirse; vuelve a la pantalla de origen. Al reservar, cada barbero muestra foto, estrellas, "Ver perfil y reseñas" (`profileId`) y "Mejor valorado" (mayor promedio de la API con 3+ valoraciones; solo resalta).
-- **Esperando al backend:** pestaña **Comunidad** (Explorar · Comunidad · Reservas · Mensajes · Perfil): publicaciones de barberías y barberos (promoción, evento, trabajo, aviso), feed Para ti / Cerca / Siguiendo, me gusta, comentarios con respuestas, compartir, guardar, seguir, eventos, reportar y bloquear (obligatorio para las tiendas), y me gusta y foto del autor en las valoraciones. Pedido completo enviado al usuario el 2026-10-22. Los clientes solo interactúan al inicio (pendiente de confirmar).
+- **Comunidad conectada (2026-10-27, contrato `docs/api/COMUNIDAD.md`):** pestaña **Comunidad** (entre Explorar y Reservas, en los dos modos) con Para ti · Cerca · Siguiendo, filtros por tipo y "Publicar" para quien tiene barbería o perfil profesional; detalle público `/community/[id]` con comentarios; `/community/saved` y `/community/new` (protegidas). Interactuar sin sesión abre "Crea tu cuenta". El autor lleva a su barbería o a su perfil profesional; "Reservar" abre la reserva en esa barbería. Falta la prueba en el teléfono.
+- **Comunidad, diseño y teclado (2026-10-27):** estilo de feed social (referencia Instagram/Threads): pestañas subrayadas, una fila de filtros con icono de borde a borde, tarjeta con "⋯" en la cabecera, fotos al ancho real (antes se salían 8 px por lado: el cálculo ignoraba el margen de la lista), iconos con su número y Guardar a la derecha. `KeyboardAvoider` y `MessageBar` nuevos en `shared/ui`: en Android (edge-to-edge) el campo de comentar y el del chat suben con el teclado también sin `react-native-keyboard-controller`.
+- **Antes (pedido al backend):** pestaña **Comunidad** (Explorar · Comunidad · Reservas · Mensajes · Perfil): publicaciones de barberías y barberos (promoción, evento, trabajo, aviso), feed Para ti / Cerca / Siguiendo, me gusta, comentarios con respuestas, compartir, guardar, seguir, eventos, reportar y bloquear (obligatorio para las tiendas), y me gusta y foto del autor en las valoraciones. Pedido completo enviado al usuario el 2026-10-22. Los clientes solo interactúan al inicio (pendiente de confirmar).
 - Enlaces universales para abrir publicaciones compartidas: cambio nativo, pendiente de aprobación.
 
 - **Barbero (2026-10-22):** "Mi barbería" muestra la **bolsa laboral** primero al barbero sin barbería (ofertas de su distrito, postulaciones, perfil) y discreta al que ya trabaja; el dueño no la ve. **Mensajes** separados en Social · Profesional (solo si hay de ambos), con quién responde (dueño o administrador) y "Ver perfil profesional" en lo laboral. **Ranking sin desmotivar:** el perfil propio muestra "Tu camino al ranking" (0/3) y pasos para destacar; "Nuevo talento" en vez de "fuera del ranking"; celebración al entrar.
@@ -380,6 +382,8 @@ Contrato estable del backend (commit a4b17a4), `pnpm sync:api` del 2026-10-15. G
 | `/shop` (pestaña en modo barbería) | Mi barbería | M6 |
 | `/shop/[shopId]/details`, `status`, `services`, `barbers`, `members`, `hours`, `blocks` | Gestión (protegidas, personal) | M6 |
 | `/create-shop`, `/profile/invitations` | Crear barbería, invitaciones (protegidas) | M6 |
+| `/community` (pestaña), `/community/[id]` | Comunidad y publicación (públicas) | Comunidad |
+| `/community/saved`, `/community/new` | Guardadas y nueva publicación (protegidas) | Comunidad |
 
 ## Pendiente
 

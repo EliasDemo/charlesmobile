@@ -53,7 +53,8 @@
     "deleteAccount": "Delete my account",
     "notifications": "Notifications",
     "changePassword": "Change password",
-    "messages": "Messages"
+    "messages": "Messages",
+    "community": "Community"
   },
   "placeholder": {
     "comingSoon": "Available in an upcoming version."

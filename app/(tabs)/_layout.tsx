@@ -166,6 +166,10 @@ export default function TabsLayout() {
           options={{ href: shop, title: t('nav.agenda'), tabBarIcon: tabIcon('today') }}
         />
         <Tabs.Screen
+          name="community"
+          options={{ title: t('nav.community'), tabBarIcon: tabIcon('people') }}
+        />
+        <Tabs.Screen
           name="bookings"
           options={{ href: client, title: t('nav.bookings'), tabBarIcon: tabIcon('calendar') }}
         />

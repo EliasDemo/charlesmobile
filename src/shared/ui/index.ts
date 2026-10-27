@@ -37,6 +37,7 @@ export { Text, type TextProps } from './Text';
 export { TextField, type TextFieldProps } from './TextField';
 export { Checkbox, type CheckboxProps } from './Checkbox';
 export { ConfirmDialog, type ConfirmDialogProps } from './ConfirmDialog';
+export { useCommunityNavigation } from './communityNavigation';
 export { AuthPromptHost, askForAccount, type AuthPromptHostProps, type AuthPromptReason } from './AuthPrompt';
 export { ListRow, SwitchRow, type ListRowProps, type SwitchRowProps } from './ListRow';
 export { Notice, type NoticeProps, type NoticeTone } from './Notice';
@@ -85,7 +86,14 @@ export { PlanLimitNotice } from './PlanLimitNotice';
 export { DistrictPicker } from './DistrictPicker';
 export { TourOverlay, TourTarget, useFirstTimeTour } from './Tour';
 export { UnlockHost, showUnlocked, type Unlock, type UnlockItem } from './UnlockSheet';
-export { KeyboardRoot, keyboardController, useKeyboardHeight, useKeyboardVisible } from './keyboard';
+export { MessageBar, type MessageBarProps } from './MessageBar';
+export {
+  KeyboardAvoider,
+  KeyboardRoot,
+  keyboardController,
+  useKeyboardHeight,
+  useKeyboardVisible,
+} from './keyboard';
 export { BrandHeader } from './BrandHeader';
 export { BrandMap, mapAvailable, type BrandMapProps, type MapPin } from './BrandMap';
 export { useNearMe } from './useNearMe';

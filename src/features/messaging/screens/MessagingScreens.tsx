@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate, formatTime } from '@/shared/lib';
@@ -12,7 +12,9 @@ import {
   Icon,
   InfoCard,
   InfiniteList,
+  KeyboardAvoider,
   LoadingState,
+  MessageBar,
   Monogram,
   Notice,
   Screen,
@@ -23,7 +25,7 @@ import {
   translateErrorMessage,
 } from '@/shared/ui';
 import type { Conversation, Mailbox, Message, ReportReason } from '../api/messagingApi';
-import { ChatBubble, Composer, DaySeparator, dayLabel } from '../components/ChatParts';
+import { ChatBubble, DaySeparator, dayLabel } from '../components/ChatParts';
 import {
   MESSAGE_MAX,
   useChat,
@@ -178,10 +180,9 @@ function Chat({
   }
 
   return (
-    <KeyboardAvoidingView
+    <KeyboardAvoider
       style={[styles.fill, { backgroundColor: theme.colors.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? touchTarget * 2 : 0}
+      offset={touchTarget * 2}
     >
       {conversation ? (
         <View style={[styles.top, { borderBottomColor: theme.colors.border }]}>
@@ -259,14 +260,18 @@ function Chat({
         />
       ) : null}
       {chat.error ? <Notice tone="danger" message={chat.error} /> : null}
-      <Composer
+      <MessageBar
         value={chat.draft}
         onChange={chat.setDraft}
         onSend={chat.send}
         canSend={chat.canSend}
         sending={chat.isSending}
         disabled={Boolean(conversation?.blocked)}
+        placeholder={conversation?.blocked ? t('chat.blockedShort') : t('chat.label')}
+        label={t('chat.label')}
+        sendLabel={t('chat.send')}
         maxLength={MESSAGE_MAX}
+        testID="chat-input"
       />
 
       <ConfirmDialog
@@ -304,7 +309,7 @@ function Chat({
           ))}
         </View>
       </ConfirmDialog>
-    </KeyboardAvoidingView>
+    </KeyboardAvoider>
   );
 }
 

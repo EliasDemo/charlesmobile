@@ -26,6 +26,7 @@ import memberships from './locales/es/memberships.json';
 import business from './locales/es/business.json';
 import face from './locales/es/face.json';
 import tour from './locales/es/tour.json';
+import community from './locales/es/community.json';
 import type devTexts from './locales/es/dev.json';
 import en_common from './locales/en/common.json';
 import en_errors from './locales/en/errors.json';
@@ -53,6 +54,7 @@ import en_memberships from './locales/en/memberships.json';
 import en_business from './locales/en/business.json';
 import en_face from './locales/en/face.json';
 import en_tour from './locales/en/tour.json';
+import en_community from './locales/en/community.json';
 import { onLanguageChange } from './language';
 
 export const defaultNS = 'common';
@@ -84,6 +86,7 @@ export const resources = {
     business,
     face,
     tour,
+    community,
   },
   en: {
     common: en_common,
@@ -112,6 +115,7 @@ export const resources = {
     business: en_business,
     face: en_face,
     tour: en_tour,
+    community: en_community,
   },
 } as const;
 
