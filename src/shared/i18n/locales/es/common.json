@@ -283,5 +283,11 @@
     "active": "Cerca de mí ✓",
     "denied": "Sin tu ubicación mostramos la lista normal. Puedes elegir un distrito.",
     "failed": "No pudimos obtener tu ubicación. Intenta de nuevo."
+  },
+  "like": {
+    "action": "Me gusta",
+    "label_one": "Me gusta ({{count}})",
+    "label_other": "Me gusta ({{count}})",
+    "failed": "No pudimos guardar tu me gusta. Intenta de nuevo."
   }
 }

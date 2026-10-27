@@ -11,6 +11,7 @@ import {
   Monogram,
   QueryView,
   RatingLabel,
+  ReviewLikeButton,
   StatusPill,
   Text,
   categoryIcon,
@@ -193,7 +194,8 @@ export function ReviewItem({
   return (
     <View style={[styles.review, { borderColor: theme.colors.border }]}>
       <View style={styles.reviewHeader}>
-        <Text variant="bodyStrong">{`@${review.authorName}`}</Text>
+        <Monogram name={review.authorName} size={sizes.avatarSmall} imageUrl={review.authorPhotoUrl} />
+        <Text variant="bodyStrong" style={styles.reviewAuthor}>{`@${review.authorName}`}</Text>
         <Text
           variant="label"
           color="warning"
@@ -221,6 +223,7 @@ export function ReviewItem({
           <Text>{review.response.text}</Text>
         </View>
       ) : null}
+      <ReviewLikeButton reviewId={review.id} likes={review.likes} likedByMe={review.likedByMe} />
       {footer}
     </View>
   );
@@ -242,5 +245,6 @@ const styles = StyleSheet.create({
   barberRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.xs },
   review: { gap: spacing.xs, paddingVertical: spacing.sm, borderBottomWidth: sizes.borderWidth },
   reviewHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  reviewAuthor: { flex: 1 },
   response: { gap: spacing.xxs, padding: spacing.sm, marginTop: spacing.xs },
 });

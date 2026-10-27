@@ -283,5 +283,11 @@
     "active": "Near me ✓",
     "denied": "Without your location we show the regular list. You can pick a district.",
     "failed": "We could not get your location. Try again."
+  },
+  "like": {
+    "action": "Like",
+    "label_one": "Like ({{count}})",
+    "label_other": "Like ({{count}})",
+    "failed": "We could not save your like. Try again."
   }
 }

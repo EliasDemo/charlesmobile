@@ -6,7 +6,7 @@ import type { Location } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate } from '@/shared/lib';
 import { env } from '@/shared/config';
-import { spacing } from '@/shared/theme';
+import { sizes, spacing } from '@/shared/theme';
 import {
   Button,
   Card,
@@ -35,6 +35,7 @@ import {
   useFieldErrorText,
   type TextFieldProps,
   useNearMe,
+  ReviewLikeButton,
 } from '@/shared/ui';
 import type { PortfolioItem, RankedBarber, RankingFilters, Workplace } from '../api/careerApi';
 import { CareerHeader, PortfolioGrid, RankText } from '../components/CareerParts';
@@ -506,11 +507,18 @@ export function PublicCareerProfileScreen({
                 ) : (
                   reviews.items.map((r) => (
                     <Card key={r.id}>
-                      <Stars rating={r.rating} />
+                      <View style={styles.row}>
+                        <Monogram name={r.clientName} size={sizes.avatarSmall} imageUrl={r.authorPhotoUrl} />
+                        <View style={styles.flex}>
+                          <Text variant="bodyStrong">{`@${r.clientName}`}</Text>
+                          <Stars rating={r.rating} />
+                        </View>
+                      </View>
                       {r.comment ? <Text>{r.comment}</Text> : null}
                       <Text variant="caption" color="textSecondary">
-                        {[`@${r.clientName}`, r.serviceName, r.barbershopName].filter(Boolean).join(' · ')}
+                        {[r.serviceName, r.barbershopName].filter(Boolean).join(' · ')}
                       </Text>
+                      <ReviewLikeButton reviewId={r.id} likes={r.likes} likedByMe={r.likedByMe} />
                     </Card>
                   ))
                 )}

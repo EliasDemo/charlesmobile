@@ -89,3 +89,4 @@ export { KeyboardRoot, keyboardController, useKeyboardHeight, useKeyboardVisible
 export { BrandHeader } from './BrandHeader';
 export { BrandMap, mapAvailable, type BrandMapProps, type MapPin } from './BrandMap';
 export { useNearMe } from './useNearMe';
+export { ReviewLikeButton } from './LikeButton';
