@@ -12,7 +12,10 @@
     "account": "Account",
     "settings": "Settings",
     "session": "Session",
-    "shop": "Barbershop"
+    "shop": "Barbershop",
+    "mine": "Yours",
+    "pro": "For professionals",
+    "help": "Help"
   },
   "edit": {
     "title": "Edit profile",
@@ -118,5 +121,12 @@
     "permissionsHint": "Location, camera, photos and notifications are changed in the phone settings.",
     "about": "About",
     "version": "Version"
-  }
+  },
+  "pro": {
+    "promoTitle": "Are you a barber or do you run a barbershop?",
+    "promoText": "Get bookings, organize your schedule and show your cuts. Creating your barbershop is free.",
+    "toShopHint": "Schedule, bookings and managing your barbershop",
+    "toClientHint": "Go back to searching and booking as a client"
+  },
+  "version": "Charles · version {{version}}"
 }

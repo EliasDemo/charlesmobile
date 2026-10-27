@@ -12,7 +12,10 @@
     "account": "Cuenta",
     "settings": "Ajustes",
     "session": "Sesión",
-    "shop": "Barbería"
+    "shop": "Barbería",
+    "mine": "Lo tuyo",
+    "pro": "Para profesionales",
+    "help": "Ayuda"
   },
   "edit": {
     "title": "Editar perfil",
@@ -118,5 +121,12 @@
     "permissionsHint": "Ubicación, cámara, fotos y notificaciones se cambian en los ajustes del teléfono.",
     "about": "Acerca de",
     "version": "Versión"
-  }
+  },
+  "pro": {
+    "promoTitle": "¿Eres barbero o tienes una barbería?",
+    "promoText": "Recibe reservas, arma tu agenda y muestra tus cortes. Crear tu barbería es gratis.",
+    "toShopHint": "Agenda, reservas y gestión de tu barbería",
+    "toClientHint": "Vuelve a buscar y reservar como cliente"
+  },
+  "version": "Charles · versión {{version}}"
 }

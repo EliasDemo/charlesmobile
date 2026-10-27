@@ -26,6 +26,7 @@ const profileProps = () => ({
   onMemberships: jest.fn(),
   onPreferences: jest.fn(),
   onFavorites: jest.fn(),
+  onNotifications: jest.fn(),
   onHelp: jest.fn(),
   onMyReviews: jest.fn(),
   onWelcome: jest.fn(),
