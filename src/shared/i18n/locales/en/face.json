@@ -3,8 +3,15 @@
   "entry": "Cuts for your face",
   "consent": {
     "title": "Discover the cuts that suit you best",
-    "message": "We'll analyze your face on your phone to suggest cuts. The photo is not uploaded or stored: we only send 4 measurements.",
-    "accept": "I agree, continue"
+    "message": "We'll analyze your face on your phone to suggest cuts. The photo is never uploaded or stored: we only send a few measurements.",
+    "accept": "I agree, continue",
+    "eyebrow": "Style advisor",
+    "p1Title": "It all happens on your phone",
+    "p1": "We measure your face right here; the photo is never uploaded.",
+    "p2Title": "Nothing is stored",
+    "p2": "Photos are deleted right away. We only send a few measurements.",
+    "p3Title": "Cuts that suit you",
+    "p3": "With real photos and barbers near you."
   },
   "scan": {
     "title": "Take a selfie",
@@ -75,6 +82,14 @@
       "HIGH": "Clear result",
       "MEDIUM": "Likely result",
       "LOW": "Your face has traits of both: the suggestions work for either"
-    }
+    },
+    "cutsTitle": "Recommended cuts"
+  },
+  "steps": {
+    "label": "Step {{n}} of {{total}}: {{name}}",
+    "consent": "Privacy",
+    "scan": "Photos",
+    "preferences": "Taste",
+    "result": "Your cuts"
   }
 }

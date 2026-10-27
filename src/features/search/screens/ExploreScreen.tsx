@@ -1,19 +1,23 @@
 import type { ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from '@/shared/i18n';
-import { sizes, spacing, useTheme } from '@/shared/theme';
+import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import {
+  BrandHero,
   Button,
   Chip,
   ConfirmDialog,
+  Icon,
   InfiniteList,
   Notice,
   SearchField,
   Text,
   ScreenTitle,
+  SectionHeading,
   TourTarget,
   useFirstTimeTour,
+  type IconName,
 } from '@/shared/ui';
 import { ResultCard } from '../components/ResultCard';
 import { SearchMap } from '../components/SearchMap';
@@ -65,28 +69,40 @@ export function ExploreScreen({
   const header = (
     <View style={styles.header}>
       <ScreenTitle title={t('title')} right={headerRight} />
-      <TourTarget id="explore.search">
-        <SearchField
-          value={store.text}
-          onChangeText={store.setText}
-          placeholder={t('placeholder')}
-          label={t('fieldLabel')}
-        />
-      </TourTarget>
+      <BrandHero compact eyebrow={t('hero.eyebrow')} title={t('hero.title')}>
+        <TourTarget id="explore.search">
+          <SearchField
+            value={store.text}
+            onChangeText={store.setText}
+            placeholder={t('placeholder')}
+            label={t('fieldLabel')}
+          />
+        </TourTarget>
+      </BrandHero>
       {results.textTooShort ? (
         <Text variant="caption" color="textSecondary">
           {t('minChars')}
         </Text>
       ) : null}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
+      <View style={styles.quick}>
         <TourTarget id="explore.nearMe">
-          <Chip
+          <QuickAction
+            icon="navigate"
             label={nearMe.active ? t('nearMeActive') : t('nearMe')}
             selected={nearMe.active}
             onPress={nearMe.active ? nearMe.stop : nearMe.start}
-            accessibilityHint={nearMe.active ? t('nearMeOff') : undefined}
+            hint={nearMe.active ? t('nearMeOff') : undefined}
           />
         </TourTarget>
+        {onOpenFace ? (
+          <TourTarget id="explore.face">
+            <QuickAction icon="happy" label={t('face')} onPress={onOpenFace} highlight />
+          </TourTarget>
+        ) : null}
+        {onOpenBarbers ? <QuickAction icon="trophy" label={t('barbers')} onPress={onOpenBarbers} /> : null}
+        {onOpenJobs ? <QuickAction icon="briefcase" label={t('jobs')} onPress={onOpenJobs} /> : null}
+      </View>
+      <View style={styles.toolbar}>
         <Chip
           label={
             results.activeFilters > 0 ? t('filtersActive', { count: results.activeFilters }) : t('filters')
@@ -101,14 +117,7 @@ export function ExploreScreen({
           label={store.view === 'list' ? t('viewMap') : t('viewList')}
           onPress={() => store.setView(store.view === 'list' ? 'map' : 'list')}
         />
-        {onOpenFace ? (
-          <TourTarget id="explore.face">
-            <Chip label={t('face')} onPress={onOpenFace} />
-          </TourTarget>
-        ) : null}
-        {onOpenBarbers ? <Chip label={t('barbers')} onPress={onOpenBarbers} /> : null}
-        {onOpenJobs ? <Chip label={t('jobs')} onPress={onOpenJobs} /> : null}
-      </ScrollView>
+      </View>
       {categories.data && categories.data.length > 0 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chips}>
           <Chip
@@ -142,9 +151,12 @@ export function ExploreScreen({
       {store.view === 'list' ? (results.usingDefaultOrder ? homeBanner : resultsTop) : null}
       {store.view === 'list' && results.usingDefaultOrder && results.query.items?.length ? (
         // "Mejor valoradas" only when some result actually has reviews.
-        <Text variant="subtitle">
-          {results.query.items.some((item) => item.rating.count > 0) ? t('topRated') : t('allBarbershops')}
-        </Text>
+        <SectionHeading
+          icon={results.query.items.some((item) => item.rating.count > 0) ? 'star' : 'storefront'}
+          title={
+            results.query.items.some((item) => item.rating.count > 0) ? t('topRated') : t('allBarbershops')
+          }
+        />
       ) : null}
     </View>
   );
@@ -190,7 +202,61 @@ export function ExploreScreen({
   );
 }
 
+/** A round shortcut with its label; "Cortes para tu cara" is highlighted in copper. */
+function QuickAction({
+  icon,
+  label,
+  onPress,
+  selected = false,
+  highlight = false,
+  hint,
+}: {
+  icon: IconName;
+  label: string;
+  onPress: () => void;
+  selected?: boolean;
+  highlight?: boolean;
+  hint?: string;
+}) {
+  const theme = useTheme();
+  const filled = selected || highlight;
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityHint={hint}
+      accessibilityState={{ selected }}
+      onPress={onPress}
+      style={styles.action}
+    >
+      <View
+        style={[
+          styles.actionIcon,
+          {
+            borderRadius: theme.radius.lg,
+            backgroundColor: filled ? theme.colors.primary : theme.colors.primarySoft,
+          },
+        ]}
+      >
+        <Icon name={icon} size={sizes.icon} color={filled ? theme.colors.onPrimary : theme.colors.primary} />
+      </View>
+      <Text variant="caption" align="center" numberOfLines={2} color={selected ? 'primary' : 'textPrimary'}>
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
+  quick: { flexDirection: 'row', justifyContent: 'space-between', gap: spacing.xs },
+  action: { flex: 1, alignItems: 'center', gap: spacing.xs, minHeight: touchTarget },
+  actionIcon: {
+    width: touchTarget + spacing.sm,
+    height: touchTarget + spacing.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  toolbar: { flexDirection: 'row', gap: spacing.sm },
   root: { flex: 1 },
   header: { gap: spacing.md, paddingBottom: spacing.xs },
   mapHeader: {

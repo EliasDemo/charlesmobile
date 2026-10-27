@@ -27,7 +27,8 @@
     "availableNow": "Slot available now",
     "priceFrom": "From {{price}}",
     "favorite": "In your favorites",
-    "featured": "Featured"
+    "featured": "Featured",
+    "new": "New"
   },
   "sort": {
     "label": "Sort by",
@@ -89,5 +90,9 @@
   "allBarbershops": "Barbershops",
   "barbers": "Barbers",
   "jobs": "Jobs",
-  "face": "✨ Cuts for your face"
+  "face": "✨ Cuts for your face",
+  "hero": {
+    "eyebrow": "Charles",
+    "title": "Your next cut starts here"
+  }
 }

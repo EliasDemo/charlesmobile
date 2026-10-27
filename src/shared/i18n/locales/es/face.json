@@ -3,8 +3,15 @@
   "entry": "Cortes para tu cara",
   "consent": {
     "title": "Descubre los cortes que mejor te quedan",
-    "message": "Analizaremos tu cara en tu teléfono para sugerirte cortes. La foto no se sube ni se guarda: solo enviamos 4 medidas.",
-    "accept": "Acepto, continuar"
+    "message": "Analizaremos tu cara en tu teléfono para sugerirte cortes. La foto no se sube ni se guarda: solo enviamos unas medidas.",
+    "accept": "Acepto, continuar",
+    "eyebrow": "Asesor de estilo",
+    "p1Title": "Todo pasa en tu teléfono",
+    "p1": "Medimos tu cara aquí mismo; la foto nunca se sube.",
+    "p2Title": "Nada se guarda",
+    "p2": "Las fotos se borran al instante. Solo enviamos unas medidas.",
+    "p3Title": "Cortes que te quedan",
+    "p3": "Con fotos reales y barberos cerca de ti."
   },
   "scan": {
     "title": "Tómate una selfie",
@@ -75,6 +82,14 @@
       "HIGH": "Resultado claro",
       "MEDIUM": "Resultado probable",
       "LOW": "Tu cara tiene rasgos de ambas: las sugerencias sirven para las dos"
-    }
+    },
+    "cutsTitle": "Cortes recomendados"
+  },
+  "steps": {
+    "label": "Paso {{n}} de {{total}}: {{name}}",
+    "consent": "Privacidad",
+    "scan": "Fotos",
+    "preferences": "Gustos",
+    "result": "Tus cortes"
   }
 }

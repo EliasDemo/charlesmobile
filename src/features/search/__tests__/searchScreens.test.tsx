@@ -79,7 +79,7 @@ describe('ExploreScreen: four states', () => {
     expect(screen.getByText(/Desde S\/\s?20/)).toBeTruthy();
     expect(screen.getAllByText(/Desde/)).toHaveLength(1); // priceFrom null is hidden
     expect(screen.queryByText(/^a \d/)).toBeNull(); // no distance without location
-    expect(screen.getByText(common.rating.none)).toBeTruthy();
+    expect(screen.getByText(texts.card.new)).toBeTruthy();
     expect(screen.getByText(texts.card.availableNow)).toBeTruthy();
     expect(screen.getByText(texts.card.independent)).toBeTruthy();
     const call = api.callsTo('GET', '/api/v1/search/barbershops')[0]!;

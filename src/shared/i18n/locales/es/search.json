@@ -27,7 +27,8 @@
     "availableNow": "Turno disponible ahora",
     "priceFrom": "Desde {{price}}",
     "favorite": "En tus favoritas",
-    "featured": "Destacado"
+    "featured": "Destacado",
+    "new": "Nueva"
   },
   "sort": {
     "label": "Ordenar por",
@@ -89,5 +90,9 @@
   "allBarbershops": "Barberías",
   "barbers": "Barberos",
   "jobs": "Empleos",
-  "face": "✨ Cortes para tu cara"
+  "face": "✨ Cortes para tu cara",
+  "hero": {
+    "eyebrow": "Charles",
+    "title": "Tu próximo corte empieza aquí"
+  }
 }
