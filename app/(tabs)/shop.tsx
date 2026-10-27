@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { AdSlot } from '@/features/ads';
+import { AdSlot, StoreButton } from '@/features/ads';
 import { TodaySummary } from '@/features/business';
 import { useMyCareerProfile } from '@/features/career';
 import { JobBoardCard } from '@/features/jobs';
@@ -23,7 +23,12 @@ export default function ShopHomeRoute() {
           onProfile={() => router.push(profile ? '/career' : '/career/edit')}
         />
       )}
-      headerRight={<NotificationBell onPress={() => router.push('/notifications')} />}
+      headerRight={
+        <>
+          <StoreButton onPress={() => router.push({ pathname: '/store', params: { for: 'shop' } })} />
+          <NotificationBell onPress={() => router.push('/notifications')} />
+        </>
+      }
       todaySlot={(shopId) => (
         <TodaySummary
           shopId={shopId}

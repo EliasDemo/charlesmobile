@@ -25,6 +25,8 @@ export default function NotificationsRoute() {
         if (target.kind === 'conversation') {
           router.push({ pathname: '/messages/[id]', params: { id: target.id, resolve: '1' } });
         }
+        if (target.kind === 'forumThread')
+          router.push({ pathname: '/forums/[id]', params: { id: target.id } });
         if (target.kind === 'myApplications') router.push('/jobs/applications');
         if (target.kind === 'myPlan') {
           useAppMode.getState().setMode('shop');

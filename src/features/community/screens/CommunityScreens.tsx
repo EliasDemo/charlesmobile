@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { env } from '@/shared/config';
@@ -26,6 +26,7 @@ import {
   Monogram,
   Notice,
   Screen,
+  SegmentedControl,
   SwitchRow,
   Text,
   TextField,
@@ -64,14 +65,18 @@ export function CommunityScreen({
   canPublish,
   onPublish,
   onSaved,
+  forums,
 }: {
   nav: CommunityNavigation;
   canPublish: boolean;
   onPublish: () => void;
   onSaved?: () => void;
+  /** The "Foros" section (questions and answers), shown beside the posts. */
+  forums?: ReactNode;
 }) {
   const { t } = useTranslation('community');
   const theme = useTheme();
+  const [section, setSection] = useState<'posts' | 'forums'>('posts');
   const [tab, setTab] = useState<FeedTab>('forYou');
   const [type, setType] = useState<PostType | undefined>(undefined);
   const nearMe = useNearMe();
@@ -83,7 +88,7 @@ export function CommunityScreen({
         <Text variant="display" style={styles.flex} numberOfLines={1}>
           {t('title')}
         </Text>
-        {onSaved ? (
+        {onSaved && section === 'posts' ? (
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={t('mySaved')}
@@ -94,46 +99,69 @@ export function CommunityScreen({
           </Pressable>
         ) : null}
       </View>
-      <View style={styles.filters}>
-        <FeedTabs
-          label={t('tabs.label')}
-          value={tab}
-          onChange={setTab}
+      {forums ? (
+        <SegmentedControl
+          label={t('sections.label')}
+          hideLabel
+          value={section}
+          onChange={setSection}
           options={[
-            { value: 'forYou', label: t('tabs.forYou') },
-            { value: 'nearby', label: t('tabs.nearby') },
-            { value: 'following', label: t('tabs.following') },
+            { value: 'posts', label: t('sections.posts') },
+            { value: 'forums', label: t('sections.forums') },
           ]}
         />
-        <TypeFilter
-          value={type}
-          onChange={setType}
-          options={[
-            { value: undefined, label: t('types.all'), icon: 'apps-outline' },
-            ...TYPES.map((k) => ({ value: k, label: t(`types.${k}`), icon: TYPE_ICON[k] })),
-          ]}
-        />
-      </View>
-      {needsLocation ? (
-        <Notice tone="info" message={t('nearbyAsk')}>
-          <Button label={t('nearbyAction')} icon="navigate" onPress={nearMe.toggle} loading={nearMe.busy} />
-        </Notice>
-      ) : (
-        // The list keeps its own margin: it runs over the screen's so cards are not doubly inset.
-        <View style={styles.feed}>
-          <InfiniteList
-            query={feed}
-            keyExtractor={(p) => p.id}
-            empty={{ title: t(`empty.${tab}`), message: t(`empty.${tab}Text`), icon: 'people-outline' }}
-            renderItem={({ item }) => <PostCard post={item} {...nav} onOpen={nav.onOpenPost} />}
-          />
-        </View>
-      )}
-      {canPublish ? (
-        <View style={styles.fab}>
-          <Button label={t('new.fab')} icon="add" onPress={onPublish} />
-        </View>
       ) : null}
+      {section === 'forums' ? (
+        forums
+      ) : (
+        <>
+          <View style={styles.filters}>
+            <FeedTabs
+              label={t('tabs.label')}
+              value={tab}
+              onChange={setTab}
+              options={[
+                { value: 'forYou', label: t('tabs.forYou') },
+                { value: 'nearby', label: t('tabs.nearby') },
+                { value: 'following', label: t('tabs.following') },
+              ]}
+            />
+            <TypeFilter
+              value={type}
+              onChange={setType}
+              options={[
+                { value: undefined, label: t('types.all'), icon: 'apps-outline' },
+                ...TYPES.map((k) => ({ value: k, label: t(`types.${k}`), icon: TYPE_ICON[k] })),
+              ]}
+            />
+          </View>
+          {needsLocation ? (
+            <Notice tone="info" message={t('nearbyAsk')}>
+              <Button
+                label={t('nearbyAction')}
+                icon="navigate"
+                onPress={nearMe.toggle}
+                loading={nearMe.busy}
+              />
+            </Notice>
+          ) : (
+            // The list keeps its own margin: it runs over the screen's so cards are not doubly inset.
+            <View style={styles.feed}>
+              <InfiniteList
+                query={feed}
+                keyExtractor={(p) => p.id}
+                empty={{ title: t(`empty.${tab}`), message: t(`empty.${tab}Text`), icon: 'people-outline' }}
+                renderItem={({ item }) => <PostCard post={item} {...nav} onOpen={nav.onOpenPost} />}
+              />
+            </View>
+          )}
+          {canPublish ? (
+            <View style={styles.fab}>
+              <Button label={t('new.fab')} icon="add" onPress={onPublish} />
+            </View>
+          ) : null}
+        </>
+      )}
     </Screen>
   );
 }

@@ -1,0 +1,86 @@
+{
+  "title": "Forums",
+  "barber": "Barber",
+  "edited": "edited",
+  "more": "More options",
+  "edit": "Edit",
+  "delete": "Delete",
+  "report": "Report",
+  "save": "Save",
+  "search": "Search questions",
+  "allTopics": "All topics",
+  "sort": {
+    "label": "Sort",
+    "recent": "Recent",
+    "new": "New",
+    "unanswered": "Unanswered",
+    "oldest": "Oldest",
+    "helpful": "Most helpful"
+  },
+  "marks": {
+    "pinned": "Pinned",
+    "solved": "Solved",
+    "locked": "Closed"
+  },
+  "replies_one": "{{count}} answer",
+  "replies_other": "{{count}} answers",
+  "noReplies": "No answers",
+  "beFirst": "Nobody has answered yet. Do you know the answer?",
+  "empty": {
+    "title": "No questions yet",
+    "text": "Be the first to ask in this topic.",
+    "search": "No questions with that title"
+  },
+  "hidden": {
+    "title": "This thread isn't available",
+    "text": "It was removed or is under review."
+  },
+  "contentNotAllowed": "The text has words that aren't allowed. Change it and try again.",
+  "thread": {
+    "locked": "Support closed this thread: it no longer takes answers.",
+    "lockedSend": "This thread was closed and no longer takes answers.",
+    "lockedEmpty": "This thread was closed with no answers.",
+    "chooseBest": "When an answer helps you, mark it as the best so others can find it.",
+    "deleteTitle": "Delete your question?",
+    "deleteMessage": "It's deleted with all its answers.",
+    "deleted": "Question deleted",
+    "editTitle": "Edit question",
+    "editMessage": "It will be marked as edited."
+  },
+  "reply": {
+    "label": "Your answer",
+    "placeholder": "Write your answer…",
+    "send": "Answer",
+    "loginToAnswer": "Sign in to answer",
+    "best": "Best answer",
+    "markBest": "Mark as best",
+    "unmarkBest": "Unmark as best",
+    "markedBest": "You marked the best answer",
+    "unmarkedBest": "It's no longer the best answer",
+    "helpful_one": "Helpful · {{count}}",
+    "helpful_other": "Helpful · {{count}}",
+    "helpful_zero": "Helpful",
+    "deleteTitle": "Delete your answer?",
+    "deleteMessage": "It's removed from the thread.",
+    "deleteBestMessage": "It's the best answer: the thread will be unsolved.",
+    "deleted": "Answer deleted",
+    "editTitle": "Edit answer",
+    "editMessage": "It will be marked as edited."
+  },
+  "ask": {
+    "fab": "Ask",
+    "intro": "Ask anything about cuts, beards, tools or the business. The community answers.",
+    "topic": "Topic",
+    "title": "Title",
+    "titleHint": "A clear question, 8 to 140 characters.",
+    "body": "Details",
+    "bodyHint": "Say what you tried and how it went.",
+    "publish": "Post question",
+    "published": "Question posted",
+    "noTopics": "No topics yet.",
+    "categoryRequired": "Choose a topic.",
+    "titleLength": "The title must be 8 to 140 characters.",
+    "bodyRequired": "Write the details of your question.",
+    "bodyLength": "5000 characters at most."
+  }
+}

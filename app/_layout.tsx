@@ -76,6 +76,8 @@ function AppStack() {
       router.navigate('/shop');
     } else if (target.kind === 'conversation') {
       router.push({ pathname: '/messages/[id]', params: { id: target.id, resolve: '1' } });
+    } else if (target.kind === 'forumThread') {
+      router.push({ pathname: '/forums/[id]', params: { id: target.id } });
     } else if (target.kind === 'myApplications') router.push('/jobs/applications');
     else if (target.kind === 'myPlan') {
       useAppMode.getState().setMode('shop');

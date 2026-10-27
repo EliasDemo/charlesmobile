@@ -160,7 +160,8 @@ function NotificationRow({ notification, onPress }: { notification: AppNotificat
       ? 'pending'
       : 'neutral';
   const [bg, fg] = TONE_COLORS[tone];
-  const icon: IconName = urgent ? 'flash' : RESOURCE_ICON[notification.resource.type];
+  // A resource newer than this build (forum_thread) still gets an icon.
+  const icon: IconName = urgent ? 'flash' : (RESOURCE_ICON[notification.resource.type] ?? 'chatbubbles');
   return (
     <Pressable
       accessibilityRole="button"

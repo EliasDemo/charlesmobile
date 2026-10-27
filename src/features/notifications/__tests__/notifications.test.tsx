@@ -45,6 +45,12 @@ describe('notificationTarget', () => {
     });
     expect(notificationTarget({ type: 'review', id: 's1' })).toEqual({ kind: 'shopReviews', shopId: 's1' });
     expect(notificationTarget({ type: 'ticket', id: 't' })).toEqual({ kind: 'ticket', id: 't' });
+    // Forum notices open the thread (resource forum_thread, FOROS.md).
+    const forumThread = { type: 'forum_thread', id: 'th1' } as unknown as Parameters<
+      typeof notificationTarget
+    >[0];
+    expect(notificationTarget(forumThread, 'FORUM_REPLY')).toEqual({ kind: 'forumThread', id: 'th1' });
+    expect(notificationTarget(forumThread, 'FORUM_SOLUTION')).toEqual({ kind: 'forumThread', id: 'th1' });
     expect(notificationTarget({ type: 'account', id: null })).toEqual({ kind: 'support' });
     expect(notificationTarget({ type: 'conversation', id: 'c' })).toEqual({ kind: 'conversation', id: 'c' });
   });

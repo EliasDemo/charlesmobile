@@ -11647,7 +11647,13 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": ["home_banner", "search_top", "booking_success", "shop_dashboard"]
+              "enum": [
+                "home_banner",
+                "search_top",
+                "booking_success",
+                "shop_dashboard",
+                "store_featured"
+              ]
             }
           }
         ],
@@ -11713,6 +11719,92 @@
         "tags": ["sponsors"]
       }
     },
+    "/api/v1/store": {
+      "get": {
+        "description": "Publicidad de marcas auspiciadoras (siempre etiquetada «Patrocinado»; nunca en la Comunidad). Charles no vende: cada producto enlaza a la tienda de la marca. Registra impresiones de `featured` como en /placements y los clics con /store/products/{id}/click.",
+        "operationId": "SponsorsController_store_v1",
+        "parameters": [
+          {
+            "name": "audience",
+            "required": false,
+            "in": "query",
+            "description": "CLIENTS: cosmética y cuidado personal; BARBERSHOPS: herramientas e insumos.",
+            "schema": {
+              "default": "CLIENTS",
+              "type": "string",
+              "enum": ["CLIENTS", "BARBERSHOPS"]
+            }
+          },
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "description": "Filtra marcas, ofertas y productos.",
+            "schema": {
+              "type": "string",
+              "enum": ["COSMETICS", "TOOLS", "FURNITURE", "SUPPLIES", "EDUCATION", "OTHER"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Tienda: ofertas, productos, marcas por rubro, videos y descuentos",
+        "tags": ["sponsors"]
+      }
+    },
+    "/api/v1/store/products/{id}/click": {
+      "post": {
+        "description": "Uno por persona (o instalación) por hora; los repetidos se ignoran (204 igual).",
+        "operationId": "SponsorsController_productClick_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductClickDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Registrar un clic a \"Ver en la tienda\" de un producto",
+        "tags": ["sponsors"]
+      }
+    },
     "/api/v1/sponsors/{id}": {
       "get": {
         "operationId": "SponsorsController_sponsor_v1",
@@ -11748,7 +11840,7 @@
             }
           }
         },
-        "summary": "Auspiciador y su catálogo de productos (enlaces externos)",
+        "summary": "Marca auspiciadora: ficha, productos y videos (enlaces externos)",
         "tags": ["sponsors"]
       }
     },
@@ -12010,6 +12102,173 @@
           }
         ],
         "summary": "Solo ADMIN: subir una imagen de auspiciador (logo, anuncio o producto)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/sponsors/{id}/videos": {
+      "get": {
+        "operationId": "SponsorsAdminController_sponsorVideos_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: videos de la marca (también en proceso o fallidos)",
+        "tags": ["admin"]
+      },
+      "post": {
+        "description": "multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).",
+        "operationId": "SponsorsAdminController_uploadVideo_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: subir un video de la marca para la Tienda (máximo 5)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/sponsor-videos/{videoId}": {
+      "delete": {
+        "operationId": "SponsorsAdminController_removeVideo_v1",
+        "parameters": [
+          {
+            "name": "videoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: borrar un video de una marca",
         "tags": ["admin"]
       }
     },
@@ -12948,6 +13207,421 @@
           }
         ],
         "summary": "Solo ADMIN: anular una compra sin pagar",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/barbershops/{id}/videos": {
+      "get": {
+        "operationId": "VideosController_shopVideos_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Videos publicitarios de la barbería (listos y visibles)",
+        "tags": ["videos"]
+      },
+      "post": {
+        "description": "multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).",
+        "operationId": "VideosController_uploadShop_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: subir un video del local (máximo 5)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/barber-profiles/{id}/videos": {
+      "get": {
+        "operationId": "VideosController_profileVideos_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Videos de cortes del barbero (listos y visibles)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/barbershops/{id}/videos/manage": {
+      "get": {
+        "operationId": "VideosController_manageShop_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "OWNER o MANAGER: todos los videos (también en proceso o fallidos)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/me/barber-profile/videos": {
+      "get": {
+        "operationId": "VideosController_manageMine_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VideoDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis videos de cortes (también en proceso o fallidos)",
+        "tags": ["videos"]
+      },
+      "post": {
+        "description": "multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).",
+        "operationId": "VideosController_uploadMine_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoUploadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Subir un video de mis cortes (máximo 10)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/videos/{id}": {
+      "delete": {
+        "operationId": "VideosController_remove_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Borrar un video (su barbería o su barbero)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/videos/{id}/report": {
+      "post": {
+        "operationId": "VideosController_report_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoReportDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reportar un video (una vez por persona)",
+        "tags": ["videos"]
+      }
+    },
+    "/api/v1/admin/videos/reported": {
+      "get": {
+        "operationId": "VideosAdminController_reported_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportedVideoDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Videos con reportes abiertos",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/videos/{id}/moderation": {
+      "post": {
+        "operationId": "VideosAdminController_moderate_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoModerationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mantener, retirar o restaurar un video (con motivo)",
         "tags": ["admin"]
       }
     },
@@ -15533,421 +16207,6 @@
         ],
         "summary": "Barbero: rechazar",
         "tags": ["jobs"]
-      }
-    },
-    "/api/v1/barbershops/{id}/videos": {
-      "get": {
-        "operationId": "VideosController_shopVideos_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoDto"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Videos publicitarios de la barbería (listos y visibles)",
-        "tags": ["videos"]
-      },
-      "post": {
-        "description": "multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).",
-        "operationId": "VideosController_uploadShop_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/VideoUploadDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "202": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VideoDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "OWNER o MANAGER: subir un video del local (máximo 5)",
-        "tags": ["videos"]
-      }
-    },
-    "/api/v1/barber-profiles/{id}/videos": {
-      "get": {
-        "operationId": "VideosController_profileVideos_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoDto"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Videos de cortes del barbero (listos y visibles)",
-        "tags": ["videos"]
-      }
-    },
-    "/api/v1/barbershops/{id}/videos/manage": {
-      "get": {
-        "operationId": "VideosController_manageShop_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoDto"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "OWNER o MANAGER: todos los videos (también en proceso o fallidos)",
-        "tags": ["videos"]
-      }
-    },
-    "/api/v1/me/barber-profile/videos": {
-      "get": {
-        "operationId": "VideosController_manageMine_v1",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VideoDto"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Mis videos de cortes (también en proceso o fallidos)",
-        "tags": ["videos"]
-      },
-      "post": {
-        "description": "multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).",
-        "operationId": "VideosController_uploadMine_v1",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/VideoUploadDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "202": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VideoDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Subir un video de mis cortes (máximo 10)",
-        "tags": ["videos"]
-      }
-    },
-    "/api/v1/videos/{id}": {
-      "delete": {
-        "operationId": "VideosController_remove_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": ""
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Borrar un video (su barbería o su barbero)",
-        "tags": ["videos"]
-      }
-    },
-    "/api/v1/videos/{id}/report": {
-      "post": {
-        "operationId": "VideosController_report_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VideoReportDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": ""
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Reportar un video (una vez por persona)",
-        "tags": ["videos"]
-      }
-    },
-    "/api/v1/admin/videos/reported": {
-      "get": {
-        "operationId": "VideosAdminController_reported_v1",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ReportedVideoDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Videos con reportes abiertos",
-        "tags": ["admin"]
-      }
-    },
-    "/api/v1/admin/videos/{id}/moderation": {
-      "post": {
-        "operationId": "VideosAdminController_moderate_v1",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/VideoModerationDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Mantener, retirar o restaurar un video (con motivo)",
-        "tags": ["admin"]
       }
     },
     "/api/v1/face-shape/classify": {
@@ -22678,7 +22937,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": ["POST", "COMMENT", "USER"]
+              "enum": ["POST", "COMMENT", "USER", "FORUM_THREAD", "FORUM_REPLY"]
             }
           }
         ],
@@ -22908,6 +23167,1016 @@
         ],
         "summary": "Salir de una lista de espera",
         "tags": ["waitlist"]
+      }
+    },
+    "/api/v1/forums/categories": {
+      "get": {
+        "operationId": "ForumsController_categories_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ForumCategoryDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Temas del foro (activos, en su orden)",
+        "tags": ["forums"]
+      }
+    },
+    "/api/v1/forums/threads": {
+      "get": {
+        "description": "Con sesión se ocultan los de cuentas bloqueadas.",
+        "operationId": "ForumsController_threads_v1",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "description": "Busca en el título.",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "recent: actividad reciente (fijados primero); new: los más nuevos; unanswered: sin respuestas.",
+            "schema": {
+              "default": "recent",
+              "type": "string",
+              "enum": ["recent", "new", "unanswered"]
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor (opaco).",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Hilos: por tema, búsqueda en el título y orden (reciente, nuevos, sin respuesta)",
+        "tags": ["forums"]
+      },
+      "post": {
+        "description": "Mismos límites y palabras no permitidas que la Comunidad.",
+        "operationId": "ForumsController_createThread_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThreadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Abrir un hilo (pregunta o tema de conversación)",
+        "tags": ["forums"]
+      }
+    },
+    "/api/v1/forums/threads/{id}": {
+      "get": {
+        "operationId": "ForumsController_thread_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "410": {
+            "description": "THREAD_HIDDEN",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Un hilo con su texto completo",
+        "tags": ["forums"]
+      },
+      "patch": {
+        "operationId": "ForumsController_updateThread_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateThreadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Autor: editar el título o el texto",
+        "tags": ["forums"]
+      },
+      "delete": {
+        "operationId": "ForumsController_deleteThread_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Autor: borrar el hilo",
+        "tags": ["forums"]
+      }
+    },
+    "/api/v1/forums/threads/{id}/replies": {
+      "get": {
+        "operationId": "ForumsController_replies_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "description": "La mejor respuesta siempre va primero.",
+            "schema": {
+              "default": "oldest",
+              "type": "string",
+              "enum": ["oldest", "helpful"]
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Valor de nextCursor (opaco).",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplyPageDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Respuestas (la mejor primero; luego por fecha o por \"me sirvió\")",
+        "tags": ["forums"]
+      },
+      "post": {
+        "operationId": "ForumsController_reply_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReplyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplyDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "THREAD_LOCKED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Responder (avisa a quien abrió el hilo)",
+        "tags": ["forums"]
+      }
+    },
+    "/api/v1/forums/threads/{id}/solution": {
+      "put": {
+        "operationId": "ForumsController_markSolution_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolutionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Autor del hilo: marcar la mejor respuesta (avisa a quien la escribió)",
+        "tags": ["forums"]
+      },
+      "delete": {
+        "operationId": "ForumsController_clearSolution_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Autor del hilo: quitar la mejor respuesta",
+        "tags": ["forums"]
+      }
+    },
+    "/api/v1/forums/replies/{id}": {
+      "patch": {
+        "operationId": "ForumsController_updateReply_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReplyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplyDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Autor: editar una respuesta",
+        "tags": ["forums"]
+      },
+      "delete": {
+        "operationId": "ForumsController_deleteReply_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Autor: borrar una respuesta",
+        "tags": ["forums"]
+      }
+    },
+    "/api/v1/forums/replies/{id}/helpful": {
+      "put": {
+        "operationId": "ForumsController_helpful_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplyDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Votar \"me sirvió\" (idempotente; no en respuestas propias)",
+        "tags": ["forums"]
+      },
+      "delete": {
+        "operationId": "ForumsController_unhelpful_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReplyDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Quitar el voto \"me sirvió\"",
+        "tags": ["forums"]
+      }
+    },
+    "/api/v1/admin/forum/categories": {
+      "get": {
+        "operationId": "ForumsAdminController_categories_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminForumCategoryDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Temas del foro (también los inactivos)",
+        "tags": ["admin"]
+      },
+      "post": {
+        "operationId": "ForumsAdminController_createCategory_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateForumCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminForumCategoryDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: crear un tema",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/forum/categories/{id}": {
+      "patch": {
+        "operationId": "ForumsAdminController_updateCategory_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateForumCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminForumCategoryDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: editar, ordenar o desactivar un tema",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/forum/threads": {
+      "get": {
+        "operationId": "ForumsAdminController_threads_v1",
+        "parameters": [
+          {
+            "name": "state",
+            "required": false,
+            "in": "query",
+            "description": "REPORTED: con reportes abiertos; HIDDEN: ocultos por reportes; REMOVED: retirados.",
+            "schema": {
+              "default": "ALL",
+              "type": "string",
+              "enum": ["ALL", "REPORTED", "HIDDEN", "REMOVED"]
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 60,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminThreadDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Hilos para moderar (reportados, ocultos, retirados o todos)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/forum/threads/{id}": {
+      "patch": {
+        "operationId": "ForumsAdminController_moderate_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModerateThreadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminThreadDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fijar, cerrar, mover de tema o retirar un hilo (auditado)",
+        "tags": ["admin"]
       }
     },
     "/api/v1/locations/departments": {
@@ -31415,7 +32684,7 @@
         },
         "required": ["type"]
       },
-      "ProductDto": {
+      "StoreProductDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -31438,10 +32707,399 @@
             "nullable": true
           },
           "actionUrl": {
-            "type": "string"
+            "type": "string",
+            "description": "Enlace https a la tienda de la marca (Charles no vende ni cobra)."
           },
           "priceText": {
             "type": "string",
+            "nullable": true,
+            "description": "Detalle libre: \"Frasco de 100 g\"."
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["CLIENTS", "BARBERSHOPS", "ALL"]
+          },
+          "priceAmount": {
+            "type": "number",
+            "nullable": true,
+            "description": "Precio normal en céntimos."
+          },
+          "offerPriceAmount": {
+            "type": "number",
+            "nullable": true,
+            "description": "Precio de oferta en céntimos; null si no hay oferta vigente."
+          },
+          "currency": {
+            "type": "string",
+            "example": "PEN"
+          },
+          "discountPercent": {
+            "type": "number",
+            "nullable": true,
+            "description": "Descuento redondeado (1 a 99)."
+          },
+          "couponCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Cupón de la marca, si la oferta lo usa."
+          },
+          "offerEndsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "sponsorName": {
+            "type": "string"
+          },
+          "sponsorLogoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "enum": ["COSMETICS", "TOOLS", "FURNITURE", "SUPPLIES", "EDUCATION", "OTHER"]
+          }
+        },
+        "required": [
+          "id",
+          "sponsorId",
+          "name",
+          "description",
+          "imageUrl",
+          "actionUrl",
+          "priceText",
+          "audience",
+          "priceAmount",
+          "offerPriceAmount",
+          "currency",
+          "discountPercent",
+          "couponCode",
+          "offerEndsAt",
+          "sortOrder",
+          "isActive",
+          "sponsorName",
+          "sponsorLogoUrl",
+          "category"
+        ]
+      },
+      "StoreBrandDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "logoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "enum": ["COSMETICS", "TOOLS", "FURNITURE", "SUPPLIES", "EDUCATION", "OTHER"]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "productCount": {
+            "type": "number",
+            "description": "Productos visibles para este público."
+          },
+          "hasOffers": {
+            "type": "boolean",
+            "description": "Tiene al menos una oferta vigente."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "logoUrl",
+          "coverUrl",
+          "category",
+          "description",
+          "productCount",
+          "hasOffers"
+        ]
+      },
+      "StoreCategoryDto": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": ["COSMETICS", "TOOLS", "FURNITURE", "SUPPLIES", "EDUCATION", "OTHER"]
+          },
+          "brands": {
+            "type": "number",
+            "description": "Marcas con productos para este público."
+          }
+        },
+        "required": ["category", "brands"]
+      },
+      "StoreVideoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PROCESSING", "READY", "FAILED"],
+            "description": "PROCESSING mientras se comprime (segundos); vuelve a consultar."
+          },
+          "videoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "MP4 (H.264, máx. 720p). null si no está listo."
+          },
+          "posterUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Miniatura WebP."
+          },
+          "durationMs": {
+            "type": "number",
+            "nullable": true
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["NOT_A_VIDEO", "TOO_LONG", "TOO_LARGE", "PROCESSING_FAILED"],
+            "description": "Por qué falló (solo en la vista de quien lo subió)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "sponsorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sponsorName": {
+            "type": "string"
+          },
+          "sponsorLogoUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "videoUrl",
+          "posterUrl",
+          "durationMs",
+          "caption",
+          "failureReason",
+          "createdAt",
+          "sponsorId",
+          "sponsorName",
+          "sponsorLogoUrl"
+        ]
+      },
+      "StoreDealDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["PERCENTAGE", "FIXED_AMOUNT"]
+          },
+          "value": {
+            "type": "number",
+            "description": "Porcentaje (1 a 100) o monto en céntimos."
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true
+          },
+          "daysOfWeek": {
+            "description": "Días de la cita (0 = domingo); vacío: todos.",
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "fromCharles": {
+            "type": "boolean",
+            "description": "true: la ofrece Charles y vale en todas las barberías."
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "barbershopName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "value",
+          "currency",
+          "daysOfWeek",
+          "endsAt",
+          "fromCharles",
+          "barbershopId",
+          "barbershopName"
+        ]
+      },
+      "StoreDto": {
+        "type": "object",
+        "properties": {
+          "featured": {
+            "description": "Destacados (espacio store_featured).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicPlacementDto"
+            }
+          },
+          "offers": {
+            "description": "Ofertas vigentes, mayor descuento primero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreProductDto"
+            }
+          },
+          "products": {
+            "description": "Productos sin oferta, los más nuevos primero.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreProductDto"
+            }
+          },
+          "brands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreBrandDto"
+            }
+          },
+          "categories": {
+            "description": "Rubros con marcas (para los filtros).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreCategoryDto"
+            }
+          },
+          "videos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreVideoDto"
+            }
+          },
+          "deals": {
+            "description": "Descuentos en reservas (de Charles y de barberías). Vacío para BARBERSHOPS.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreDealDto"
+            }
+          }
+        },
+        "required": ["featured", "offers", "products", "brands", "categories", "videos", "deals"]
+      },
+      "ProductClickDto": {
+        "type": "object",
+        "properties": {
+          "viewerKey": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Sin sesión: identificador aleatorio de la instalación. Con sesión se ignora."
+          }
+        }
+      },
+      "PublicProductDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sponsorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionUrl": {
+            "type": "string",
+            "description": "Enlace https a la tienda de la marca (Charles no vende ni cobra)."
+          },
+          "priceText": {
+            "type": "string",
+            "nullable": true,
+            "description": "Detalle libre: \"Frasco de 100 g\"."
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["CLIENTS", "BARBERSHOPS", "ALL"]
+          },
+          "priceAmount": {
+            "type": "number",
+            "nullable": true,
+            "description": "Precio normal en céntimos."
+          },
+          "offerPriceAmount": {
+            "type": "number",
+            "nullable": true,
+            "description": "Precio de oferta en céntimos; null si no hay oferta vigente."
+          },
+          "currency": {
+            "type": "string",
+            "example": "PEN"
+          },
+          "discountPercent": {
+            "type": "number",
+            "nullable": true,
+            "description": "Descuento redondeado (1 a 99)."
+          },
+          "couponCode": {
+            "type": "string",
+            "nullable": true,
+            "description": "Cupón de la marca, si la oferta lo usa."
+          },
+          "offerEndsAt": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           },
           "sortOrder": {
@@ -31459,8 +33117,67 @@
           "imageUrl",
           "actionUrl",
           "priceText",
+          "audience",
+          "priceAmount",
+          "offerPriceAmount",
+          "currency",
+          "discountPercent",
+          "couponCode",
+          "offerEndsAt",
           "sortOrder",
           "isActive"
+        ]
+      },
+      "VideoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PROCESSING", "READY", "FAILED"],
+            "description": "PROCESSING mientras se comprime (segundos); vuelve a consultar."
+          },
+          "videoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "MP4 (H.264, máx. 720p). null si no está listo."
+          },
+          "posterUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Miniatura WebP."
+          },
+          "durationMs": {
+            "type": "number",
+            "nullable": true
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["NOT_A_VIDEO", "TOO_LONG", "TOO_LARGE", "PROCESSING_FAILED"],
+            "description": "Por qué falló (solo en la vista de quien lo subió)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "videoUrl",
+          "posterUrl",
+          "durationMs",
+          "caption",
+          "failureReason",
+          "createdAt"
         ]
       },
       "PublicSponsorDto": {
@@ -31477,14 +33194,48 @@
             "type": "string",
             "nullable": true
           },
+          "category": {
+            "type": "string",
+            "enum": ["COSMETICS", "TOOLS", "FURNITURE", "SUPPLIES", "EDUCATION", "OTHER"]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "websiteUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Web de la marca (https)."
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "products": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ProductDto"
+              "$ref": "#/components/schemas/PublicProductDto"
+            }
+          },
+          "videos": {
+            "description": "Videos de la marca (hasta 30 s, sin sonido al inicio).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VideoDto"
             }
           }
         },
-        "required": ["id", "name", "logoUrl", "products"]
+        "required": [
+          "id",
+          "name",
+          "logoUrl",
+          "category",
+          "description",
+          "websiteUrl",
+          "coverUrl",
+          "products",
+          "videos"
+        ]
       },
       "SponsorDto": {
         "type": "object",
@@ -31505,6 +33256,22 @@
             "nullable": true,
             "description": "Solo en /admin."
           },
+          "category": {
+            "type": "string",
+            "enum": ["COSMETICS", "TOOLS", "FURNITURE", "SUPPLIES", "EDUCATION", "OTHER"]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "websiteUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "isActive": {
             "type": "boolean"
           },
@@ -31513,6 +33280,10 @@
           },
           "products": {
             "type": "number"
+          },
+          "videos": {
+            "type": "number",
+            "description": "Videos vigentes (listos o en proceso)."
           },
           "createdAt": {
             "format": "date-time",
@@ -31524,9 +33295,14 @@
           "name",
           "logoUrl",
           "contact",
+          "category",
+          "description",
+          "websiteUrl",
+          "coverUrl",
           "isActive",
           "campaigns",
           "products",
+          "videos",
           "createdAt"
         ]
       },
@@ -31547,6 +33323,29 @@
           "logoUrl": {
             "type": "string",
             "description": "URL devuelta por POST /admin/sponsors/media.",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "category": {
+            "type": "string",
+            "enum": ["COSMETICS", "TOOLS", "FURNITURE", "SUPPLIES", "EDUCATION", "OTHER"],
+            "default": "OTHER"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 600,
+            "description": "Presentación de la marca en la Tienda.",
+            "minLength": 1
+          },
+          "websiteUrl": {
+            "type": "string",
+            "description": "Web de la marca (https).",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "coverUrl": {
+            "type": "string",
+            "description": "Portada (URL devuelta por POST /admin/sponsors/media).",
             "minLength": 1,
             "maxLength": 500
           }
@@ -31575,6 +33374,28 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["COSMETICS", "TOOLS", "FURNITURE", "SUPPLIES", "EDUCATION", "OTHER"]
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 600,
+            "minLength": 1
+          },
+          "websiteUrl": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "coverUrl": {
+            "type": "string",
+            "nullable": true,
+            "minLength": 1,
+            "maxLength": 500
           }
         }
       },
@@ -31592,6 +33413,22 @@
         },
         "required": ["url", "thumbUrl"]
       },
+      "VideoUploadDto": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "description": "MP4, MOV o WebM; hasta 30 s y 50 MB."
+          },
+          "caption": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1
+          }
+        },
+        "required": ["file"]
+      },
       "PlacementDto": {
         "type": "object",
         "properties": {
@@ -31601,7 +33438,13 @@
           },
           "slotKey": {
             "type": "string",
-            "enum": ["home_banner", "search_top", "booking_success", "shop_dashboard"]
+            "enum": [
+              "home_banner",
+              "search_top",
+              "booking_success",
+              "shop_dashboard",
+              "store_featured"
+            ]
           },
           "title": {
             "type": "string"
@@ -31793,7 +33636,13 @@
         "properties": {
           "slotKey": {
             "type": "string",
-            "enum": ["home_banner", "search_top", "booking_success", "shop_dashboard"]
+            "enum": [
+              "home_banner",
+              "search_top",
+              "booking_success",
+              "shop_dashboard",
+              "store_featured"
+            ]
           },
           "title": {
             "type": "string",
@@ -31848,6 +33697,100 @@
           }
         }
       },
+      "ProductDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sponsorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionUrl": {
+            "type": "string"
+          },
+          "priceText": {
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["CLIENTS", "BARBERSHOPS", "ALL"]
+          },
+          "priceAmount": {
+            "type": "number",
+            "nullable": true
+          },
+          "offerPriceAmount": {
+            "type": "number",
+            "nullable": true,
+            "description": "Tal como se cargó (aunque haya vencido)."
+          },
+          "currency": {
+            "type": "string"
+          },
+          "couponCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "offerEndsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "offerActive": {
+            "type": "boolean",
+            "description": "La oferta está vigente ahora."
+          },
+          "discountPercent": {
+            "type": "number",
+            "nullable": true
+          },
+          "clicks": {
+            "type": "number",
+            "description": "Clics a la tienda (uno por persona o dispositivo por hora)."
+          }
+        },
+        "required": [
+          "id",
+          "sponsorId",
+          "name",
+          "description",
+          "imageUrl",
+          "actionUrl",
+          "priceText",
+          "sortOrder",
+          "isActive",
+          "audience",
+          "priceAmount",
+          "offerPriceAmount",
+          "currency",
+          "couponCode",
+          "offerEndsAt",
+          "offerActive",
+          "discountPercent",
+          "clicks"
+        ]
+      },
       "CreateProductDto": {
         "type": "object",
         "properties": {
@@ -31883,6 +33826,32 @@
             "default": 0,
             "minimum": 0,
             "maximum": 1000
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["CLIENTS", "BARBERSHOPS", "ALL"],
+            "default": "ALL"
+          },
+          "priceAmount": {
+            "type": "number",
+            "minimum": 100,
+            "maximum": 10000000,
+            "description": "Precio normal en céntimos."
+          },
+          "offerPriceAmount": {
+            "type": "number",
+            "minimum": 100,
+            "description": "Precio de oferta en céntimos: exige priceAmount y debe ser menor."
+          },
+          "couponCode": {
+            "type": "string",
+            "example": "CHARLES10",
+            "description": "Cupón de la marca (A-Z, 0-9, guion)."
+          },
+          "offerEndsAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Fin de la oferta (sin él, vale mientras exista)."
           }
         },
         "required": ["name", "actionUrl"]
@@ -31925,6 +33894,29 @@
           },
           "isActive": {
             "type": "boolean"
+          },
+          "audience": {
+            "type": "string",
+            "enum": ["CLIENTS", "BARBERSHOPS", "ALL"]
+          },
+          "priceAmount": {
+            "type": "number",
+            "nullable": true,
+            "description": "Céntimos."
+          },
+          "offerPriceAmount": {
+            "type": "number",
+            "nullable": true,
+            "description": "Céntimos; null quita la oferta."
+          },
+          "couponCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "offerEndsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
@@ -32149,6 +34141,109 @@
           }
         },
         "required": ["packageId", "campaignName", "payerEmail"]
+      },
+      "VideoReportDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": ["NOT_MY_PHOTO", "NO_CONSENT", "INAPPROPRIATE", "MISLEADING", "OTHER"]
+          },
+          "details": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        "required": ["reason"]
+      },
+      "ReportedVideoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["PROCESSING", "READY", "FAILED"],
+            "description": "PROCESSING mientras se comprime (segundos); vuelve a consultar."
+          },
+          "videoUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "MP4 (H.264, máx. 720p). null si no está listo."
+          },
+          "posterUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Miniatura WebP."
+          },
+          "durationMs": {
+            "type": "number",
+            "nullable": true
+          },
+          "caption": {
+            "type": "string",
+            "nullable": true
+          },
+          "failureReason": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["NOT_A_VIDEO", "TOO_LONG", "TOO_LARGE", "PROCESSING_FAILED"],
+            "description": "Por qué falló (solo en la vista de quien lo subió)."
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "ownerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "openReports": {
+            "type": "number"
+          },
+          "removed": {
+            "type": "boolean"
+          },
+          "reasons": {
+            "description": "Motivos de los reportes abiertos.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "videoUrl",
+          "posterUrl",
+          "durationMs",
+          "caption",
+          "failureReason",
+          "createdAt",
+          "ownerName",
+          "openReports",
+          "removed",
+          "reasons"
+        ]
+      },
+      "VideoModerationDto": {
+        "type": "object",
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": ["KEEP", "REMOVE", "RESTORE"]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 500
+          }
+        },
+        "required": ["decision", "reason"]
       },
       "WorkplaceDto": {
         "type": "object",
@@ -33604,177 +35699,6 @@
             "minLength": 1
           }
         }
-      },
-      "VideoDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "string",
-            "enum": ["PROCESSING", "READY", "FAILED"],
-            "description": "PROCESSING mientras se comprime (segundos); vuelve a consultar."
-          },
-          "videoUrl": {
-            "type": "string",
-            "nullable": true,
-            "description": "MP4 (H.264, máx. 720p). null si no está listo."
-          },
-          "posterUrl": {
-            "type": "string",
-            "nullable": true,
-            "description": "Miniatura WebP."
-          },
-          "durationMs": {
-            "type": "number",
-            "nullable": true
-          },
-          "caption": {
-            "type": "string",
-            "nullable": true
-          },
-          "failureReason": {
-            "type": "string",
-            "nullable": true,
-            "enum": ["NOT_A_VIDEO", "TOO_LONG", "TOO_LARGE", "PROCESSING_FAILED"],
-            "description": "Por qué falló (solo en la vista de quien lo subió)."
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "status",
-          "videoUrl",
-          "posterUrl",
-          "durationMs",
-          "caption",
-          "failureReason",
-          "createdAt"
-        ]
-      },
-      "VideoUploadDto": {
-        "type": "object",
-        "properties": {
-          "file": {
-            "type": "string",
-            "format": "binary",
-            "description": "MP4, MOV o WebM; hasta 30 s y 50 MB."
-          },
-          "caption": {
-            "type": "string",
-            "maxLength": 200,
-            "minLength": 1
-          }
-        },
-        "required": ["file"]
-      },
-      "VideoReportDto": {
-        "type": "object",
-        "properties": {
-          "reason": {
-            "type": "string",
-            "enum": ["NOT_MY_PHOTO", "NO_CONSENT", "INAPPROPRIATE", "MISLEADING", "OTHER"]
-          },
-          "details": {
-            "type": "string",
-            "maxLength": 500,
-            "minLength": 1
-          }
-        },
-        "required": ["reason"]
-      },
-      "ReportedVideoDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "string",
-            "enum": ["PROCESSING", "READY", "FAILED"],
-            "description": "PROCESSING mientras se comprime (segundos); vuelve a consultar."
-          },
-          "videoUrl": {
-            "type": "string",
-            "nullable": true,
-            "description": "MP4 (H.264, máx. 720p). null si no está listo."
-          },
-          "posterUrl": {
-            "type": "string",
-            "nullable": true,
-            "description": "Miniatura WebP."
-          },
-          "durationMs": {
-            "type": "number",
-            "nullable": true
-          },
-          "caption": {
-            "type": "string",
-            "nullable": true
-          },
-          "failureReason": {
-            "type": "string",
-            "nullable": true,
-            "enum": ["NOT_A_VIDEO", "TOO_LONG", "TOO_LARGE", "PROCESSING_FAILED"],
-            "description": "Por qué falló (solo en la vista de quien lo subió)."
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "ownerName": {
-            "type": "string",
-            "nullable": true
-          },
-          "openReports": {
-            "type": "number"
-          },
-          "removed": {
-            "type": "boolean"
-          },
-          "reasons": {
-            "description": "Motivos de los reportes abiertos.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "id",
-          "status",
-          "videoUrl",
-          "posterUrl",
-          "durationMs",
-          "caption",
-          "failureReason",
-          "createdAt",
-          "ownerName",
-          "openReports",
-          "removed",
-          "reasons"
-        ]
-      },
-      "VideoModerationDto": {
-        "type": "object",
-        "properties": {
-          "decision": {
-            "type": "string",
-            "enum": ["KEEP", "REMOVE", "RESTORE"]
-          },
-          "reason": {
-            "type": "string",
-            "minLength": 5,
-            "maxLength": 500
-          }
-        },
-        "required": ["decision", "reason"]
       },
       "FaceMeasurementsDto": {
         "type": "object",
@@ -37634,7 +39558,7 @@
         "properties": {
           "targetType": {
             "type": "string",
-            "enum": ["post", "comment", "user"]
+            "enum": ["post", "comment", "user", "forum_thread", "forum_reply"]
           },
           "targetId": {
             "type": "string",
@@ -37661,7 +39585,7 @@
           },
           "targetType": {
             "type": "string",
-            "enum": ["POST", "COMMENT", "USER"]
+            "enum": ["POST", "COMMENT", "USER", "FORUM_THREAD", "FORUM_REPLY"]
           },
           "targetId": {
             "type": "string",
@@ -37859,6 +39783,530 @@
           "notifiedAt",
           "createdAt"
         ]
+      },
+      "ForumCategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string",
+            "example": "tecnicas-de-corte"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "threadCount": {
+            "type": "number",
+            "description": "Hilos visibles del tema."
+          }
+        },
+        "required": ["id", "slug", "name", "description", "threadCount"]
+      },
+      "ForumAuthorDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "username": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "isBarber": {
+            "type": "boolean",
+            "description": "Tiene perfil profesional de barbero (insignia \"Barbero\")."
+          }
+        },
+        "required": ["userId", "username", "photoUrl", "isBarber"]
+      },
+      "ThreadSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string",
+            "description": "Primeros 200 caracteres."
+          },
+          "author": {
+            "$ref": "#/components/schemas/ForumAuthorDto"
+          },
+          "replyCount": {
+            "type": "number"
+          },
+          "solved": {
+            "type": "boolean",
+            "description": "Tiene una respuesta marcada como la mejor."
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "locked": {
+            "type": "boolean",
+            "description": "Cerrado por soporte: no admite respuestas."
+          },
+          "lastActivityAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "categoryName",
+          "title",
+          "excerpt",
+          "author",
+          "replyCount",
+          "solved",
+          "pinned",
+          "locked",
+          "lastActivityAt",
+          "createdAt"
+        ]
+      },
+      "ThreadPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ThreadSummaryDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "ThreadDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string",
+            "description": "Primeros 200 caracteres."
+          },
+          "author": {
+            "$ref": "#/components/schemas/ForumAuthorDto"
+          },
+          "replyCount": {
+            "type": "number"
+          },
+          "solved": {
+            "type": "boolean",
+            "description": "Tiene una respuesta marcada como la mejor."
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "locked": {
+            "type": "boolean",
+            "description": "Cerrado por soporte: no admite respuestas."
+          },
+          "lastActivityAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "solutionReplyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "isMine": {
+            "type": "boolean",
+            "description": "Quien mira es el autor (puede editar, borrar y marcar la mejor)."
+          },
+          "editedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "categoryName",
+          "title",
+          "excerpt",
+          "author",
+          "replyCount",
+          "solved",
+          "pinned",
+          "locked",
+          "lastActivityAt",
+          "createdAt",
+          "body",
+          "solutionReplyId",
+          "isMine",
+          "editedAt"
+        ]
+      },
+      "CreateThreadDto": {
+        "type": "object",
+        "properties": {
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 140,
+            "example": "¿Cómo hago un degradado sin escalones?"
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          }
+        },
+        "required": ["categoryId", "title", "body"]
+      },
+      "UpdateThreadDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 140
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          }
+        }
+      },
+      "ReplyDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "threadId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "author": {
+            "$ref": "#/components/schemas/ForumAuthorDto"
+          },
+          "body": {
+            "type": "string"
+          },
+          "helpful": {
+            "type": "number",
+            "description": "Votos \"me sirvió\"."
+          },
+          "votedHelpful": {
+            "type": "boolean",
+            "description": "Quien mira votó \"me sirvió\"."
+          },
+          "isSolution": {
+            "type": "boolean",
+            "description": "Es la mejor respuesta del hilo."
+          },
+          "isMine": {
+            "type": "boolean"
+          },
+          "editedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "threadId",
+          "author",
+          "body",
+          "helpful",
+          "votedHelpful",
+          "isSolution",
+          "isMine",
+          "editedAt",
+          "createdAt"
+        ]
+      },
+      "ReplyPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReplyDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "CreateReplyDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 3000
+          }
+        },
+        "required": ["body"]
+      },
+      "SolutionDto": {
+        "type": "object",
+        "properties": {
+          "replyId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Respuesta del hilo que resolvió la duda."
+          }
+        },
+        "required": ["replyId"]
+      },
+      "UpdateReplyDto": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 3000
+          }
+        },
+        "required": ["body"]
+      },
+      "AdminForumCategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "slug": {
+            "type": "string",
+            "example": "tecnicas-de-corte"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "threadCount": {
+            "type": "number",
+            "description": "Hilos visibles del tema."
+          },
+          "sortOrder": {
+            "type": "number"
+          },
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": ["id", "slug", "name", "description", "threadCount", "sortOrder", "isActive"]
+      },
+      "CreateForumCategoryDto": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "example": "tecnicas-de-corte",
+            "description": "a-z, 0-9 y guion (2 a 40)."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "sortOrder": {
+            "type": "number",
+            "default": 0,
+            "minimum": 0,
+            "maximum": 1000
+          }
+        },
+        "required": ["slug", "name"]
+      },
+      "UpdateForumCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "sortOrder": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "false: el tema deja de verse y no admite hilos nuevos."
+          }
+        }
+      },
+      "AdminThreadDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "excerpt": {
+            "type": "string",
+            "description": "Primeros 200 caracteres."
+          },
+          "author": {
+            "$ref": "#/components/schemas/ForumAuthorDto"
+          },
+          "replyCount": {
+            "type": "number"
+          },
+          "solved": {
+            "type": "boolean",
+            "description": "Tiene una respuesta marcada como la mejor."
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "locked": {
+            "type": "boolean",
+            "description": "Cerrado por soporte: no admite respuestas."
+          },
+          "lastActivityAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["VISIBLE", "HIDDEN", "REMOVED", "DELETED"]
+          },
+          "reportCount": {
+            "type": "number",
+            "description": "Reportes abiertos."
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "categoryName",
+          "title",
+          "excerpt",
+          "author",
+          "replyCount",
+          "solved",
+          "pinned",
+          "locked",
+          "lastActivityAt",
+          "createdAt",
+          "state",
+          "reportCount"
+        ]
+      },
+      "ModerateThreadDto": {
+        "type": "object",
+        "properties": {
+          "pinned": {
+            "type": "boolean",
+            "description": "Fijar arriba del tema."
+          },
+          "locked": {
+            "type": "boolean",
+            "description": "Cerrar: no admite respuestas nuevas."
+          },
+          "removed": {
+            "type": "boolean",
+            "description": "Retirar (o restaurar) sin esperar reportes."
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Mover a otro tema."
+          }
+        }
       },
       "ProvinceDto": {
         "type": "object",

@@ -63,13 +63,20 @@ describe('AdSlot', () => {
 });
 
 describe('SponsorScreen', () => {
-  it('lists the products with their store link', async () => {
-    mockApi({
+  it('lists the products with their price and store link, and counts the click', async () => {
+    jest.spyOn(Linking, 'openURL').mockResolvedValue(true);
+    const api = mockApi({
+      'POST /api/v1/store/products/{id}/click': { status: 204 },
       'GET /api/v1/sponsors/{id}': {
         body: {
           id: 'sp1',
           name: 'Marca Demo',
           logoUrl: null,
+          coverUrl: null,
+          category: 'COSMETICS',
+          description: 'Ceras y pomadas',
+          websiteUrl: null,
+          videos: [],
           products: [
             {
               id: 'pr1',
@@ -78,7 +85,14 @@ describe('SponsorScreen', () => {
               description: null,
               imageUrl: null,
               actionUrl: 'https://tienda.example/cera',
-              priceText: 'S/ 35',
+              priceText: 'Frasco de 100 g',
+              priceAmount: 3500,
+              offerPriceAmount: null,
+              discountPercent: null,
+              couponCode: null,
+              offerEndsAt: null,
+              currency: 'PEN',
+              audience: 'ALL',
               sortOrder: 0,
               isActive: true,
             },
@@ -87,7 +101,12 @@ describe('SponsorScreen', () => {
       },
     });
     await renderWithProviders(<SponsorScreen id="sp1" />);
-    expect(await screen.findByText('S/ 35')).toBeTruthy();
-    expect(screen.getByRole('button', { name: texts.seeInStore })).toBeTruthy();
+    expect(await screen.findByText('Ceras y pomadas')).toBeTruthy();
+    expect(screen.getByText(/35[.,]00/)).toBeTruthy();
+    expect(screen.getByText(texts.store.categories.COSMETICS)).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: texts.seeInStore }));
+    await waitFor(() =>
+      expect(api.calls.some((c) => c.path === '/api/v1/store/products/pr1/click')).toBe(true),
+    );
   });
 });

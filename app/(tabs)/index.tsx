@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { AdSlot } from '@/features/ads';
+import { AdSlot, StoreButton } from '@/features/ads';
 import { NotificationBell } from '@/features/notifications';
 import { ExploreScreen } from '@/features/search';
 
@@ -13,7 +13,12 @@ export default function ExploreRoute() {
       onOpenBarbers={() => router.push('/barbers')}
       onOpenJobs={() => router.push('/jobs')}
       onOpenFace={() => router.push('/face')}
-      headerRight={<NotificationBell onPress={() => router.push('/notifications')} />}
+      headerRight={
+        <>
+          <StoreButton onPress={() => router.push('/store')} />
+          <NotificationBell onPress={() => router.push('/notifications')} />
+        </>
+      }
       homeBanner={<AdSlot slot="home_banner" onOpenSponsor={openSponsor} />}
       resultsTop={<AdSlot slot="search_top" onOpenSponsor={openSponsor} />}
     />

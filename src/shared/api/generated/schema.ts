@@ -442,6 +442,75 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/forum/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Temas del foro (también los inactivos) */
+        get: operations["ForumsAdminController_categories_v1"];
+        put?: never;
+        /** Solo ADMIN: crear un tema */
+        post: operations["ForumsAdminController_createCategory_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/forum/categories/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Solo ADMIN: editar, ordenar o desactivar un tema */
+        patch: operations["ForumsAdminController_updateCategory_v1"];
+        trace?: never;
+    };
+    "/api/v1/admin/forum/threads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Hilos para moderar (reportados, ocultos, retirados o todos) */
+        get: operations["ForumsAdminController_threads_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/forum/threads/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Fijar, cerrar, mover de tema o retirar un hilo (auditado) */
+        patch: operations["ForumsAdminController_moderate_v1"];
+        trace?: never;
+    };
     "/api/v1/admin/images/{id}/moderation": {
         parameters: {
             query?: never;
@@ -966,6 +1035,23 @@ export type paths = {
         patch: operations["SponsorPackagesAdminController_update_v1"];
         trace?: never;
     };
+    "/api/v1/admin/sponsor-videos/{videoId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Solo ADMIN: borrar un video de una marca */
+        delete: operations["SponsorsAdminController_removeVideo_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/sponsors": {
         parameters: {
             query?: never;
@@ -1049,6 +1135,27 @@ export type paths = {
         put?: never;
         /** Solo ADMIN: agregar un producto (con enlace externo de compra) */
         post: operations["SponsorsAdminController_createProduct_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/sponsors/{id}/videos": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: videos de la marca (también en proceso o fallidos) */
+        get: operations["SponsorsAdminController_sponsorVideos_v1"];
+        put?: never;
+        /**
+         * Solo ADMIN: subir un video de la marca para la Tienda (máximo 5)
+         * @description multipart/form-data, campo `file`: MP4, MOV o WebM de hasta 30 s y 50 MB. Responde enseguida con status PROCESSING; consulta la lista hasta que esté READY (o FAILED con failureReason). Se comprime a 720p y se eliminan los metadatos (GPS incluido).
+         */
+        post: operations["SponsorsAdminController_uploadVideo_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3969,6 +4076,138 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/forums/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Temas del foro (activos, en su orden) */
+        get: operations["ForumsController_categories_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/forums/replies/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Autor: borrar una respuesta */
+        delete: operations["ForumsController_deleteReply_v1"];
+        options?: never;
+        head?: never;
+        /** Autor: editar una respuesta */
+        patch: operations["ForumsController_updateReply_v1"];
+        trace?: never;
+    };
+    "/api/v1/forums/replies/{id}/helpful": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Votar "me sirvió" (idempotente; no en respuestas propias) */
+        put: operations["ForumsController_helpful_v1"];
+        post?: never;
+        /** Quitar el voto "me sirvió" */
+        delete: operations["ForumsController_unhelpful_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/forums/threads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Hilos: por tema, búsqueda en el título y orden (reciente, nuevos, sin respuesta)
+         * @description Con sesión se ocultan los de cuentas bloqueadas.
+         */
+        get: operations["ForumsController_threads_v1"];
+        put?: never;
+        /**
+         * Abrir un hilo (pregunta o tema de conversación)
+         * @description Mismos límites y palabras no permitidas que la Comunidad.
+         */
+        post: operations["ForumsController_createThread_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/forums/threads/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Un hilo con su texto completo */
+        get: operations["ForumsController_thread_v1"];
+        put?: never;
+        post?: never;
+        /** Autor: borrar el hilo */
+        delete: operations["ForumsController_deleteThread_v1"];
+        options?: never;
+        head?: never;
+        /** Autor: editar el título o el texto */
+        patch: operations["ForumsController_updateThread_v1"];
+        trace?: never;
+    };
+    "/api/v1/forums/threads/{id}/replies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Respuestas (la mejor primero; luego por fecha o por "me sirvió") */
+        get: operations["ForumsController_replies_v1"];
+        put?: never;
+        /** Responder (avisa a quien abrió el hilo) */
+        post: operations["ForumsController_reply_v1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/forums/threads/{id}/solution": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Autor del hilo: marcar la mejor respuesta (avisa a quien la escribió) */
+        put: operations["ForumsController_markSolution_v1"];
+        post?: never;
+        /** Autor del hilo: quitar la mejor respuesta */
+        delete: operations["ForumsController_clearSolution_v1"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/gallery/{imageId}/reports": {
         parameters: {
             query?: never;
@@ -5520,10 +5759,50 @@ export type paths = {
             path?: never;
             cookie?: never;
         };
-        /** Auspiciador y su catálogo de productos (enlaces externos) */
+        /** Marca auspiciadora: ficha, productos y videos (enlaces externos) */
         get: operations["SponsorsController_sponsor_v1"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/store": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Tienda: ofertas, productos, marcas por rubro, videos y descuentos
+         * @description Publicidad de marcas auspiciadoras (siempre etiquetada «Patrocinado»; nunca en la Comunidad). Charles no vende: cada producto enlaza a la tienda de la marca. Registra impresiones de `featured` como en /placements y los clics con /store/products/{id}/click.
+         */
+        get: operations["SponsorsController_store_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/store/products/{id}/click": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Registrar un clic a "Ver en la tienda" de un producto
+         * @description Uno por persona (o instalación) por hora; los repetidos se ignoran (204 igual).
+         */
+        post: operations["SponsorsController_productClick_v1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -5919,7 +6198,7 @@ export type components = {
             /** @enum {string} */
             targetState: "VISIBLE" | "HIDDEN" | "REMOVED" | "DELETED";
             /** @enum {string} */
-            targetType: "POST" | "COMMENT" | "USER";
+            targetType: "POST" | "COMMENT" | "USER" | "FORUM_THREAD" | "FORUM_REPLY";
         };
         AdminDashboardDto: {
             /** @description Reportes de barberías abiertos. */
@@ -5957,6 +6236,18 @@ export type components = {
         AdminFailedRefundPageDto: {
             items: components["schemas"]["AdminFailedRefundDto"][];
             nextCursor: string | null;
+        };
+        AdminForumCategoryDto: {
+            description: string | null;
+            /** Format: uuid */
+            id: string;
+            isActive: boolean;
+            name: string;
+            /** @example tecnicas-de-corte */
+            slug: string;
+            sortOrder: number;
+            /** @description Hilos visibles del tema. */
+            threadCount: number;
         };
         AdminHistoryDto: {
             /** Format: date-time */
@@ -6187,6 +6478,31 @@ export type components = {
             status: "PENDING" | "TRIALING" | "ACTIVE" | "PAST_DUE" | "CANCELED" | "EXPIRED";
             /** Format: date-time */
             trialEndsAt: string | null;
+        };
+        AdminThreadDto: {
+            author: components["schemas"]["ForumAuthorDto"];
+            /** Format: uuid */
+            categoryId: string;
+            categoryName: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** @description Primeros 200 caracteres. */
+            excerpt: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            lastActivityAt: string;
+            /** @description Cerrado por soporte: no admite respuestas. */
+            locked: boolean;
+            pinned: boolean;
+            replyCount: number;
+            /** @description Reportes abiertos. */
+            reportCount: number;
+            /** @description Tiene una respuesta marcada como la mejor. */
+            solved: boolean;
+            /** @enum {string} */
+            state: "VISIBLE" | "HIDDEN" | "REMOVED" | "DELETED";
+            title: string;
         };
         AgendaActionsDto: {
             /** @description Solo OWNER o MANAGER (el barbero no cancela): reserva pendiente de pago, o confirmada que aún no empieza. POST /bookings/{id}/cancel exige motivo. */
@@ -7144,7 +7460,7 @@ export type components = {
             /** Format: uuid */
             targetId: string;
             /** @enum {string} */
-            targetType: "post" | "comment" | "user";
+            targetType: "post" | "comment" | "user" | "forum_thread" | "forum_reply";
         };
         CreateCouponDto: {
             /**
@@ -7286,6 +7602,17 @@ export type components = {
              * @description Por defecto, ahora.
              */
             startsAt?: string;
+        };
+        CreateForumCategoryDto: {
+            description?: string;
+            name: string;
+            /**
+             * @description a-z, 0-9 y guion (2 a 40).
+             * @example tecnicas-de-corte
+             */
+            slug: string;
+            /** @default 0 */
+            sortOrder: number;
         };
         CreateImageReportDto: {
             details?: string;
@@ -7450,7 +7777,7 @@ export type components = {
             /** @default 0 */
             priority: number;
             /** @enum {string} */
-            slotKey: "home_banner" | "search_top" | "booking_success" | "shop_dashboard";
+            slotKey: "home_banner" | "search_top" | "booking_success" | "shop_dashboard" | "store_featured";
             title: string;
         };
         CreatePlanDto: {
@@ -7514,9 +7841,28 @@ export type components = {
         CreateProductDto: {
             /** @description Enlace https de compra (Charles no vende ni cobra). */
             actionUrl: string;
+            /**
+             * @default ALL
+             * @enum {string}
+             */
+            audience: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            /**
+             * @description Cupón de la marca (A-Z, 0-9, guion).
+             * @example CHARLES10
+             */
+            couponCode?: string;
             description?: string;
             imageUrl?: string;
             name: string;
+            /**
+             * Format: date-time
+             * @description Fin de la oferta (sin él, vale mientras exista).
+             */
+            offerEndsAt?: string;
+            /** @description Precio de oferta en céntimos: exige priceAmount y debe ser menor. */
+            offerPriceAmount?: number;
+            /** @description Precio normal en céntimos. */
+            priceAmount?: number;
             /** @example Desde S/ 39.90 */
             priceText?: string;
             /** @default 0 */
@@ -7567,6 +7913,9 @@ export type components = {
              * @example 20
              */
             value: number;
+        };
+        CreateReplyDto: {
+            body: string;
         };
         CreateReviewDto: {
             /** @description Texto plano: se recortan los espacios y no se interpreta HTML. */
@@ -7648,11 +7997,22 @@ export type components = {
             username?: string;
         };
         CreateSponsorDto: {
+            /**
+             * @default OTHER
+             * @enum {string}
+             */
+            category: "COSMETICS" | "TOOLS" | "FURNITURE" | "SUPPLIES" | "EDUCATION" | "OTHER";
             /** @description Contacto interno (se guarda cifrado). */
             contact?: string;
+            /** @description Portada (URL devuelta por POST /admin/sponsors/media). */
+            coverUrl?: string;
+            /** @description Presentación de la marca en la Tienda. */
+            description?: string;
             /** @description URL devuelta por POST /admin/sponsors/media. */
             logoUrl?: string;
             name: string;
+            /** @description Web de la marca (https). */
+            websiteUrl?: string;
         };
         CreateSponsorPackageDto: {
             /** @example crecimiento */
@@ -7682,6 +8042,13 @@ export type components = {
             sortOrder?: number;
             /** @enum {string|null} */
             vibe?: "CLASSIC" | "MODERN" | null;
+        };
+        CreateThreadDto: {
+            body: string;
+            /** Format: uuid */
+            categoryId: string;
+            /** @example ¿Cómo hago un degradado sin escalones? */
+            title: string;
         };
         CreateTicketDto: {
             /** @enum {string} */
@@ -7906,6 +8273,24 @@ export type components = {
         FollowStateDto: {
             followers: number;
             following: boolean;
+        };
+        ForumAuthorDto: {
+            /** @description Tiene perfil profesional de barbero (insignia "Barbero"). */
+            isBarber: boolean;
+            photoUrl: string | null;
+            /** Format: uuid */
+            userId: string;
+            username: string;
+        };
+        ForumCategoryDto: {
+            description: string | null;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @example tecnicas-de-corte */
+            slug: string;
+            /** @description Hilos visibles del tema. */
+            threadCount: number;
         };
         GalleryImageDto: {
             /** Format: uuid */
@@ -8626,6 +9011,19 @@ export type components = {
              */
             recoveryCode?: string;
         };
+        ModerateThreadDto: {
+            /**
+             * Format: uuid
+             * @description Mover a otro tema.
+             */
+            categoryId?: string;
+            /** @description Cerrar: no admite respuestas nuevas. */
+            locked?: boolean;
+            /** @description Fijar arriba del tema. */
+            pinned?: boolean;
+            /** @description Retirar (o restaurar) sin esperar reportes. */
+            removed?: boolean;
+        };
         ModerationResultDto: {
             resolvedReports: number;
             /** @enum {string} */
@@ -8905,7 +9303,7 @@ export type components = {
             imageUrl: string | null;
             priority: number;
             /** @enum {string} */
-            slotKey: "home_banner" | "search_top" | "booking_success" | "shop_dashboard";
+            slotKey: "home_banner" | "search_top" | "booking_success" | "shop_dashboard" | "store_featured";
             title: string;
         };
         PlacementEventDto: {
@@ -9130,14 +9528,35 @@ export type components = {
         };
         /** @enum {string} */
         PriceLineType: "SERVICE" | "DISCOUNT" | "FEE" | "TAX";
+        ProductClickDto: {
+            /**
+             * Format: uuid
+             * @description Sin sesión: identificador aleatorio de la instalación. Con sesión se ignora.
+             */
+            viewerKey?: string;
+        };
         ProductDto: {
             actionUrl: string;
+            /** @enum {string} */
+            audience: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            /** @description Clics a la tienda (uno por persona o dispositivo por hora). */
+            clicks: number;
+            couponCode: string | null;
+            currency: string;
             description: string | null;
+            discountPercent: number | null;
             /** Format: uuid */
             id: string;
             imageUrl: string | null;
             isActive: boolean;
             name: string;
+            /** @description La oferta está vigente ahora. */
+            offerActive: boolean;
+            /** Format: date-time */
+            offerEndsAt: string | null;
+            /** @description Tal como se cargó (aunque haya vencido). */
+            offerPriceAmount: number | null;
+            priceAmount: number | null;
             priceText: string | null;
             sortOrder: number;
             /** Format: uuid */
@@ -9268,6 +9687,35 @@ export type components = {
             /** @description Insignia "Verificada" del plan. */
             verified: boolean;
         };
+        PublicProductDto: {
+            /** @description Enlace https a la tienda de la marca (Charles no vende ni cobra). */
+            actionUrl: string;
+            /** @enum {string} */
+            audience: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            /** @description Cupón de la marca, si la oferta lo usa. */
+            couponCode: string | null;
+            /** @example PEN */
+            currency: string;
+            description: string | null;
+            /** @description Descuento redondeado (1 a 99). */
+            discountPercent: number | null;
+            /** Format: uuid */
+            id: string;
+            imageUrl: string | null;
+            isActive: boolean;
+            name: string;
+            /** Format: date-time */
+            offerEndsAt: string | null;
+            /** @description Precio de oferta en céntimos; null si no hay oferta vigente. */
+            offerPriceAmount: number | null;
+            /** @description Precio normal en céntimos. */
+            priceAmount: number | null;
+            /** @description Detalle libre: "Frasco de 100 g". */
+            priceText: string | null;
+            sortOrder: number;
+            /** Format: uuid */
+            sponsorId: string;
+        };
         PublicPromotionDto: {
             currency: string | null;
             daysOfWeek: number[];
@@ -9317,11 +9765,19 @@ export type components = {
             nextCursor: string | null;
         };
         PublicSponsorDto: {
+            /** @enum {string} */
+            category: "COSMETICS" | "TOOLS" | "FURNITURE" | "SUPPLIES" | "EDUCATION" | "OTHER";
+            coverUrl: string | null;
+            description: string | null;
             /** Format: uuid */
             id: string;
             logoUrl: string | null;
             name: string;
-            products: components["schemas"]["ProductDto"][];
+            products: components["schemas"]["PublicProductDto"][];
+            /** @description Videos de la marca (hasta 30 s, sin sonido al inicio). */
+            videos: components["schemas"]["VideoDto"][];
+            /** @description Web de la marca (https). */
+            websiteUrl: string | null;
         };
         PurposeAmountDto: {
             /** @description Céntimos cobrados en el mes. */
@@ -9618,6 +10074,29 @@ export type components = {
              * @example ana.perez
              */
             username: string;
+        };
+        ReplyDto: {
+            author: components["schemas"]["ForumAuthorDto"];
+            body: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            editedAt: string | null;
+            /** @description Votos "me sirvió". */
+            helpful: number;
+            /** Format: uuid */
+            id: string;
+            isMine: boolean;
+            /** @description Es la mejor respuesta del hilo. */
+            isSolution: boolean;
+            /** Format: uuid */
+            threadId: string;
+            /** @description Quien mira votó "me sirvió". */
+            votedHelpful: boolean;
+        };
+        ReplyPageDto: {
+            items: components["schemas"]["ReplyDto"][];
+            nextCursor: string | null;
         };
         ReportBarberDto: {
             amount: number;
@@ -10136,18 +10615,32 @@ export type components = {
             /** Format: date-time */
             startAt: string;
         };
+        SolutionDto: {
+            /**
+             * Format: uuid
+             * @description Respuesta del hilo que resolvió la duda.
+             */
+            replyId: string;
+        };
         SponsorDto: {
             campaigns: number;
+            /** @enum {string} */
+            category: "COSMETICS" | "TOOLS" | "FURNITURE" | "SUPPLIES" | "EDUCATION" | "OTHER";
             /** @description Solo en /admin. */
             contact: string | null;
+            coverUrl: string | null;
             /** Format: date-time */
             createdAt: string;
+            description: string | null;
             /** Format: uuid */
             id: string;
             isActive: boolean;
             logoUrl: string | null;
             name: string;
             products: number;
+            /** @description Videos vigentes (listos o en proceso). */
+            videos: number;
+            websiteUrl: string | null;
         };
         SponsorMediaDto: {
             /** @description Miniatura (400 px de ancho). */
@@ -10331,6 +10824,118 @@ export type components = {
             /** @enum {string} */
             state: "AVAILABLE" | "PENDING" | "INFO";
         };
+        StoreBrandDto: {
+            /** @enum {string} */
+            category: "COSMETICS" | "TOOLS" | "FURNITURE" | "SUPPLIES" | "EDUCATION" | "OTHER";
+            coverUrl: string | null;
+            description: string | null;
+            /** @description Tiene al menos una oferta vigente. */
+            hasOffers: boolean;
+            /** Format: uuid */
+            id: string;
+            logoUrl: string | null;
+            name: string;
+            /** @description Productos visibles para este público. */
+            productCount: number;
+        };
+        StoreCategoryDto: {
+            /** @description Marcas con productos para este público. */
+            brands: number;
+            /** @enum {string} */
+            category: "COSMETICS" | "TOOLS" | "FURNITURE" | "SUPPLIES" | "EDUCATION" | "OTHER";
+        };
+        StoreDealDto: {
+            /** Format: uuid */
+            barbershopId: string | null;
+            barbershopName: string | null;
+            currency: string | null;
+            /** @description Días de la cita (0 = domingo); vacío: todos. */
+            daysOfWeek: number[];
+            /** Format: date-time */
+            endsAt: string | null;
+            /** @description true: la ofrece Charles y vale en todas las barberías. */
+            fromCharles: boolean;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            /** @enum {string} */
+            type: "PERCENTAGE" | "FIXED_AMOUNT";
+            /** @description Porcentaje (1 a 100) o monto en céntimos. */
+            value: number;
+        };
+        StoreDto: {
+            brands: components["schemas"]["StoreBrandDto"][];
+            /** @description Rubros con marcas (para los filtros). */
+            categories: components["schemas"]["StoreCategoryDto"][];
+            /** @description Descuentos en reservas (de Charles y de barberías). Vacío para BARBERSHOPS. */
+            deals: components["schemas"]["StoreDealDto"][];
+            /** @description Destacados (espacio store_featured). */
+            featured: components["schemas"]["PublicPlacementDto"][];
+            /** @description Ofertas vigentes, mayor descuento primero. */
+            offers: components["schemas"]["StoreProductDto"][];
+            /** @description Productos sin oferta, los más nuevos primero. */
+            products: components["schemas"]["StoreProductDto"][];
+            videos: components["schemas"]["StoreVideoDto"][];
+        };
+        StoreProductDto: {
+            /** @description Enlace https a la tienda de la marca (Charles no vende ni cobra). */
+            actionUrl: string;
+            /** @enum {string} */
+            audience: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            /** @enum {string} */
+            category: "COSMETICS" | "TOOLS" | "FURNITURE" | "SUPPLIES" | "EDUCATION" | "OTHER";
+            /** @description Cupón de la marca, si la oferta lo usa. */
+            couponCode: string | null;
+            /** @example PEN */
+            currency: string;
+            description: string | null;
+            /** @description Descuento redondeado (1 a 99). */
+            discountPercent: number | null;
+            /** Format: uuid */
+            id: string;
+            imageUrl: string | null;
+            isActive: boolean;
+            name: string;
+            /** Format: date-time */
+            offerEndsAt: string | null;
+            /** @description Precio de oferta en céntimos; null si no hay oferta vigente. */
+            offerPriceAmount: number | null;
+            /** @description Precio normal en céntimos. */
+            priceAmount: number | null;
+            /** @description Detalle libre: "Frasco de 100 g". */
+            priceText: string | null;
+            sortOrder: number;
+            /** Format: uuid */
+            sponsorId: string;
+            sponsorLogoUrl: string | null;
+            sponsorName: string;
+        };
+        StoreVideoDto: {
+            caption: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            durationMs: number | null;
+            /**
+             * @description Por qué falló (solo en la vista de quien lo subió).
+             * @enum {string|null}
+             */
+            failureReason: "NOT_A_VIDEO" | "TOO_LONG" | "TOO_LARGE" | "PROCESSING_FAILED" | null;
+            /** Format: uuid */
+            id: string;
+            /** @description Miniatura WebP. */
+            posterUrl: string | null;
+            /** Format: uuid */
+            sponsorId: string;
+            sponsorLogoUrl: string | null;
+            sponsorName: string;
+            /**
+             * @description PROCESSING mientras se comprime (segundos); vuelve a consultar.
+             * @enum {string}
+             */
+            status: "PROCESSING" | "READY" | "FAILED";
+            /** @description MP4 (H.264, máx. 720p). null si no está listo. */
+            videoUrl: string | null;
+        };
         StyleInteractionDto: {
             /**
              * Format: uuid
@@ -10467,6 +11072,59 @@ export type components = {
             termsUrl: string | null;
             /** @example 2026-10 */
             version: string;
+        };
+        ThreadDto: {
+            author: components["schemas"]["ForumAuthorDto"];
+            body: string;
+            /** Format: uuid */
+            categoryId: string;
+            categoryName: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            editedAt: string | null;
+            /** @description Primeros 200 caracteres. */
+            excerpt: string;
+            /** Format: uuid */
+            id: string;
+            /** @description Quien mira es el autor (puede editar, borrar y marcar la mejor). */
+            isMine: boolean;
+            /** Format: date-time */
+            lastActivityAt: string;
+            /** @description Cerrado por soporte: no admite respuestas. */
+            locked: boolean;
+            pinned: boolean;
+            replyCount: number;
+            /** Format: uuid */
+            solutionReplyId: string | null;
+            /** @description Tiene una respuesta marcada como la mejor. */
+            solved: boolean;
+            title: string;
+        };
+        ThreadPageDto: {
+            items: components["schemas"]["ThreadSummaryDto"][];
+            nextCursor: string | null;
+        };
+        ThreadSummaryDto: {
+            author: components["schemas"]["ForumAuthorDto"];
+            /** Format: uuid */
+            categoryId: string;
+            categoryName: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** @description Primeros 200 caracteres. */
+            excerpt: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: date-time */
+            lastActivityAt: string;
+            /** @description Cerrado por soporte: no admite respuestas. */
+            locked: boolean;
+            pinned: boolean;
+            replyCount: number;
+            /** @description Tiene una respuesta marcada como la mejor. */
+            solved: boolean;
+            title: string;
         };
         TicketDetailDto: {
             /** @description Si puede responder (abierto, o resuelto dentro del plazo). */
@@ -10637,6 +11295,13 @@ export type components = {
         UpdateCommentDto: {
             body: string;
         };
+        UpdateForumCategoryDto: {
+            description?: string | null;
+            /** @description false: el tema deja de verse y no admite hilos nuevos. */
+            isActive?: boolean;
+            name?: string;
+            sortOrder?: number;
+        };
         UpdateGalleryImageDto: {
             caption?: string | null;
             /**
@@ -10762,10 +11427,19 @@ export type components = {
         };
         UpdateProductDto: {
             actionUrl?: string;
+            /** @enum {string} */
+            audience?: "CLIENTS" | "BARBERSHOPS" | "ALL";
+            couponCode?: string | null;
             description?: string | null;
             imageUrl?: string | null;
             isActive?: boolean;
             name?: string;
+            /** Format: date-time */
+            offerEndsAt?: string | null;
+            /** @description Céntimos; null quita la oferta. */
+            offerPriceAmount?: number | null;
+            /** @description Céntimos. */
+            priceAmount?: number | null;
             priceText?: string | null;
             sortOrder?: number;
         };
@@ -10807,6 +11481,9 @@ export type components = {
             maxPerUser?: number | null;
             maxRedemptions?: number | null;
             name?: string;
+        };
+        UpdateReplyDto: {
+            body: string;
         };
         UpdateReviewDto: {
             /** @description null quita el comentario. */
@@ -10852,10 +11529,15 @@ export type components = {
             preferences?: string | null;
         };
         UpdateSponsorDto: {
+            /** @enum {string} */
+            category?: "COSMETICS" | "TOOLS" | "FURNITURE" | "SUPPLIES" | "EDUCATION" | "OTHER";
             contact?: string | null;
+            coverUrl?: string | null;
+            description?: string | null;
             isActive?: boolean;
             logoUrl?: string | null;
             name?: string;
+            websiteUrl?: string | null;
         };
         UpdateSponsorPackageDto: {
             description?: string | null;
@@ -10879,6 +11561,10 @@ export type components = {
             sortOrder?: number;
             /** @enum {string|null} */
             vibe?: "CLASSIC" | "MODERN" | null;
+        };
+        UpdateThreadDto: {
+            body?: string;
+            title?: string;
         };
         UpdateTicketStatusDto: {
             /** @description Obligatorio al cerrar un ticket que no está resuelto. */
@@ -11948,7 +12634,7 @@ export interface operations {
         parameters: {
             query?: {
                 status?: "OPEN" | "DISMISSED" | "ACTIONED";
-                targetType?: "POST" | "COMMENT" | "USER";
+                targetType?: "POST" | "COMMENT" | "USER" | "FORUM_THREAD" | "FORUM_REPLY";
             };
             header?: never;
             path?: never;
@@ -12157,6 +12843,201 @@ export interface operations {
                 };
             };
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsAdminController_categories_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminForumCategoryDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsAdminController_createCategory_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateForumCategoryDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminForumCategoryDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsAdminController_updateCategory_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateForumCategoryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminForumCategoryDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsAdminController_threads_v1: {
+        parameters: {
+            query?: {
+                q?: string;
+                /** @description REPORTED: con reportes abiertos; HIDDEN: ocultos por reportes; REMOVED: retirados. */
+                state?: "ALL" | "REPORTED" | "HIDDEN" | "REMOVED";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminThreadDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsAdminController_moderate_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModerateThreadDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminThreadDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -13643,6 +14524,41 @@ export interface operations {
             };
         };
     };
+    SponsorsAdminController_removeVideo_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                videoId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     SponsorsAdminController_list_v1: {
         parameters: {
             query?: never;
@@ -13972,6 +14888,84 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProductDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_sponsorVideos_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoDto"][];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsAdminController_uploadVideo_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["VideoUploadDto"];
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VideoDto"];
                 };
             };
             403: {
@@ -21632,6 +22626,463 @@ export interface operations {
             };
         };
     };
+    ForumsController_categories_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ForumCategoryDto"][];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_deleteReply_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_updateReply_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateReplyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReplyDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_helpful_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReplyDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_unhelpful_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReplyDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_threads_v1: {
+        parameters: {
+            query?: {
+                categoryId?: string;
+                /** @description Valor de nextCursor (opaco). */
+                cursor?: string;
+                limit?: number;
+                /** @description Busca en el título. */
+                q?: string;
+                /** @description recent: actividad reciente (fijados primero); new: los más nuevos; unanswered: sin respuestas. */
+                sort?: "recent" | "new" | "unanswered";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_createThread_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateThreadDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_thread_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description THREAD_HIDDEN */
+            410: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_deleteThread_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_updateThread_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateThreadDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_replies_v1: {
+        parameters: {
+            query?: {
+                /** @description Valor de nextCursor (opaco). */
+                cursor?: string;
+                limit?: number;
+                /** @description La mejor respuesta siempre va primero. */
+                sort?: "oldest" | "helpful";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReplyPageDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_reply_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReplyDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReplyDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+            /** @description THREAD_LOCKED */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_markSolution_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SolutionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    ForumsController_clearSolution_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThreadDto"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
     ImagesController_report_v1: {
         parameters: {
             query?: never;
@@ -23862,7 +25313,7 @@ export interface operations {
     SponsorsController_placements_v1: {
         parameters: {
             query: {
-                slot: "home_banner" | "search_top" | "booking_success" | "shop_dashboard";
+                slot: "home_banner" | "search_top" | "booking_success" | "shop_dashboard" | "store_featured";
             };
             header?: never;
             path?: never;
@@ -25551,6 +27002,61 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["PublicSponsorDto"];
                 };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
+                };
+            };
+        };
+    };
+    SponsorsController_store_v1: {
+        parameters: {
+            query?: {
+                /** @description CLIENTS: cosmética y cuidado personal; BARBERSHOPS: herramientas e insumos. */
+                audience?: "CLIENTS" | "BARBERSHOPS";
+                /** @description Filtra marcas, ofertas y productos. */
+                category?: "COSMETICS" | "TOOLS" | "FURNITURE" | "SUPPLIES" | "EDUCATION" | "OTHER";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StoreDto"];
+                };
+            };
+        };
+    };
+    SponsorsController_productClick_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProductClickDto"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             404: {
                 headers: {

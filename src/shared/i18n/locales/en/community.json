@@ -151,5 +151,10 @@
       "OTHER": "Other"
     }
   },
-  "reportAction": "Report"
+  "reportAction": "Report",
+  "sections": {
+    "label": "Section",
+    "posts": "Posts",
+    "forums": "Forums"
+  }
 }

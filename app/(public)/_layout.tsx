@@ -20,7 +20,9 @@ export default function PublicLayout() {
       <Stack.Screen name="barber/[id]" options={{ title: t('profileTitle', { ns: 'career' }) }} />
       <Stack.Screen name="jobs/index" options={{ title: t('jobs', { ns: 'search' }) }} />
       <Stack.Screen name="jobs/[id]" options={{ title: t('jobs', { ns: 'search' }) }} />
+      <Stack.Screen name="store" options={{ title: t('store.title', { ns: 'ads' }) }} />
       <Stack.Screen name="sponsor/[id]" options={{ title: t('title', { ns: 'ads' }) }} />
+      <Stack.Screen name="forums/[id]" options={{ title: t('title', { ns: 'forums' }) }} />
       <Stack.Screen name="community/[id]" options={{ title: t('title', { ns: 'community' }) }} />
       <Stack.Screen name="book/[barbershopId]" options={{ title: t('nav.book') }} />
       <Stack.Screen

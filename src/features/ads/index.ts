@@ -1,3 +1,5 @@
 export { AdSlot } from './components/AdSlot';
 export { SponsorScreen } from './screens/SponsorScreen';
-export type { AdSlotKey } from './api/adsApi';
+export { StoreScreen } from './screens/StoreScreen';
+export { StoreButton } from './components/StoreButton';
+export type { AdSlotKey, StoreAudience } from './api/adsApi';

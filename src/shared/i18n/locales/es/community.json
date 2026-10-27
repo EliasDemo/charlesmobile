@@ -151,5 +151,10 @@
       "OTHER": "Otro"
     }
   },
-  "reportAction": "Reportar"
+  "reportAction": "Reportar",
+  "sections": {
+    "label": "Sección",
+    "posts": "Publicaciones",
+    "forums": "Foros"
+  }
 }

@@ -5,5 +5,40 @@
   "notSold": "Charles doesn't sell these products: \"See in store\" opens the sponsor's page.",
   "noProducts": "This sponsor hasn't published products yet.",
   "seeInStore": "See in store",
-  "title": "Sponsor"
+  "title": "Brand",
+  "store": {
+    "title": "Store",
+    "open": "Open the store",
+    "sponsored": "Sponsored",
+    "intro": "Offers from the brands that support Charles, and discounts for your bookings.",
+    "introShop": "Machines, supplies, furniture and courses for your barbershop, from brands that support Charles.",
+    "all": "All",
+    "categories": {
+      "COSMETICS": "Cosmetics and care",
+      "TOOLS": "Machines and tools",
+      "FURNITURE": "Furniture",
+      "SUPPLIES": "Supplies",
+      "EDUCATION": "Training",
+      "OTHER": "Other"
+    },
+    "deals": "Booking discounts",
+    "dealsHint": "Applied when you book in the app.",
+    "dealEverywhere": "Valid at every barbershop",
+    "offers": "Offers",
+    "products": "Products",
+    "brands": "Brands",
+    "videos": "Videos",
+    "videosHint": "Tap a video to turn the sound on.",
+    "discount": "-{{percent}} %",
+    "amountOff": "-{{amount}}",
+    "normalPrice": "Regular price {{price}}",
+    "coupon": "Coupon: {{code}}",
+    "until": "Until {{date}}",
+    "hasOffers": "On offer",
+    "soundOn": "Turn sound on",
+    "soundOff": "Turn sound off",
+    "website": "Visit their website",
+    "emptyTitle": "Nothing here yet",
+    "empty": "Brands haven't published products for this category yet."
+  }
 }

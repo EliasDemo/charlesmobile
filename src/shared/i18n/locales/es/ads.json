@@ -5,5 +5,40 @@
   "notSold": "Charles no vende estos productos: \"Ver en la tienda\" abre la página del auspiciador.",
   "noProducts": "Este auspiciador aún no publicó productos.",
   "seeInStore": "Ver en la tienda",
-  "title": "Auspiciador"
+  "title": "Marca",
+  "store": {
+    "title": "Tienda",
+    "open": "Abrir la tienda",
+    "sponsored": "Patrocinado",
+    "intro": "Ofertas de las marcas que acompañan a Charles y descuentos para tus reservas.",
+    "introShop": "Máquinas, insumos, mobiliario y cursos para tu barbería, de marcas que acompañan a Charles.",
+    "all": "Todo",
+    "categories": {
+      "COSMETICS": "Cosmética y cuidado",
+      "TOOLS": "Máquinas y herramientas",
+      "FURNITURE": "Mobiliario",
+      "SUPPLIES": "Insumos",
+      "EDUCATION": "Formación",
+      "OTHER": "Otros"
+    },
+    "deals": "Descuentos en reservas",
+    "dealsHint": "Se aplican al reservar en la app.",
+    "dealEverywhere": "Vale en todas las barberías",
+    "offers": "Ofertas",
+    "products": "Productos",
+    "brands": "Marcas",
+    "videos": "Videos",
+    "videosHint": "Toca un video para activar el sonido.",
+    "discount": "-{{percent}} %",
+    "amountOff": "-{{amount}}",
+    "normalPrice": "Precio normal {{price}}",
+    "coupon": "Cupón: {{code}}",
+    "until": "Hasta el {{date}}",
+    "hasOffers": "Con ofertas",
+    "soundOn": "Activar sonido",
+    "soundOff": "Quitar sonido",
+    "website": "Visitar su web",
+    "emptyTitle": "Aún no hay nada aquí",
+    "empty": "Las marcas todavía no publicaron productos para esta categoría."
+  }
 }

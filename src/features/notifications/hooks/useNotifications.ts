@@ -186,6 +186,7 @@ export type NotificationTarget =
   | { kind: 'myPlan' }
   | { kind: 'myMemberships' }
   | { kind: 'bookShop'; barbershopId: string }
+  | { kind: 'forumThread'; id: string }
   | { kind: 'inbox' };
 
 /**
@@ -204,6 +205,10 @@ export function notificationTarget(resource: NotificationResource, type?: string
   if (type === 'WAITLIST_SLOT_FREED' && resource.type === 'barbershop' && resource.id) {
     return { kind: 'bookShop', barbershopId: resource.id };
   }
+  // Forum notices (FOROS.md): resource forum_thread, which the contract's enum does not list yet.
+  const forum =
+    type === 'FORUM_REPLY' || type === 'FORUM_SOLUTION' || (resource.type as string) === 'forum_thread';
+  if (forum && resource.id) return { kind: 'forumThread', id: resource.id };
   if (resource.type === 'booking' && resource.id) return { kind: 'booking', id: resource.id };
   if (resource.type === 'review' && resource.id) return { kind: 'shopReviews', shopId: resource.id };
   if (resource.type === 'barbershop' || resource.type === 'review') return { kind: 'shop' };

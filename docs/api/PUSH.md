@@ -34,6 +34,7 @@ Para quien construye la app. Estado al cierre de la Fase 10. Referencia del back
 | `ticket`        | Ticket de soporte (`GET /me/support/tickets/{id}`) |
 | `barbershop`    | Panel de la barbería                               |
 | `account`       | Ayuda / estado de la cuenta (`id` es `null`)       |
+| `forum_thread`  | Hilo del foro (`GET /forums/threads/{id}`)         |
 
 ## Tipos de aviso
 
@@ -53,6 +54,8 @@ Para quien construye la app. Estado al cierre de la Fase 10. Referencia del back
 | `ACCOUNT_DISABLED`                                | La cuenta                                                                                  | correo (siempre)                 |
 | `BARBERSHOP_SUSPENDED`                            | OWNER y MANAGER                                                                            | bandeja y correo (siempre)       |
 | `WAITLIST_SLOT_FREED`                             | Cliente en la lista de espera de esa franja (`resource.type` = `barbershop`)               | push y bandeja (urgente)         |
+| `FORUM_REPLY`                                     | Quien abrió el hilo: le respondieron                                                       | push y bandeja                   |
+| `FORUM_SOLUTION`                                  | Quien escribió la mejor respuesta                                                          | push y bandeja                   |
 
 "Siempre" = avisos de seguridad y de pagos: se envían aunque la persona haya apagado ese canal.
 

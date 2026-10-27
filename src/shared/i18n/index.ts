@@ -28,6 +28,7 @@ import face from './locales/es/face.json';
 import tour from './locales/es/tour.json';
 import community from './locales/es/community.json';
 import waitlist from './locales/es/waitlist.json';
+import forums from './locales/es/forums.json';
 import type devTexts from './locales/es/dev.json';
 import en_common from './locales/en/common.json';
 import en_errors from './locales/en/errors.json';
@@ -57,6 +58,7 @@ import en_face from './locales/en/face.json';
 import en_tour from './locales/en/tour.json';
 import en_community from './locales/en/community.json';
 import en_waitlist from './locales/en/waitlist.json';
+import en_forums from './locales/en/forums.json';
 import { onLanguageChange } from './language';
 
 export const defaultNS = 'common';
@@ -90,6 +92,7 @@ export const resources = {
     tour,
     community,
     waitlist,
+    forums,
   },
   en: {
     common: en_common,
@@ -120,6 +123,7 @@ export const resources = {
     tour: en_tour,
     community: en_community,
     waitlist: en_waitlist,
+    forums: en_forums,
   },
 } as const;
 

@@ -1,0 +1,86 @@
+{
+  "title": "Foros",
+  "barber": "Barbero",
+  "edited": "editado",
+  "more": "Más opciones",
+  "edit": "Editar",
+  "delete": "Eliminar",
+  "report": "Reportar",
+  "save": "Guardar",
+  "search": "Buscar preguntas",
+  "allTopics": "Todos los temas",
+  "sort": {
+    "label": "Ordenar",
+    "recent": "Recientes",
+    "new": "Nuevos",
+    "unanswered": "Sin responder",
+    "oldest": "Primeras",
+    "helpful": "Más útiles"
+  },
+  "marks": {
+    "pinned": "Fijado",
+    "solved": "Resuelto",
+    "locked": "Cerrado"
+  },
+  "replies_one": "{{count}} respuesta",
+  "replies_other": "{{count}} respuestas",
+  "noReplies": "Sin respuestas",
+  "beFirst": "Nadie respondió todavía. ¿Sabes la respuesta?",
+  "empty": {
+    "title": "Aún no hay preguntas",
+    "text": "Sé el primero en preguntar en este tema.",
+    "search": "No encontramos preguntas con ese título"
+  },
+  "hidden": {
+    "title": "Este hilo no está disponible",
+    "text": "Fue retirado o está en revisión."
+  },
+  "contentNotAllowed": "El texto tiene palabras que no están permitidas. Cámbialo e inténtalo de nuevo.",
+  "thread": {
+    "locked": "Soporte cerró este hilo: ya no admite respuestas.",
+    "lockedSend": "Este hilo se cerró y ya no admite respuestas.",
+    "lockedEmpty": "Este hilo se cerró sin respuestas.",
+    "chooseBest": "Cuando una respuesta te ayude, márcala como la mejor para que otros la encuentren.",
+    "deleteTitle": "¿Eliminar tu pregunta?",
+    "deleteMessage": "Se borrará con todas sus respuestas.",
+    "deleted": "Pregunta eliminada",
+    "editTitle": "Editar pregunta",
+    "editMessage": "Quedará marcada como editada."
+  },
+  "reply": {
+    "label": "Tu respuesta",
+    "placeholder": "Escribe tu respuesta…",
+    "send": "Responder",
+    "loginToAnswer": "Inicia sesión para responder",
+    "best": "Mejor respuesta",
+    "markBest": "Marcar como la mejor",
+    "unmarkBest": "Quitar como la mejor",
+    "markedBest": "Marcaste la mejor respuesta",
+    "unmarkedBest": "Ya no es la mejor respuesta",
+    "helpful_one": "Me sirvió · {{count}}",
+    "helpful_other": "Me sirvió · {{count}}",
+    "helpful_zero": "Me sirvió",
+    "deleteTitle": "¿Eliminar tu respuesta?",
+    "deleteMessage": "Se borrará del hilo.",
+    "deleteBestMessage": "Es la mejor respuesta: el hilo quedará sin resolver.",
+    "deleted": "Respuesta eliminada",
+    "editTitle": "Editar respuesta",
+    "editMessage": "Quedará marcada como editada."
+  },
+  "ask": {
+    "fab": "Preguntar",
+    "intro": "Pregunta lo que quieras sobre cortes, barba, herramientas o el negocio. Responde la comunidad.",
+    "topic": "Tema",
+    "title": "Título",
+    "titleHint": "Una pregunta clara, de 8 a 140 caracteres.",
+    "body": "Detalles",
+    "bodyHint": "Cuenta qué intentaste y qué te salió.",
+    "publish": "Publicar pregunta",
+    "published": "Pregunta publicada",
+    "noTopics": "Todavía no hay temas.",
+    "categoryRequired": "Elige un tema.",
+    "titleLength": "El título debe tener entre 8 y 140 caracteres.",
+    "bodyRequired": "Escribe los detalles de tu pregunta.",
+    "bodyLength": "Máximo 5000 caracteres."
+  }
+}

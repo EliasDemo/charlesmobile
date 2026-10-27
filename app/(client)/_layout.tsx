@@ -40,6 +40,7 @@ export default function ClientLayout() {
       <Stack.Screen name="jobs/offers" options={{ title: t('offers.mine', { ns: 'jobs' }) }} />
       <Stack.Screen name="community/saved" options={{ title: t('savedTitle', { ns: 'community' }) }} />
       <Stack.Screen name="community/new" options={{ title: t('new.title', { ns: 'community' }) }} />
+      <Stack.Screen name="forums/new" options={{ title: t('ask.fab', { ns: 'forums' }) }} />
       <Stack.Screen name="bookings/[id]" options={{ title: t('nav.booking') }} />
     </Stack>
   );

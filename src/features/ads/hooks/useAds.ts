@@ -8,9 +8,14 @@ import {
   adKeys,
   fetchPlacements,
   fetchSponsor,
+  fetchStore,
   sendPlacementEvent,
+  sendProductClick,
+  storeKeys,
   type AdSlotKey,
   type Placement,
+  type StoreAudience,
+  type StoreCategory,
 } from '../api/adsApi';
 
 // One per installation, created once and kept (not a person's data: it only counts views).
@@ -34,16 +39,11 @@ async function track(placement: Placement, type: 'IMPRESSION' | 'CLICK', authent
   await sendPlacementEvent(placement.id, type, key).catch(() => undefined);
 }
 
-/** The ads of a space; each one counts its impression once while shown. */
-export function useAdSlot(slot: AdSlotKey) {
+/** Counts each ad's impression once while it is on screen. */
+function usePlacements(placements: Placement[] | undefined) {
   const authenticated = useSession((s) => s.status === 'authenticated');
-  const query = useQuery({
-    queryKey: adKeys.slot(slot),
-    queryFn: () => fetchPlacements(slot),
-    staleTime: 300_000,
-  });
   const seen = useRef(new Set<string>());
-  const items = useMemo(() => query.data ?? [], [query.data]);
+  const items = useMemo(() => placements ?? [], [placements]);
   useEffect(() => {
     for (const placement of items) {
       if (seen.current.has(placement.id)) continue;
@@ -59,6 +59,40 @@ export function useAdSlot(slot: AdSlotKey) {
       if (placement.actionUrl) void openWebUrl(placement.actionUrl).catch(() => undefined);
     },
   };
+}
+
+/** The ads of a space; each one counts its impression once while shown. */
+export function useAdSlot(slot: AdSlotKey) {
+  const query = useQuery({
+    queryKey: adKeys.slot(slot),
+    queryFn: () => fetchPlacements(slot),
+    staleTime: 300_000,
+  });
+  return usePlacements(query.data);
+}
+
+/** "Ver en la tienda": counts the click first (never blocks on it), then opens the brand's shop. */
+export function useOpenProduct() {
+  const authenticated = useSession((s) => s.status === 'authenticated');
+  return (product: { id: string; actionUrl: string }) => {
+    void (async () => {
+      const key = authenticated ? undefined : await getViewerKey();
+      await sendProductClick(product.id, key).catch(() => undefined);
+    })();
+    void openWebUrl(product.actionUrl).catch(() => undefined);
+  };
+}
+
+/** The store for clients or for barbershops, filtered by one category (or all). */
+export function useStore(audience: StoreAudience, category?: StoreCategory) {
+  const query = useQuery({
+    queryKey: storeKeys.store(audience, category),
+    queryFn: () => fetchStore(audience, category),
+    staleTime: 300_000,
+    placeholderData: (previous) => previous,
+  });
+  const featured = usePlacements(query.data?.featured);
+  return { query, featured, openProduct: useOpenProduct() };
 }
 
 export function useSponsor(id: string) {
