@@ -79,7 +79,12 @@
     "myLocation": "My location",
     "showAll": "Show all barbershops",
     "directions": "Directions",
-    "waze": "Waze"
+    "waze": "Waze",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "close": "Close",
+    "openNow": "Open now",
+    "closedNow": "Closed now"
   },
   "allBarbershops": "Barbershops",
   "barbers": "Barbers",

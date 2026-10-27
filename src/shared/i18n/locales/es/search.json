@@ -79,7 +79,12 @@
     "myLocation": "Mi ubicación",
     "showAll": "Ver todas las barberías",
     "directions": "Cómo llegar",
-    "waze": "Waze"
+    "waze": "Waze",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "close": "Cerrar",
+    "openNow": "Abierta ahora",
+    "closedNow": "Cerrada ahora"
   },
   "allBarbershops": "Barberías",
   "barbers": "Barberos",

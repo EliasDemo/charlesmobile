@@ -95,6 +95,13 @@ export {
   useKeyboardVisible,
 } from './keyboard';
 export { BrandHeader } from './BrandHeader';
-export { BrandMap, type BrandMapHandle, mapAvailable, type BrandMapProps, type MapPin } from './BrandMap';
+export {
+  BrandMap,
+  type BrandMapHandle,
+  type MapView,
+  mapAvailable,
+  type BrandMapProps,
+  type MapPin,
+} from './BrandMap';
 export { useNearMe } from './useNearMe';
 export { ReviewLikeButton } from './LikeButton';
