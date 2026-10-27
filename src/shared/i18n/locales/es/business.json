@@ -189,5 +189,59 @@
     "sold": "Vendido hoy",
     "count": "Ventas y atenciones",
     "seeCash": "Ver caja"
+  },
+  "money": {
+    "available": "Saldo a favor",
+    "availableHint": "Lo puedes usar para pagar tu plan. Charles te lo transfiere según lo acordado.",
+    "pending": "Por liberar",
+    "pendingHint": "Reservas cobradas aún no atendidas.",
+    "direct": "Cobrado directo",
+    "directHint": "Ya está en tu cuenta de Mercado Pago.",
+    "sellerTitle": "Recibe los pagos en tu cuenta",
+    "sellerText": "Vincula tu Mercado Pago y las reservas se cobran directo a ti.",
+    "movements": "Movimientos",
+    "range_one": "Hoy",
+    "range_other": "{{count}} días",
+    "empty": "Sin movimientos en este periodo",
+    "gross": "Cobrado",
+    "commission": "Comisión de Charles",
+    "net": "Neto para ti",
+    "lineGross": "Cobrado {{amount}}",
+    "lineCommission": "Comisión {{amount}}",
+    "kind": {
+      "BOOKING": "Reserva",
+      "BOOKING_DIRECT": "Reserva directa",
+      "REFUND": "Devolución",
+      "MEMBERSHIP": "Membresía",
+      "SUBSCRIPTION_PAYMENT": "Plan",
+      "PAYOUT": "Transferencia",
+      "ADJUSTMENT": "Ajuste"
+    },
+    "state": {
+      "AVAILABLE": "Disponible",
+      "PENDING": "Por liberar",
+      "INFO": "Informativo"
+    }
+  },
+  "seller": {
+    "intro": "Con tu cuenta de Mercado Pago vinculada, lo que pagan tus clientes al reservar va directo a ti. Para el cliente no cambia nada.",
+    "status": {
+      "NOT_CONNECTED": "Sin vincular",
+      "PENDING": "Vinculando…",
+      "CONNECTED": "Vinculada",
+      "REVOKED": "Desvinculada"
+    },
+    "text": {
+      "NOT_CONNECTED": "Toca \"Vincular\" y autoriza en Mercado Pago. Al volver a la app verás el estado.",
+      "PENDING": "Termina la autorización en Mercado Pago y vuelve a la app.",
+      "CONNECTED": "Los pagos de reservas llegan a tu cuenta de Mercado Pago.",
+      "REVOKED": "La vinculación se canceló. Vuelve a vincular para cobrar directo."
+    },
+    "since": "Vinculada desde el {{date}}",
+    "connect": "Vincular Mercado Pago",
+    "disconnect": "Desvincular",
+    "disconnectTitle": "¿Desvincular Mercado Pago?",
+    "disconnectMessage": "Los pagos de nuevas reservas los cobrará Charles y sumarán a tu saldo a favor.",
+    "disconnected": "Mercado Pago desvinculado"
   }
 }

@@ -12,6 +12,7 @@ export const planKeys = {
   shop: (id: string) => ['plans', 'shop', id] as const,
   catalog: (audience: Plan['audience']) => ['plans', 'catalog', audience] as const,
   badges: (id: string) => ['plans', 'badges', id] as const,
+  balance: (id: string) => ['plans', 'balance', id] as const,
 };
 
 /** The plan in force, its subscription and the usage of each limit. */
@@ -23,14 +24,22 @@ export const fetchPlans = (audience: Plan['audience']): Promise<Plan[]> =>
   unwrap(api.GET('/api/v1/plans', { params: { query: { audience } } }));
 
 /**
- * Only the OWNER. The payment link arrives by email: the app never opens `checkoutUrl` nor shows
- * a "buy" button (Apple and Google rules).
+ * Only the OWNER. With GATEWAY the payment link arrives by email (the app never opens
+ * `checkoutUrl`); with BALANCE it is charged right away to the balance in favor (no trial).
  */
-export const subscribe = (id: string, planCode: string, interval: BillingInterval, replace: boolean) =>
+export type PaymentMethod = 'GATEWAY' | 'BALANCE';
+
+export const subscribe = (
+  id: string,
+  planCode: string,
+  interval: BillingInterval,
+  replace: boolean,
+  paymentMethod: PaymentMethod = 'GATEWAY',
+) =>
   unwrap(
     api.POST('/api/v1/barbershops/{id}/subscription', {
       params: { path: { id } },
-      body: { planCode, interval, replace, paymentMethod: 'GATEWAY' },
+      body: { planCode, interval, replace, paymentMethod },
     }),
   );
 
@@ -63,3 +72,11 @@ export const useFeaturedDays = (id: string, days: number) =>
 /** Public: whether the barbershop shows the "Verificada" badge. */
 export const fetchBadges = (id: string) =>
   unwrap(api.GET('/api/v1/barbershops/{id}/plan/badges', { params: { path: { id } } }));
+
+/** Balance in favor (céntimos): how much the plan can take from it. */
+export const fetchBalance = (id: string) =>
+  unwrap(api.GET('/api/v1/barbershops/{id}/balance', { params: { path: { id } } }));
+
+/** Pays the next period (or recovers a PAST_DUE plan) with the balance. Only the OWNER. */
+export const payWithBalance = (id: string): Promise<Subscription> =>
+  unwrap(api.POST('/api/v1/barbershops/{id}/subscription/pay-with-balance', { params: { path: { id } } }));

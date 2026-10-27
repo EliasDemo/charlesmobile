@@ -59,5 +59,12 @@
     "text": "Your plan now includes:",
     "unlimited": "Unlimited",
     "upTo": "Up to {{value}}"
-  }
+  },
+  "payGateway": "Pay with Mercado Pago",
+  "payBalance": "Use my balance ({{amount}})",
+  "paidWithBalance": "{{plan}} plan active! You paid it with your balance.",
+  "insufficientBalance": "Your balance is not enough for this plan.",
+  "paidNext": "You paid the next period with your balance.",
+  "recoverWithBalance": "Reactivate with my balance",
+  "payNextWithBalance": "Pay ahead with my balance"
 }

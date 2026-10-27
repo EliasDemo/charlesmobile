@@ -189,5 +189,59 @@
     "sold": "Sold today",
     "count": "Sales and appointments",
     "seeCash": "See register"
+  },
+  "money": {
+    "available": "Balance in your favor",
+    "availableHint": "You can use it to pay your plan. Charles transfers it as agreed.",
+    "pending": "To be released",
+    "pendingHint": "Bookings paid but not attended yet.",
+    "direct": "Paid directly",
+    "directHint": "Already in your Mercado Pago account.",
+    "sellerTitle": "Get paid in your account",
+    "sellerText": "Link your Mercado Pago and bookings are paid directly to you.",
+    "movements": "Movements",
+    "range_one": "Today",
+    "range_other": "{{count}} days",
+    "empty": "No movements in this period",
+    "gross": "Charged",
+    "commission": "Charles commission",
+    "net": "Net for you",
+    "lineGross": "Charged {{amount}}",
+    "lineCommission": "Commission {{amount}}",
+    "kind": {
+      "BOOKING": "Booking",
+      "BOOKING_DIRECT": "Direct booking",
+      "REFUND": "Refund",
+      "MEMBERSHIP": "Membership",
+      "SUBSCRIPTION_PAYMENT": "Plan",
+      "PAYOUT": "Transfer",
+      "ADJUSTMENT": "Adjustment"
+    },
+    "state": {
+      "AVAILABLE": "Available",
+      "PENDING": "To be released",
+      "INFO": "Informative"
+    }
+  },
+  "seller": {
+    "intro": "With your Mercado Pago account linked, what your clients pay when booking goes straight to you. Nothing changes for the client.",
+    "status": {
+      "NOT_CONNECTED": "Not linked",
+      "PENDING": "Linking…",
+      "CONNECTED": "Linked",
+      "REVOKED": "Unlinked"
+    },
+    "text": {
+      "NOT_CONNECTED": "Tap \"Link\" and authorize in Mercado Pago. When you come back you will see the state.",
+      "PENDING": "Finish the authorization in Mercado Pago and come back.",
+      "CONNECTED": "Booking payments arrive in your Mercado Pago account.",
+      "REVOKED": "The link was canceled. Link again to get paid directly."
+    },
+    "since": "Linked since {{date}}",
+    "connect": "Link Mercado Pago",
+    "disconnect": "Unlink",
+    "disconnectTitle": "Unlink Mercado Pago?",
+    "disconnectMessage": "New booking payments will be charged by Charles and added to your balance.",
+    "disconnected": "Mercado Pago unlinked"
   }
 }

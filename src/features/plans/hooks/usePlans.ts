@@ -11,7 +11,10 @@ import {
   fetchShopPlan,
   planKeys,
   setActiveBarbers,
+  fetchBalance,
+  payWithBalance,
   subscribe,
+  type PaymentMethod,
   syncSubscription,
   useFeaturedDays as requestFeaturedDays,
   type BillingInterval,
@@ -33,6 +36,19 @@ export function useShopPlan(shopId: string) {
   const refresh = () => void queryClient.invalidateQueries({ queryKey: planKeys.all });
 
   const sync = useMutation({ mutationFn: () => syncSubscription(shopId), onSettled: refresh });
+  const payBalance = useMutation({
+    mutationFn: () => payWithBalance(shopId),
+    onSuccess: () => {
+      refresh();
+      showToast(i18n.t('plans:paidNext'));
+    },
+    onError: (err) =>
+      setError(
+        isApiError(err) && err.code === 'INSUFFICIENT_BALANCE'
+          ? i18n.t('plans:insufficientBalance')
+          : translateErrorMessage(err),
+      ),
+  });
   const pending = query.data?.subscription?.status === 'PENDING';
   const syncRef = useRef(sync.mutate);
   useEffect(() => {
@@ -77,6 +93,11 @@ export function useShopPlan(shopId: string) {
     error,
     checkPayment: () => sync.mutate(),
     isChecking: sync.isPending,
+    payWithBalance: () => {
+      setError(null);
+      payBalance.mutate();
+    },
+    isPayingBalance: payBalance.isPending,
     cancel: (reason?: string) => cancel.mutate(reason),
     isCancelling: cancel.isPending,
     saveActiveBarbers: (ids: string[]) => barbers.mutate(ids),
@@ -93,28 +114,41 @@ export function usePlanCatalog(shopId: string, audience: Plan['audience'], curre
   const [interval, setInterval] = useState<BillingInterval>('MONTHLY');
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Balance in favor, for "Usar mi saldo" (not shown if it cannot be read).
+  const balance = useQuery({
+    queryKey: planKeys.balance(shopId),
+    queryFn: () => fetchBalance(shopId),
+    retry: false,
+  });
   const mutation = useMutation({
-    mutationFn: (plan: Plan) => subscribe(shopId, plan.code, interval, current !== null),
-    onSuccess: (_s, plan) => {
-      setSentTo(plan.name);
+    mutationFn: ({ plan, method }: { plan: Plan; method: PaymentMethod }) =>
+      subscribe(shopId, plan.code, interval, current !== null, method),
+    onSuccess: (_s, { plan, method }) => {
+      if (method === 'BALANCE') showToast(i18n.t('plans:paidWithBalance', { plan: plan.name }));
+      else setSentTo(plan.name);
       void queryClient.invalidateQueries({ queryKey: planKeys.all });
     },
     onError: (err) =>
       setError(
         isApiError(err) && err.code === 'BILLING_UNAVAILABLE'
           ? i18n.t('plans:billingUnavailable')
-          : translateErrorMessage(err),
+          : isApiError(err) && err.code === 'INSUFFICIENT_BALANCE'
+            ? i18n.t('plans:insufficientBalance')
+            : translateErrorMessage(err),
       ),
   });
   return {
     query,
     interval,
     setInterval,
-    choose: (plan: Plan) => {
+    choose: (plan: Plan, method: PaymentMethod = 'GATEWAY') => {
       setError(null);
-      mutation.mutate(plan);
+      mutation.mutate({ plan, method });
     },
-    choosing: mutation.isPending ? mutation.variables?.code : undefined,
+    choosing: mutation.isPending
+      ? `${mutation.variables?.plan.code}:${mutation.variables?.method}`
+      : undefined,
+    balance: balance.data ?? null,
     sentTo,
     error,
   };

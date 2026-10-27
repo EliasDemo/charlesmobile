@@ -40,7 +40,9 @@
       "clients": "Clients",
       "catalog": "Cuts catalog",
       "reports": "Reports",
-      "invoicing": "Receipts"
+      "invoicing": "Receipts",
+      "money": "My money",
+      "seller": "Direct payments"
     },
     "asBarber": "As a barber",
     "myBlocks": "My blocks at {{name}}",
@@ -70,7 +72,9 @@
       "clients": "Profiles and ranking",
       "catalog": "Photos as services",
       "reports": "Sales and commissions",
-      "invoicing": "Electronic receipts"
+      "invoicing": "Electronic receipts",
+      "money": "Balance and movements",
+      "seller": "Mercado Pago in your account"
     },
     "groups": {
       "day": "Day to day",

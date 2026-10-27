@@ -49,7 +49,9 @@ export type ShopSection =
   | 'clients'
   | 'catalog'
   | 'reports'
-  | 'invoicing';
+  | 'invoicing'
+  | 'money'
+  | 'seller';
 
 export interface ShopHomeScreenProps {
   /** Action on the right of the title (the notifications bell, given by the route). */
@@ -91,7 +93,10 @@ const STATUS_STYLE: Record<
 const GROUPS: { key: 'day' | 'team' | 'business' | 'marketing' | 'settings'; sections: ShopSection[] }[] = [
   { key: 'day', sections: ['cash', 'sales', 'blocks'] },
   { key: 'team', sections: ['barbers', 'hours', 'services', 'members', 'jobs', 'talent'] },
-  { key: 'business', sections: ['clients', 'reports', 'memberships', 'catalog', 'invoicing'] },
+  {
+    key: 'business',
+    sections: ['money', 'seller', 'clients', 'reports', 'memberships', 'catalog', 'invoicing'],
+  },
   { key: 'marketing', sections: ['promotions', 'gallery', 'videos', 'reviews'] },
   { key: 'settings', sections: ['details', 'status', 'plan'] },
 ];
@@ -119,6 +124,8 @@ const SECTION_ICON: Record<ShopSection, IconName> = {
   catalog: 'albums',
   reports: 'bar-chart',
   invoicing: 'document-text',
+  money: 'wallet',
+  seller: 'card',
 };
 
 export function ShopHomeScreen({

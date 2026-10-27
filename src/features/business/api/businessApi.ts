@@ -31,6 +31,9 @@ export const businessKeys = {
   catalog: (id: string) => ['business', id, 'catalog'] as const,
   sources: (id: string) => ['business', id, 'catalog', 'sources'] as const,
   report: (id: string, from: string, to: string) => ['business', id, 'report', from, to] as const,
+  balance: (id: string) => ['business', id, 'balance'] as const,
+  statement: (id: string, from: string, to: string) => ['business', id, 'statement', from, to] as const,
+  seller: (id: string) => ['business', id, 'seller'] as const,
 };
 
 const p = (id: string) => ({ params: { path: { id } } });
@@ -154,3 +157,20 @@ export const setBarberCommission = (id: string, barberId: string, commissionBp: 
       body: { commissionBp },
     }),
   );
+
+// Money: balance in favor, statement and the Mercado Pago account for direct payments.
+export type Balance = S['BalanceDto'];
+export type Statement = S['StatementDto'];
+export type StatementLine = S['StatementLineDto'];
+export type SellerAccount = S['SellerAccountDto'];
+
+export const fetchBalance = (id: string): Promise<Balance> =>
+  unwrap(api.GET('/api/v1/barbershops/{id}/balance', p(id)));
+export const fetchStatement = (id: string, from: string, to: string): Promise<Statement> =>
+  unwrap(api.GET('/api/v1/barbershops/{id}/statement', { params: { path: { id }, query: { from, to } } }));
+export const fetchSellerAccount = (id: string): Promise<SellerAccount> =>
+  unwrap(api.GET('/api/v1/barbershops/{id}/seller-account', p(id)));
+export const connectSeller = (id: string) =>
+  unwrap(api.POST('/api/v1/barbershops/{id}/seller-account/connect', p(id)));
+export const disconnectSeller = (id: string) =>
+  unwrap(api.DELETE('/api/v1/barbershops/{id}/seller-account', p(id)));

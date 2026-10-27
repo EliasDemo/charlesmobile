@@ -126,6 +126,19 @@ export function MyPlanScreen({
                     label={t(`status.${sub.status}`)}
                   />
                 ) : null}
+                {isOwner &&
+                sub &&
+                (sub.status === 'PAST_DUE' || sub.status === 'ACTIVE') &&
+                plan &&
+                !plan.isDefault ? (
+                  <Button
+                    label={sub.status === 'PAST_DUE' ? t('recoverWithBalance') : t('payNextWithBalance')}
+                    icon="wallet"
+                    variant={sub.status === 'PAST_DUE' ? 'primary' : 'secondary'}
+                    onPress={p.payWithBalance}
+                    loading={p.isPayingBalance}
+                  />
+                ) : null}
                 {sub?.status === 'PENDING' ? (
                   <Notice tone="info" message={t('pendingEmail')}>
                     <Button
@@ -333,12 +346,28 @@ export function PlansScreen({
                     </Text>
                   ))}
                   {!isCurrent ? (
-                    <Button
-                      label={t('choose')}
-                      variant="secondary"
-                      onPress={() => c.choose(plan)}
-                      loading={c.choosing === plan.code}
-                    />
+                    <View style={styles.section}>
+                      <Button
+                        label={price ? t('payGateway') : t('choose')}
+                        variant="secondary"
+                        onPress={() => c.choose(plan, 'GATEWAY')}
+                        loading={c.choosing === `${plan.code}:GATEWAY`}
+                      />
+                      {price && c.balance ? (
+                        <Button
+                          label={t('payBalance', {
+                            amount: formatMoney({
+                              amount: c.balance.available,
+                              currency: c.balance.currency,
+                            }),
+                          })}
+                          icon="wallet"
+                          onPress={() => c.choose(plan, 'BALANCE')}
+                          loading={c.choosing === `${plan.code}:BALANCE`}
+                          disabled={c.balance.available < price}
+                        />
+                      ) : null}
+                    </View>
                   ) : null}
                 </View>
               );

@@ -86,7 +86,7 @@ describe('PlansScreen', () => {
       'POST /api/v1/barbershops/{id}/subscription': { status: 201, body: shopPlan().subscription },
     });
     await renderWithProviders(<PlansScreen shopId="shop-1" audience="BARBERSHOP" currentCode="free" />);
-    await fireEvent.press(await screen.findByRole('button', { name: texts.choose }));
+    await fireEvent.press(await screen.findByRole('button', { name: texts.payGateway }));
     expect(await screen.findByText(texts.sent.replace('{{plan}}', 'Pro'))).toBeTruthy();
     expect(api.calls.find((c) => c.method === 'POST')!.body).toEqual({
       planCode: 'pro',

@@ -59,5 +59,12 @@
     "text": "Esto incluye tu plan ahora:",
     "unlimited": "Sin límite",
     "upTo": "Hasta {{value}}"
-  }
+  },
+  "payGateway": "Pagar con Mercado Pago",
+  "payBalance": "Usar mi saldo ({{amount}})",
+  "paidWithBalance": "¡Plan {{plan}} activo! Lo pagaste con tu saldo.",
+  "insufficientBalance": "Tu saldo a favor no alcanza para este plan.",
+  "paidNext": "Pagaste el siguiente periodo con tu saldo.",
+  "recoverWithBalance": "Reactivar con mi saldo",
+  "payNextWithBalance": "Adelantar el pago con mi saldo"
 }

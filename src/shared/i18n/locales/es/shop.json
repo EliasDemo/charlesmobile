@@ -40,7 +40,9 @@
       "clients": "Clientes",
       "catalog": "Catálogo de cortes",
       "reports": "Reportes",
-      "invoicing": "Boletas"
+      "invoicing": "Boletas",
+      "money": "Mi dinero",
+      "seller": "Cobro directo"
     },
     "asBarber": "Como barbero",
     "myBlocks": "Mis bloqueos en {{name}}",
@@ -70,7 +72,9 @@
       "clients": "Fichas y ranking",
       "catalog": "Fotos como servicios",
       "reports": "Ventas y comisiones",
-      "invoicing": "Boleta electrónica"
+      "invoicing": "Boleta electrónica",
+      "money": "Saldo a favor y movimientos",
+      "seller": "Mercado Pago en tu cuenta"
     },
     "groups": {
       "day": "Día a día",
