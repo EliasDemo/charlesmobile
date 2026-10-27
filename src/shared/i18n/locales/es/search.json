@@ -75,7 +75,11 @@
     "backToList": "Ver la lista",
     "searchHere": "Buscar en esta zona",
     "empty": "No hay barberías en esta zona con estos filtros.",
-    "openDetail": "Ver barbería"
+    "openDetail": "Ver barbería",
+    "myLocation": "Mi ubicación",
+    "showAll": "Ver todas las barberías",
+    "directions": "Cómo llegar",
+    "waze": "Waze"
   },
   "allBarbershops": "Barberías",
   "barbers": "Barberos",

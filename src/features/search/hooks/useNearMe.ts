@@ -37,6 +37,12 @@ export function useNearMe() {
     setStatus('explaining');
   };
 
+  /** Opening the map: only if permission was already given, so no dialog ever appears by itself. */
+  const locateIfAllowed = async () => {
+    if (center?.source === 'device') return;
+    if ((await getLocationPermission()) === 'granted') await locate();
+  };
+
   const acceptExplanation = async () => {
     const permission = await requestLocationPermission();
     if (permission === 'granted') return locate();
@@ -47,6 +53,7 @@ export function useNearMe() {
     active: center?.source === 'device',
     status,
     start: () => void start(),
+    locateIfAllowed: () => void locateIfAllowed(),
     acceptExplanation: () => void acceptExplanation(),
     dismiss: () => setStatus('idle'),
     stop: () => {

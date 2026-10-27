@@ -1,7 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { BrandMap, Icon, Text, mapAvailable } from '@/shared/ui';
+import { BrandMap, Icon, Text, mapAvailable, type BrandMapHandle } from '@/shared/ui';
 
 interface Coordinates {
   latitude: number;
@@ -25,6 +26,13 @@ export function LocationPicker({
 }) {
   const theme = useTheme();
   const { t } = useTranslation('shop');
+  const map = useRef<BrandMapHandle>(null);
+  // A position set from outside ("Usar mi ubicación") brings the camera along; a tap on the map
+  // already shows where it is.
+  const picked = useRef<Coordinates | null>(null);
+  useEffect(() => {
+    if (value && value !== picked.current) map.current?.flyTo(value, STREET_ZOOM);
+  }, [value]);
   if (!mapAvailable()) {
     // Room kept for the map: it appears when the build has the Maps key.
     return (
@@ -52,10 +60,14 @@ export function LocationPicker({
     <View style={styles.root}>
       <View style={[styles.map, { borderRadius: theme.radius.lg, borderColor: theme.colors.border }]}>
         <BrandMap
+          ref={map}
           center={pin}
           zoom={STREET_ZOOM}
           pins={[{ id: 'shop', ...pin, selected: true }]}
-          onPick={onChange}
+          onPick={(coordinates) => {
+            picked.current = coordinates;
+            onChange(coordinates);
+          }}
           testID="location-picker"
         />
       </View>

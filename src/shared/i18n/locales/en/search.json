@@ -75,7 +75,11 @@
     "backToList": "See the list",
     "searchHere": "Search this area",
     "empty": "No barbershops in this area with these filters.",
-    "openDetail": "See barbershop"
+    "openDetail": "See barbershop",
+    "myLocation": "My location",
+    "showAll": "Show all barbershops",
+    "directions": "Directions",
+    "waze": "Waze"
   },
   "allBarbershops": "Barbershops",
   "barbers": "Barbers",

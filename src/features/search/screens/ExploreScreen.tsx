@@ -172,6 +172,9 @@ export function ExploreScreen({
             onSearchHere={store.setCenter}
             onOpenBarbershop={onOpenBarbershop}
             onShowList={() => store.setView('list')}
+            onLocate={nearMe.start}
+            onLocateSilently={nearMe.locateIfAllowed}
+            locating={nearMe.status === 'locating'}
           />
         </View>
       )}
