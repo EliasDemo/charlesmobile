@@ -18,6 +18,12 @@ export default function TalentRoute() {
               params: { shopId, barberProfileId: barber.id, name: barber.displayName },
             })
           }
+          onOffer={() =>
+            router.push({
+              pathname: '/shop/[shopId]/offers/new',
+              params: { shopId, barberProfileId: barber.id, name: barber.displayName },
+            })
+          }
         />
       )}
     />

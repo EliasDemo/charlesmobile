@@ -16,15 +16,23 @@ import {
 } from '@/shared/lib';
 import { applyServerErrors, showToast, translateErrorMessage } from '@/shared/ui';
 import {
+  acceptOffer,
   applyToJob,
+  createOffer,
   createJob,
   decideApplication,
   fetchApplicants,
   fetchJob,
   fetchJobs,
   fetchMyApplications,
+  fetchMyOffers,
+  fetchShopOffers,
   fetchShopJobs,
   inviteBarberProfile,
+  rejectOffer,
+  withdrawOffer,
+  type CreateOfferBody,
+  type JobOffer,
   jobKeys,
   updateJob,
   withdrawApplication,
@@ -305,4 +313,111 @@ export function useNearMe() {
     }
   };
   return { near, busy, toggle: () => void toggle() };
+}
+
+/** "Ofertas para ti": pending first; accepting joins the barbershop's team. */
+export function useMyOffers({ onAccepted }: { onAccepted?: (offer: JobOffer) => void } = {}) {
+  const queryClient = useQueryClient();
+  const query = useQuery({ queryKey: jobKeys.myOffers, queryFn: fetchMyOffers, staleTime: 0 });
+  const [error, setError] = useState<string | null>(null);
+  const refresh = () => {
+    void queryClient.invalidateQueries({ queryKey: jobKeys.all });
+    // Accepting adds a workplace: "Mi barbería" and the profile change.
+    void queryClient.invalidateQueries();
+  };
+  const accept = useMutation({
+    mutationFn: acceptOffer,
+    onSuccess: (offer) => {
+      refresh();
+      showToast(i18n.t('jobs:offers.acceptedToast', { shop: offer.barbershop.name }));
+      onAccepted?.(offer);
+    },
+    onError: (err) => {
+      setError(translateErrorMessage(err));
+      void query.refetch();
+    },
+  });
+  const reject = useMutation({
+    mutationFn: ({ id, note }: { id: string; note: string }) => rejectOffer(id, note),
+    onSuccess: () => {
+      refresh();
+      showToast(i18n.t('jobs:offers.rejectedToast'));
+    },
+    onError: (err) => {
+      setError(translateErrorMessage(err));
+      void query.refetch();
+    },
+  });
+  const items = [...(query.data ?? [])].sort(
+    (a, b) => Number(b.status === 'PENDING') - Number(a.status === 'PENDING'),
+  );
+  return {
+    query,
+    items,
+    pending: items.filter((o) => o.status === 'PENDING').length,
+    error,
+    accept: (id: string) => {
+      setError(null);
+      accept.mutate(id);
+    },
+    reject: (id: string, note: string) => {
+      setError(null);
+      reject.mutate({ id, note });
+    },
+    busyId: accept.isPending ? accept.variables : reject.isPending ? reject.variables?.id : null,
+  };
+}
+
+/** Offers a barbershop sent, with "Retirar" while pending. */
+export function useShopOffers(shopId: string) {
+  const queryClient = useQueryClient();
+  const query = useQuery({
+    queryKey: jobKeys.shopOffers(shopId),
+    queryFn: () => fetchShopOffers(shopId),
+    staleTime: 0,
+  });
+  const [error, setError] = useState<string | null>(null);
+  const withdraw = useMutation({
+    mutationFn: (offerId: string) => withdrawOffer(shopId, offerId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: jobKeys.shopOffers(shopId) });
+      showToast(i18n.t('jobs:offers.withdrawnToast'));
+    },
+    onError: (err) => setError(translateErrorMessage(err)),
+  });
+  return {
+    query,
+    error,
+    withdraw: (id: string) => {
+      setError(null);
+      withdraw.mutate(id);
+    },
+    withdrawingId: withdraw.isPending ? withdraw.variables : null,
+  };
+}
+
+/** Days an offer stays open (the contract allows 1 to 30; 7 by default). */
+export const OFFER_DAYS = [3, 7, 15, 30] as const;
+
+/** Send an offer to a barber (from their profile or the talent list). */
+export function useCreateOffer(shopId: string, { onSent }: { onSent: () => void }) {
+  const queryClient = useQueryClient();
+  const [error, setError] = useState<string | null>(null);
+  const send = useMutation({
+    mutationFn: (body: CreateOfferBody) => createOffer(shopId, body),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: jobKeys.shopOffers(shopId) });
+      showToast(i18n.t('jobs:offers.sentToast'));
+      onSent();
+    },
+    onError: (err) => setError(translateErrorMessage(err)),
+  });
+  return {
+    error,
+    isSending: send.isPending,
+    send: (body: CreateOfferBody) => {
+      setError(null);
+      send.mutate(body);
+    },
+  };
 }

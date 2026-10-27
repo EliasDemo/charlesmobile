@@ -19,6 +19,7 @@ export default function ShopHomeRoute() {
           onOpenJobs={() => router.push('/jobs')}
           onOpenJob={(id) => router.push({ pathname: '/jobs/[id]', params: { id } })}
           onApplications={() => router.push('/jobs/applications')}
+          onOffers={() => router.push('/jobs/offers')}
           onProfile={() => router.push(profile ? '/career' : '/career/edit')}
         />
       )}

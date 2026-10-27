@@ -181,6 +181,8 @@ export type NotificationTarget =
   | { kind: 'conversation'; id: string }
   | { kind: 'myApplications' }
   | { kind: 'shopJobs' }
+  | { kind: 'myOffers' }
+  | { kind: 'shopOffers' }
   | { kind: 'myPlan' }
   | { kind: 'myMemberships' }
   | { kind: 'inbox' };
@@ -194,6 +196,9 @@ export function notificationTarget(resource: NotificationResource, type?: string
   // Plans and memberships are recognized by the notice type (Fases 15 y 16).
   if (type === 'PLAN_UPDATE') return { kind: 'myPlan' };
   if (type === 'MEMBERSHIP_UPDATE') return { kind: 'myMemberships' };
+  // Direct job offers (resource job_offer): received by the barber, answered for the barbershop.
+  if (type === 'JOB_OFFER_RECEIVED') return { kind: 'myOffers' };
+  if (type === 'JOB_OFFER_ANSWERED') return { kind: 'shopOffers' };
   if (resource.type === 'booking' && resource.id) return { kind: 'booking', id: resource.id };
   if (resource.type === 'review' && resource.id) return { kind: 'shopReviews', shopId: resource.id };
   if (resource.type === 'barbershop' || resource.type === 'review') return { kind: 'shop' };

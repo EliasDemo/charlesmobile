@@ -27,6 +27,11 @@ export default function NotificationsRoute() {
           router.push('/my-plan');
         }
         if (target.kind === 'myMemberships') router.push('/memberships');
+        if (target.kind === 'myOffers') router.push('/jobs/offers');
+        if (target.kind === 'shopOffers') {
+          useAppMode.getState().setMode('shop');
+          router.push('/my-offers');
+        }
       }}
     />
   );

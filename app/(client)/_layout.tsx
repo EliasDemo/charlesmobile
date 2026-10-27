@@ -36,6 +36,7 @@ export default function ClientLayout() {
       <Stack.Screen name="career/add-cut" options={{ title: t('portfolio.add', { ns: 'career' }) }} />
       <Stack.Screen name="memberships" options={{ title: t('title', { ns: 'memberships' }) }} />
       <Stack.Screen name="jobs/applications" options={{ title: t('myApplications', { ns: 'jobs' }) }} />
+      <Stack.Screen name="jobs/offers" options={{ title: t('offers.mine', { ns: 'jobs' }) }} />
       <Stack.Screen name="bookings/[id]" options={{ title: t('nav.booking') }} />
     </Stack>
   );

@@ -8,6 +8,7 @@ export default function JobsRoute() {
     <JobsScreen
       onOpen={(id) => router.push({ pathname: '/jobs/[id]', params: { id } })}
       onApplications={authenticated ? () => router.push('/jobs/applications') : undefined}
+      onOffers={authenticated ? () => router.push('/jobs/offers') : undefined}
     />
   );
 }

@@ -7,6 +7,7 @@ export default function ShopJobsRoute() {
     <ShopJobsScreen
       shopId={shopId}
       onNew={() => router.push({ pathname: '/shop/[shopId]/jobs/new', params: { shopId } })}
+      onSentOffers={() => router.push({ pathname: '/shop/[shopId]/offers', params: { shopId } })}
       onOpen={(jobId) => router.push({ pathname: '/shop/[shopId]/jobs/[jobId]', params: { shopId, jobId } })}
     />
   );

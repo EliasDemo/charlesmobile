@@ -58,6 +58,8 @@ export default function StaffLayout() {
       <Stack.Screen name="shop/[shopId]/invoicing" options={{ title: t('home.sections.invoicing') }} />
       <Stack.Screen name="my-plan" options={{ title: t('home.sections.plan') }} />
       <Stack.Screen name="shop/[shopId]/talent" options={{ title: t('home.sections.talent') }} />
+      <Stack.Screen name="shop/[shopId]/offers/index" options={{ title: t('offers.sent', { ns: 'jobs' }) }} />
+      <Stack.Screen name="shop/[shopId]/offers/new" options={{ title: t('offers.offer', { ns: 'jobs' }) }} />
       <Stack.Screen name="shop/[shopId]/videos" options={{ title: t('home.sections.videos') }} />
       <Stack.Screen
         name="shop/[shopId]/promotions/[promotionId]"

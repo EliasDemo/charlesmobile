@@ -68,7 +68,10 @@ const placeOf = (job: JobPosting) =>
  * "S/ 1,200 – 1,800 al mes · Comisión · Negociable", from the fields the backend gives. The app
  * shows them as they come (never computes pay).
  */
-export function jobPayText(job: JobPosting, t: TFunction<'jobs'>): string | null {
+export function jobPayText(
+  job: Pick<JobPosting, 'payMin' | 'payMax' | 'payPeriod' | 'payType'> & { negotiable?: boolean },
+  t: TFunction<'jobs'>,
+): string | null {
   const money = (amount: number) => formatMoney({ amount, currency: PAY_CURRENCY });
   const range =
     job.payMin !== null && job.payMax !== null && job.payMin !== job.payMax

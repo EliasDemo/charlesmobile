@@ -1,4 +1,4 @@
-export { useHasApplied, useInviteBarber } from './hooks/useJobs';
+export { useHasApplied, useInviteBarber, useMyOffers } from './hooks/useJobs';
 export { JobBoardCard, type JobBoardCardProps } from './components/JobBoardCard';
 export {
   ApplicantsScreen,
@@ -11,3 +11,4 @@ export {
   StaffBarberActions,
 } from './screens/JobsScreens';
 export { JobWizardScreen } from './screens/JobWizardScreen';
+export { MyOffersScreen, OfferJobScreen, ShopOffersScreen } from './screens/OffersScreens';

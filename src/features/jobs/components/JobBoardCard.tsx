@@ -3,7 +3,7 @@ import type { Location } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import { ActionTile, Button, Card, Icon, ListRow, Skeleton, Text } from '@/shared/ui';
-import { useJobList } from '../hooks/useJobs';
+import { useJobList, useMyOffers } from '../hooks/useJobs';
 import { JobCard } from './JobParts';
 
 /** Offers shown on the card; the rest are in "Ver todas las ofertas". */
@@ -22,6 +22,7 @@ export interface JobBoardCardProps {
   onOpenJob: (id: string) => void;
   onApplications: () => void;
   onProfile: () => void;
+  onOffers: () => void;
 }
 
 /** "Bolsa laboral" in barbershop mode, so a barber can look for work and apply from there. */
@@ -47,10 +48,12 @@ function PrimaryBoard({
   onOpenJob,
   onApplications,
   onProfile,
+  onOffers,
 }: JobBoardCardProps) {
   const { t } = useTranslation('jobs');
   const theme = useTheme();
   const nearby = useJobList({ ubigeo: place?.ubigeo });
+  const offers = useMyOffers();
   const items = (nearby.items ?? []).slice(0, PREVIEW);
   return (
     <Card style={styles.card}>
@@ -74,6 +77,11 @@ function PrimaryBoard({
       ))}
       <Button label={t('board.all')} icon="search" onPress={onOpenJobs} fullWidth />
       <View>
+        <ListRow
+          icon="mail-unread"
+          title={offers.pending > 0 ? t('offers.mineCount', { count: offers.pending }) : t('offers.mine')}
+          onPress={onOffers}
+        />
         <ListRow icon="document-text" title={t('myApplications')} onPress={onApplications} />
         <ListRow
           icon="person-circle"

@@ -27,6 +27,12 @@ export default function BarberProfileRoute() {
             onWrite={() =>
               router.push({ pathname: '/messages/new', params: { shopId: currentId, barberProfileId: id } })
             }
+            onOffer={() =>
+              router.push({
+                pathname: '/shop/[shopId]/offers/new',
+                params: { shopId: currentId, barberProfileId: id },
+              })
+            }
           />
         ) : undefined
       }

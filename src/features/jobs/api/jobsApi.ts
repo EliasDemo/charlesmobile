@@ -24,6 +24,8 @@ export const jobKeys = {
   detail: (id: string) => ['jobs', 'detail', id] as const,
   mine: ['jobs', 'my-applications'] as const,
   shop: (shopId: string) => ['jobs', 'shop', shopId] as const,
+  myOffers: ['jobs', 'my-offers'] as const,
+  shopOffers: (shopId: string) => ['jobs', 'shop', shopId, 'offers'] as const,
   applicants: (shopId: string, jobId: string) => ['jobs', 'shop', shopId, 'applicants', jobId] as const,
 };
 
@@ -106,5 +108,32 @@ export const inviteBarberProfile = (barbershopId: string, barberProfileId: strin
     api.POST('/api/v1/barbershops/{barbershopId}/barber-invitations', {
       params: { path: { barbershopId } },
       body: { barberProfileId, ...(message?.trim() ? { message: message.trim() } : {}) },
+    }),
+  );
+
+// Direct offers: a barbershop offers work to a barber, who accepts (joins the team) or rejects.
+export type JobOffer = S['JobOfferDto'];
+export type CreateOfferBody = S['CreateJobOfferDto'];
+
+export const fetchMyOffers = (): Promise<JobOffer[]> => unwrap(api.GET('/api/v1/me/job-offers'));
+export const acceptOffer = (offerId: string): Promise<JobOffer> =>
+  unwrap(api.POST('/api/v1/me/job-offers/{offerId}/accept', { params: { path: { offerId } }, body: {} }));
+export const rejectOffer = (offerId: string, note: string): Promise<JobOffer> =>
+  unwrap(
+    api.POST('/api/v1/me/job-offers/{offerId}/reject', {
+      params: { path: { offerId } },
+      body: note.trim() ? { note: note.trim() } : {},
+    }),
+  );
+export const fetchShopOffers = (barbershopId: string): Promise<JobOffer[]> =>
+  unwrap(api.GET('/api/v1/barbershops/{barbershopId}/job-offers', { params: { path: { barbershopId } } }));
+export const createOffer = (barbershopId: string, body: CreateOfferBody): Promise<JobOffer> =>
+  unwrap(
+    api.POST('/api/v1/barbershops/{barbershopId}/job-offers', { params: { path: { barbershopId } }, body }),
+  );
+export const withdrawOffer = (barbershopId: string, offerId: string): Promise<JobOffer> =>
+  unwrap(
+    api.POST('/api/v1/barbershops/{barbershopId}/job-offers/{offerId}/withdraw', {
+      params: { path: { barbershopId, offerId } },
     }),
   );

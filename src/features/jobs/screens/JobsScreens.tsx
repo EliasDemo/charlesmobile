@@ -56,9 +56,11 @@ const zone = env.defaultTimeZone;
 export function JobsScreen({
   onOpen,
   onApplications,
+  onOffers,
 }: {
   onOpen: (id: string) => void;
   onApplications?: () => void;
+  onOffers?: () => void;
 }) {
   const { t } = useTranslation('jobs');
   const styleList = useStyles();
@@ -106,6 +108,7 @@ export function JobsScreen({
             {onApplications ? (
               <ListRow icon="document-text" title={t('myApplications')} onPress={onApplications} />
             ) : null}
+            {onOffers ? <ListRow icon="mail-unread" title={t('offers.mine')} onPress={onOffers} /> : null}
             <View style={styles.searchRow}>
               <View style={styles.flex}>
                 <DistrictPicker label={t('area')} value={place} onChange={setPlace} allowAll />
@@ -340,10 +343,12 @@ export function MyApplicationsScreen({ onOpenJob }: { onOpenJob: (postingId: str
 export function ShopJobsScreen({
   shopId,
   onNew,
+  onSentOffers,
   onOpen,
 }: {
   shopId: string;
   onNew: () => void;
+  onSentOffers?: () => void;
   onOpen: (jobId: string) => void;
 }) {
   const { t } = useTranslation('jobs');
@@ -351,6 +356,7 @@ export function ShopJobsScreen({
   return (
     <Screen>
       <Button label={t('shop.new')} icon="add-circle" onPress={onNew} />
+      {onSentOffers ? <ListRow icon="paper-plane" title={t('offers.sent')} onPress={onSentOffers} /> : null}
       <QueryView
         query={query}
         isEmpty={(items) => items.length === 0}
@@ -667,14 +673,18 @@ export function StaffBarberActions({
   shopId,
   profileId,
   onWrite,
+  onOffer,
 }: {
   shopId: string;
   profileId: string;
   onWrite: () => void;
+  /** "Ofrecer trabajo": a direct offer with pay and schedule. */
+  onOffer?: () => void;
 }) {
   const { t } = useTranslation('jobs');
   return (
     <View style={styles.section}>
+      {onOffer ? <Button label={t('offers.offer')} icon="briefcase" onPress={onOffer} /> : null}
       <Button label={t('invite.write')} icon="chatbubble-ellipses" variant="secondary" onPress={onWrite} />
       <InviteBarberButton shopId={shopId} profileId={profileId} />
     </View>

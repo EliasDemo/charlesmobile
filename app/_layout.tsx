@@ -77,7 +77,11 @@ function AppStack() {
       useAppMode.getState().setMode('shop');
       router.push('/my-plan');
     } else if (target.kind === 'myMemberships') router.push('/memberships');
-    else if (target.kind === 'shopJobs') {
+    else if (target.kind === 'myOffers') router.push('/jobs/offers');
+    else if (target.kind === 'shopOffers') {
+      useAppMode.getState().setMode('shop');
+      router.push('/my-offers');
+    } else if (target.kind === 'shopJobs') {
       useAppMode.getState().setMode('shop');
       router.navigate('/shop');
     } else router.push('/notifications');
