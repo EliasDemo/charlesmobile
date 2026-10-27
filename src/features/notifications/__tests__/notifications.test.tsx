@@ -87,6 +87,39 @@ describe('InboxScreen', () => {
     await waitFor(() => expect(api.calls.some((c) => c.path.endsWith('/read-all'))).toBe(true));
   });
 
+  it('groups notices by day and filters the unread ones', async () => {
+    const now = Date.now();
+    mockApi({
+      'GET /api/v1/me/notifications': {
+        body: {
+          items: [
+            notice({
+              id: 'n1',
+              title: 'Se liberó un turno',
+              type: 'WAITLIST_SLOT_FREED',
+              createdAt: new Date(now).toISOString(),
+            }),
+            notice({
+              id: 'n2',
+              title: 'Reserva confirmada antigua',
+              readAt: new Date(now).toISOString(),
+              createdAt: new Date(now - 10 * 86_400_000).toISOString(),
+            }),
+          ],
+          nextCursor: null,
+        },
+      },
+    });
+    await renderWithProviders(<InboxScreen onOpen={jest.fn()} />);
+    expect(await screen.findByText(texts.groups.today)).toBeTruthy();
+    expect(screen.getByText(texts.groups.older)).toBeTruthy();
+    expect(screen.getByText(texts.ago.now)).toBeTruthy();
+
+    await fireEvent.press(screen.getByText(texts.filters.unreadCount.replace('{{count}}', '1')));
+    expect(screen.getByText('Se liberó un turno')).toBeTruthy();
+    expect(screen.queryByText('Reserva confirmada antigua')).toBeNull();
+  });
+
   it('explains an empty inbox', async () => {
     mockApi({ 'GET /api/v1/me/notifications': { body: { items: [], nextCursor: null } } });
     await renderWithProviders(<InboxScreen onOpen={jest.fn()} />);

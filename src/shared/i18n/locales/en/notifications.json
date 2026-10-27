@@ -21,5 +21,24 @@
     "messages": "Messages",
     "payments": "Payments",
     "promotions": "Promotions"
+  },
+  "readAllShort": "Mark all read",
+  "emptyUnread": "You're all caught up: no unread notices",
+  "groups": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "week": "This week",
+    "older": "Earlier"
+  },
+  "filters": {
+    "all": "All",
+    "unread": "Unread",
+    "unreadCount": "Unread ({{count}})"
+  },
+  "ago": {
+    "now": "Now",
+    "minutes_one": "{{count}} min ago",
+    "minutes_other": "{{count}} min ago",
+    "yesterday": "Yesterday"
   }
 }

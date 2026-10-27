@@ -21,5 +21,24 @@
     "messages": "Mensajes",
     "payments": "Pagos",
     "promotions": "Promociones"
+  },
+  "readAllShort": "Marcar todo leído",
+  "emptyUnread": "Estás al día: no hay avisos sin leer",
+  "groups": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "week": "Esta semana",
+    "older": "Antes"
+  },
+  "filters": {
+    "all": "Todos",
+    "unread": "No leídos",
+    "unreadCount": "No leídos ({{count}})"
+  },
+  "ago": {
+    "now": "Ahora",
+    "minutes_one": "hace {{count}} min",
+    "minutes_other": "hace {{count}} min",
+    "yesterday": "Ayer"
   }
 }
