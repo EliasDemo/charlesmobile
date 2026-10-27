@@ -10,12 +10,17 @@
     "title": "Take a selfie",
     "tip1": "Facing the camera, without sunglasses or a cap.",
     "tip2": "In good light and with your hair off your forehead, if you can.",
-    "tip3": "Only your face in the photo.",
-    "take": "Take selfie",
+    "tip3": "Only your face in the photo, filling a good part of the screen.",
+    "take": "Take the first photo",
     "unavailable": "Face analysis will arrive with the next version of the app.",
     "denied": "We need the camera to analyze your face. Turn it on in your phone settings.",
     "noFace": "We couldn't see your face well. Try facing the camera, with more light.",
-    "cancelled": ""
+    "cancelled": "",
+    "takeNext": "Take photo {{n}} of {{total}}",
+    "progress": "{{done}} of {{total}} photos: we take several to measure accurately.",
+    "notFrontal": "Look straight at the camera, without turning or tilting your head.",
+    "tooFar": "Come a bit closer: your face should fill more of the photo.",
+    "manyFaces": "There's more than one face in the photo. Take it alone."
   },
   "prefs": {
     "title": "Anything else we should know?",
@@ -26,9 +31,21 @@
     "location": "We'll use your location only to show photos and barbers nearby. It isn't stored.",
     "see": "See my cuts"
   },
-  "hair": { "STRAIGHT": "Straight", "WAVY": "Wavy", "CURLY": "Curly", "COILY": "Coily" },
-  "vibe": { "CLASSIC": "Classic", "MODERN": "Modern" },
-  "maintenance": { "LOW": "Low maintenance", "MEDIUM": "Medium maintenance", "HIGH": "High maintenance" },
+  "hair": {
+    "STRAIGHT": "Straight",
+    "WAVY": "Wavy",
+    "CURLY": "Curly",
+    "COILY": "Coily"
+  },
+  "vibe": {
+    "CLASSIC": "Classic",
+    "MODERN": "Modern"
+  },
+  "maintenance": {
+    "LOW": "Low maintenance",
+    "MEDIUM": "Medium maintenance",
+    "HIGH": "High maintenance"
+  },
   "shapes": {
     "OVAL": "Oval",
     "ROUND": "Round",
@@ -39,7 +56,6 @@
   },
   "result": {
     "yourShape": "Your face looks",
-    "confidence": "Confidence: {{percent}} %",
     "alsoCould": "Your face could also be: {{shapes}}",
     "match": "{{percent}} % match",
     "notValidated": "suggestion under review",
@@ -51,6 +67,14 @@
     "rememberConsent": "I agree that Charles remembers my face shape to suggest cuts (I can delete it anytime).",
     "remember": "Remember my face shape",
     "remembered": "We saved your face shape",
-    "again": "Scan again"
+    "again": "Scan again",
+    "mixedTitle": "Your face mixes two shapes",
+    "between": "Between {{a}} and {{b}}",
+    "why": "Why",
+    "certainty": {
+      "HIGH": "Clear result",
+      "MEDIUM": "Likely result",
+      "LOW": "Your face has traits of both: the suggestions work for either"
+    }
   }
 }

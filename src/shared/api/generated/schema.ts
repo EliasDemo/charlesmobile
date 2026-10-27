@@ -8186,14 +8186,23 @@ export type components = {
             days: number;
             reason: string;
         };
+        /**
+         * @description LOW: cara mixta. Muestra la forma junto a sus alternativas, sin afirmarla.
+         * @enum {string}
+         */
+        FaceCertainty: "HIGH" | "MEDIUM" | "LOW";
         FaceMeasurementsDto: {
-            /** @description Ancho entre pómulos (lo más ancho de la cara media). */
+            /** @description Mayor ancho al 35, 40 o 45 % de la altura (pómulos). */
             cheekboneWidth: number;
-            /** @description Largo: de la frente (línea del cabello) al mentón. */
+            /** @description Ancho al 90 % de la altura (mentón). Opcional, pero mejora la precisión. */
+            chinWidth?: number;
+            /** @description Largo: del borde superior del contorno (centro de la frente) al mentón. */
             faceLength: number;
-            /** @description Ancho de la frente. */
+            /** @description Ancho del contorno al 15 % de la altura (frente). */
             foreheadWidth: number;
-            /** @description Ancho de la mandíbula a la altura de sus ángulos. */
+            /** @description Si viene y la cara no está de frente: 400 (`headPose` / `frontalFace`). */
+            headPose?: components["schemas"]["HeadPoseDto"];
+            /** @description Ancho al 80 % de la altura (ángulos de la mandíbula). */
             jawWidth: number;
         };
         /** @enum {string} */
@@ -8205,9 +8214,15 @@ export type components = {
         FaceShapeResultDto: {
             /** @description Formas también posibles (caras mixtas). Muéstralas como "también podría ser". */
             alternatives: components["schemas"]["FaceShapeAlternativeDto"][];
+            /** @description LOW: cara mixta. Muestra la forma junto a sus alternativas, sin afirmarla. */
+            certainty: components["schemas"]["FaceCertainty"];
             /** @description Probabilidad de la forma elegida (0 a 1). */
             confidence: number;
+            /** @description Versión del clasificador. */
+            modelVersion: number;
             shape: components["schemas"]["FaceShape"];
+            /** @description Rasgos que explican el resultado ("Tu mandíbula se afina..."). Vacío si se envió la forma. */
+            traits: components["schemas"]["FaceTraitDto"][];
         };
         FaceShapeRuleDto: {
             faceShape: components["schemas"]["FaceShape"];
@@ -8223,6 +8238,13 @@ export type components = {
             updatedAt: string;
             /** @description false: criterio general, aún no validado por barberos. */
             validated: boolean;
+        };
+        /** @enum {string} */
+        FaceTrait: "LONG" | "SHORT" | "WIDE_FOREHEAD" | "NARROW_FOREHEAD" | "WIDE_JAW" | "NARROW_JAW" | "POINTED_CHIN" | "BROAD_CHIN" | "BALANCED";
+        FaceTraitDto: {
+            key: components["schemas"]["FaceTrait"];
+            /** @example Tu mandíbula se afina hacia el mentón. */
+            text: string;
         };
         FavoriteDto: {
             address: string;
@@ -8377,9 +8399,11 @@ export type components = {
         GalleryUploadDto: {
             caption?: string | null;
             cheekboneWidth?: number;
+            /** @description Opcional: ancho del mentón (mejora la clasificación). */
+            chinWidth?: number;
             /** @description Obligatorio y true: quien sube declara que la persona fotografiada dio su consentimiento. */
             consent: boolean;
-            /** @description Forma de cara, etapa 2: medidas de la cara de la foto tomadas EN EL TELÉFONO (largo, ancho de frente, pómulos y mandíbula, en cualquier unidad). Las cuatro o ninguna. Si no se envía faceShape, se clasifica con ellas (etiqueta sin confirmar). Nunca se envían puntos de la cara. */
+            /** @description Forma de cara, etapa 2: medidas de la cara de la foto tomadas EN EL TELÉFONO (largo, ancho de frente, pómulos y mandíbula, en cualquier unidad). Las cuatro o ninguna; `chinWidth` es opcional. Si no se envía faceShape, se clasifica con ellas (etiqueta sin confirmar). Nunca se envían puntos de la cara. */
             faceLength?: number;
             /**
              * @description Forma de cara de la persona (la marca el barbero). Con estilos, la foto queda como etiqueta confirmada y sirve para recomendar cortes a caras parecidas.
@@ -8414,6 +8438,14 @@ export type components = {
         };
         /** @enum {string} */
         HairType: "STRAIGHT" | "WAVY" | "CURLY" | "COILY";
+        HeadPoseDto: {
+            /** @description Cabeza arriba o abajo (Euler X). Máximo ±20°. */
+            pitch: number;
+            /** @description Inclinación (Euler Z). La app endereza los puntos antes de medir. */
+            roll?: number;
+            /** @description Giro a los lados (Euler Y). Máximo ±15°. */
+            yaw: number;
+        };
         HealthCheckDto: {
             detail: string;
             /** @description Tiempo de respuesta (ms). */

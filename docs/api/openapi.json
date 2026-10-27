@@ -27249,7 +27249,7 @@
           },
           "faceLength": {
             "type": "number",
-            "description": "Forma de cara, etapa 2: medidas de la cara de la foto tomadas EN EL TELÉFONO (largo, ancho de frente, pómulos y mandíbula, en cualquier unidad). Las cuatro o ninguna. Si no se envía faceShape, se clasifica con ellas (etiqueta sin confirmar). Nunca se envían puntos de la cara."
+            "description": "Forma de cara, etapa 2: medidas de la cara de la foto tomadas EN EL TELÉFONO (largo, ancho de frente, pómulos y mandíbula, en cualquier unidad). Las cuatro o ninguna; `chinWidth` es opcional. Si no se envía faceShape, se clasifica con ellas (etiqueta sin confirmar). Nunca se envían puntos de la cara."
           },
           "foreheadWidth": {
             "type": "number"
@@ -27259,6 +27259,10 @@
           },
           "jawWidth": {
             "type": "number"
+          },
+          "chinWidth": {
+            "type": "number",
+            "description": "Opcional: ancho del mentón (mejora la clasificación)."
           }
         },
         "required": ["file", "consent"]
@@ -35700,24 +35704,54 @@
           }
         }
       },
+      "HeadPoseDto": {
+        "type": "object",
+        "properties": {
+          "yaw": {
+            "type": "number",
+            "description": "Giro a los lados (Euler Y). Máximo ±15°."
+          },
+          "pitch": {
+            "type": "number",
+            "description": "Cabeza arriba o abajo (Euler X). Máximo ±20°."
+          },
+          "roll": {
+            "type": "number",
+            "description": "Inclinación (Euler Z). La app endereza los puntos antes de medir."
+          }
+        },
+        "required": ["yaw", "pitch"]
+      },
       "FaceMeasurementsDto": {
         "type": "object",
         "properties": {
           "faceLength": {
             "type": "number",
-            "description": "Largo: de la frente (línea del cabello) al mentón."
+            "description": "Largo: del borde superior del contorno (centro de la frente) al mentón."
           },
           "foreheadWidth": {
             "type": "number",
-            "description": "Ancho de la frente."
+            "description": "Ancho del contorno al 15 % de la altura (frente)."
           },
           "cheekboneWidth": {
             "type": "number",
-            "description": "Ancho entre pómulos (lo más ancho de la cara media)."
+            "description": "Mayor ancho al 35, 40 o 45 % de la altura (pómulos)."
           },
           "jawWidth": {
             "type": "number",
-            "description": "Ancho de la mandíbula a la altura de sus ángulos."
+            "description": "Ancho al 80 % de la altura (ángulos de la mandíbula)."
+          },
+          "chinWidth": {
+            "type": "number",
+            "description": "Ancho al 90 % de la altura (mentón). Opcional, pero mejora la precisión."
+          },
+          "headPose": {
+            "description": "Si viene y la cara no está de frente: 400 (`headPose` / `frontalFace`).",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HeadPoseDto"
+              }
+            ]
           }
         },
         "required": ["faceLength", "foreheadWidth", "cheekboneWidth", "jawWidth"]
@@ -35725,6 +35759,11 @@
       "FaceShape": {
         "type": "string",
         "enum": ["OVAL", "ROUND", "SQUARE", "OBLONG", "HEART", "DIAMOND"]
+      },
+      "FaceCertainty": {
+        "type": "string",
+        "enum": ["HIGH", "MEDIUM", "LOW"],
+        "description": "LOW: cara mixta. Muestra la forma junto a sus alternativas, sin afirmarla."
       },
       "FaceShapeAlternativeDto": {
         "type": "object",
@@ -35742,6 +35781,37 @@
         },
         "required": ["shape", "probability"]
       },
+      "FaceTrait": {
+        "type": "string",
+        "enum": [
+          "LONG",
+          "SHORT",
+          "WIDE_FOREHEAD",
+          "NARROW_FOREHEAD",
+          "WIDE_JAW",
+          "NARROW_JAW",
+          "POINTED_CHIN",
+          "BROAD_CHIN",
+          "BALANCED"
+        ]
+      },
+      "FaceTraitDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FaceTrait"
+              }
+            ]
+          },
+          "text": {
+            "type": "string",
+            "example": "Tu mandíbula se afina hacia el mentón."
+          }
+        },
+        "required": ["key", "text"]
+      },
       "FaceShapeResultDto": {
         "type": "object",
         "properties": {
@@ -35756,15 +35826,34 @@
             "type": "number",
             "description": "Probabilidad de la forma elegida (0 a 1)."
           },
+          "certainty": {
+            "description": "LOW: cara mixta. Muestra la forma junto a sus alternativas, sin afirmarla.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FaceCertainty"
+              }
+            ]
+          },
           "alternatives": {
             "description": "Formas también posibles (caras mixtas). Muéstralas como \"también podría ser\".",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/FaceShapeAlternativeDto"
             }
+          },
+          "traits": {
+            "description": "Rasgos que explican el resultado (\"Tu mandíbula se afina...\"). Vacío si se envió la forma.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FaceTraitDto"
+            }
+          },
+          "modelVersion": {
+            "type": "number",
+            "description": "Versión del clasificador."
           }
         },
-        "required": ["shape", "confidence", "alternatives"]
+        "required": ["shape", "confidence", "certainty", "alternatives", "traits", "modelVersion"]
       },
       "StyleVibe": {
         "type": "string",

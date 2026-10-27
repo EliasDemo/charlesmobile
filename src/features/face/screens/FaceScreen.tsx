@@ -60,8 +60,32 @@ export function FaceScreen({ onBook, onOpenBarber }: FaceScreenProps) {
             <Text key={k} color="textSecondary">{`• ${t(`scan.${k}`)}`}</Text>
           ))}
           {!f.available ? <Notice tone="info" message={t('scan.unavailable')} /> : null}
+          <View
+            style={styles.shots}
+            accessibilityLabel={t('scan.progress', { done: f.shotsTaken, total: f.shots })}
+          >
+            {Array.from({ length: f.shots }, (_, i) => (
+              <View
+                key={i}
+                style={[
+                  styles.shot,
+                  {
+                    borderRadius: theme.radius.pill,
+                    backgroundColor: i < f.shotsTaken ? theme.colors.success : theme.colors.border,
+                  },
+                ]}
+              />
+            ))}
+          </View>
+          <Text variant="caption" color="textSecondary" align="center">
+            {t('scan.progress', { done: f.shotsTaken, total: f.shots })}
+          </Text>
           <Button
-            label={t('scan.take')}
+            label={
+              f.shotsTaken === 0
+                ? t('scan.take')
+                : t('scan.takeNext', { n: f.shotsTaken + 1, total: f.shots })
+            }
             icon="camera"
             onPress={f.scan}
             loading={f.isScanning}
@@ -177,16 +201,42 @@ function Result({
   return (
     <View style={styles.content}>
       <View style={[styles.hero, surface, { backgroundColor: theme.colors.primarySoft }]}>
-        <Text variant="caption" color="primary">
-          {t('result.yourShape')}
-        </Text>
-        <Text variant="hero" color="primary">
-          {t(`shapes.${shape.shape}`)}
-        </Text>
-        <Text color="textSecondary">
-          {t('result.confidence', { percent: Math.round(shape.confidence * 100) })}
-        </Text>
-        {shape.alternatives.length > 0 ? (
+        {shape.certainty === 'LOW' && shape.alternatives[0] ? (
+          // A mixed face: never state one shape (FORMA-DE-CARA.md).
+          <>
+            <Text variant="caption" color="primary">
+              {t('result.mixedTitle')}
+            </Text>
+            <Text variant="title" color="primary">
+              {t('result.between', {
+                a: t(`shapes.${shape.shape}`),
+                b: t(`shapes.${shape.alternatives[0].shape}`),
+              })}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text variant="caption" color="primary">
+              {t('result.yourShape')}
+            </Text>
+            <Text variant="hero" color="primary">
+              {t(`shapes.${shape.shape}`)}
+            </Text>
+          </>
+        )}
+        <Text color="textSecondary">{t(`result.certainty.${shape.certainty}`)}</Text>
+        {shape.traits.length > 0 ? (
+          <View style={styles.traits}>
+            <Text variant="label">{t('result.why')}</Text>
+            {shape.traits.map((trait) => (
+              <View key={trait.key} style={styles.trait}>
+                <Icon name="checkmark-circle" size={sizes.icon - spacing.xs} color={theme.colors.primary} />
+                <Text style={styles.flexText}>{trait.text}</Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
+        {shape.certainty !== 'LOW' && shape.alternatives.length > 0 ? (
           <Text variant="caption" color="textSecondary">
             {t('result.alsoCould', {
               shapes: shape.alternatives.map((a) => t(`shapes.${a.shape}`)).join(', '),
@@ -326,6 +376,11 @@ function HaircutCard({
 }
 
 const styles = StyleSheet.create({
+  shots: { flexDirection: 'row', justifyContent: 'center', gap: spacing.xs },
+  shot: { width: spacing.xl, height: spacing.xs },
+  traits: { gap: spacing.xs, marginTop: spacing.xs },
+  trait: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.xs },
+  flexText: { flex: 1 },
   content: { gap: spacing.md },
   center: { alignItems: 'center' },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },

@@ -1,4 +1,4 @@
-# Recomendación por forma de cara en la app móvil (Etapa 1)
+# Recomendación por forma de cara en la app móvil
 
 Para quien construye la app. El cliente escanea su cara **en el teléfono**, recibe los cortes que mejor le quedan con **fotos reales de caras parecidas cerca de él** y los **barberos que mejor dominan cada corte**. Sin IA en el servidor y **sin subir ni guardar la foto del cliente**.
 
@@ -11,26 +11,59 @@ Para quien construye la app. El cliente escanea su cara **en el teléfono**, rec
 - **"Recordar mi forma de cara"** es opcional y aparte: solo con una casilla de consentimiento explícita (ver §4). Debe poder borrarse.
 - Presenta todo como **sugerencia**: muestra siempre `disclaimer` y, si hay `alternatives`, "Tu cara también podría ser…".
 
-## 2. Escaneo en el teléfono
+## 2. Escaneo en el teléfono (protocolo v2)
 
-1. Pantalla de cámara frontal con **silueta guía**: de frente, sin lentes oscuros ni gorra, buena luz, cabello fuera de la frente si es posible.
-2. Con el detector de rostro aprobado, toma los puntos del **contorno de la cara** y calcula:
-   - `faceLength`: del borde superior de la frente (o la línea del cabello) al mentón;
-   - `foreheadWidth`: ancho de la frente (a la altura de las sienes);
-   - `cheekboneWidth`: ancho máximo entre pómulos;
-   - `jawWidth`: ancho de la mandíbula a la altura de sus ángulos.
-     Cualquier unidad (píxeles sirve): solo cuentan las proporciones.
-3. Promedia 5–10 cuadros estables antes de enviar (reduce el ruido).
+El clasificador está **calibrado con rostros reales medidos con este protocolo exacto**. Si la app mide distinto, el resultado se desvía: síguelo al pie de la letra.
+
+1. **Cámara frontal con silueta guía**: de frente, sin lentes oscuros ni gorra, buena luz, cabello fuera de la frente si es posible.
+2. **Calidad antes de medir** (con los datos del detector, en cada cuadro):
+   - `headEulerAngleY` (giro) entre −15° y 15°, y `headEulerAngleX` (arriba/abajo) entre −20° y 20°. Si no, muestra "Mira de frente a la cámara".
+   - Un solo rostro, y que ocupe al menos el 35 % del ancho de la imagen ("Acércate un poco").
+3. **Endereza** el contorno de la cara (36 puntos): rota todos los puntos alrededor del centro de los ojos para que la línea entre los ojos quede horizontal (corrige `headEulerAngleZ`).
+4. **Mide sobre el contorno enderezado** (es lo que ya hace `measureFace`, más el mentón). Con `top` y `bottom` = menor y mayor `y` del contorno, `L = bottom − top`, y "ancho a la altura h" = distancia en `x` entre el punto del contorno más cercano a `top + L·h` a cada lado del centro (promedio de las `x`):
+   - `faceLength` = `L`;
+   - `foreheadWidth` = ancho a 0,15;
+   - `cheekboneWidth` = el mayor ancho entre 0,35, 0,40 y 0,45;
+   - `jawWidth` = ancho a 0,80;
+   - `chinWidth` = ancho a 0,90 (opcional pero recomendado: separa redonda de cuadrada y corazón de diamante).
+5. **Promedia 5–10 cuadros válidos** (mediana de cada medida) antes de enviar.
+6. Envía también `headPose` `{ yaw, pitch, roll }` (promedio de los cuadros). Si la cara no estaba de frente, el servidor responde 400 `headPose` / `frontalFace`: pide repetir.
+
+Cualquier unidad sirve (píxeles): solo cuentan las proporciones. La foto y los puntos nunca salen del teléfono.
 
 ## 3. Endpoints
 
 ### Clasificar (opcional): `POST /face-shape/classify`
 
 ```json
-{ "faceLength": 140, "foreheadWidth": 92, "cheekboneWidth": 100, "jawWidth": 80 }
+{
+  "faceLength": 118,
+  "foreheadWidth": 95,
+  "cheekboneWidth": 100,
+  "jawWidth": 72,
+  "chinWidth": 50,
+  "headPose": { "yaw": 3.1, "pitch": -4.0, "roll": 1.2 }
+}
 ```
 
-→ `{ "shape": "OVAL", "confidence": 0.82, "alternatives": [{ "shape": "ROUND", "probability": 0.15 }] }`. Medidas imposibles: 400 `VALIDATION_ERROR` (`measurements` / `plausibleFace`): pide repetir el escaneo.
+→
+
+```json
+{
+  "shape": "HEART",
+  "confidence": 0.71,
+  "certainty": "HIGH",
+  "alternatives": [{ "shape": "OVAL", "probability": 0.18 }],
+  "traits": [
+    { "key": "POINTED_CHIN", "text": "Tu mentón termina en punta." },
+    { "key": "NARROW_JAW", "text": "Tu mandíbula se afina hacia el mentón." }
+  ],
+  "modelVersion": 2
+}
+```
+
+- `certainty`: `HIGH` (≥ 0,6), `MEDIUM` (≥ 0,4) o `LOW` (cara mixta). Con `LOW` no afirmes la forma: muestra "Tu cara está entre ovalada y redonda" con la alternativa principal.
+- `traits`: muestra los rasgos como explicación ("Por qué"). Si se envió `faceShape` en vez de medidas, llega vacío. Medidas imposibles: 400 `VALIDATION_ERROR` (`measurements` / `plausibleFace`); cabeza girada: 400 (`headPose` / `frontalFace`). En ambos casos, pide repetir el escaneo.
 
 Formas: `OVAL` (ovalada), `ROUND` (redonda), `SQUARE` (cuadrada), `OBLONG` (alargada), `HEART` (corazón), `DIAMOND` (diamante).
 

@@ -10,12 +10,17 @@
     "title": "Tómate una selfie",
     "tip1": "De frente, sin lentes oscuros ni gorra.",
     "tip2": "Con buena luz y el cabello fuera de la frente, si puedes.",
-    "tip3": "Solo tu cara en la foto.",
-    "take": "Tomar selfie",
+    "tip3": "Solo tu cara en la foto, que ocupe buena parte de la pantalla.",
+    "take": "Tomar la primera foto",
     "unavailable": "El análisis de tu cara llegará con la próxima versión de la app.",
     "denied": "Necesitamos la cámara para analizar tu cara. Actívala en los ajustes del teléfono.",
     "noFace": "No pudimos ver bien tu cara. Intenta de frente, con más luz.",
-    "cancelled": ""
+    "cancelled": "",
+    "takeNext": "Tomar la foto {{n}} de {{total}}",
+    "progress": "{{done}} de {{total}} fotos: tomamos varias para medir con precisión.",
+    "notFrontal": "Mira de frente a la cámara, sin girar ni inclinar la cabeza.",
+    "tooFar": "Acércate un poco: tu cara debe ocupar más de la foto.",
+    "manyFaces": "Hay más de una cara en la foto. Tómala solo tú."
   },
   "prefs": {
     "title": "¿Algo más que debamos saber?",
@@ -26,8 +31,16 @@
     "location": "Usaremos tu ubicación solo para mostrarte fotos y barberos cerca. No se guarda.",
     "see": "Ver mis cortes"
   },
-  "hair": { "STRAIGHT": "Lacio", "WAVY": "Ondulado", "CURLY": "Rizado", "COILY": "Afro" },
-  "vibe": { "CLASSIC": "Clásico", "MODERN": "Moderno" },
+  "hair": {
+    "STRAIGHT": "Lacio",
+    "WAVY": "Ondulado",
+    "CURLY": "Rizado",
+    "COILY": "Afro"
+  },
+  "vibe": {
+    "CLASSIC": "Clásico",
+    "MODERN": "Moderno"
+  },
   "maintenance": {
     "LOW": "Poco mantenimiento",
     "MEDIUM": "Mantenimiento medio",
@@ -43,7 +56,6 @@
   },
   "result": {
     "yourShape": "Tu cara parece",
-    "confidence": "Confianza: {{percent}} %",
     "alsoCould": "Tu cara también podría ser: {{shapes}}",
     "match": "{{percent}} % compatible",
     "notValidated": "sugerencia en revisión",
@@ -55,6 +67,14 @@
     "rememberConsent": "Acepto que Charles recuerde mi forma de cara para sugerirme cortes (puedo borrarla cuando quiera).",
     "remember": "Recordar mi forma de cara",
     "remembered": "Guardamos tu forma de cara",
-    "again": "Volver a escanear"
+    "again": "Volver a escanear",
+    "mixedTitle": "Tu cara combina dos formas",
+    "between": "Entre {{a}} y {{b}}",
+    "why": "Por qué",
+    "certainty": {
+      "HIGH": "Resultado claro",
+      "MEDIUM": "Resultado probable",
+      "LOW": "Tu cara tiene rasgos de ambas: las sugerencias sirven para las dos"
+    }
   }
 }

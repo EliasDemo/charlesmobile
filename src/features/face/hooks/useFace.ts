@@ -1,8 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useSession } from '@/shared/api';
+import { isApiError, useSession } from '@/shared/api';
 import { i18n } from '@/shared/i18n';
 import {
+  FACE_SHOTS,
+  combineFaceFrames,
   faceScanAvailable,
   getCurrentCoordinates,
   requestLocationPermission,
@@ -33,6 +35,8 @@ export function useFaceRecommendation() {
   const authenticated = useSession((s) => s.status === 'authenticated');
   const [step, setStep] = useState<FaceStep>('consent');
   const [measurements, setMeasurements] = useState<FaceMeasurements | null>(null);
+  // Protocol v2: several valid photos, combined with the median of each measurement.
+  const [frames, setFrames] = useState<FaceMeasurements[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [hairType, setHairType] = useState<HairType | undefined>(undefined);
   const [vibe, setVibe] = useState<Vibe | undefined>(undefined);
@@ -42,8 +46,14 @@ export function useFaceRecommendation() {
     mutationFn: scanFace,
     onSuccess: (result) => {
       if (result.status === 'measured') {
-        setMeasurements(result.measurements);
+        const next = [...frames, result.measurements];
         setMessage(null);
+        if (next.length < FACE_SHOTS) {
+          setFrames(next);
+          return;
+        }
+        setFrames([]);
+        setMeasurements(combineFaceFrames(next));
         setStep('preferences');
       } else if (result.status !== 'cancelled') setMessage(i18n.t(`face:scan.${result.status}`));
     },
@@ -67,7 +77,17 @@ export function useFaceRecommendation() {
       });
     },
     onSuccess: () => setStep('result'),
-    onError: (err) => setMessage(translateErrorMessage(err)),
+    onError: (err) => {
+      // The head was turned (400 headPose / frontalFace): take the photos again.
+      if (isApiError(err) && err.status === 400 && JSON.stringify(err.details ?? '').includes('headPose')) {
+        setMeasurements(null);
+        setFrames([]);
+        setStep('scan');
+        setMessage(i18n.t('face:scan.notFrontal'));
+        return;
+      }
+      setMessage(translateErrorMessage(err));
+    },
   });
 
   const remember = useMutation({
@@ -82,6 +102,9 @@ export function useFaceRecommendation() {
     accept: () => setStep('scan'),
     scan: () => scan.mutate(),
     isScanning: scan.isPending,
+    /** Valid photos so far, of `shots`. */
+    shotsTaken: frames.length,
+    shots: FACE_SHOTS,
     hairType,
     setHairType,
     vibe,
@@ -93,6 +116,7 @@ export function useFaceRecommendation() {
     result: recommend.data ?? null,
     restart: () => {
       setMeasurements(null);
+      setFrames([]);
       setStep('scan');
     },
     message,

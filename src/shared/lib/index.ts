@@ -67,12 +67,16 @@ export {
 } from './video';
 export {
   faceScanAvailable,
+  FACE_SHOTS,
+  combineFaceFrames,
+  measureDetected,
   measureFace,
   measurePhoto,
   measurementFields,
   scanFace,
   type FaceMeasurements,
   type FaceScanResult,
+  type HeadPose,
 } from './face';
 export { loadAppSettings, useAppSettings, type AppSettings } from './appSettings';
 export { playSound, soundsAvailable, type SoundKind } from './sound';
