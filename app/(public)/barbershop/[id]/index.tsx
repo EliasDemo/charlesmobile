@@ -1,5 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { BarbershopScreen } from '@/features/barbershop';
+import { FollowButton } from '@/features/community';
 import { MembershipPlansSection } from '@/features/memberships';
 import { VerifiedBadge } from '@/features/plans';
 import { ActivePromotions } from '@/features/promotions';
@@ -31,6 +32,11 @@ export default function BarbershopRoute() {
       footer={authenticated ? <ReportBarbershopButton barbershopId={id} /> : null}
       extraSections={(shop) => (
         <>
+          {/* Following brings its posts to Comunidad > Siguiendo. */}
+          <FollowButton
+            author={{ kind: 'BARBERSHOP', id }}
+            onRequireLogin={() => askForAccount('generic', `/barbershop/${id}`)}
+          />
           <VerifiedBadge barbershopId={id} />
           <SendMessageButton
             onPress={() =>

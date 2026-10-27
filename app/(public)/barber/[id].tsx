@@ -3,7 +3,9 @@ import { PublicCareerProfileScreen } from '@/features/career';
 import { StaffBarberActions } from '@/features/jobs';
 import { useEffectiveMode, useShopHome } from '@/features/shop-management';
 import { ProfileVideos } from '@/features/videos';
+import { FollowButton } from '@/features/community';
 import { useSession } from '@/shared/api';
+import { askForAccount } from '@/shared/ui';
 
 /** A barber's public profile. Owners and managers, in barbershop mode, can write and invite. */
 export default function BarberProfileRoute() {
@@ -20,21 +22,28 @@ export default function BarberProfileRoute() {
           : router.back()
       }
       actions={
-        authenticated && shopMode && currentId ? (
-          <StaffBarberActions
-            shopId={currentId}
-            profileId={id}
-            onWrite={() =>
-              router.push({ pathname: '/messages/new', params: { shopId: currentId, barberProfileId: id } })
-            }
-            onOffer={() =>
-              router.push({
-                pathname: '/shop/[shopId]/offers/new',
-                params: { shopId: currentId, barberProfileId: id },
-              })
-            }
+        <>
+          {/* Following brings their posts to Comunidad > Siguiendo. */}
+          <FollowButton
+            author={{ kind: 'PROFESSIONAL', id }}
+            onRequireLogin={() => askForAccount('generic', `/barber/${id}`)}
           />
-        ) : undefined
+          {authenticated && shopMode && currentId ? (
+            <StaffBarberActions
+              shopId={currentId}
+              profileId={id}
+              onWrite={() =>
+                router.push({ pathname: '/messages/new', params: { shopId: currentId, barberProfileId: id } })
+              }
+              onOffer={() =>
+                router.push({
+                  pathname: '/shop/[shopId]/offers/new',
+                  params: { shopId: currentId, barberProfileId: id },
+                })
+              }
+            />
+          ) : undefined}
+        </>
       }
       videos={<ProfileVideos profileId={id} />}
     />
