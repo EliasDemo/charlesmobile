@@ -1,10 +1,11 @@
 import type { TFunction } from 'i18next';
-import { formatMoney, parseSoles } from '@/shared/lib';
+import { parseSoles } from '@/shared/lib';
+import type { CreateJobBody } from '../api/jobsApi';
 
 export type PayPeriod = 'MONTH' | 'WEEK' | 'DAY' | 'SERVICE';
 export type SelectionProcess = 'INTERVIEW' | 'TRIAL' | 'DIRECT';
 
-/** What the wizard asks beyond the contract's fields (they travel inside its text fields). */
+/** What the wizard asks beyond title, type and styles. */
 export interface OfferExtras {
   amount: string;
   period: PayPeriod;
@@ -15,35 +16,45 @@ export interface OfferExtras {
   about: string;
 }
 
+const PERIOD: Record<PayPeriod, NonNullable<CreateJobBody['payPeriod']>> = {
+  MONTH: 'MONTH',
+  WEEK: 'WEEK',
+  DAY: 'DAY',
+  SERVICE: 'PER_SERVICE',
+};
+
 /**
- * Pay, "conversable", requirements and the selection process written into `compensationText`
- * (max. 120) and `description`, until the backend has fields for them.
+ * The offer in the contract's own fields: pay (céntimos), type and period, "negociable",
+ * requirements, selection process and description. The commission percentage has no field of its
+ * own, so it travels in `compensationText` ("Comisión 40 %").
  */
-export function composeOffer(e: OfferExtras, t: TFunction<'jobs'>) {
+export function offerFields(e: OfferExtras, t: TFunction<'jobs'>) {
   const cents = parseSoles(e.amount);
-  const pay = [
-    cents !== null
-      ? t('wizard.payLine', {
-          amount: formatMoney({ amount: cents, currency: 'PEN' }),
-          period: t(`wizard.periods.${e.period}`),
-        })
-      : null,
-    e.commission ? t('wizard.commissionLine', { percent: e.commission }) : null,
-    e.negotiable ? t('wizard.negotiableShort') : null,
-  ]
+  const commission = e.commission.trim();
+  const payType: CreateJobBody['payType'] =
+    e.period === 'SERVICE'
+      ? 'PER_SERVICE'
+      : cents !== null && commission
+        ? 'MIXED'
+        : commission
+          ? 'COMMISSION'
+          : cents !== null
+            ? 'FIXED'
+            : null;
+  const requirements = e.requirements
+    .map((r) => r.trim())
     .filter(Boolean)
-    .join(' · ')
-    .slice(0, 120);
-  const requirements = e.requirements.map((r) => r.trim()).filter(Boolean);
-  const description = [
-    e.about.trim(),
-    requirements.length
-      ? `${t('wizard.requirementsTitle')}\n${requirements.map((r) => `• ${r}`).join('\n')}`
-      : '',
-    `${t('wizard.processTitle')} ${t(`wizard.processes.${e.process}`)}`,
-  ]
-    .filter(Boolean)
-    .join('\n\n')
-    .slice(0, 2000);
-  return { compensationText: pay, description };
+    .slice(0, REQUIREMENTS_MAX);
+  return {
+    description: e.about.trim(),
+    compensationText: commission ? t('wizard.commissionLine', { percent: commission }) : '',
+    ...(cents !== null ? { payMin: cents, payMax: cents, payPeriod: PERIOD[e.period] } : {}),
+    ...(payType ? { payType } : {}),
+    negotiable: e.negotiable,
+    requirements,
+    selectionProcess: e.process,
+  } satisfies Partial<CreateJobBody>;
 }
+
+/** The contract allows up to 20 requirements. */
+export const REQUIREMENTS_MAX = 20;

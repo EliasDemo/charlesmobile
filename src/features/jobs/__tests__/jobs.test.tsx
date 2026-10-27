@@ -177,7 +177,7 @@ describe('ApplicantsScreen', () => {
 });
 
 describe('JobWizardScreen', () => {
-  it('builds the posting in 3 steps and writes pay, requirements and process into its texts', async () => {
+  it('builds the posting in 3 steps and sends pay, requirements and process in their own fields', async () => {
     const api = mockApi({
       'GET /api/v1/service-styles': { body: [] },
       'GET /api/v1/barbershops/{barbershopId}/jobs': { body: [] },
@@ -199,14 +199,16 @@ describe('JobWizardScreen', () => {
     expect(screen.getByText(texts.wizard.preview)).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: texts.form.publish }));
     await waitFor(() => expect(onSaved).toHaveBeenCalled());
-    const body = api.calls.find((c) => c.method === 'POST')!.body as {
-      compensationText: string;
-      description: string;
-    };
-    expect(body.compensationText).toMatch(
-      /1,500\.00 al mes · conversable|1500\.00 al mes · conversable|1 500,00 al mes · conversable/,
-    );
-    expect(body.description).toContain('• 2 años de experiencia');
-    expect(body.description).toContain('Proceso: Entrevista');
+    expect(api.calls.find((c) => c.method === 'POST')!.body).toMatchObject({
+      title: 'Barbero de fin de semana',
+      description: 'Sábados y domingos, buen ambiente.',
+      payMin: 150000,
+      payMax: 150000,
+      payPeriod: 'MONTH',
+      payType: 'FIXED',
+      negotiable: true,
+      requirements: ['2 años de experiencia'],
+      selectionProcess: 'INTERVIEW',
+    });
   });
 });

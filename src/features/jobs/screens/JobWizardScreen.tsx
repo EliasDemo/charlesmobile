@@ -8,7 +8,13 @@ import { Button, Chip, Notice, Screen, SwitchRow, Text, TextField } from '@/shar
 import type { EmploymentType } from '../api/jobsApi';
 import { JobCard } from '../components/JobParts';
 import { EMPLOYMENT_TYPES, useJobForm } from '../hooks/useJobs';
-import { composeOffer, type OfferExtras, type PayPeriod, type SelectionProcess } from '../schemas/offer';
+import {
+  REQUIREMENTS_MAX,
+  offerFields,
+  type OfferExtras,
+  type PayPeriod,
+  type SelectionProcess,
+} from '../schemas/offer';
 
 const STEPS = 3;
 const PERIODS: PayPeriod[] = ['MONTH', 'WEEK', 'DAY', 'SERVICE'];
@@ -38,7 +44,7 @@ export function JobWizardScreen({ shopId, onSaved }: { shopId: string; onSaved: 
     about: '',
   });
   const set = (patch: Partial<OfferExtras>) => setExtras((e) => ({ ...e, ...patch }));
-  const offer = composeOffer(extras, t);
+  const offer = offerFields(extras, t);
   const canNext = [
     title.trim().length >= 5,
     extras.amount.trim() === '' || parseSoles(extras.amount) !== null,
@@ -51,6 +57,8 @@ export function JobWizardScreen({ shopId, onSaved }: { shopId: string; onSaved: 
     f.form.setValue('styleIds', styleIds);
     f.form.setValue('compensationText', offer.compensationText);
     f.form.setValue('description', offer.description);
+    const { description: _d, compensationText: _c, ...structured } = offer;
+    f.setStructured(structured);
     void f.submit();
   };
 
@@ -173,7 +181,7 @@ export function JobWizardScreen({ shopId, onSaved }: { shopId: string; onSaved: 
               maxLength={120}
             />
           ))}
-          {extras.requirements.length < 10 ? (
+          {extras.requirements.length < REQUIREMENTS_MAX ? (
             <Button
               label={t('wizard.addRequirement')}
               variant="ghost"
@@ -214,14 +222,14 @@ export function JobWizardScreen({ shopId, onSaved }: { shopId: string; onSaved: 
               id: 'preview',
               distanceKm: null,
               location: null,
-              negotiable: false,
-              payMin: null,
-              payMax: null,
-              payType: null,
-              payPeriod: null,
-              requirements: [],
+              negotiable: offer.negotiable,
+              payMin: offer.payMin ?? null,
+              payMax: offer.payMax ?? null,
+              payType: offer.payType ?? null,
+              payPeriod: offer.payPeriod ?? null,
+              requirements: offer.requirements,
               schedule: null,
-              selectionProcess: null,
+              selectionProcess: offer.selectionProcess,
               barbershop: {
                 id: shopId,
                 name: t('wizard.yourShop'),

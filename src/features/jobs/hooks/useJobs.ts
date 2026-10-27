@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { isApiError, nextPageParam } from '@/shared/api';
 import { env } from '@/shared/config';
@@ -29,6 +29,7 @@ import {
   updateJob,
   withdrawApplication,
   type Decision,
+  type CreateJobBody,
   type EmploymentType,
   type JobFilters,
   type JobPosting,
@@ -129,6 +130,9 @@ export function useJobForm({
   const list = useShopJobs(shopId);
   const job = jobId ? list.data?.find((j) => j.id === jobId) : undefined;
   const [generalError, setGeneralError] = useState<string | null>(null);
+  // Fields the wizard sets beyond the form (pay, requirements, process), sent as they are.
+  // A ref, not state: the wizard sets it right before submitting.
+  const structured = useRef<Partial<CreateJobBody>>({});
   const zone = env.defaultTimeZone;
   const form = useForm<JobForm>({
     resolver: zodResolver(jobSchema),
@@ -166,6 +170,7 @@ export function useJobForm({
         description: values.description.trim(),
         employmentType: values.employmentType,
         styleIds: values.styleIds,
+        ...structured.current,
       };
       return jobId
         ? updateJob(shopId, jobId, {
@@ -199,6 +204,9 @@ export function useJobForm({
     job,
     editing: Boolean(jobId),
     form,
+    setStructured: (fields: Partial<CreateJobBody>) => {
+      structured.current = fields;
+    },
     submit: form.handleSubmit((values) => {
       setGeneralError(null);
       save.mutate(values);
