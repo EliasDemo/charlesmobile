@@ -372,26 +372,15 @@
   "readiness": {
     "title": "Aún no se puede reservar",
     "subtitle": "Tus clientes no verán turnos hasta completar esto:",
-    "ok": {
-      "published": "Barbería publicada y abierta",
-      "hours": "Horario de atención",
-      "services": "Servicios disponibles",
-      "barbers": "Barberos activos",
-      "barberServices": "Todos los barberos tienen servicios"
-    },
-    "missing": {
-      "published": "La barbería no está publicada o está cerrada.",
-      "hours": "No tiene horario de atención.",
-      "services": "No hay servicios disponibles.",
-      "barbers": "No hay barberos activos.",
-      "barberServices": "Sin servicios asignados: {{names}}. No aparecerán turnos con ellos."
-    },
-    "fix": {
-      "published": "Ver revisión y estado",
-      "hours": "Poner horario",
+    "readyTitle": "Tus clientes ya pueden reservar",
+    "bookable_one": "{{count}} barbero recibe reservas. Revisa estos avisos:",
+    "bookable_other": "{{count}} barberos reciben reservas. Revisa estos avisos:",
+    "fixTarget": {
+      "review": "Ver la revisión",
+      "hours": "Poner horarios",
       "services": "Agregar servicios",
-      "barbers": "Agregar barberos",
-      "barberServices": "Asignar servicios"
+      "barbers": "Ver barberos",
+      "plan": "Ver mi plan"
     }
   }
 }

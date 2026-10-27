@@ -1,12 +1,9 @@
-import { screen } from '@testing-library/react-native';
+import { fireEvent, screen } from '@testing-library/react-native';
 import { mockApi } from '@test/mockApi';
 import { renderWithProviders, resetAppState, signIn } from '@test/render';
-import type { components } from '@/shared/api';
 import texts from '@/shared/i18n/locales/es/shop.json';
 import { ReadinessCard } from '../components/ReadinessCard';
 import { TIME_OPTIONS, withBreak } from '../hooks/useWeekSchedule';
-
-type S = components['schemas'];
 
 describe('schedule helpers', () => {
   it('offers the times of the day every 30 minutes', () => {
@@ -25,47 +22,50 @@ describe('schedule helpers', () => {
   });
 });
 
-const shop = (status: S['BarbershopManageDto']['status'] = 'OPEN') =>
-  ({ id: 'shop-1', status }) as S['BarbershopManageDto'];
-
-const barber = (overrides: Partial<S['BarberManageDto']>) =>
-  ({
-    id: 'b1',
-    displayName: 'Julián',
-    isActive: true,
-    serviceIds: ['sv1'],
-    ...overrides,
-  }) as S['BarberManageDto'];
-
-const routes = (barbers: S['BarberManageDto'][], days: S['DayScheduleDto'][]) => ({
-  'GET /api/v1/barbershops/{id}/business-hours': {
-    body: { timezone: 'America/Lima', isOpenNow: true, days },
-  },
-  'GET /api/v1/me/barbershops/{id}/services': {
-    body: { items: [{ id: 'sv1', isAvailable: true }], nextCursor: null },
-  },
-  'GET /api/v1/me/barbershops/{id}/barbers': { body: { items: barbers, nextCursor: null } },
-});
-
 beforeEach(() => {
   resetAppState();
   signIn({ roles: ['CLIENT', 'OWNER'] });
 });
 
 describe('ReadinessCard', () => {
-  it('names the barbers without services and the missing hours', async () => {
-    mockApi(routes([barber({ serviceIds: [] })], []) as never);
-    await renderWithProviders(<ReadinessCard shop={shop()} onFix={jest.fn()} />);
-    expect(await screen.findByText(texts.readiness.missing.hours)).toBeTruthy();
-    expect(screen.getByText(/Sin servicios asignados: Julián/)).toBeTruthy();
-    expect(screen.getByText(texts.readiness.ok.published)).toBeTruthy();
+  it("shows the backend's messages, blocking first, and opens where each is fixed", async () => {
+    mockApi({
+      'GET /api/v1/barbershops/{id}/readiness': {
+        body: {
+          ready: false,
+          bookableBarbers: 0,
+          issues: [
+            {
+              code: 'INVITATION_PENDING',
+              severity: 'WARNING',
+              message: 'Julián aún no acepta',
+              barberId: 'b1',
+              barberName: 'Julián',
+            },
+            {
+              code: 'NO_BUSINESS_HOURS',
+              severity: 'BLOCKING',
+              message: 'Falta el horario',
+              barberId: null,
+              barberName: null,
+            },
+          ],
+        },
+      },
+    } as never);
+    const onFix = jest.fn();
+    await renderWithProviders(<ReadinessCard shopId="shop-1" onFix={onFix} />);
+    expect(await screen.findByText('Falta el horario')).toBeTruthy();
+    expect(screen.getByText('Julián aún no acepta')).toBeTruthy();
+    await fireEvent.press(screen.getByText(texts.readiness.fixTarget.hours));
+    expect(onFix).toHaveBeenCalledWith('hours');
   });
 
-  it('hides itself when clients can book', async () => {
-    const api = mockApi(
-      routes([barber({})], [{ dayOfWeek: 1, windows: [{ start: '09:00', end: '18:00' }] }]) as never,
-    );
-    await renderWithProviders(<ReadinessCard shop={shop()} onFix={jest.fn()} />);
+  it('hides itself when there is nothing to say', async () => {
+    const api = mockApi({
+      'GET /api/v1/barbershops/{id}/readiness': { body: { ready: true, bookableBarbers: 2, issues: [] } },
+    } as never);
+    await renderWithProviders(<ReadinessCard shopId="shop-1" onFix={jest.fn()} />);
     await new Promise((r) => setTimeout(r, 50));
     expect(api.fetchMock).toHaveBeenCalled();
     expect(screen.queryByTestId('readiness-card')).toBeNull();

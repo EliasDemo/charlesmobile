@@ -45,12 +45,19 @@ export const shopKeys = {
   barberSchedule: (id: string, barberId: string) => ['shop-management', id, 'schedule', barberId] as const,
   blocks: (id: string) => ['shop-management', id, 'blocks'] as const,
   review: (id: string) => ['shop-management', id, 'review'] as const,
+  readiness: (id: string) => ['shop-management', id, 'readiness'] as const,
   myBarber: ['shop-management', 'me-barber'] as const,
   gallery: (id: string, barberId: string | null) =>
     ['shop-management', id, 'gallery', barberId ?? 'all'] as const,
   invitations: ['shop-management', 'invitations'] as const,
   categories: ['service-categories'] as const,
 };
+
+// "Lista para reservar": what the backend says is missing for clients to book.
+export type Readiness = S['ReadinessDto'];
+export type ReadinessIssue = S['ReadinessIssueDto'];
+export const fetchReadiness = (id: string): Promise<Readiness> =>
+  unwrap(api.GET('/api/v1/barbershops/{id}/readiness', { params: path(id) }));
 
 // Barbershops
 export const fetchMyBarbershops = (): Promise<MyBarbershop[]> =>

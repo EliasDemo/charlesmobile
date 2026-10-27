@@ -372,26 +372,15 @@
   "readiness": {
     "title": "Booking isn't possible yet",
     "subtitle": "Your clients won't see slots until you complete this:",
-    "ok": {
-      "published": "Barbershop published and open",
-      "hours": "Opening hours",
-      "services": "Available services",
-      "barbers": "Active barbers",
-      "barberServices": "Every barber has services"
-    },
-    "missing": {
-      "published": "The barbershop is not published or it is closed.",
-      "hours": "It has no opening hours.",
-      "services": "There are no available services.",
-      "barbers": "There are no active barbers.",
-      "barberServices": "No services assigned: {{names}}. No slots will show with them."
-    },
-    "fix": {
-      "published": "See review and status",
+    "readyTitle": "Your clients can book",
+    "bookable_one": "{{count}} barber takes bookings. Check these notices:",
+    "bookable_other": "{{count}} barbers take bookings. Check these notices:",
+    "fixTarget": {
+      "review": "See the review",
       "hours": "Set hours",
       "services": "Add services",
-      "barbers": "Add barbers",
-      "barberServices": "Assign services"
+      "barbers": "See barbers",
+      "plan": "See my plan"
     }
   }
 }

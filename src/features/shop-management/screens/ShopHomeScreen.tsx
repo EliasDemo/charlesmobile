@@ -203,7 +203,7 @@ export function ShopHomeScreen({
                       />
                     </Card>
                     <ReadinessCard
-                      shop={shop}
+                      shopId={shop.id}
                       onFix={(target) =>
                         onOpen(
                           shop.id,
