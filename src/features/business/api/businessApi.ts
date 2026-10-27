@@ -34,6 +34,9 @@ export const businessKeys = {
   balance: (id: string) => ['business', id, 'balance'] as const,
   statement: (id: string, from: string, to: string) => ['business', id, 'statement', from, to] as const,
   seller: (id: string) => ['business', id, 'seller'] as const,
+  monthly: (id: string, months: number) => ['business', id, 'monthly', months] as const,
+  heatmap: (id: string, days: number) => ['business', id, 'heatmap', days] as const,
+  market: (id: string, km: number) => ['business', id, 'market', km] as const,
 };
 
 const p = (id: string) => ({ params: { path: { id } } });
@@ -174,3 +177,18 @@ export const connectSeller = (id: string) =>
   unwrap(api.POST('/api/v1/barbershops/{id}/seller-account/connect', p(id)));
 export const disconnectSeller = (id: string) =>
   unwrap(api.DELETE('/api/v1/barbershops/{id}/seller-account', p(id)));
+
+// Trends: by month, by hour (heat map) and the zone (averages only).
+export type MonthlyReport = S['MonthlyReportDto'];
+export type Heatmap = S['HeatmapDto'];
+export type Market = S['MarketDto'];
+export const fetchMonthly = (id: string, months: number): Promise<MonthlyReport> =>
+  unwrap(
+    api.GET('/api/v1/barbershops/{id}/reports/monthly', { params: { path: { id }, query: { months } } }),
+  );
+export const fetchHeatmap = (id: string, days: number): Promise<Heatmap> =>
+  unwrap(api.GET('/api/v1/barbershops/{id}/reports/heatmap', { params: { path: { id }, query: { days } } }));
+export const fetchMarket = (id: string, radiusKm: number): Promise<Market> =>
+  unwrap(
+    api.GET('/api/v1/barbershops/{id}/reports/market', { params: { path: { id }, query: { radiusKm } } }),
+  );

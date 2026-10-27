@@ -37,6 +37,7 @@ import {
   rangeFor,
   type RangeKey,
 } from '../components/BusinessParts';
+import { InsightsSection } from '../components/Insights';
 import {
   INVOICE_DOC_FROM_CENTS,
   PAYMENT_METHODS,
@@ -847,7 +848,7 @@ export function CatalogScreen({ shopId }: { shopId: string }) {
 
 // --------------------------------------------------------------------------- Reports
 
-export function ReportsScreen({ shopId }: { shopId: string }) {
+export function ReportsScreen({ shopId, onUpgrade }: { shopId: string; onUpgrade?: () => void }) {
   const { t } = useTranslation('business');
   const [range, setRange] = useState<RangeKey>('week');
   const { from, to } = rangeFor(range);
@@ -960,6 +961,7 @@ export function ReportsScreen({ shopId }: { shopId: string }) {
           </View>
         )}
       </QueryView>
+      <InsightsSection shopId={shopId} onUpgrade={onUpgrade} />
     </Screen>
   );
 }
