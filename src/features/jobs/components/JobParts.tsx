@@ -1,7 +1,8 @@
+import type { TFunction } from 'i18next';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
-import { formatShortDate } from '@/shared/lib';
+import { formatMoney, formatShortDate } from '@/shared/lib';
 import { sizes, spacing, useTheme, type StatusTone } from '@/shared/theme';
 import {
   Badge,
@@ -56,10 +57,40 @@ export function JobFact({ icon, text, strong }: { icon: IconName; text: string; 
 }
 
 /** A job posting: who hires, what, the kind of job, the pay and until when. */
+/** Pay comes in céntimos of soles (the job board is for Peru). */
+const PAY_CURRENCY = 'PEN';
+
+/** Where the posting is: its district when the API knows it, the address otherwise. */
+const placeOf = (job: JobPosting) =>
+  job.location ? `${job.location.district}, ${job.location.province}` : job.barbershop.address;
+
+/**
+ * "S/ 1,200 – 1,800 al mes · Comisión · Negociable", from the fields the backend gives. The app
+ * shows them as they come (never computes pay).
+ */
+export function jobPayText(job: JobPosting, t: TFunction<'jobs'>): string | null {
+  const money = (amount: number) => formatMoney({ amount, currency: PAY_CURRENCY });
+  const range =
+    job.payMin !== null && job.payMax !== null && job.payMin !== job.payMax
+      ? `${money(job.payMin)} – ${money(job.payMax)}`
+      : job.payMin !== null
+        ? money(job.payMin)
+        : job.payMax !== null
+          ? t('pay.upTo', { amount: money(job.payMax) })
+          : null;
+  const parts = [
+    range ? (job.payPeriod ? `${range} ${t(`pay.period.${job.payPeriod}`)}` : range) : null,
+    job.payType ? t(`pay.type.${job.payType}`) : null,
+    job.negotiable ? t('pay.negotiable') : null,
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(' · ') : null;
+}
+
 export function JobCard({ job, onPress }: { job: JobPosting; onPress: () => void }) {
   const { t } = useTranslation('jobs');
   const surface = useSurfaceStyle();
   const press = usePressScale();
+  const pay = jobPayText(job, t);
   return (
     <Pressable
       accessibilityRole="button"
@@ -87,8 +118,20 @@ export function JobCard({ job, onPress }: { job: JobPosting; onPress: () => void
           <Badge label={t(`types.${job.employmentType}`)} tone="primary" />
           {job.myApplicationStatus ? <ApplicationStatusPill status={job.myApplicationStatus} /> : null}
         </View>
-        {job.compensationText ? <JobFact icon="cash" text={job.compensationText} strong /> : null}
-        <JobFact icon="location" text={job.barbershop.address} />
+        {pay ? <JobFact icon="cash" text={pay} strong /> : null}
+        {!pay && job.compensationText ? <JobFact icon="cash" text={job.compensationText} strong /> : null}
+        <JobFact
+          icon="location"
+          text={
+            job.distanceKm !== null
+              ? t('card.distance', { km: job.distanceKm.toFixed(1), place: placeOf(job) })
+              : placeOf(job)
+          }
+        />
+        {job.schedule ? <JobFact icon="time" text={job.schedule} /> : null}
+        {job.requirements.length > 0 ? (
+          <JobFact icon="checkmark-circle" text={job.requirements.slice(0, 3).join(' · ')} />
+        ) : null}
         {job.closesAt ? (
           <JobFact icon="time" text={t('closesAt', { date: formatShortDate(job.closesAt, zone) })} />
         ) : null}

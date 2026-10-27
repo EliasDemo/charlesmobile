@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import type { Location } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import { ActionTile, Button, Card, Icon, ListRow, Skeleton, Text } from '@/shared/ui';
@@ -15,7 +16,7 @@ export interface JobBoardCardProps {
    */
   variant: 'primary' | 'subtle';
   /** The barber's district (from their professional profile), to show nearby offers first. */
-  area?: string;
+  place?: Location;
   hasProfile: boolean;
   onOpenJobs: () => void;
   onOpenJob: (id: string) => void;
@@ -40,7 +41,7 @@ export function JobBoardCard(props: JobBoardCardProps) {
 }
 
 function PrimaryBoard({
-  area,
+  place,
   hasProfile,
   onOpenJobs,
   onOpenJob,
@@ -49,7 +50,7 @@ function PrimaryBoard({
 }: JobBoardCardProps) {
   const { t } = useTranslation('jobs');
   const theme = useTheme();
-  const nearby = useJobList({ area });
+  const nearby = useJobList({ ubigeo: place?.ubigeo });
   const items = (nearby.items ?? []).slice(0, PREVIEW);
   return (
     <Card style={styles.card}>
@@ -59,11 +60,13 @@ function PrimaryBoard({
           {t('board.title')}
         </Text>
       </View>
-      <Text color="textSecondary">{area ? t('board.nearby', { area }) : t('board.intro')}</Text>
+      <Text color="textSecondary">
+        {place ? t('board.nearby', { area: place.district }) : t('board.intro')}
+      </Text>
       {nearby.items === undefined && !nearby.error ? <Skeleton /> : null}
       {nearby.items !== undefined && items.length === 0 ? (
         <Text variant="caption" color="textSecondary">
-          {area ? t('board.emptyArea') : t('empty')}
+          {place ? t('board.emptyArea') : t('empty')}
         </Text>
       ) : null}
       {items.map((job) => (

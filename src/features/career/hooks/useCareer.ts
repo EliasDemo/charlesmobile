@@ -86,7 +86,7 @@ export function useCareerProfileForm({ onSaved }: { onSaved: () => void }) {
       headline: '',
       bio: '',
       yearsExperience: '',
-      district: '',
+      location: null,
       availableForWork: false,
     },
   });
@@ -98,7 +98,7 @@ export function useCareerProfileForm({ onSaved }: { onSaved: () => void }) {
       headline: loaded.headline ?? '',
       bio: loaded.bio ?? '',
       yearsExperience: loaded.yearsExperience?.toString() ?? '',
-      district: loaded.district ?? '',
+      location: loaded.location ?? null,
       availableForWork: loaded.availableForWork,
     });
     // Only when the saved profile changes.
@@ -114,7 +114,7 @@ export function useCareerProfileForm({ onSaved }: { onSaved: () => void }) {
         headline: text(values.headline),
         bio: text(values.bio),
         yearsExperience: values.yearsExperience.trim() ? Number(values.yearsExperience) : null,
-        district: text(values.district),
+        ubigeo: values.location?.ubigeo ?? null,
         availableForWork: values.availableForWork,
       });
       if (creating) await refreshSession().catch(() => undefined);
@@ -127,13 +127,7 @@ export function useCareerProfileForm({ onSaved }: { onSaved: () => void }) {
     },
     onError: (error) =>
       setGeneralError(
-        applyServerErrors(error, form.setError, [
-          'displayName',
-          'headline',
-          'bio',
-          'yearsExperience',
-          'district',
-        ]),
+        applyServerErrors(error, form.setError, ['displayName', 'headline', 'bio', 'yearsExperience']),
       ),
   });
   return {

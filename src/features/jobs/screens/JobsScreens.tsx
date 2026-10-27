@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useStyles } from '@/features/gallery';
+import type { Location } from '@/shared/api';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate } from '@/shared/lib';
@@ -40,6 +41,7 @@ import {
   useJobList,
   useMyApplications,
   useShopJobs,
+  useNearMe,
 } from '../hooks/useJobs';
 
 const zone = env.defaultTimeZone;
@@ -56,9 +58,15 @@ export function JobsScreen({
   const styleList = useStyles();
   const [type, setType] = useState<EmploymentType | undefined>(undefined);
   const [style, setStyle] = useState<string | undefined>(undefined);
-  const [area, setArea] = useState('');
+  const [place, setPlace] = useState<Location | null>(null);
+  const nearMe = useNearMe();
   const [filtering, setFiltering] = useState(false);
-  const list = useJobList({ employmentType: type, style, area });
+  const list = useJobList({
+    employmentType: type,
+    style,
+    ubigeo: place?.ubigeo,
+    near: nearMe.near ?? undefined,
+  });
   return (
     <Screen scroll={false}>
       <FilterSheet
@@ -94,11 +102,18 @@ export function JobsScreen({
             ) : null}
             <View style={styles.searchRow}>
               <View style={styles.flex}>
-                <DistrictPicker label={t('area')} value={area} onChange={setArea} allowAll />
+                <DistrictPicker label={t('area')} value={place} onChange={setPlace} allowAll />
               </View>
               <FilterButton
                 active={Number(Boolean(type)) + Number(Boolean(style))}
                 onPress={() => setFiltering(true)}
+              />
+            </View>
+            <View style={styles.chipRow}>
+              <Chip
+                label={nearMe.near ? t('near.active') : t('near.label')}
+                selected={nearMe.near !== null}
+                onPress={nearMe.busy ? () => undefined : nearMe.toggle}
               />
             </View>
             {type || style ? (

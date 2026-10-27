@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { provinceOf } from '@/shared/lib';
+import type { Location } from '@/shared/api';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import {
   Badge,
@@ -104,19 +104,23 @@ export function TalentScreen({
   renderActions: (barber: RankedBarber) => ReactNode;
 }) {
   const { t } = useTranslation('career');
-  const [district, setDistrict] = useState('');
+  const [place, setPlace] = useState<Location | null>(null);
+  const district = place?.district ?? '';
+  const province = place?.province ?? '';
   // Without a district the whole country is "local" (the podium is the national top).
   const local = useRanking({ district: district || undefined, availableForWork: true });
+  // The province and the country are filtered by the backend (its list of provinces).
+  const inProvince = useRanking({ province: province || undefined, availableForWork: true });
   const national = useRanking({ availableForWork: true });
-  const province = provinceOf(district);
   const localItems = local.items ?? [];
-  const others = !district
+  const sameProvince = !place
     ? []
-    : (national.items ?? []).filter((b) => !localItems.some((l) => l.id === b.id));
-  const sameProvince = province
-    ? others.filter((b) => b.district && provinceOf(b.district) === province)
-    : [];
-  const rest = others.filter((b) => !sameProvince.includes(b));
+    : (inProvince.items ?? []).filter((b) => !localItems.some((l) => l.id === b.id));
+  const rest = !place
+    ? []
+    : (national.items ?? []).filter(
+        (b) => !localItems.some((l) => l.id === b.id) && !sameProvince.some((p) => p.id === b.id),
+      );
   const podium = localItems.filter((b) => b.rank !== null).slice(0, 3);
   const card = (b: RankedBarber, place?: number) => (
     <BarberCard key={b.id} barber={b} place={place} onOpen={() => onOpen(b.id)} actions={renderActions(b)} />
@@ -124,7 +128,7 @@ export function TalentScreen({
   return (
     <Screen>
       <Text color="textSecondary">{t('talent.intro')}</Text>
-      <DistrictPicker label={t('talent.district')} value={district} onChange={setDistrict} allowAll />
+      <DistrictPicker label={t('talent.district')} value={place} onChange={setPlace} allowAll />
       {local.items === undefined ? <LoadingState /> : null}
       {podium.length > 0 ? (
         <View style={styles.section}>

@@ -144,5 +144,31 @@
     "profile": "Mi perfil profesional",
     "createProfile": "Crea tu perfil profesional",
     "createProfileHint": "Es lo que ven las barberías cuando postulas."
+  },
+  "near": {
+    "label": "Más cerca",
+    "active": "Más cerca ✓",
+    "denied": "Sin tu ubicación mostramos las ofertas recientes. Puedes elegir un distrito.",
+    "failed": "No pudimos obtener tu ubicación. Intenta de nuevo."
+  },
+  "card": {
+    "distance": "A {{km}} km · {{place}}"
+  },
+  "pay": {
+    "upTo": "Hasta {{amount}}",
+    "negotiable": "Negociable",
+    "period": {
+      "DAY": "al día",
+      "WEEK": "a la semana",
+      "BIWEEKLY": "a la quincena",
+      "MONTH": "al mes",
+      "PER_SERVICE": "por servicio"
+    },
+    "type": {
+      "FIXED": "Sueldo fijo",
+      "COMMISSION": "Comisión",
+      "MIXED": "Fijo + comisión",
+      "PER_SERVICE": "Por servicio"
+    }
   }
 }

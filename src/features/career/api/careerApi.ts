@@ -13,6 +13,7 @@ export type RankingPage = S['RankingPageDto'];
 export type RankingFilters = {
   style?: string;
   district?: string;
+  province?: string;
   q?: string;
   availableForWork?: boolean;
   sort?: 'ranking' | 'newest';
@@ -96,6 +97,7 @@ export const fetchRanking = (filters: RankingFilters, offset = 0): Promise<Ranki
           offset,
           ...(filters.style ? { style: filters.style } : {}),
           ...(filters.district?.trim() ? { district: filters.district.trim() } : {}),
+          ...(filters.province ? { province: filters.province } : {}),
           ...(filters.q?.trim() ? { q: filters.q.trim() } : {}),
           ...(filters.availableForWork ? { availableForWork: true } : {}),
           ...(filters.sort ? { sort: filters.sort } : {}),

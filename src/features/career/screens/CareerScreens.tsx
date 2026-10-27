@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 import { Image, StyleSheet, View } from 'react-native';
 import { useStyles } from '@/features/gallery';
+import type { Location } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate } from '@/shared/lib';
 import { env } from '@/shared/config';
@@ -294,7 +295,7 @@ export function CareerProfileFormScreen({ onSaved }: { onSaved: () => void }) {
             />
             <Controller
               control={f.form.control}
-              name="district"
+              name="location"
               render={({ field }) => (
                 <DistrictPicker label={t('form.district')} value={field.value} onChange={field.onChange} />
               )}
@@ -548,9 +549,14 @@ export function RankingScreen({
   const { t } = useTranslation('career');
   const styleList = useStyles();
   const [q, setQ] = useState('');
-  const [district, setDistrict] = useState('');
+  const [place, setPlace] = useState<Location | null>(null);
   const [style, setStyle] = useState<string | undefined>(undefined);
-  const filters: RankingFilters = { q, district, style, availableForWork: availableOnly || undefined };
+  const filters: RankingFilters = {
+    q,
+    district: place?.district,
+    style,
+    availableForWork: availableOnly || undefined,
+  };
   const ranking = useRanking(filters);
   const [filtering, setFiltering] = useState(false);
   return (
@@ -560,10 +566,10 @@ export function RankingScreen({
         onClose={() => setFiltering(false)}
         onClear={() => {
           setStyle(undefined);
-          setDistrict('');
+          setPlace(null);
         }}
       >
-        <DistrictPicker label={t('ranking.district')} value={district} onChange={setDistrict} allowAll />
+        <DistrictPicker label={t('ranking.district')} value={place} onChange={setPlace} allowAll />
         <FilterGroup title={t('specialties.title')}>
           <Chip label={t('allStyles')} selected={!style} onPress={() => setStyle(undefined)} />
           {(styleList.data ?? []).map((s) => (
@@ -588,7 +594,7 @@ export function RankingScreen({
                 />
               </View>
               <FilterButton
-                active={Number(Boolean(style)) + Number(Boolean(district.trim()))}
+                active={Number(Boolean(style)) + Number(Boolean(place))}
                 onPress={() => setFiltering(true)}
               />
             </View>

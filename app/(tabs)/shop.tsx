@@ -14,7 +14,7 @@ export default function ShopHomeRoute() {
       jobBoardSlot={(variant) => (
         <JobBoardCard
           variant={variant}
-          area={profile?.district ?? undefined}
+          place={profile?.location ?? undefined}
           hasProfile={profile !== null}
           onOpenJobs={() => router.push('/jobs')}
           onOpenJob={(id) => router.push({ pathname: '/jobs/[id]', params: { id } })}

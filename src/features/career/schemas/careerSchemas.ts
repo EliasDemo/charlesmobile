@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { Location } from '@/shared/api';
 
 // Limits published in the contract (UpsertBarberProfileDto). Messages are `career` i18n keys.
 const optionalText = (min: number, max: number, message: string) =>
@@ -17,7 +18,8 @@ export const profileSchema = z.object({
   yearsExperience: z.string().refine((v) => v.trim() === '' || (/^\d+$/.test(v.trim()) && Number(v) <= 60), {
     error: 'form.yearsRange',
   }),
-  district: optionalText(2, 60, 'form.districtLength'),
+  /** The district picked from the API (with its ubigeo); null: not said. */
+  location: z.custom<Location | null>(),
   availableForWork: z.boolean(),
 });
 export type ProfileForm = z.infer<typeof profileSchema>;

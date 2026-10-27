@@ -200,7 +200,8 @@
     "none": "Not chosen",
     "all": "All of Peru",
     "choose": "Choose your district",
-    "search": "Search district"
+    "search": "Search district",
+    "error": "We could not load the districts. Check your connection."
   },
   "tour": {
     "step": "{{current}} of {{total}}",

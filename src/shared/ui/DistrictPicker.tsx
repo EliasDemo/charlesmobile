@@ -1,19 +1,18 @@
-import { useMemo, useState } from 'react';
-import { FlatList, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDistrictSearch, type Location } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
-import { PERU_DISTRICTS } from '@/shared/lib';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import { Icon } from './Icon';
 import { SearchField } from './SearchField';
 import { Text } from './Text';
 
-const ROWS = PERU_DISTRICTS.flatMap((p) => p.districts.map((d) => ({ district: d, province: p.province })));
-const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const SEARCH_DELAY_MS = 300;
 
 /**
- * A field that opens the list of districts with a search: everyone picks the same names
- * (no typos), which makes "cerca" filters work.
+ * A field that opens Peru's districts (from the API, with their ubigeo) with a search: everyone
+ * picks the same place (no typos), which makes "cerca" filters work.
  */
 export function DistrictPicker({
   label,
@@ -22,8 +21,8 @@ export function DistrictPicker({
   allowAll,
 }: {
   label: string;
-  value: string;
-  onChange: (district: string) => void;
+  value: Location | null;
+  onChange: (location: Location | null) => void;
   /** Shows "Todo el Perú" first (filters). */
   allowAll?: boolean;
 }) {
@@ -32,11 +31,15 @@ export function DistrictPicker({
   const insets = useSafeAreaInsets();
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
-  const rows = useMemo(() => {
-    const term = normalize(q.trim());
-    const found = term ? ROWS.filter((r) => normalize(r.district).includes(term)) : ROWS;
-    return allowAll ? [{ district: '', province: '' }, ...found] : found;
-  }, [q, allowAll]);
+  const [term, setTerm] = useState('');
+  useEffect(() => {
+    const timer = setTimeout(() => setTerm(q), SEARCH_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [q]);
+  const search = useDistrictSearch(term);
+  const found: (Location | null)[] = search.data ?? [];
+  const rows = allowAll ? [null, ...found] : found;
+  const shown = value ? value.district : '';
   return (
     <View style={styles.field}>
       <Text variant="label" color="textSecondary">
@@ -44,7 +47,7 @@ export function DistrictPicker({
       </Text>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={`${label}: ${value || t('district.none')}`}
+        accessibilityLabel={`${label}: ${shown || t('district.none')}`}
         onPress={() => setOpen(true)}
         style={[
           styles.box,
@@ -57,9 +60,16 @@ export function DistrictPicker({
         testID="district-picker"
       >
         <Icon name="location" size={sizes.icon} color={theme.colors.textMuted} />
-        <Text style={styles.flex} color={value ? 'textPrimary' : 'textMuted'}>
-          {value || (allowAll ? t('district.all') : t('district.choose'))}
-        </Text>
+        <View style={styles.flex}>
+          <Text color={value ? 'textPrimary' : 'textMuted'}>
+            {shown || (allowAll ? t('district.all') : t('district.choose'))}
+          </Text>
+          {value ? (
+            <Text variant="caption" color="textMuted">
+              {`${value.province}, ${value.department}`}
+            </Text>
+          ) : null}
+        </View>
         <Icon name="chevron-down" size={sizes.icon} color={theme.colors.textMuted} />
       </Pressable>
       <Modal visible={open} animationType="slide" onRequestClose={() => setOpen(false)}>
@@ -88,19 +98,25 @@ export function DistrictPicker({
             onChangeText={setQ}
             placeholder={t('district.search')}
           />
+          {search.isPending ? <ActivityIndicator color={theme.colors.primary} /> : null}
+          {search.isError ? (
+            <Text color="textSecondary" align="center">
+              {t('district.error')}
+            </Text>
+          ) : null}
           <FlatList
             data={rows}
-            keyExtractor={(r) => r.district || 'all'}
+            keyExtractor={(r) => r?.ubigeo ?? 'all'}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ paddingBottom: insets.bottom + spacing.lg }}
             renderItem={({ item }) => {
-              const selected = item.district === value;
+              const selected = (item?.ubigeo ?? null) === (value?.ubigeo ?? null);
               return (
                 <Pressable
                   accessibilityRole="button"
                   accessibilityState={{ selected }}
                   onPress={() => {
-                    onChange(item.district);
+                    onChange(item);
                     setOpen(false);
                     setQ('');
                   }}
@@ -111,11 +127,11 @@ export function DistrictPicker({
                       variant={selected ? 'bodyStrong' : 'body'}
                       color={selected ? 'primary' : 'textPrimary'}
                     >
-                      {item.district || t('district.all')}
+                      {item ? item.district : t('district.all')}
                     </Text>
-                    {item.province ? (
+                    {item ? (
                       <Text variant="caption" color="textMuted">
-                        {item.province}
+                        {`${item.province}, ${item.department}`}
                       </Text>
                     ) : null}
                   </View>

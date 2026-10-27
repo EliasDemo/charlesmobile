@@ -5,7 +5,15 @@ import { useForm } from 'react-hook-form';
 import { isApiError, nextPageParam } from '@/shared/api';
 import { env } from '@/shared/config';
 import { i18n } from '@/shared/i18n';
-import { dmyToIsoDate, isoDateToDmy, toLocalDate, zonedTimeToIso } from '@/shared/lib';
+import {
+  dmyToIsoDate,
+  getCurrentCoordinates,
+  isoDateToDmy,
+  requestLocationPermission,
+  toLocalDate,
+  zonedTimeToIso,
+  type Coordinates,
+} from '@/shared/lib';
 import { applyServerErrors, showToast, translateErrorMessage } from '@/shared/ui';
 import {
   applyToJob,
@@ -264,4 +272,29 @@ export function useInviteBarber(shopId: string | null) {
 export function useHasApplied(enabled = true) {
   const query = useQuery({ queryKey: jobKeys.mine, queryFn: fetchMyApplications, enabled });
   return query.data === undefined ? undefined : query.data.length > 0;
+}
+
+/**
+ * "Más cerca": asks for the location only when the person taps it (CLAUDE.md §5) and keeps it in
+ * memory; if refused, the list keeps working without it.
+ */
+export function useNearMe() {
+  const [near, setNear] = useState<Coordinates | null>(null);
+  const [busy, setBusy] = useState(false);
+  const toggle = async () => {
+    if (near) return setNear(null);
+    setBusy(true);
+    try {
+      if ((await requestLocationPermission()) !== 'granted') {
+        showToast(i18n.t('jobs:near.denied'));
+        return;
+      }
+      setNear(await getCurrentCoordinates());
+    } catch {
+      showToast(i18n.t('jobs:near.failed'));
+    } finally {
+      setBusy(false);
+    }
+  };
+  return { near, busy, toggle: () => void toggle() };
 }

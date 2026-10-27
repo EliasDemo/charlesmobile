@@ -200,7 +200,8 @@
     "none": "Sin elegir",
     "all": "Todo el Perú",
     "choose": "Elige tu distrito",
-    "search": "Buscar distrito"
+    "search": "Buscar distrito",
+    "error": "No pudimos cargar los distritos. Revisa tu conexión."
   },
   "tour": {
     "step": "{{current}} de {{total}}",

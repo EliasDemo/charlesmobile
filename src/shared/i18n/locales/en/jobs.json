@@ -144,5 +144,31 @@
     "profile": "My professional profile",
     "createProfile": "Create your professional profile",
     "createProfileHint": "It is what barbershops see when you apply."
+  },
+  "near": {
+    "label": "Nearest",
+    "active": "Nearest ✓",
+    "denied": "Without your location we show recent offers. You can pick a district.",
+    "failed": "We could not get your location. Try again."
+  },
+  "card": {
+    "distance": "{{km}} km away · {{place}}"
+  },
+  "pay": {
+    "upTo": "Up to {{amount}}",
+    "negotiable": "Negotiable",
+    "period": {
+      "DAY": "per day",
+      "WEEK": "per week",
+      "BIWEEKLY": "every two weeks",
+      "MONTH": "per month",
+      "PER_SERVICE": "per service"
+    },
+    "type": {
+      "FIXED": "Fixed salary",
+      "COMMISSION": "Commission",
+      "MIXED": "Fixed + commission",
+      "PER_SERVICE": "Per service"
+    }
   }
 }

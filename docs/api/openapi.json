@@ -19608,11 +19608,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
         "summary": "Feed de la comunidad (sin sesión también)",
         "tags": ["community"]
       }
@@ -19864,11 +19859,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
         "summary": "Una publicación",
         "tags": ["community"]
       },
@@ -20198,11 +20188,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
         "summary": "Publicaciones de una barbería (fijadas primero)",
         "tags": ["community"]
       }
@@ -20301,11 +20286,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
         "summary": "Publicaciones de un perfil profesional (fijadas primero)",
         "tags": ["community"]
       }
@@ -20753,11 +20733,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
         "summary": "Contar un compartido (devuelve el enlace)",
         "tags": ["community"]
       }
@@ -20951,11 +20926,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
         "summary": "Comentarios (primer nivel, fijados primero) o respuestas de uno (parentId)",
         "tags": ["community"]
       },
@@ -21643,11 +21613,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
         "summary": "Seguidores de la barbería (y si la sigo)",
         "tags": ["community"]
       },
@@ -21861,11 +21826,6 @@
             }
           }
         },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
         "summary": "Seguidores del perfil profesional (y si lo sigo)",
         "tags": ["community"]
       },

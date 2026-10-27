@@ -73,6 +73,5 @@ export {
   type FaceMeasurements,
   type FaceScanResult,
 } from './face';
-export { PERU_DISTRICTS, provinceOf } from './peru';
 export { loadAppSettings, useAppSettings, type AppSettings } from './appSettings';
 export { playSound, soundsAvailable, type SoundKind } from './sound';

@@ -9,7 +9,14 @@ export type ApplicationStatus = JobApplication['status'];
 export type Decision = S['DecideApplicationDto']['status'];
 export type CreateJobBody = S['CreateJobPostingDto'];
 export type UpdateJobBody = S['UpdateJobPostingDto'];
-export type JobFilters = { style?: string; employmentType?: EmploymentType; area?: string };
+export type JobFilters = {
+  style?: string;
+  employmentType?: EmploymentType;
+  /** District of the posting (INEI code). */
+  ubigeo?: string;
+  /** "Más cerca": nearest first (the backend answers up to 50, without pages). */
+  near?: { latitude: number; longitude: number };
+};
 
 export const jobKeys = {
   all: ['jobs'] as const,
@@ -32,7 +39,10 @@ export const fetchJobs = (filters: JobFilters, cursor?: string): Promise<JobPost
           ...(cursor ? { cursor } : {}),
           ...(filters.style ? { style: filters.style } : {}),
           ...(filters.employmentType ? { employmentType: filters.employmentType } : {}),
-          ...(filters.area?.trim() ? { area: filters.area.trim() } : {}),
+          ...(filters.ubigeo ? { ubigeo: filters.ubigeo } : {}),
+          ...(filters.near
+            ? { lat: filters.near.latitude, lng: filters.near.longitude, sort: 'distance' as const }
+            : {}),
         },
       },
     }),
