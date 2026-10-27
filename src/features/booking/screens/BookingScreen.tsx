@@ -1,15 +1,16 @@
 import type { ReactNode } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { PushPermissionPrompt } from '@/features/notifications';
 import { BookingReviewSection } from '@/features/reviews';
 import { WebCheckout, type CheckoutOutcome } from '@/shared/payments';
 import { useTranslation } from '@/shared/i18n';
 import { formatDuration, formatLongDate, formatMinutes, formatMoney, formatTime } from '@/shared/lib';
-import { spacing } from '@/shared/theme';
+import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import {
   Button,
   Card,
   ConfirmDialog,
+  Icon,
   Notice,
   QueryView,
   Screen,
@@ -60,12 +61,7 @@ export function BookingScreen({
       <QueryView query={data.query} notFound={notFound}>
         {(booking) => (
           <View style={styles.content}>
-            <View style={styles.header}>
-              <Text variant="title" style={styles.flex}>
-                {booking.service.name ?? t('detail.title')}
-              </Text>
-              <StatusBadge status={booking.status} />
-            </View>
+            <When booking={booking} onOpenBarbershop={onOpenBarbershop} />
             {booking.status === 'PENDING_PAYMENT' ? (
               <Card testID="pending-hero">
                 <Text variant="subtitle">{t('detail.pendingTitle')}</Text>
@@ -128,14 +124,6 @@ export function BookingScreen({
                     ? t('cancel.doneRefund', { amount: formatMoney(data.cancelled.refund.amount) })
                     : t('cancel.done')
                 }
-              />
-            ) : null}
-            <When booking={booking} />
-            {booking.barbershop.name ? (
-              <Button
-                label={`${t('detail.openBarbershop')}: ${booking.barbershop.name}`}
-                variant="ghost"
-                onPress={() => onOpenBarbershop(booking.barbershop.id)}
               />
             ) : null}
 
@@ -227,17 +215,47 @@ export function BookingScreen({
   );
 }
 
-function When({ booking }: { booking: Booking }) {
+/** The booking at a glance, on the brand color: what, its state, when, with whom and where. */
+function When({ booking, onOpenBarbershop }: { booking: Booking; onOpenBarbershop: (id: string) => void }) {
   const { t } = useTranslation('booking');
+  const theme = useTheme();
   const timeZone = booking.barbershop.timezone;
   return (
-    <Card>
-      <Text variant="bodyStrong">
+    <View style={[styles.hero, { backgroundColor: theme.colors.brand, borderRadius: theme.radius.xl }]}>
+      <StatusBadge status={booking.status} />
+      <Text variant="display" color="onBrand" numberOfLines={2}>
+        {booking.service.name ?? t('detail.title')}
+      </Text>
+      <Text variant="subtitle" color="onBrand">
         {formatLongDate(booking.startAt, timeZone)} · {formatTime(booking.startAt, timeZone)}
       </Text>
-      <Text color="textSecondary">{formatMinutes(booking.durationMinutes)}</Text>
-      {booking.barber.name ? <Text>{t('detail.barber', { barber: booking.barber.name })}</Text> : null}
-    </Card>
+      <View style={styles.heroRow}>
+        <Icon name="time" size={sizes.icon} color={theme.colors.brandAccent} />
+        <Text color="onBrand">{formatMinutes(booking.durationMinutes)}</Text>
+      </View>
+      {booking.barber.name ? (
+        <View style={styles.heroRow}>
+          <Icon name="person" size={sizes.icon} color={theme.colors.brandAccent} />
+          <Text color="onBrand" style={styles.flex}>
+            {t('detail.barber', { barber: booking.barber.name })}
+          </Text>
+        </View>
+      ) : null}
+      {booking.barbershop.name ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`${t('detail.openBarbershop')}: ${booking.barbershop.name}`}
+          onPress={() => onOpenBarbershop(booking.barbershop.id)}
+          style={[styles.heroShop, { borderColor: theme.colors.brandAccent, borderRadius: theme.radius.md }]}
+        >
+          <Icon name="storefront" size={sizes.icon} color={theme.colors.brandAccent} />
+          <Text variant="bodyStrong" color="onBrand" style={styles.flex} numberOfLines={1}>
+            {booking.barbershop.name}
+          </Text>
+          <Icon name="chevron-forward" size={sizes.icon} color={theme.colors.brandAccent} />
+        </Pressable>
+      ) : null}
+    </View>
   );
 }
 
@@ -283,8 +301,18 @@ const URGENT_SECONDS = 60;
 
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },
-  header: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   flex: { flex: 1 },
+  hero: { padding: spacing.lg, gap: spacing.sm },
+  heroRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  heroShop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    minHeight: touchTarget,
+    paddingHorizontal: spacing.md,
+    marginTop: spacing.xs,
+    borderWidth: 1,
+  },
 });
 
 /** What the checkout page reported, while the backend confirms (it alone decides the state). */

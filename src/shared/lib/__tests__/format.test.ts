@@ -1,4 +1,4 @@
-import { formatLongDate, formatShortDate, formatTime, toLocalDate } from '../dates';
+import { daysFromToday, formatLongDate, formatShortDate, formatTime, toLocalDate } from '../dates';
 import { formatMoney } from '../money';
 import { initials } from '../format';
 
@@ -44,5 +44,15 @@ describe('initials (unusual names)', () => {
   });
   it('uses the first and last word of long names', () => {
     expect(initials('  maría   josé  de la   torre ')).toBe('MT');
+  });
+});
+
+describe('daysFromToday', () => {
+  const now = new Date('2030-01-07T23:30:00.000Z'); // 18:30 on Jan 7 in Lima
+  it('counts calendar days in the barbershop zone, not the phone zone', () => {
+    expect(daysFromToday('2030-01-08T02:00:00.000Z', 'America/Lima', now)).toBe(0); // 21:00 same day in Lima
+    expect(daysFromToday('2030-01-08T15:00:00.000Z', 'America/Lima', now)).toBe(1);
+    expect(daysFromToday('2030-01-10T15:00:00.000Z', 'America/Lima', now)).toBe(3);
+    expect(daysFromToday('2030-01-06T15:00:00.000Z', 'America/Lima', now)).toBe(-1);
   });
 });

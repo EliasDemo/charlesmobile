@@ -6,7 +6,7 @@ import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
 import { InfiniteList, SegmentedControl, Text } from '@/shared/ui';
 import type { BookingScope } from '../api/bookingApi';
-import { BookingCard } from '../components/BookingParts';
+import { BookingCard, NextBookingCard } from '../components/BookingParts';
 import { useMyBookings } from '../hooks/useBooking';
 
 export function MyBookingsScreen({
@@ -26,7 +26,7 @@ export function MyBookingsScreen({
 
   const header = (
     <View style={styles.header}>
-      <Text variant="title">{t('nav.bookings', { ns: 'common' })}</Text>
+      <Text variant="display">{t('nav.bookings', { ns: 'common' })}</Text>
       <PendingReviewPrompt onReview={onReview} />
       <SegmentedControl
         label={t('nav.bookings', { ns: 'common' })}
@@ -49,7 +49,14 @@ export function MyBookingsScreen({
       <InfiniteList
         query={query}
         header={header}
-        renderItem={({ item }) => <BookingCard booking={item} onPress={onOpenBooking} />}
+        renderItem={({ item, index }) =>
+          // The nearest appointment stands out; the rest stay compact.
+          scope === 'upcoming' && index === 0 ? (
+            <NextBookingCard booking={item} onPress={onOpenBooking} />
+          ) : (
+            <BookingCard booking={item} onPress={onOpenBooking} />
+          )
+        }
         keyExtractor={(item) => item.id}
         empty={
           scope === 'upcoming'

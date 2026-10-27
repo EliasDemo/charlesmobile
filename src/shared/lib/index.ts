@@ -10,6 +10,7 @@ export {
   toLocalDate,
   upcomingDays,
   zonedTimeToIso,
+  daysFromToday,
 } from './dates';
 export { deviceModelName } from './device';
 export { displayLanguage, displayLocale, setDisplayLanguage, type AppLanguage } from './locale';

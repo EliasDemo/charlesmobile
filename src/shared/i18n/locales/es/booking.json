@@ -109,7 +109,13 @@
     "emptyHistory": {
       "title": "Aún no hay reservas pasadas"
     },
-    "explore": "Explorar barberías"
+    "explore": "Explorar barberías",
+    "next": "Tu próxima cita",
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "inDays_one": "En {{count}} día",
+    "inDays_other": "En {{count}} días",
+    "more": "Después"
   },
   "payment": {
     "pay": "Pagar {{amount}}",

@@ -109,7 +109,13 @@
     "emptyHistory": {
       "title": "No past bookings yet"
     },
-    "explore": "Explore barbershops"
+    "explore": "Explore barbershops",
+    "next": "Your next appointment",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "inDays_one": "In {{count}} day",
+    "inDays_other": "In {{count}} days",
+    "more": "Later"
   },
   "payment": {
     "pay": "Pay {{amount}}",

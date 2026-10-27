@@ -1,17 +1,19 @@
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { formatLongDate, formatMinutes, formatMoney, formatTime } from '@/shared/lib';
-import { spacing } from '@/shared/theme';
+import { sizes, spacing, useTheme } from '@/shared/theme';
 import {
   Button,
   Card,
   EmptyState,
+  Icon,
   LoadingState,
   Notice,
   QueryView,
   Screen,
   Text,
   TextField,
+  type IconName,
 } from '@/shared/ui';
 import { PriceBreakdown } from '../components/BookingParts';
 import { useSummary } from '../hooks/useSummary';
@@ -24,6 +26,7 @@ export interface SummaryScreenProps extends UseConfirmBookingOptions {
 
 export function SummaryScreen({ onChangeSlot, onSeeBookings, ...confirmOptions }: SummaryScreenProps) {
   const { t } = useTranslation('booking');
+  const theme = useTheme();
   const summary = useSummary(confirmOptions);
 
   if (!summary.complete) {
@@ -41,17 +44,33 @@ export function SummaryScreen({ onChangeSlot, onSeeBookings, ...confirmOptions }
   const { shop, service } = summary;
   return (
     <Screen>
-      <Text variant="title">{t('summary.title')}</Text>
-      <Card>
-        <Row label={t('summary.barbershop')} value={shop.name} />
-        <Row label={t('summary.service')} value={service.name} />
-        <Row label={t('summary.barber')} value={summary.barberName ?? t('summary.firstAvailable')} />
-        <Row
-          label={t('summary.when')}
-          value={`${formatLongDate(summary.slot!.startAt, shop.timezone)} · ${formatTime(summary.slot!.startAt, shop.timezone)}`}
-        />
-        <Row label={t('summary.duration')} value={formatMinutes(service.durationMinutes)} />
-      </Card>
+      <Text variant="display">{t('summary.title')}</Text>
+      {/* A ticket: where and when on top, the details below a torn line. */}
+      <View style={[styles.ticket, { borderRadius: theme.radius.xl, backgroundColor: theme.colors.surface }]}>
+        <View style={[styles.ticketTop, { backgroundColor: theme.colors.brand }]}>
+          <Text variant="label" color="brandAccent" numberOfLines={2}>
+            {shop.name}
+          </Text>
+          <Text variant="subtitle" color="onBrand">
+            {`${formatLongDate(summary.slot!.startAt, shop.timezone)} · ${formatTime(summary.slot!.startAt, shop.timezone)}`}
+          </Text>
+        </View>
+        <View style={styles.tear}>
+          <View style={[styles.notch, styles.notchLeft, { backgroundColor: theme.colors.background }]} />
+          <View style={[styles.dashes, { borderColor: theme.colors.border }]} />
+          <View style={[styles.notch, styles.notchRight, { backgroundColor: theme.colors.background }]} />
+        </View>
+        <View style={styles.ticketBody}>
+          <Row icon="cut" label={t('summary.service')} value={service.name} />
+          <Row
+            icon="person"
+            label={t('summary.barber')}
+            value={summary.barberName ?? t('summary.firstAvailable')}
+          />
+          <Row icon="time" label={t('summary.duration')} value={formatMinutes(service.durationMinutes)} />
+          <Row icon="location" label={t('summary.barbershop')} value={shop.address} />
+        </View>
+      </View>
       <QueryView query={summary.quote.query} skeletonCount={1}>
         {(quote) => (
           <View style={styles.price}>
@@ -134,18 +153,31 @@ function CouponField({
   );
 }
 
-function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
+function Row({ icon, label, value }: { icon: IconName; label: string; value: string }) {
+  const theme = useTheme();
   return (
     <View style={styles.row}>
-      <Text variant="caption" color="textSecondary">
-        {label}
-      </Text>
-      <Text variant={strong ? 'bodyStrong' : 'body'}>{value}</Text>
+      <Icon name={icon} size={sizes.icon} color={theme.colors.primary} />
+      <View style={styles.flex}>
+        <Text variant="caption" color="textSecondary">
+          {label}
+        </Text>
+        <Text variant="bodyStrong">{value}</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  row: { gap: spacing.xxs, paddingVertical: spacing.xs },
+  flex: { flex: 1 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingVertical: spacing.xs },
+  ticket: { overflow: 'hidden' },
+  ticketTop: { padding: spacing.lg, gap: spacing.xs },
+  ticketBody: { paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
+  tear: { flexDirection: 'row', alignItems: 'center', height: spacing.xl },
+  dashes: { flex: 1, borderTopWidth: 2, borderStyle: 'dashed', marginHorizontal: spacing.sm },
+  notch: { width: spacing.xl, height: spacing.xl, borderRadius: spacing.md },
+  notchLeft: { marginLeft: -spacing.md },
+  notchRight: { marginRight: -spacing.md },
   price: { gap: spacing.sm },
 });

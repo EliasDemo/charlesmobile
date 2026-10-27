@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ResultCard } from '@/features/search';
 import { useTranslation } from '@/shared/i18n';
-import { formatMinutes, formatMoney, formatTime } from '@/shared/lib';
+import { formatShortDate, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
 import { Button, Chip, DateSelector, Notice, QueryView, Screen, Text } from '@/shared/ui';
 import { BarberChoice } from '../components/BarberChoice';
+import { BOOK_BAR_SPACE, BookBar, ServiceOption, SlotButton, SlotGrid, Step } from '../components/BookParts';
 import { useBookingSetup } from '../hooks/useBookingSetup';
 
 export interface BookScreenProps {
@@ -19,6 +20,7 @@ export interface BookScreenProps {
   onOpenBarberProfile?: (profileId: string) => void;
 }
 
+/** "Reservar" in four numbered steps (service, barber, day, time), with the choice fixed below. */
 export function BookScreen({
   barbershopId,
   serviceId,
@@ -37,154 +39,165 @@ export function BookScreen({
     message: t('notFound.message', { ns: 'barbershop' }),
     action: { label: t('notFound.action', { ns: 'barbershop' }), onPress: onBack },
   };
+  const zone = setup.shop.data?.timezone;
+  const summary =
+    setup.service && zone
+      ? [
+          setup.service.name,
+          draft.slot
+            ? `${formatShortDate(draft.slot.startAt, zone)} · ${formatTime(draft.slot.startAt, zone)}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(' · ')
+      : null;
 
   return (
-    <Screen>
-      <QueryView query={setup.shop} notFound={notFound}>
-        {(shop) => (
-          <View style={styles.content}>
-            <Text variant="title">{shop.name}</Text>
-            {draft.notice === 'slotTaken' ? <Notice tone="warning" message={t('book.slotTaken')} /> : null}
+    <View style={styles.fill}>
+      <Screen>
+        <QueryView query={setup.shop} notFound={notFound}>
+          {(shop) => (
+            <View style={styles.content}>
+              <Text variant="display" numberOfLines={2}>
+                {shop.name}
+              </Text>
+              {draft.notice === 'slotTaken' ? <Notice tone="warning" message={t('book.slotTaken')} /> : null}
 
-            <Section title={t('book.service')}>
-              <QueryView query={setup.services} isEmpty={(list) => list.length === 0}>
-                {(services) => (
-                  <View style={styles.chips}>
-                    {services.map((service) => (
+              <Step number={1} title={t('book.service')} done={Boolean(setup.service)}>
+                <QueryView query={setup.services} isEmpty={(list) => list.length === 0}>
+                  {(services) => (
+                    <View style={styles.list}>
+                      {services.map((service) => (
+                        <ServiceOption
+                          key={service.id}
+                          service={service}
+                          selected={draft.serviceId === service.id}
+                          onPress={() => draft.setService(service.id)}
+                        />
+                      ))}
+                    </View>
+                  )}
+                </QueryView>
+              </Step>
+
+              {setup.service ? (
+                <>
+                  <Step number={2} title={t('book.barber')} done>
+                    <View style={styles.chips}>
                       <Chip
-                        key={service.id}
-                        label={`${service.name} · ${formatMoney(service.price)} · ${formatMinutes(service.durationMinutes)}`}
-                        selected={draft.serviceId === service.id}
-                        onPress={() => draft.setService(service.id)}
+                        label={t('book.anyBarber')}
+                        selected={draft.barberId === null}
+                        onPress={() => draft.setBarber(null)}
                       />
-                    ))}
-                  </View>
-                )}
-              </QueryView>
-            </Section>
+                    </View>
+                    {setup.eligibleBarbers.map((barber) => {
+                      const profileId = barber.profileId;
+                      return (
+                        <BarberChoice
+                          key={barber.id}
+                          barber={barber}
+                          selected={draft.barberId === barber.id}
+                          topRated={setup.topRatedBarberId === barber.id}
+                          onSelect={() => draft.setBarber(barber.id)}
+                          onOpenProfile={
+                            profileId && onOpenBarberProfile
+                              ? () => onOpenBarberProfile(profileId)
+                              : undefined
+                          }
+                        />
+                      );
+                    })}
+                  </Step>
 
-            {setup.service ? (
-              <>
-                <Section title={t('book.barber')}>
-                  <View style={styles.chips}>
-                    <Chip
-                      label={t('book.anyBarber')}
-                      selected={draft.barberId === null}
-                      onPress={() => draft.setBarber(null)}
+                  <Step number={3} title={t('book.day')} done={Boolean(draft.date)}>
+                    <DateSelector
+                      days={setup.days}
+                      selected={draft.date}
+                      onSelect={(date) => date && draft.setDate(date)}
+                      label={t('book.day')}
                     />
-                  </View>
-                  {setup.eligibleBarbers.map((barber) => {
-                    const profileId = barber.profileId;
-                    return (
-                      <BarberChoice
-                        key={barber.id}
-                        barber={barber}
-                        selected={draft.barberId === barber.id}
-                        topRated={setup.topRatedBarberId === barber.id}
-                        onSelect={() => draft.setBarber(barber.id)}
-                        onOpenProfile={
-                          profileId && onOpenBarberProfile ? () => onOpenBarberProfile(profileId) : undefined
-                        }
-                      />
-                    );
-                  })}
-                </Section>
+                  </Step>
 
-                <Section title={t('book.day')}>
-                  <DateSelector
-                    days={setup.days}
-                    selected={draft.date}
-                    onSelect={(date) => date && draft.setDate(date)}
-                    label={t('book.day')}
-                  />
-                </Section>
-
-                <Section title={t('book.slots')}>
-                  <Text variant="caption" color="textMuted">
-                    {t('book.slotsTimezone', { timezone: shop.timezone })}
-                  </Text>
-                  <QueryView query={setup.availability}>
-                    {() =>
-                      setup.noSlots ? (
-                        <View style={styles.content}>
-                          <Notice tone="info" message={t('book.noSlots')}>
-                            {nextDay ? (
-                              <Button
-                                label={t('nextDay', { ns: 'common' })}
-                                variant="secondary"
-                                icon="arrow-forward"
-                                onPress={() => draft.setDate(nextDay)}
-                              />
-                            ) : null}
-                          </Notice>
-                          <Text variant="subtitle">{t('book.alternativesTitle')}</Text>
-                          <QueryView
-                            query={setup.alternatives}
-                            isEmpty={(alternatives) => alternatives.items.length === 0}
-                            empty={{ message: t('service.alternativesEmpty', { ns: 'barbershop' }) }}
-                          >
-                            {(alternatives) =>
-                              alternatives.items.map((alternative) => (
-                                <ResultCard
-                                  key={alternative.barbershop.id}
-                                  item={alternative.barbershop}
-                                  onPress={onOpenBarbershop}
+                  <Step number={4} title={t('book.slots')} done={Boolean(draft.slot)}>
+                    <Text variant="caption" color="textMuted">
+                      {t('book.slotsTimezone', { timezone: shop.timezone })}
+                    </Text>
+                    <QueryView query={setup.availability}>
+                      {() =>
+                        setup.noSlots ? (
+                          <View style={styles.content}>
+                            <Notice tone="info" message={t('book.noSlots')}>
+                              {nextDay ? (
+                                <Button
+                                  label={t('nextDay', { ns: 'common' })}
+                                  variant="secondary"
+                                  icon="arrow-forward"
+                                  onPress={() => draft.setDate(nextDay)}
                                 />
-                              ))
-                            }
-                          </QueryView>
-                        </View>
-                      ) : (
-                        setup.slotGroups.map((group) => (
-                          <View key={group.part} style={styles.group}>
-                            <Text variant="label" color="textSecondary">
-                              {t(`book.parts.${group.part}`)}
-                            </Text>
-                            <ScrollView
-                              horizontal
-                              showsHorizontalScrollIndicator={false}
-                              contentContainerStyle={styles.chips}
+                              ) : null}
+                            </Notice>
+                            <Text variant="subtitle">{t('book.alternativesTitle')}</Text>
+                            <QueryView
+                              query={setup.alternatives}
+                              isEmpty={(alternatives) => alternatives.items.length === 0}
+                              empty={{ message: t('service.alternativesEmpty', { ns: 'barbershop' }) }}
                             >
-                              {group.slots.map((slot) => (
-                                <Chip
-                                  key={slot.startAt}
-                                  label={formatTime(slot.startAt, shop.timezone)}
-                                  selected={draft.slot?.startAt === slot.startAt}
-                                  onPress={() => draft.setSlot({ startAt: slot.startAt, endAt: slot.endAt })}
-                                />
-                              ))}
-                            </ScrollView>
+                              {(alternatives) =>
+                                alternatives.items.map((alternative) => (
+                                  <ResultCard
+                                    key={alternative.barbershop.id}
+                                    item={alternative.barbershop}
+                                    onPress={onOpenBarbershop}
+                                  />
+                                ))
+                              }
+                            </QueryView>
                           </View>
-                        ))
-                      )
-                    }
-                  </QueryView>
-                </Section>
-              </>
-            ) : (
-              <Text color="textSecondary">{t('book.chooseService')}</Text>
-            )}
-
-            <Button label={t('book.continue')} onPress={onContinue} disabled={!setup.canContinue} fullWidth />
-          </View>
-        )}
-      </QueryView>
-    </Screen>
-  );
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <View style={styles.section}>
-      <Text variant="subtitle">{title}</Text>
-      {children}
+                        ) : (
+                          setup.slotGroups.map((group) => (
+                            <View key={group.part} style={styles.group}>
+                              <Text variant="label" color="textSecondary">
+                                {t(`book.parts.${group.part}`)}
+                              </Text>
+                              <SlotGrid>
+                                {group.slots.map((slot) => (
+                                  <SlotButton
+                                    key={slot.startAt}
+                                    label={formatTime(slot.startAt, shop.timezone)}
+                                    selected={draft.slot?.startAt === slot.startAt}
+                                    onPress={() =>
+                                      draft.setSlot({ startAt: slot.startAt, endAt: slot.endAt })
+                                    }
+                                  />
+                                ))}
+                              </SlotGrid>
+                            </View>
+                          ))
+                        )
+                      }
+                    </QueryView>
+                  </Step>
+                </>
+              ) : (
+                <Text color="textSecondary">{t('book.chooseService')}</Text>
+              )}
+              <View style={styles.barSpace} />
+            </View>
+          )}
+        </QueryView>
+      </Screen>
+      {setup.shop.data ? (
+        <BookBar summary={summary} canContinue={setup.canContinue} onContinue={onContinue} />
+      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { gap: spacing.lg },
-  section: { gap: spacing.sm },
-  group: { gap: spacing.xs },
+  fill: { flex: 1 },
+  content: { gap: spacing.xl },
+  list: { gap: spacing.sm },
+  group: { gap: spacing.sm },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+  barSpace: { height: BOOK_BAR_SPACE },
 });

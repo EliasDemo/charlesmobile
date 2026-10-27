@@ -1,11 +1,12 @@
-import { Share, StyleSheet, View } from 'react-native';
+import { Pressable, Share, StyleSheet, View } from 'react-native';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
-import { formatMoney, formatShortDate, formatTime } from '@/shared/lib';
-import { spacing, type StatusTone } from '@/shared/theme';
+import { daysFromToday, formatLongDate, formatMoney, formatShortDate, formatTime } from '@/shared/lib';
+import { sizes, spacing, useTheme, type StatusTone } from '@/shared/theme';
 import {
   Button,
   Card,
+  Icon,
   IconTile,
   InfoCard,
   StatusPill,
@@ -107,6 +108,83 @@ export function BookingCard({ booking, onPress }: { booking: Booking; onPress: (
   );
 }
 
+/** The next appointment, big: when (with "Hoy" / "Mañana" / "En 3 días"), what, where and with whom. */
+export function NextBookingCard({ booking, onPress }: { booking: Booking; onPress: (id: string) => void }) {
+  const { t } = useTranslation('booking');
+  const theme = useTheme();
+  const zone = booking.barbershop.timezone;
+  const days = zone ? daysFromToday(booking.startAt, zone) : null;
+  const when =
+    days === null || days < 0
+      ? null
+      : days === 0
+        ? t('list.today')
+        : days === 1
+          ? t('list.tomorrow')
+          : t('list.inDays', { count: days });
+  return (
+    <Pressable
+      accessibilityRole="button"
+      onPress={() => onPress(booking.id)}
+      style={({ pressed }) => [
+        styles.next,
+        { backgroundColor: theme.colors.brand, borderRadius: theme.radius.xl, opacity: pressed ? 0.92 : 1 },
+      ]}
+      testID={`booking-${booking.id}`}
+    >
+      <View style={styles.nextTop}>
+        <Text variant="label" color="brandAccent" style={styles.flex}>
+          {t('list.next')}
+        </Text>
+        {when ? (
+          <View
+            style={[
+              styles.when,
+              { backgroundColor: theme.colors.brandAccent, borderRadius: theme.radius.pill },
+            ]}
+          >
+            <Text variant="label" color="onPrimary">
+              {when}
+            </Text>
+          </View>
+        ) : null}
+      </View>
+      {zone ? (
+        <View>
+          <Text variant="display" color="onBrand">
+            {formatTime(booking.startAt, zone)}
+          </Text>
+          <Text color="onBrand">{formatLongDate(booking.startAt, zone)}</Text>
+        </View>
+      ) : null}
+      <View style={[styles.nextDivider, { backgroundColor: theme.colors.brandAccent }]} />
+      <View style={styles.nextRow}>
+        <Icon name={'cut'} size={sizes.icon} color={theme.colors.brandAccent} />
+        <Text variant="bodyStrong" color="onBrand" style={styles.flex} numberOfLines={1}>
+          {booking.service.name ?? ''}
+        </Text>
+      </View>
+      {booking.barbershop.name ? (
+        <View style={styles.nextRow}>
+          <Icon name="storefront" size={sizes.icon} color={theme.colors.brandAccent} />
+          <Text color="onBrand" style={styles.flex} numberOfLines={1}>
+            {booking.barbershop.name}
+          </Text>
+        </View>
+      ) : null}
+      {booking.barber.name ? (
+        <View style={styles.nextRow}>
+          <Icon name="person" size={sizes.icon} color={theme.colors.brandAccent} />
+          <Text color="onBrand" style={styles.flex} numberOfLines={1}>
+            {t('detail.barber', { barber: booking.barber.name })}
+          </Text>
+        </View>
+      ) : null}
+      <StatusBadge status={booking.status} />
+    </Pressable>
+  );
+}
+
 /**
  * Development only: the booking id, to confirm the payment with `dev:pay` from the backend.
  * `__DEV__` is false in release bundles, so this branch is removed there.
@@ -139,4 +217,9 @@ export function DevBookingId({ bookingId }: { bookingId: string }) {
 const styles = StyleSheet.create({
   flex: { flex: 1 },
   priceRow: { flexDirection: 'row', gap: spacing.md },
+  next: { padding: spacing.lg, gap: spacing.sm },
+  nextTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  when: { paddingHorizontal: spacing.md, paddingVertical: spacing.xxs },
+  nextDivider: { height: 2, width: spacing.xxl, marginVertical: spacing.xs },
+  nextRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
 });

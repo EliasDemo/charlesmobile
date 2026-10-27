@@ -30,6 +30,17 @@ export function toLocalDate(iso: string, timeZone: string): string {
   return `${get('year')}-${get('month')}-${get('day')}`;
 }
 
+/** Calendar days from today to an instant, both in the given zone (0 today, 1 tomorrow, -1 yesterday). */
+export function daysFromToday(iso: string, timeZone: string, now: Date = new Date()): number {
+  const toUtc = (day: string) => {
+    const [y, m, d] = day.split('-').map(Number);
+    return Date.UTC(y!, m! - 1, d!);
+  };
+  return Math.round(
+    (toUtc(toLocalDate(iso, timeZone)) - toUtc(toLocalDate(now.toISOString(), timeZone))) / 86_400_000,
+  );
+}
+
 /**
  * The next `count` calendar days in a time zone, starting today there. Pure calendar arithmetic on
  * dates (not instants), so it never drifts with the phone's zone.

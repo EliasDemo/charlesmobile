@@ -80,6 +80,8 @@ describe('BarbershopScreen', () => {
     expect(screen.getByText('Barba')).toBeTruthy(); // category group
     expect(screen.getByText('Barbero Demo')).toBeTruthy();
     expect(screen.getByText('Excelente corte')).toBeTruthy();
+    // The week opens from today's line.
+    await fireEvent.press(screen.getByRole('button', { name: new RegExp(`^${texts.hours.today}:`) }));
     expect(screen.getAllByText('09:00–13:00 · 14:00–20:00').length).toBeGreaterThan(0);
     expect(screen.getByText(texts.hours.closedDay)).toBeTruthy(); // Sunday
     // phone, description and links are null: hidden
