@@ -64,7 +64,7 @@ export function InfoCard({
                   color={theme.colors.textMuted}
                   size={theme.typography.caption.fontSize}
                 />
-                <Text variant="caption" color="textSecondary">
+                <Text variant="caption" color="textSecondary" style={styles.shrink}>
                   {item.text}
                 </Text>
               </View>
@@ -124,7 +124,8 @@ const styles = StyleSheet.create({
   titleRow: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm },
   flex: { flex: 1 },
   details: { flexDirection: 'row', flexWrap: 'wrap', columnGap: spacing.md, rowGap: spacing.xxs },
-  detail: { flexDirection: 'row', alignItems: 'center', gap: spacing.xxs },
+  detail: { flexDirection: 'row', alignItems: 'center', gap: spacing.xxs, maxWidth: '100%' },
+  shrink: { flexShrink: 1 },
   tile: {
     width: sizes.avatarSmall,
     height: sizes.avatarSmall,

@@ -3,6 +3,9 @@ import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import { Text } from './Text';
 
+const SINGLE_LINE_MAX = 255;
+const MULTILINE_MAX = 2000;
+
 export interface TextFieldProps extends TextInputProps {
   label: string;
   hint?: string;
@@ -48,6 +51,8 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
           placeholderTextColor={theme.colors.textMuted}
           selectionColor={theme.colors.primary}
           maxFontSizeMultiplier={2}
+          // A safety limit when the screen sets none: a huge paste must not freeze the field.
+          maxLength={props.multiline ? MULTILINE_MAX : SINGLE_LINE_MAX}
           onFocus={(event) => {
             setFocused(true);
             onFocus?.(event);
@@ -59,6 +64,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
           style={[
             theme.typography.body,
             styles.input,
+            props.multiline ? styles.multiline : null,
             { color: editable ? theme.colors.textPrimary : theme.colors.onDisabled },
             style,
           ]}
@@ -89,4 +95,10 @@ const styles = StyleSheet.create({
     borderWidth: sizes.borderWidth,
   },
   input: { flex: 1, minHeight: touchTarget, paddingHorizontal: spacing.md },
+  // Grows with the text up to five lines, then scrolls inside: the button below stays in view.
+  multiline: {
+    maxHeight: touchTarget * 4,
+    paddingVertical: spacing.sm,
+    textAlignVertical: 'top',
+  },
 });

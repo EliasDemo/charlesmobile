@@ -3,6 +3,8 @@ import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import { Icon } from './Icon';
 
+const SEARCH_MAX = 100;
+
 export interface SearchFieldProps {
   value: string;
   onChangeText: (text: string) => void;
@@ -36,6 +38,7 @@ export function SearchField({ value, onChangeText, placeholder, label }: SearchF
         selectionColor={theme.colors.primary}
         returnKeyType="search"
         autoCorrect={false}
+        maxLength={SEARCH_MAX}
         maxFontSizeMultiplier={2}
         style={[theme.typography.body, styles.input, { color: theme.colors.textPrimary }]}
       />

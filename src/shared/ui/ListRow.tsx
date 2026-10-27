@@ -46,7 +46,11 @@ export function ListRow({ title, subtitle, value, onPress, destructive, icon }: 
           </Text>
         ) : null}
       </View>
-      {value ? <Text color="textSecondary">{value}</Text> : null}
+      {value ? (
+        <Text color="textSecondary" numberOfLines={1} style={styles.value}>
+          {value}
+        </Text>
+      ) : null}
       {onPress ? (
         <View importantForAccessibility="no-hide-descendants">
           <Icon name="chevron-forward" size={sizes.icon} color={theme.colors.textMuted} />
@@ -121,6 +125,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: sizes.borderWidth,
   },
   texts: { flex: 1, gap: spacing.xxs },
+  // A long value never squeezes the title away.
+  value: { maxWidth: '45%', flexShrink: 1 },
   icon: {
     width: touchTarget - spacing.sm,
     height: touchTarget - spacing.sm,

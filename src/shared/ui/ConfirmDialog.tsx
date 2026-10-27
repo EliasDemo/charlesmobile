@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { haptic } from '@/shared/lib';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import { Button } from './Button';
 import { Icon, type IconName } from './Icon';
+import { KeyboardAvoider } from './keyboard';
 import { Text } from './Text';
 
 export interface ConfirmDialogProps {
@@ -67,7 +68,7 @@ export function ConfirmDialog({
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onCancel} statusBarTranslucent>
       <GestureHandlerRootView style={styles.flex}>
-        <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <KeyboardAvoider style={styles.flex}>
           <Pressable
             style={[styles.backdrop, { backgroundColor: theme.colors.backdrop }]}
             onPress={loading ? undefined : onCancel}
@@ -134,7 +135,7 @@ export function ConfirmDialog({
               </Animated.View>
             </GestureDetector>
           </Pressable>
-        </KeyboardAvoidingView>
+        </KeyboardAvoider>
       </GestureHandlerRootView>
     </Modal>
   );

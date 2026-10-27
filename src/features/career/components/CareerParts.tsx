@@ -1,4 +1,5 @@
-import { Image, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useState } from 'react';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { mediaUrl } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
@@ -79,30 +80,32 @@ export function PortfolioGrid({
 }) {
   const { t } = useTranslation('career');
   const theme = useTheme();
-  const { width } = useWindowDimensions();
-  const size = Math.floor((Math.min(width, sizes.maxContentWidth) - spacing.gutter * 2 - spacing.xs * 2) / 3);
+  // Three per row from the grid's real width (it may sit inside a card with its own padding).
+  const [width, setWidth] = useState(0);
+  const size = Math.floor((width - spacing.xs * 2) / 3);
   return (
-    <View style={styles.grid}>
-      {items.map((item) => {
-        const uri = mediaUrl(item.thumbUrl);
-        return (
-          <Pressable
-            key={item.id}
-            accessibilityRole="imagebutton"
-            accessibilityLabel={item.caption ?? t('portfolio.cut')}
-            onPress={onPress ? () => onPress(item) : undefined}
-            onLongPress={onLongPress ? () => onLongPress(item) : undefined}
-            style={{ width: size, height: size, borderRadius: theme.radius.md, overflow: 'hidden' }}
-            testID={`portfolio-${item.id}`}
-          >
-            {uri ? (
-              <Image source={{ uri }} style={styles.fill} />
-            ) : (
-              <View style={[styles.fill, { backgroundColor: theme.colors.surface }]} />
-            )}
-          </Pressable>
-        );
-      })}
+    <View style={styles.grid} onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
+      {size > 0 &&
+        items.map((item) => {
+          const uri = mediaUrl(item.thumbUrl);
+          return (
+            <Pressable
+              key={item.id}
+              accessibilityRole="imagebutton"
+              accessibilityLabel={item.caption ?? t('portfolio.cut')}
+              onPress={onPress ? () => onPress(item) : undefined}
+              onLongPress={onLongPress ? () => onLongPress(item) : undefined}
+              style={{ width: size, height: size, borderRadius: theme.radius.md, overflow: 'hidden' }}
+              testID={`portfolio-${item.id}`}
+            >
+              {uri ? (
+                <Image source={{ uri }} style={styles.fill} />
+              ) : (
+                <View style={[styles.fill, { backgroundColor: theme.colors.surface }]} />
+              )}
+            </Pressable>
+          );
+        })}
     </View>
   );
 }

@@ -916,7 +916,9 @@ export function ReportsScreen({ shopId, onUpgrade }: { shopId: string; onUpgrade
                         label={t('reports.saveCommission')}
                         onPress={() => {
                           const value = Number(percent.replace(',', '.'));
-                          if (value >= 0 && value <= 100) r.setCommission(b.barberId, value);
+                          // An invalid percent keeps the editor open: closing would look saved.
+                          if (!percent.trim() || !(value >= 0 && value <= 100)) return;
+                          r.setCommission(b.barberId, value);
                           setEditing(null);
                         }}
                       />

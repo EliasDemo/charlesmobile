@@ -1,5 +1,6 @@
 import { formatLongDate, formatShortDate, formatTime, toLocalDate } from '../dates';
 import { formatMoney } from '../money';
+import { initials } from '../format';
 
 describe('formatMoney', () => {
   it('shows céntimos as soles without doing arithmetic on prices', () => {
@@ -29,5 +30,19 @@ describe('dates in the barbershop time zone', () => {
   it('computes the local calendar day', () => {
     expect(toLocalDate('2030-01-08T03:00:00.000Z', 'America/Lima')).toBe('2030-01-07');
     expect(toLocalDate('2030-01-08T03:00:00.000Z', 'UTC')).toBe('2030-01-08');
+  });
+});
+
+describe('initials (unusual names)', () => {
+  it('keeps a leading emoji whole', () => {
+    expect(initials('😎 Carlos')).toBe('😎C');
+    expect(Array.from(initials('💈')).length).toBe(1);
+  });
+  it('falls back for empty or blank names', () => {
+    expect(initials('')).toBe('?');
+    expect(initials('   ')).toBe('?');
+  });
+  it('uses the first and last word of long names', () => {
+    expect(initials('  maría   josé  de la   torre ')).toBe('MT');
   });
 });

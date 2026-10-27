@@ -26,6 +26,9 @@ export function formatRating(average: number): string {
 /** Initials for placeholders until the gallery exists ("Barbería Demo" → "BD"). */
 export function initials(name: string): string {
   const words = name.trim().split(/\s+/).filter(Boolean);
-  const letters = (words.length > 1 ? [words[0], words[words.length - 1]] : words).map((w) => w![0] ?? '');
-  return letters.join('').toUpperCase();
+  // By code point, not by UTF-16 unit: a name that starts with an emoji must not show half of it.
+  const letters = (words.length > 1 ? [words[0], words[words.length - 1]] : words).map(
+    (w) => Array.from(w!)[0] ?? '',
+  );
+  return letters.join('').toUpperCase() || '?';
 }

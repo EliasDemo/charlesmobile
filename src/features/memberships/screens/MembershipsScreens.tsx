@@ -220,7 +220,8 @@ export function ShopMembershipsScreen({ shopId, isOwner }: { shopId: string; isO
   const [credits, setCredits] = useState('');
   const [serviceIds, setServiceIds] = useState<string[]>([]);
   const priceCents = Math.round(Number(price.replace(',', '.')) * 100);
-  const valid = name.trim().length >= 3 && priceCents > 0 && Number(credits) >= 1;
+  const valid =
+    name.trim().length >= 3 && Number.isFinite(priceCents) && priceCents > 0 && Number(credits) >= 1;
   return (
     <Screen>
       {m.error ? <Notice tone="danger" message={m.error} /> : null}
@@ -240,7 +241,7 @@ export function ShopMembershipsScreen({ shopId, isOwner }: { shopId: string; isO
               label={t('shop.credits')}
               hint={t('shop.creditsHint')}
               value={credits}
-              onChangeText={setCredits}
+              onChangeText={(v) => setCredits(v.replace(/[^\d]/g, ''))}
               keyboardType="number-pad"
               maxLength={3}
             />

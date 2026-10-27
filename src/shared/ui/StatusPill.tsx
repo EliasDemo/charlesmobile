@@ -23,7 +23,7 @@ export function StatusPill({ tone, icon, label }: StatusPillProps) {
       testID={`status-${tone}`}
     >
       <Icon name={icon} color={theme.colors[fg]} size={theme.typography.caption.fontSize} />
-      <Text variant="label" style={{ color: theme.colors[fg] }}>
+      <Text variant="label" numberOfLines={1} style={[styles.label, { color: theme.colors[fg] }]}>
         {label}
       </Text>
     </View>
@@ -38,5 +38,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xxs,
     alignSelf: 'flex-start',
+    maxWidth: '100%',
   },
+  label: { flexShrink: 1 },
 });

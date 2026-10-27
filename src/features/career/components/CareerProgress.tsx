@@ -44,7 +44,7 @@ export function CareerProgressCard({
               style={[
                 styles.fill,
                 {
-                  width: `${(reviews / RANKING_MIN_REVIEWS) * 100}%`,
+                  width: `${Math.min(1, reviews / RANKING_MIN_REVIEWS) * 100}%`,
                   backgroundColor: theme.colors.primary,
                   borderRadius: theme.radius.pill,
                 },

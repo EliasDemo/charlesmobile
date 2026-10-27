@@ -581,6 +581,7 @@ export function NewPostScreen({
             value={capacity}
             onChangeText={(v) => setCapacity(v.replace(/[^\d]/g, ''))}
             keyboardType="number-pad"
+            maxLength={5}
           />
           {date && !eventValid ? <Notice tone="warning" message={t('new.eventInvalid')} /> : null}
         </View>
@@ -658,7 +659,7 @@ export function NewPostScreen({
                     event: {
                       startsAt: zonedTimeToIso(isoDate, time, zone),
                       address: address.trim(),
-                      ...(capacity ? { capacity: Number(capacity) } : {}),
+                      ...(Number(capacity) > 0 ? { capacity: Number(capacity) } : {}),
                     },
                   }
                 : {}),

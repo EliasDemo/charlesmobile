@@ -18,7 +18,7 @@ export function Badge({ label, tone = 'neutral' }: { label: string; tone?: Badge
   const color = tone === 'neutral' ? theme.colors.border : theme.colors[TEXT_COLOR[tone]];
   return (
     <View style={[styles.badge, { borderColor: color, borderRadius: theme.radius.pill }]}>
-      <Text variant="caption" color={TEXT_COLOR[tone]}>
+      <Text variant="caption" color={TEXT_COLOR[tone]} numberOfLines={1}>
         {label}
       </Text>
     </View>
@@ -31,5 +31,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xxs,
     alignSelf: 'flex-start',
+    maxWidth: '100%',
   },
 });

@@ -18,6 +18,7 @@ import {
   SkeletonList,
   StatusPill,
   Text,
+  KeyboardAvoider,
   TextField,
 } from '@/shared/ui';
 import type { ManagedGalleryImage } from '../api/shopApi';
@@ -159,7 +160,9 @@ function Sheet({
   const { t } = useTranslation();
   return (
     <Modal visible animationType="slide" onRequestClose={onClose} statusBarTranslucent>
-      <View style={[styles.sheet, { backgroundColor: theme.colors.background, paddingTop: insets.top }]}>
+      <KeyboardAvoider
+        style={[styles.sheet, { backgroundColor: theme.colors.background, paddingTop: insets.top }]}
+      >
         <View style={styles.sheetHeader}>
           <Text variant="title" style={styles.flex}>
             {title}
@@ -174,11 +177,12 @@ function Sheet({
           </Pressable>
         </View>
         <ScrollView
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={[styles.sheetContent, { paddingBottom: insets.bottom + spacing.xl }]}
         >
           {children}
         </ScrollView>
-      </View>
+      </KeyboardAvoider>
     </Modal>
   );
 }
