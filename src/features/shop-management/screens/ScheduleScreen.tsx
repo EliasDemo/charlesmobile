@@ -93,6 +93,7 @@ export function ScheduleScreen({ shopId, barberId, readOnly = false }: ScheduleS
                     onToggle={(open) => s.toggleDay(day, open)}
                     onPick={(index, edge) => setPicking({ day, index, edge })}
                     onAddBreak={() => s.addBreak(day)}
+                    onAddWindow={() => s.addWindow(day)}
                     onRemoveWindow={(index) => s.removeWindow(day, index)}
                     onCopyAll={() => s.copyDay(day, WEEK_ORDER)}
                     onCopyWeekdays={() => s.copyDay(day, WEEKDAYS)}
@@ -175,6 +176,9 @@ const summaryLabel = (week: Week, days: readonly string[]) =>
     return `${days[d]}: ${windows.length ? windows.map((w) => `${w.start}–${w.end}`).join(', ') : '—'}`;
   }).join('. ');
 
+/** The backend accepts up to 6 windows a day (a break is two windows). */
+const MAX_WINDOWS = 6;
+
 function DayRow({
   name,
   windows,
@@ -182,6 +186,7 @@ function DayRow({
   onToggle,
   onPick,
   onAddBreak,
+  onAddWindow,
   onRemoveWindow,
   onCopyAll,
   onCopyWeekdays,
@@ -192,6 +197,7 @@ function DayRow({
   onToggle: (open: boolean) => void;
   onPick: (index: number, edge: keyof Window) => void;
   onAddBreak: () => void;
+  onAddWindow: () => void;
   onRemoveWindow: (index: number) => void;
   onCopyAll: () => void;
   onCopyWeekdays: () => void;
@@ -246,7 +252,8 @@ function DayRow({
       ))}
       {editable && open ? (
         <View style={styles.chips}>
-          <Chip label={t('hours.addBreak')} onPress={onAddBreak} />
+          {windows.length === 1 ? <Chip label={t('hours.addBreak')} onPress={onAddBreak} /> : null}
+          {windows.length < MAX_WINDOWS ? <Chip label={t('hours.addWindow')} onPress={onAddWindow} /> : null}
           <Chip label={t('hours.copyWeekdays')} onPress={onCopyWeekdays} />
           <Chip label={t('hours.copyAll')} onPress={onCopyAll} />
         </View>

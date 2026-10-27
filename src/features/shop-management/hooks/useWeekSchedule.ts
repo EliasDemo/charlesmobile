@@ -12,6 +12,10 @@ import {
   type DaySchedule,
 } from '../api/shopApi';
 
+const NEW_SHIFT_MINUTES = 60;
+const SLOT_MINUTES = 30;
+const DAY_MINUTES = 24 * 60;
+
 export interface Window {
   start: string;
   end: string;
@@ -149,7 +153,11 @@ export function useWeekSchedule(
     addWindow: (day: number) => {
       const windows = week?.[day] ?? [];
       const last = windows[windows.length - 1];
-      update(day, [...windows, last ? { start: last.end, end: last.end } : DEFAULT_WINDOW]);
+      if (!last) return update(day, [DEFAULT_WINDOW]);
+      // The new shift starts when the last one ends and lasts an hour (it can be changed).
+      const end = Math.min(toMinutes(last.end) + NEW_SHIFT_MINUTES, DAY_MINUTES - SLOT_MINUTES);
+      const hhmm = `${String(Math.floor(end / 60)).padStart(2, '0')}:${String(end % 60).padStart(2, '0')}`;
+      update(day, [...windows, { start: last.end, end: hhmm }]);
     },
     /** Same hours on the given days (all, or Monday to Friday). */
     copyDay: (from: number, to: readonly number[]) =>

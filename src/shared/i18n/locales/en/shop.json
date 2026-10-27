@@ -222,7 +222,7 @@
     "closed": "Closed",
     "from": "From",
     "to": "To",
-    "addWindow": "Add a time range (for example, after lunch)",
+    "addWindow": "+ Another shift",
     "removeWindow": "Remove range",
     "inherit": "Use the barbershop's hours",
     "inheritHint": "If you turn it off, the barber will have their own hours.",

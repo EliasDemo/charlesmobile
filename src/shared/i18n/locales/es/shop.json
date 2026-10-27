@@ -222,7 +222,7 @@
     "closed": "Cerrado",
     "from": "Desde",
     "to": "Hasta",
-    "addWindow": "Agregar franja (por ejemplo, después del almuerzo)",
+    "addWindow": "+ Otro turno",
     "removeWindow": "Quitar franja",
     "inherit": "Usar el horario de la barbería",
     "inheritHint": "Si lo desactivas, el barbero tendrá su propio horario.",
