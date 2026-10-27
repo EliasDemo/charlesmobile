@@ -19,10 +19,12 @@ import {
   TextField,
 } from '@/shared/ui';
 import type { Agenda, AgendaBlock, AgendaItem } from '../api/agendaApi';
-import { AgendaBlockCard, AgendaItemCard, StatTile } from '../components/AgendaParts';
+import { AgendaBlockCard, AgendaItemCard, NowMarker, StatTile } from '../components/AgendaParts';
 import { REASON_MAX, useAgenda } from '../hooks/useAgenda';
 
 type Row = { kind: 'item'; item: AgendaItem } | { kind: 'block'; block: AgendaBlock };
+
+const rowStart = (row: Row) => (row.kind === 'item' ? row.item.startAt : row.block.startAt);
 
 /** Bookings and blocks of the day in one timeline, by start time. */
 function timeline(agenda: Agenda): Row[] {
@@ -30,8 +32,23 @@ function timeline(agenda: Agenda): Row[] {
     ...agenda.items.map((item) => ({ kind: 'item' as const, item })),
     ...agenda.blocks.map((block) => ({ kind: 'block' as const, block })),
   ];
-  const start = (row: Row) => (row.kind === 'item' ? row.item.startAt : row.block.startAt);
-  return rows.sort((a, b) => start(a).localeCompare(start(b)));
+  return rows.sort((a, b) => rowStart(a).localeCompare(rowStart(b)));
+}
+
+/** Today only: the first row that starts after now (the "Ahora" line goes right before it). */
+function nowIndex(rows: Row[], isToday: boolean): number {
+  if (!isToday) return -1;
+  const now = new Date().toISOString();
+  return rows.findIndex((row) => rowStart(row) > now);
+}
+
+/** Today only: the next booking still to come, among those the API keeps active. */
+function nextIndex(rows: Row[], isToday: boolean): number {
+  if (!isToday) return -1;
+  const now = new Date().toISOString();
+  return rows.findIndex(
+    (row) => row.kind === 'item' && row.item.startAt > now && row.item.status === 'CONFIRMED',
+  );
 }
 
 /** Agenda tab of the barbershop mode: the day's bookings and the attendance actions. */
@@ -150,6 +167,9 @@ export function AgendaScreen({ headerRight }: { headerRight?: ReactNode }) {
                     <View>
                       {timeline(agenda).map((row, index, rows) => (
                         <FadeIn key={row.kind === 'item' ? row.item.bookingId : row.block.id} index={index}>
+                          {index === nowIndex(rows, a.date === a.today) ? (
+                            <NowMarker time={formatTime(new Date().toISOString(), agenda.timezone)} />
+                          ) : null}
                           {row.kind === 'item' ? (
                             <AgendaItemCard
                               key={row.item.bookingId}
@@ -162,6 +182,7 @@ export function AgendaScreen({ headerRight }: { headerRight?: ReactNode }) {
                               onCorrect={() => a.askCorrection(row.item)}
                               onCancel={() => a.askCancel(row.item)}
                               last={index === rows.length - 1}
+                              next={index === nextIndex(rows, a.date === a.today)}
                             />
                           ) : (
                             <AgendaBlockCard

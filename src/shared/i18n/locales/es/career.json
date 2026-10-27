@@ -129,5 +129,13 @@
       "available": "Indica si estás disponible para trabajar",
       "applied": "Postula a tu primera oferta"
     }
+  },
+  "stats": {
+    "rating_one": "valoración",
+    "rating_other": "valoraciones",
+    "attended_one": "atención",
+    "attended_other": "atenciones",
+    "years_one": "año de experiencia",
+    "years_other": "años de experiencia"
   }
 }

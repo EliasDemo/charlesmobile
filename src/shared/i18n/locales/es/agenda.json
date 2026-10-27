@@ -68,5 +68,7 @@
     "attended": "Cita marcada como atendida",
     "noShow": "Marcada como no asistió",
     "corrected": "Asistencia corregida"
-  }
+  },
+  "next": "Siguiente cita",
+  "now": "Ahora, {{time}}"
 }

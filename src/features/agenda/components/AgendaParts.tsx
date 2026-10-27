@@ -102,6 +102,8 @@ export interface AgendaItemCardProps {
   onNoShow: () => void;
   onCorrect: () => void;
   onCancel: () => void;
+  /** The next appointment of today: highlighted so it is found at a glance. */
+  next?: boolean;
 }
 
 /** One booking of the day in the timeline. Its buttons are exactly the actions the API allows now. */
@@ -115,6 +117,7 @@ export function AgendaItemCard({
   onNoShow,
   onCorrect,
   onCancel,
+  next,
 }: AgendaItemCardProps) {
   const { t } = useTranslation('agenda');
   const theme = useTheme();
@@ -153,9 +156,16 @@ export function AgendaItemCard({
               surface,
               item.pendingAttention
                 ? { borderWidth: sizes.borderWidth, borderColor: theme.colors.warning }
-                : null,
+                : next
+                  ? { borderWidth: 2, borderColor: theme.colors.primary }
+                  : null,
             ]}
           >
+            {next ? (
+              <Text variant="label" color="primary">
+                {t('next')}
+              </Text>
+            ) : null}
             <View style={styles.cardHeader}>
               <IconTile icon={categoryIcon(item.service.categoryKey)} />
               <View style={styles.flex}>
@@ -263,6 +273,23 @@ export function AgendaBlockCard({
   );
 }
 
+/** "Ahora": where the current time falls in today's timeline. */
+export function NowMarker({ time }: { time: string }) {
+  const { t } = useTranslation('agenda');
+  const theme = useTheme();
+  return (
+    <View style={styles.now} accessible accessibilityLabel={t('now', { time })}>
+      <View style={styles.nowLabel}>
+        <Text variant="label" color="danger">
+          {time}
+        </Text>
+      </View>
+      <View style={[styles.nowDot, { backgroundColor: theme.colors.danger }]} />
+      <View style={[styles.nowLine, { backgroundColor: theme.colors.danger }]} />
+    </View>
+  );
+}
+
 const RAIL_WIDTH = 56;
 const DOT = 12;
 
@@ -279,4 +306,8 @@ const styles = StyleSheet.create({
   cardHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   detail: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.xs },
+  now: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },
+  nowLabel: { width: RAIL_WIDTH, alignItems: 'flex-end', paddingRight: spacing.xs },
+  nowDot: { width: DOT, height: DOT, borderRadius: DOT / 2 },
+  nowLine: { flex: 1, height: 2 },
 });

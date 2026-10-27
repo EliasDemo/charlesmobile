@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
-import { sizes, spacing, useTheme } from '@/shared/theme';
+import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import {
   ActionTile,
   FadeIn,
@@ -193,22 +193,29 @@ export function ShopHomeScreen({
               <QueryView query={home.shop}>
                 {(shop) => (
                   <View style={styles.content}>
-                    <Card style={styles.header}>
-                      <View style={styles.headerTop}>
+                    <View
+                      style={[
+                        styles.hero,
+                        { backgroundColor: theme.colors.brand, borderRadius: theme.radius.xl },
+                      ]}
+                    >
+                      <View style={[styles.logoRing, { borderColor: theme.colors.brandAccent }]}>
                         <Monogram name={shop.name} size={sizes.avatar} imageUrl={shop.logoUrl} />
-                        <View style={styles.flex}>
-                          <Text variant="title">{shop.name}</Text>
-                          <Text variant="caption" color="textSecondary">
-                            {t(`home.role.${shop.myRole}`)} · {t(`type.${shop.type}`)}
-                          </Text>
-                        </View>
                       </View>
-                      <StatusPill
-                        tone={STATUS_STYLE[shop.status].tone}
-                        icon={STATUS_STYLE[shop.status].icon}
-                        label={t(`status.${shop.status}`)}
-                      />
-                    </Card>
+                      <View style={styles.flex}>
+                        <Text variant="title" color="onBrand" numberOfLines={2}>
+                          {shop.name}
+                        </Text>
+                        <Text variant="caption" color="brandAccent" numberOfLines={1}>
+                          {t(`home.role.${shop.myRole}`)} · {t(`type.${shop.type}`)}
+                        </Text>
+                        <StatusPill
+                          tone={STATUS_STYLE[shop.status].tone}
+                          icon={STATUS_STYLE[shop.status].icon}
+                          label={t(`status.${shop.status}`)}
+                        />
+                      </View>
+                    </View>
                     <ReadinessCard
                       shopId={shop.id}
                       onFix={(target) =>
@@ -249,10 +256,15 @@ export function ShopHomeScreen({
                             {t(`home.groups.${group.key}`)}
                           </Text>
                         </TourTarget>
-                        <TileGrid>
+                        <View
+                          style={[
+                            styles.iconGrid,
+                            { backgroundColor: theme.colors.surface, borderRadius: theme.radius.lg },
+                          ]}
+                        >
                           {group.sections.map((section, index) => (
-                            <FadeIn key={section} index={g * 3 + index} style={styles.cell}>
-                              <ActionTile
+                            <FadeIn key={section} index={g * 3 + index} style={styles.iconCell}>
+                              <SectionIcon
                                 icon={SECTION_ICON[section]}
                                 label={t(`home.sections.${section}`)}
                                 hint={t(`home.sectionHints.${section}`)}
@@ -260,7 +272,7 @@ export function ShopHomeScreen({
                               />
                             </FadeIn>
                           ))}
-                        </TileGrid>
+                        </View>
                       </View>
                     ))}
                   </View>
@@ -338,8 +350,66 @@ export function ShopHomeScreen({
   );
 }
 
+/** A section as a phone shortcut: icon in a rounded square, the name below (the hint is read aloud). */
+function SectionIcon({
+  icon,
+  label,
+  hint,
+  onPress,
+}: {
+  icon: IconName;
+  label: string;
+  hint: string;
+  onPress: () => void;
+}) {
+  const theme = useTheme();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityHint={hint}
+      onPress={onPress}
+      style={styles.iconButton}
+    >
+      {({ pressed }) => (
+        <>
+          <View
+            style={[
+              styles.iconSquare,
+              {
+                backgroundColor: pressed ? theme.colors.primary : theme.colors.primarySoft,
+                borderRadius: theme.radius.md,
+              },
+            ]}
+          >
+            <Icon
+              name={icon}
+              size={sizes.icon + spacing.xs}
+              color={pressed ? theme.colors.onPrimary : theme.colors.primary}
+            />
+          </View>
+          <Text variant="caption" align="center" numberOfLines={2}>
+            {label}
+          </Text>
+        </>
+      )}
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
   content: { gap: spacing.lg },
+  hero: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, padding: spacing.lg },
+  logoRing: { borderWidth: 3, borderRadius: sizes.avatar, padding: spacing.xxs },
+  iconGrid: { flexDirection: 'row', flexWrap: 'wrap', paddingVertical: spacing.sm },
+  iconCell: { width: '33.33%' },
+  iconButton: { alignItems: 'center', gap: spacing.xs, padding: spacing.sm, minHeight: touchTarget * 2 },
+  iconSquare: {
+    width: touchTarget + spacing.xs,
+    height: touchTarget + spacing.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   chips: { gap: spacing.sm },
   header: { gap: spacing.md },
   headerTop: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },

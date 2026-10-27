@@ -68,5 +68,7 @@
     "attended": "Appointment marked as attended",
     "noShow": "Marked as no-show",
     "corrected": "Attendance corrected"
-  }
+  },
+  "next": "Next appointment",
+  "now": "Now, {{time}}"
 }

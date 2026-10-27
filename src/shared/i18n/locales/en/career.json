@@ -129,5 +129,13 @@
       "available": "Say if you are available for work",
       "applied": "Apply to your first job"
     }
+  },
+  "stats": {
+    "rating_one": "review",
+    "rating_other": "reviews",
+    "attended_one": "appointment",
+    "attended_other": "appointments",
+    "years_one": "year of experience",
+    "years_other": "years of experience"
   }
 }

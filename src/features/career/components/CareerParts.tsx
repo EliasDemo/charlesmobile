@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { mediaUrl } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Badge, Card, Monogram, RatingLabel, StatusPill, Text } from '@/shared/ui';
+import { Badge, Monogram, StatusPill, Text } from '@/shared/ui';
 import type { BarberProfile, PortfolioItem } from '../api/careerApi';
 
 /** Position in the ranking; before 3 reviews, a positive "Nuevo talento" (never "out of the ranking"). */
@@ -27,35 +27,43 @@ export function CareerHeader({
   own?: boolean;
 }) {
   const { t } = useTranslation('career');
+  const theme = useTheme();
   return (
-    <Card>
-      <View style={styles.header}>
-        <Monogram name={profile.displayName} size={sizes.avatarLarge} imageUrl={profile.photoUrl} />
-        <View style={styles.flex}>
-          <Text variant="title">{profile.displayName}</Text>
-          {profile.headline ? <Text color="textSecondary">{profile.headline}</Text> : null}
-          {own ? null : <RankText rank={profile.rank} />}
+    <View style={styles.headerWrap}>
+      <View style={[styles.hero, { backgroundColor: theme.colors.brand, borderRadius: theme.radius.xl }]}>
+        <View style={[styles.ring, { borderColor: theme.colors.brandAccent }]}>
+          <Monogram name={profile.displayName} size={sizes.avatarLarge} imageUrl={profile.photoUrl} />
+        </View>
+        <Text variant="title" color="onBrand" align="center" numberOfLines={2}>
+          {profile.displayName}
+        </Text>
+        {profile.headline ? (
+          <Text color="brandAccent" align="center" numberOfLines={2}>
+            {profile.headline}
+          </Text>
+        ) : null}
+        {own ? null : <RankText rank={profile.rank} />}
+        <View style={[styles.stats, { borderTopColor: theme.colors.brandAccent }]}>
+          <HeroStat
+            value={profile.ratingAverage !== null ? profile.ratingAverage.toFixed(1) : '–'}
+            label={t('stats.rating', { count: profile.ratingCount })}
+          />
+          <HeroStat
+            value={String(profile.attendedCount)}
+            label={t('stats.attended', { count: profile.attendedCount })}
+          />
+          {profile.yearsExperience !== null ? (
+            <HeroStat
+              value={String(profile.yearsExperience)}
+              label={t('stats.years', { count: profile.yearsExperience })}
+            />
+          ) : null}
         </View>
       </View>
-      {profile.ratingAverage !== null ? (
-        <RatingLabel average={profile.ratingAverage} count={profile.ratingCount} variant="bodyStrong" />
-      ) : null}
       <View style={styles.facts}>
-        <Text variant="caption" color="textSecondary">
-          {t('attended', { count: profile.attendedCount })}
-        </Text>
-        {profile.yearsExperience !== null ? (
-          <Text variant="caption" color="textSecondary">
-            {t('years', { count: profile.yearsExperience })}
-          </Text>
-        ) : null}
-        {profile.district ? (
-          <Text variant="caption" color="textSecondary">
-            {profile.district}
-          </Text>
-        ) : null}
+        {profile.availableForWork ? <Badge label={t('availableForWork')} tone="success" /> : null}
+        {profile.district ? <StatusPill tone="neutral" icon="location" label={profile.district} /> : null}
       </View>
-      {profile.availableForWork ? <Badge label={t('availableForWork')} tone="success" /> : null}
       {profile.specialties.length > 0 ? (
         <View style={styles.pills}>
           {profile.specialties.map((s) => (
@@ -64,7 +72,21 @@ export function CareerHeader({
         </View>
       ) : null}
       {profile.bio ? <Text>{profile.bio}</Text> : null}
-    </Card>
+    </View>
+  );
+}
+
+/** A figure of the profile header: the number big, what it counts below. */
+function HeroStat({ value, label }: { value: string; label: string }) {
+  return (
+    <View style={styles.stat} accessible accessibilityLabel={`${value} ${label}`}>
+      <Text variant="title" color="onBrand" align="center">
+        {value}
+      </Text>
+      <Text variant="caption" color="onBrand" align="center" numberOfLines={2}>
+        {label}
+      </Text>
+    </View>
   );
 }
 
@@ -111,7 +133,17 @@ export function PortfolioGrid({
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  headerWrap: { gap: spacing.md },
+  hero: { alignItems: 'center', gap: spacing.xs, padding: spacing.xl },
+  ring: { borderWidth: 3, borderRadius: sizes.avatarLarge, padding: spacing.xxs, marginBottom: spacing.xs },
+  stats: {
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  stat: { flex: 1, alignItems: 'center', gap: spacing.xxs },
   flex: { flex: 1, gap: spacing.xxs },
   facts: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
