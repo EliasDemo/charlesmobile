@@ -82,5 +82,11 @@
     "titleLength": "El título debe tener entre 8 y 140 caracteres.",
     "bodyRequired": "Escribe los detalles de tu pregunta.",
     "bodyLength": "Máximo 5000 caracteres."
+  },
+  "noRepliesShort": "Sin resp.",
+  "hero": {
+    "eyebrow": "Pregunta y aprende",
+    "title": "¿Tienes una duda?",
+    "subtitle": "Barberos y clientes responden. Marca la mejor respuesta para que otros la encuentren."
   }
 }

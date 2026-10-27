@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlatList, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Controller } from 'react-hook-form';
 import { MenuSheet, ReportSheet } from '@/features/community';
@@ -7,6 +7,7 @@ import { useTranslation } from '@/shared/i18n';
 import { useDebouncedValue } from '@/shared/lib';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import {
+  BrandHero,
   Button,
   Chip,
   ConfirmDialog,
@@ -26,9 +27,18 @@ import {
   TextField,
   translateErrorMessage,
   useFieldErrorText,
+  useSurfaceStyle,
 } from '@/shared/ui';
 import type { ReplySort, Thread, ThreadSort } from '../api/forumsApi';
-import { AuthorLine, ReplyItem, ThreadMarks, ThreadRow } from '../components/ForumParts';
+import {
+  AuthorLine,
+  ReplyItem,
+  SortTabs,
+  ThreadMarks,
+  ThreadRow,
+  TopicPills,
+  useTopicColor,
+} from '../components/ForumParts';
 import {
   useAskThread,
   useForumCategories,
@@ -69,32 +79,21 @@ export function ForumsHome({
       <View style={styles.filters}>
         <SearchField value={search} onChangeText={setSearch} placeholder={t('search')} label={t('search')} />
         {(categories.data?.length ?? 0) > 0 ? (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.bleed}
-            contentContainerStyle={styles.chips}
-          >
-            <Chip label={t('allTopics')} selected={!categoryId} onPress={() => setCategoryId(undefined)} />
-            {categories.data!.map((c) => (
-              <Chip
-                key={c.id}
-                label={c.name}
-                selected={categoryId === c.id}
-                onPress={() => setCategoryId(categoryId === c.id ? undefined : c.id)}
-              />
-            ))}
-          </ScrollView>
+          <TopicPills
+            value={categoryId}
+            onChange={setCategoryId}
+            allLabel={t('allTopics')}
+            topics={categories.data!}
+          />
         ) : null}
-        <SegmentedControl
+        <SortTabs
           label={t('sort.label')}
-          hideLabel
           value={sort}
           onChange={setSort}
           options={[
-            { value: 'recent', label: t('sort.recent') },
-            { value: 'new', label: t('sort.new') },
-            { value: 'unanswered', label: t('sort.unanswered') },
+            { value: 'recent', label: t('sort.recent'), icon: 'flash' },
+            { value: 'new', label: t('sort.new'), icon: 'sparkles' },
+            { value: 'unanswered', label: t('sort.unanswered'), icon: 'help-circle' },
           ]}
         />
       </View>
@@ -102,6 +101,17 @@ export function ForumsHome({
         <InfiniteList
           query={threads}
           keyExtractor={(th) => th.id}
+          header={
+            <View style={styles.item}>
+              <BrandHero
+                compact
+                eyebrow={t('hero.eyebrow')}
+                title={t('hero.title')}
+                subtitle={t('hero.subtitle')}
+                icon="chatbubbles"
+              />
+            </View>
+          }
           empty={{
             title: q ? t('empty.search') : t('empty.title'),
             message: q ? undefined : t('empty.text'),
@@ -117,7 +127,7 @@ export function ForumsHome({
       <View style={styles.fab}>
         <Button
           label={t('ask.fab')}
-          icon="help-circle-outline"
+          icon="add-circle"
           onPress={() => (authenticated ? onAsk(categoryId) : onRequireLogin())}
         />
       </View>
@@ -291,37 +301,49 @@ function Question({
   const [title, setTitle] = useState(thread.title);
   const [body, setBody] = useState(thread.body);
   const titleOk = title.trim().length >= TITLE_MIN && title.trim().length <= TITLE_MAX;
+  const surface = useSurfaceStyle();
+  const topicColor = useTopicColor()(thread.categoryId);
   return (
-    <View
-      style={[
-        styles.question,
-        {
-          backgroundColor: theme.colors.surface,
-          borderRadius: theme.radius.lg,
-          borderColor: theme.colors.border,
-        },
-      ]}
-    >
-      <View style={styles.repliesHeader}>
-        <Text variant="caption" color="primary" style={styles.flex} numberOfLines={1}>
-          {thread.categoryName}
+    <View style={[styles.question, surface]}>
+      {/* Navy band: the topic and the question, like the cover of the thread. */}
+      <View
+        style={[
+          styles.questionBand,
+          {
+            backgroundColor: theme.colors.brand,
+            borderTopLeftRadius: theme.radius.lg,
+            borderTopRightRadius: theme.radius.lg,
+          },
+        ]}
+      >
+        <View style={styles.repliesHeader}>
+          <View style={[styles.topicTag, { backgroundColor: topicColor, borderRadius: theme.radius.pill }]}>
+            <Text variant="caption" color="onPrimary" numberOfLines={1}>
+              {thread.categoryName}
+            </Text>
+          </View>
+          <View style={styles.flex} />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('more')}
+            onPress={() => setMenu(true)}
+            style={styles.iconButton}
+          >
+            <Icon name="ellipsis-horizontal" size={sizes.icon} color={theme.colors.onBrand} />
+          </Pressable>
+        </View>
+        <Text variant="title" color="onBrand">
+          {thread.title}
         </Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('more')}
-          onPress={() => setMenu(true)}
-          style={styles.iconButton}
-        >
-          <Icon name="ellipsis-horizontal" size={sizes.icon} color={theme.colors.textSecondary} />
-        </Pressable>
       </View>
-      <Text variant="title">{thread.title}</Text>
-      <ThreadMarks thread={thread} />
-      <AuthorLine author={thread.author} at={thread.createdAt} edited={thread.editedAt !== null} />
-      <Text selectable>{thread.body}</Text>
-      {thread.isMine && !thread.solved && thread.replyCount > 0 ? (
-        <Notice tone="info" message={t('thread.chooseBest')} />
-      ) : null}
+      <View style={styles.questionBody}>
+        <ThreadMarks thread={thread} />
+        <AuthorLine author={thread.author} at={thread.createdAt} edited={thread.editedAt !== null} />
+        <Text selectable>{thread.body}</Text>
+        {thread.isMine && !thread.solved && thread.replyCount > 0 ? (
+          <Notice tone="info" message={t('thread.chooseBest')} />
+        ) : null}
+      </View>
 
       <MenuSheet visible={menu} onClose={() => setMenu(false)}>
         {thread.isMine ? (
@@ -515,7 +537,10 @@ const styles = StyleSheet.create({
   fab: { position: 'absolute', right: 0, bottom: spacing.xxxl * 2 },
   thread: { gap: spacing.md, padding: spacing.gutter },
   repliesHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  question: { padding: spacing.md, gap: spacing.sm, borderWidth: StyleSheet.hairlineWidth },
+  question: { overflow: 'hidden' },
+  questionBand: { padding: spacing.md, paddingTop: spacing.xs, gap: spacing.xs },
+  questionBody: { padding: spacing.md, gap: spacing.sm },
+  topicTag: { paddingHorizontal: spacing.sm, paddingVertical: spacing.xxs, flexShrink: 1 },
   iconButton: { width: touchTarget, height: touchTarget, alignItems: 'center', justifyContent: 'center' },
   closed: { padding: spacing.md, borderTopWidth: StyleSheet.hairlineWidth },
   form: { gap: spacing.lg },

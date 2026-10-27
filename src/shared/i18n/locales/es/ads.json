@@ -39,6 +39,15 @@
     "soundOff": "Quitar sonido",
     "website": "Visitar su web",
     "emptyTitle": "Aún no hay nada aquí",
-    "empty": "Las marcas todavía no publicaron productos para esta categoría."
+    "empty": "Las marcas todavía no publicaron productos para esta categoría.",
+    "eyebrow": "Marcas aliadas",
+    "hero": "Lo mejor para tu estilo",
+    "heroShop": "Equipa tu barbería",
+    "discover": "Descubrir",
+    "offersHint": "Mayor descuento primero",
+    "brandsHint": "Toca una para ver su catálogo",
+    "productsHint": "Lo más nuevo",
+    "productCount_one": "{{count}} producto",
+    "productCount_other": "{{count}} productos"
   }
 }

@@ -1,16 +1,148 @@
 import { useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { MenuSheet, ReportSheet } from '@/features/community';
 import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate } from '@/shared/lib';
 import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
-import { Button, ConfirmDialog, Icon, Monogram, Text, TextField } from '@/shared/ui';
-import type { Reply, Thread, ThreadSummary } from '../api/forumsApi';
-import { useReplyActions } from '../hooks/useForums';
+import {
+  Button,
+  ConfirmDialog,
+  Icon,
+  Monogram,
+  Text,
+  TextField,
+  useSurfaceStyle,
+  type IconName,
+} from '@/shared/ui';
+import type { ForumCategory, Reply, Thread, ThreadSummary } from '../api/forumsApi';
+import { useForumCategories, useReplyActions } from '../hooks/useForums';
 import { REPLY_MAX } from '../schemas/forumSchemas';
 
 const zone = env.defaultTimeZone;
+
+/** Topic pills with the topic's own color dot; the selected one fills with that color. */
+export function TopicPills({
+  topics,
+  value,
+  onChange,
+  allLabel,
+}: {
+  topics: ForumCategory[];
+  value: string | undefined;
+  onChange: (id: string | undefined) => void;
+  allLabel: string;
+}) {
+  const theme = useTheme();
+  const colorOf = useTopicColor();
+  const options: { id: string | undefined; name: string }[] = [{ id: undefined, name: allLabel }, ...topics];
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={styles.bleed}
+      contentContainerStyle={styles.pills}
+    >
+      {options.map((o) => {
+        const selected = o.id === value;
+        const color = o.id ? colorOf(o.id) : theme.colors.brand;
+        return (
+          <Pressable
+            key={o.id ?? 'all'}
+            accessibilityRole="button"
+            accessibilityLabel={o.name}
+            accessibilityState={{ selected }}
+            onPress={() => onChange(selected ? undefined : o.id)}
+            style={styles.pillTouch}
+          >
+            <View
+              style={[
+                styles.pill,
+                {
+                  borderRadius: theme.radius.pill,
+                  backgroundColor: selected ? color : theme.colors.surface,
+                  borderColor: selected ? color : theme.colors.border,
+                },
+              ]}
+            >
+              <View
+                style={[
+                  styles.topicDot,
+                  {
+                    backgroundColor: selected ? theme.colors.onPrimary : color,
+                    borderRadius: theme.radius.pill,
+                  },
+                ]}
+              />
+              <Text variant="label" color={selected ? 'onPrimary' : 'textPrimary'} numberOfLines={1}>
+                {o.name}
+              </Text>
+            </View>
+          </Pressable>
+        );
+      })}
+    </ScrollView>
+  );
+}
+
+/** Text tabs with an icon and a copper underline on the selected one. */
+export function SortTabs<T extends string>({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: T;
+  onChange: (value: T) => void;
+  options: { value: T; label: string; icon: IconName }[];
+}) {
+  const theme = useTheme();
+  return (
+    <View
+      accessibilityRole="tablist"
+      accessibilityLabel={label}
+      style={[styles.tabs, { borderBottomColor: theme.colors.border }]}
+    >
+      {options.map((o) => {
+        const selected = o.value === value;
+        return (
+          <Pressable
+            key={o.value}
+            accessibilityRole="tab"
+            accessibilityState={{ selected }}
+            onPress={() => onChange(o.value)}
+            style={styles.tab}
+          >
+            <View style={styles.tabLabel}>
+              <Icon
+                name={o.icon}
+                size={sizes.icon - spacing.sm}
+                color={selected ? theme.colors.primary : theme.colors.textMuted}
+              />
+              <Text
+                variant={selected ? 'bodyStrong' : 'body'}
+                color={selected ? 'textPrimary' : 'textSecondary'}
+                numberOfLines={1}
+              >
+                {o.label}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.underline,
+                {
+                  backgroundColor: selected ? theme.colors.primary : 'transparent',
+                  borderRadius: theme.radius.pill,
+                },
+              ]}
+            />
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
 type Author = ThreadSummary['author'];
 
 /** @username, the "Barbero" badge and when. */
@@ -19,8 +151,8 @@ export function AuthorLine({ author, at, edited }: { author: Author; at: string;
   const theme = useTheme();
   return (
     <View style={styles.author}>
-      <Monogram name={author.username} size={sizes.avatarSmall} imageUrl={author.photoUrl} />
-      <Text variant="bodyStrong" numberOfLines={1} style={styles.shrink}>
+      <Monogram name={author.username} size={sizes.avatarSmall - spacing.sm} imageUrl={author.photoUrl} />
+      <Text variant="label" numberOfLines={1} style={styles.shrink}>
         {`@${author.username}`}
       </Text>
       {author.isBarber ? (
@@ -43,26 +175,64 @@ export function AuthorLine({ author, at, edited }: { author: Author; at: string;
   );
 }
 
-/** 📌 fixed, 🔒 closed and ✓ solved, always with words (never color alone). */
+/** One color per topic, from the theme, in the order the topics come (stable while browsing). */
+export function useTopicColor() {
+  const theme = useTheme();
+  const categories = useForumCategories();
+  const palette = [
+    theme.colors.primary,
+    theme.colors.statusSuccessFg,
+    theme.colors.medalSilver,
+    theme.colors.statusPendingFg,
+    theme.colors.statusDangerFg,
+    theme.colors.medalGold,
+  ];
+  return (categoryId: string | undefined) => {
+    const index = categories.data?.findIndex((c) => c.id === categoryId) ?? -1;
+    return index < 0 ? theme.colors.primary : palette[index % palette.length]!;
+  };
+}
+
+/** 📌 fixed, 🔒 closed and ✓ solved as small pills, always with words (never color alone). */
 export function ThreadMarks({ thread }: { thread: Pick<ThreadSummary, 'pinned' | 'locked' | 'solved'> }) {
   const { t } = useTranslation('forums');
   const theme = useTheme();
   const marks = [
-    thread.pinned ? { icon: 'pin' as const, label: t('marks.pinned'), color: theme.colors.primary } : null,
     thread.solved
-      ? { icon: 'checkmark-circle' as const, label: t('marks.solved'), color: theme.colors.success }
+      ? {
+          icon: 'checkmark-circle' as const,
+          label: t('marks.solved'),
+          fg: theme.colors.statusSuccessFg,
+          bg: theme.colors.statusSuccessBg,
+        }
+      : null,
+    thread.pinned
+      ? {
+          icon: 'pin' as const,
+          label: t('marks.pinned'),
+          fg: theme.colors.primary,
+          bg: theme.colors.primarySoft,
+        }
       : null,
     thread.locked
-      ? { icon: 'lock-closed' as const, label: t('marks.locked'), color: theme.colors.textMuted }
+      ? {
+          icon: 'lock-closed' as const,
+          label: t('marks.locked'),
+          fg: theme.colors.statusNeutralFg,
+          bg: theme.colors.statusNeutralBg,
+        }
       : null,
   ].filter((m) => m !== null);
   if (marks.length === 0) return null;
   return (
     <View style={styles.marks}>
       {marks.map((m) => (
-        <View key={m.label} style={styles.mark}>
-          <Icon name={m.icon} size={sizes.icon - spacing.xs} color={m.color} />
-          <Text variant="caption" color="textSecondary">
+        <View
+          key={m.label}
+          style={[styles.markPill, { backgroundColor: m.bg, borderRadius: theme.radius.pill }]}
+        >
+          <Icon name={m.icon} size={sizes.icon - spacing.sm} color={m.fg} />
+          <Text variant="caption" style={{ color: m.fg }}>
             {m.label}
           </Text>
         </View>
@@ -71,52 +241,96 @@ export function ThreadMarks({ thread }: { thread: Pick<ThreadSummary, 'pinned' |
   );
 }
 
-/** A thread in the list: the question, its topic, who asked and how many answers. */
+/**
+ * A thread in the list: a colored bar for its topic, the question in big type, who asked, and an
+ * answer bubble that turns green when it is solved.
+ */
 export function ThreadRow({ thread, onOpen }: { thread: ThreadSummary; onOpen: () => void }) {
   const { t } = useTranslation('forums');
   const theme = useTheme();
+  const surface = useSurfaceStyle();
+  const topicColor = useTopicColor()(thread.categoryId);
+  const answered = thread.replyCount > 0;
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={thread.title}
       onPress={onOpen}
-      style={({ pressed }) => [
-        styles.row,
-        {
-          backgroundColor: pressed ? theme.colors.surfaceMuted : theme.colors.surface,
-          borderRadius: theme.radius.lg,
-          borderColor: thread.solved ? theme.colors.success : theme.colors.border,
-        },
-      ]}
+      style={({ pressed }) => [styles.row, surface, pressed && styles.pressed]}
       testID={`thread-${thread.id}`}
     >
-      <View style={styles.rowTop}>
-        <Text variant="caption" color="primary" numberOfLines={1} style={styles.shrink}>
-          {thread.categoryName}
-        </Text>
-        <ThreadMarks thread={thread} />
-      </View>
-      <Text variant="subtitle" numberOfLines={3}>
-        {thread.title}
-      </Text>
-      {thread.excerpt ? (
-        <Text color="textSecondary" numberOfLines={2}>
-          {thread.excerpt}
-        </Text>
-      ) : null}
-      <View style={styles.rowBottom}>
-        <View style={styles.flex}>
-          <AuthorLine author={thread.author} at={thread.createdAt} />
+      <View
+        style={[
+          styles.accent,
+          {
+            backgroundColor: topicColor,
+            borderTopLeftRadius: theme.radius.lg,
+            borderBottomLeftRadius: theme.radius.lg,
+          },
+        ]}
+      />
+      <View style={styles.rowBody}>
+        <View style={styles.rowTop}>
+          <View style={styles.topic}>
+            <View
+              style={[styles.topicDot, { backgroundColor: topicColor, borderRadius: theme.radius.pill }]}
+            />
+            <Text variant="caption" numberOfLines={1} style={[styles.shrink, { color: topicColor }]}>
+              {thread.categoryName}
+            </Text>
+          </View>
+          <ThreadMarks thread={thread} />
         </View>
-        <View style={styles.mark}>
-          <Icon
-            name="chatbubbles-outline"
-            size={sizes.icon - spacing.xs}
-            color={theme.colors.textSecondary}
-          />
-          <Text variant="caption" color="textSecondary">
-            {thread.replyCount === 0 ? t('noReplies') : t('replies', { count: thread.replyCount })}
+        <Text variant="subtitle" numberOfLines={3}>
+          {thread.title}
+        </Text>
+        {thread.excerpt ? (
+          <Text color="textSecondary" numberOfLines={2}>
+            {thread.excerpt}
           </Text>
+        ) : null}
+        <View style={styles.rowBottom}>
+          <View style={styles.flex}>
+            <AuthorLine author={thread.author} at={thread.lastActivityAt} />
+          </View>
+          <View
+            style={[
+              styles.bubble,
+              {
+                borderRadius: theme.radius.pill,
+                backgroundColor: thread.solved
+                  ? theme.colors.statusSuccessBg
+                  : answered
+                    ? theme.colors.primarySoft
+                    : theme.colors.statusPendingBg,
+              },
+            ]}
+            accessibilityLabel={answered ? t('replies', { count: thread.replyCount }) : t('noReplies')}
+          >
+            <Icon
+              name={thread.solved ? 'checkmark-done' : answered ? 'chatbubbles' : 'help'}
+              size={sizes.icon - spacing.sm}
+              color={
+                thread.solved
+                  ? theme.colors.statusSuccessFg
+                  : answered
+                    ? theme.colors.primary
+                    : theme.colors.statusPendingFg
+              }
+            />
+            <Text
+              variant="label"
+              style={{
+                color: thread.solved
+                  ? theme.colors.statusSuccessFg
+                  : answered
+                    ? theme.colors.primary
+                    : theme.colors.statusPendingFg,
+              }}
+            >
+              {answered ? String(thread.replyCount) : t('noRepliesShort')}
+            </Text>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -148,24 +362,32 @@ export function ReplyItem({
   const [draft, setDraft] = useState(reply.body);
   const needLogin = (fn: () => void) => () => (authenticated ? fn() : onRequireLogin());
   const best = reply.isSolution;
+  const surface = useSurfaceStyle();
   return (
     <View
       style={[
         styles.reply,
-        {
-          backgroundColor: best ? theme.colors.statusSuccessBg : theme.colors.surface,
-          borderColor: best ? theme.colors.success : theme.colors.border,
-          borderRadius: theme.radius.lg,
-        },
+        surface,
+        best && { borderWidth: sizes.borderWidth * 2, borderColor: theme.colors.success },
       ]}
       testID={`reply-${reply.id}`}
     >
       {best ? (
-        <View style={styles.mark}>
-          <Icon name="checkmark-circle" size={sizes.icon} color={theme.colors.statusSuccessFg} />
-          <Text variant="label" color="success">
+        <View
+          style={[
+            styles.bestBand,
+            {
+              backgroundColor: theme.colors.statusSuccessBg,
+              borderTopLeftRadius: theme.radius.lg,
+              borderTopRightRadius: theme.radius.lg,
+            },
+          ]}
+        >
+          <Icon name="trophy" size={sizes.icon - spacing.xs} color={theme.colors.statusSuccessFg} />
+          <Text variant="label" style={{ color: theme.colors.statusSuccessFg }}>
             {t('reply.best')}
           </Text>
+          <Icon name="checkmark-circle" size={sizes.icon - spacing.xs} color={theme.colors.statusSuccessFg} />
         </View>
       ) : null}
       <View style={styles.rowTop}>
@@ -305,6 +527,21 @@ export function ReplyItem({
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  bleed: { flexGrow: 0, marginHorizontal: -spacing.gutter },
+  pills: { paddingHorizontal: spacing.gutter, gap: spacing.xs },
+  pillTouch: { minHeight: touchTarget, justifyContent: 'center' },
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs + spacing.xxs,
+    borderWidth: sizes.borderWidth,
+  },
+  tabs: { flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth },
+  tab: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', minHeight: touchTarget, gap: spacing.xs },
+  tabLabel: { flexDirection: 'row', alignItems: 'center', gap: spacing.xxs },
+  underline: { height: spacing.xs - 1, alignSelf: 'stretch', marginHorizontal: spacing.md },
   shrink: { flexShrink: 1 },
   author: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, flexWrap: 'wrap' },
   barber: {
@@ -314,12 +551,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xxs,
   },
-  marks: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flexWrap: 'wrap' },
+  marks: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, flexWrap: 'wrap' },
   mark: { flexDirection: 'row', alignItems: 'center', gap: spacing.xxs },
-  row: { padding: spacing.md, gap: spacing.xs, borderWidth: StyleSheet.hairlineWidth },
+  row: { flexDirection: 'row' },
+  pressed: { opacity: 0.85 },
+  accent: { width: spacing.xs },
+  rowBody: { flex: 1, padding: spacing.md, gap: spacing.xs },
+  topic: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, flexShrink: 1 },
+  topicDot: { width: spacing.sm, height: spacing.sm },
+  markPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs,
+  },
+  bubble: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xxs,
+  },
   rowTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.sm },
   rowBottom: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs },
-  reply: { padding: spacing.md, gap: spacing.sm, borderWidth: StyleSheet.hairlineWidth },
+  reply: { padding: spacing.md, gap: spacing.sm, overflow: 'hidden' },
+  bestBand: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginHorizontal: -spacing.md,
+    marginTop: -spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
   iconButton: { width: touchTarget, height: touchTarget, alignItems: 'center', justifyContent: 'center' },
   actions: {
     flexDirection: 'row',

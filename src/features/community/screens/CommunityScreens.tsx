@@ -26,7 +26,6 @@ import {
   Monogram,
   Notice,
   Screen,
-  SegmentedControl,
   SwitchRow,
   Text,
   TextField,
@@ -34,7 +33,7 @@ import {
   useNearMe,
 } from '@/shared/ui';
 import type { Comment, FeedTab, Post, PostType } from '../api/communityApi';
-import { FeedTabs, TypeFilter } from '../components/FeedFilters';
+import { FeedTabs, SectionSwitch, TypeFilter } from '../components/FeedFilters';
 import { MenuSheet, PostCard, ReportSheet, TYPE_ICON, type PostCardActions } from '../components/PostParts';
 import {
   BODY_MAX,
@@ -100,14 +99,13 @@ export function CommunityScreen({
         ) : null}
       </View>
       {forums ? (
-        <SegmentedControl
+        <SectionSwitch
           label={t('sections.label')}
-          hideLabel
           value={section}
           onChange={setSection}
           options={[
-            { value: 'posts', label: t('sections.posts') },
-            { value: 'forums', label: t('sections.forums') },
+            { value: 'posts', label: t('sections.posts'), icon: 'images' },
+            { value: 'forums', label: t('sections.forums'), icon: 'chatbubbles' },
           ]}
         />
       ) : null}

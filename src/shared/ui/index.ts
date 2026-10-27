@@ -106,3 +106,5 @@ export {
 } from './BrandMap';
 export { useNearMe } from './useNearMe';
 export { ReviewLikeButton } from './LikeButton';
+export { BrandHero } from './BrandHero';
+export { SectionHeading } from './SectionHeading';

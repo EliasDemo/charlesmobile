@@ -82,5 +82,11 @@
     "titleLength": "The title must be 8 to 140 characters.",
     "bodyRequired": "Write the details of your question.",
     "bodyLength": "5000 characters at most."
+  },
+  "noRepliesShort": "No answers",
+  "hero": {
+    "eyebrow": "Ask and learn",
+    "title": "Got a question?",
+    "subtitle": "Barbers and clients answer. Mark the best answer so others can find it."
   }
 }

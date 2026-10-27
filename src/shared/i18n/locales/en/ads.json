@@ -39,6 +39,15 @@
     "soundOff": "Turn sound off",
     "website": "Visit their website",
     "emptyTitle": "Nothing here yet",
-    "empty": "Brands haven't published products for this category yet."
+    "empty": "Brands haven't published products for this category yet.",
+    "eyebrow": "Partner brands",
+    "hero": "The best for your style",
+    "heroShop": "Equip your barbershop",
+    "discover": "Discover",
+    "offersHint": "Biggest discount first",
+    "brandsHint": "Tap one to see its catalog",
+    "productsHint": "Newest first",
+    "productCount_one": "{{count}} product",
+    "productCount_other": "{{count}} products"
   }
 }

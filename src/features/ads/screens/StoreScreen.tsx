@@ -1,10 +1,18 @@
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { spacing } from '@/shared/theme';
-import { Chip, Notice, QueryView, Screen, Text } from '@/shared/ui';
+import { BrandHero, Notice, QueryView, Screen, SectionHeading } from '@/shared/ui';
 import type { Store, StoreAudience, StoreCategory } from '../api/adsApi';
-import { BrandCard, DealCard, FeaturedCard, ProductCard, Shelf, VideoTile } from '../components/StoreParts';
+import {
+  BrandCard,
+  CategoryPills,
+  DealCard,
+  FeaturedCarousel,
+  ProductCard,
+  Shelf,
+  VideoTile,
+} from '../components/StoreParts';
 import { useStore } from '../hooks/useAds';
 
 const isEmpty = (s: Store) =>
@@ -34,22 +42,25 @@ export function StoreScreen({
   const [category, setCategory] = useState<StoreCategory | undefined>(undefined);
   const store = useStore(audience, category);
   const categories = store.query.data?.categories ?? [];
+  const forShop = audience === 'BARBERSHOPS';
   return (
     <Screen refreshing={store.query.isRefetching} onRefresh={() => void store.query.refetch()}>
       <View style={styles.content}>
-        <Text color="textSecondary">{t(audience === 'BARBERSHOPS' ? 'store.introShop' : 'store.intro')}</Text>
+        <BrandHero
+          eyebrow={t('store.eyebrow')}
+          title={t(forShop ? 'store.heroShop' : 'store.hero')}
+          subtitle={t(forShop ? 'store.introShop' : 'store.intro')}
+          icon={forShop ? 'construct' : 'bag-handle'}
+        />
         {categories.length > 0 || category ? (
-          <Shelf>
-            <Chip label={t('store.all')} selected={!category} onPress={() => setCategory(undefined)} />
-            {categories.map((c) => (
-              <Chip
-                key={c.category}
-                label={t(`store.categories.${c.category}`)}
-                selected={category === c.category}
-                onPress={() => setCategory(category === c.category ? undefined : c.category)}
-              />
-            ))}
-          </Shelf>
+          <CategoryPills
+            value={category}
+            onChange={(value) => setCategory(value === category ? undefined : value)}
+            options={[
+              { value: undefined, label: t('store.all') },
+              ...categories.map((c) => ({ value: c.category, label: t(`store.categories.${c.category}`) })),
+            ]}
+          />
         ) : null}
         <QueryView
           query={store.query}
@@ -58,22 +69,18 @@ export function StoreScreen({
         >
           {(s) => (
             <View style={styles.content}>
-              {store.featured.items.length > 0 ? (
-                <Shelf>
-                  {store.featured.items.map((ad) => (
-                    <FeaturedCard key={ad.id} ad={ad} onOpen={() => store.featured.open(ad)} />
-                  ))}
-                </Shelf>
-              ) : null}
+              <FeaturedCarousel ads={store.featured.items} onOpen={store.featured.open} />
               {s.deals.length > 0 ? (
-                <Block title={t('store.deals')} hint={t('store.dealsHint')}>
+                <View style={styles.block}>
+                  <SectionHeading icon="pricetag" title={t('store.deals')} hint={t('store.dealsHint')} />
                   {s.deals.map((deal) => (
                     <DealCard key={deal.id} deal={deal} onOpenShop={onOpenBarbershop} />
                   ))}
-                </Block>
+                </View>
               ) : null}
               {s.offers.length > 0 ? (
-                <Block title={t('store.offers')}>
+                <View style={styles.block}>
+                  <SectionHeading icon="flame" title={t('store.offers')} hint={t('store.offersHint')} />
                   <Shelf>
                     {s.offers.map((p) => (
                       <ProductCard
@@ -84,28 +91,35 @@ export function StoreScreen({
                       />
                     ))}
                   </Shelf>
-                </Block>
+                </View>
               ) : null}
               {s.videos.length > 0 ? (
-                <Block title={t('store.videos')} hint={t('store.videosHint')}>
+                <View style={styles.block}>
+                  <SectionHeading icon="play-circle" title={t('store.videos')} hint={t('store.videosHint')} />
                   <Shelf>
                     {s.videos.map((v) => (
                       <VideoTile key={v.id} video={v} />
                     ))}
                   </Shelf>
-                </Block>
+                </View>
               ) : null}
               {s.brands.length > 0 ? (
-                <Block title={t('store.brands')}>
+                <View style={styles.block}>
+                  <SectionHeading icon="ribbon" title={t('store.brands')} hint={t('store.brandsHint')} />
                   <Shelf>
                     {s.brands.map((b) => (
                       <BrandCard key={b.id} brand={b} onOpen={() => onOpenSponsor(b.id)} />
                     ))}
                   </Shelf>
-                </Block>
+                </View>
               ) : null}
               {s.products.length > 0 ? (
-                <Block title={t('store.products')}>
+                <View style={styles.block}>
+                  <SectionHeading
+                    icon="bag-handle"
+                    title={t('store.products')}
+                    hint={t('store.productsHint')}
+                  />
                   <Shelf>
                     {s.products.map((p) => (
                       <ProductCard
@@ -116,7 +130,7 @@ export function StoreScreen({
                       />
                     ))}
                   </Shelf>
-                </Block>
+                </View>
               ) : null}
               <Notice tone="info" message={t('notSold')} />
             </View>
@@ -127,23 +141,7 @@ export function StoreScreen({
   );
 }
 
-function Block({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
-  return (
-    <View style={styles.block}>
-      <View>
-        <Text variant="title">{title}</Text>
-        {hint ? (
-          <Text variant="caption" color="textSecondary">
-            {hint}
-          </Text>
-        ) : null}
-      </View>
-      {children}
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  content: { gap: spacing.lg },
-  block: { gap: spacing.sm },
+  content: { gap: spacing.xl },
+  block: { gap: spacing.md },
 });

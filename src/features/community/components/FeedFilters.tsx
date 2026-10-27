@@ -108,7 +108,70 @@ export function TypeFilter<T extends string>({
   );
 }
 
+/**
+ * Two big sections side by side (Publicaciones · Foros): a navy track where the selected one is a
+ * copper pill with its icon.
+ */
+export function SectionSwitch<T extends string>({
+  value,
+  onChange,
+  options,
+  label,
+}: {
+  value: T;
+  onChange: (value: T) => void;
+  options: { value: T; label: string; icon: IconName }[];
+  label: string;
+}) {
+  const theme = useTheme();
+  return (
+    <View
+      accessibilityRole="tablist"
+      accessibilityLabel={label}
+      style={[styles.track, { backgroundColor: theme.colors.brand, borderRadius: theme.radius.pill }]}
+    >
+      {options.map((o) => {
+        const selected = o.value === value;
+        return (
+          <Pressable
+            key={o.value}
+            accessibilityRole="tab"
+            accessibilityState={{ selected }}
+            accessibilityLabel={o.label}
+            onPress={() => onChange(o.value)}
+            style={[
+              styles.segment,
+              {
+                borderRadius: theme.radius.pill,
+                backgroundColor: selected ? theme.colors.primary : 'transparent',
+              },
+            ]}
+          >
+            <Icon
+              name={o.icon}
+              size={sizes.icon - spacing.xs}
+              color={selected ? theme.colors.onPrimary : theme.colors.brandAccent}
+            />
+            <Text variant="label" color={selected ? 'onPrimary' : 'onBrand'} numberOfLines={1}>
+              {o.label}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
+  track: { flexDirection: 'row', padding: spacing.xxs, gap: spacing.xxs },
+  segment: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.xs,
+    minHeight: touchTarget,
+  },
   tabs: { flexDirection: 'row', borderBottomWidth: StyleSheet.hairlineWidth },
   tab: { flex: 1, alignItems: 'center', justifyContent: 'flex-end', minHeight: touchTarget, gap: spacing.xs },
   underline: { height: spacing.xs - 1, alignSelf: 'stretch', marginHorizontal: spacing.lg },

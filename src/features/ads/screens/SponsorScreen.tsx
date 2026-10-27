@@ -3,7 +3,7 @@ import { mediaUrl } from '@/shared/api';
 import { useTranslation } from '@/shared/i18n';
 import { openWebUrl } from '@/shared/lib';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Button, Monogram, Notice, QueryView, Screen, Text } from '@/shared/ui';
+import { Button, Monogram, Notice, QueryView, Screen, SectionHeading, Text } from '@/shared/ui';
 import { ProductCard, Shelf, SponsoredTag, VideoTile } from '../components/StoreParts';
 import { useOpenProduct, useSponsor } from '../hooks/useAds';
 
@@ -29,7 +29,7 @@ export function SponsorScreen({ id }: { id: string }) {
                 <View
                   style={[
                     styles.logo,
-                    { borderColor: theme.colors.background, borderRadius: theme.radius.pill },
+                    { borderColor: theme.colors.brandAccent, borderRadius: theme.radius.pill },
                   ]}
                 >
                   <Monogram name={s.name} size={sizes.avatarLarge} imageUrl={s.logoUrl} />
@@ -55,7 +55,7 @@ export function SponsorScreen({ id }: { id: string }) {
               ) : null}
               {s.videos.some((v) => v.status === 'READY') ? (
                 <View style={styles.block}>
-                  <Text variant="title">{t('store.videos')}</Text>
+                  <SectionHeading icon="play-circle" title={t('store.videos')} hint={t('store.videosHint')} />
                   <Shelf>
                     {s.videos.map((v) => (
                       <VideoTile key={v.id} video={v} />
@@ -64,7 +64,7 @@ export function SponsorScreen({ id }: { id: string }) {
                 </View>
               ) : null}
               <View style={styles.block}>
-                <Text variant="title">{t('store.products')}</Text>
+                <SectionHeading icon="bag-handle" title={t('store.products')} />
                 {s.products.length === 0 ? <Text color="textSecondary">{t('noProducts')}</Text> : null}
                 {s.products.map((product) => (
                   <ProductCard key={product.id} product={product} onOpen={() => openProduct(product)} wide />
