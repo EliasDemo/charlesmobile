@@ -91,7 +91,7 @@ Probada por el usuario: todo funciona según lo planteado. **Pendiente pedido po
   - "Cerca de mí": explicación previa, permiso del sistema, denegado o bloqueado (con "Abrir ajustes"). Las coordenadas viven solo en memoria y los resultados con ubicación se descartan de la caché a los 5 minutos. Fuera de Perú, se busca sin ubicación.
   - Las tarjetas ocultan lo que no viene: distancia, "desde" y valoración.
 - **Mapa:**
-  - `react-native-maps` (iOS: Apple Maps). En Android solo se muestra si `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true`; si no, aparece un aviso con "Ver la lista".
+  - Mapa con **MapLibre + OpenFreeMap** (OpenStreetMap; gratis, sin clave). Sin el módulo en la compilación instalada aparece un aviso con "Ver la lista".
   - "Buscar en esta zona" busca alrededor del centro del mapa sin pedir permiso.
 - **`features/barbershop`:**
   - Detalle con portada provisional (iniciales), favorito, "Reservar" deshabilitado con "Disponible pronto", información (lo que no viene se oculta), "Cómo llegar" (app de mapas del sistema), "Llamar", enlaces (solo se abren URL reales), cierre temporal con fecha de reapertura, horario semanal en la zona de la barbería, servicios por categoría, barberos y valoraciones. Cada sección carga y falla por separado. Un 404 muestra "No encontramos esta barbería".
@@ -401,7 +401,7 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 |---|---|---|
 | `expo-navigation-bar` y su plugin (`enforceContrast: false`) | El color de los iconos de la barra inferior de Android sigue el tema | El código lo detecta y no lo usa: la barra queda como la deja el sistema, sin errores |
 | `backgroundColor` en `app.config.ts` | Fondo oscuro antes de que cargue la app (sin destello blanco) | Ya se aplica en tiempo de ejecución con `expo-system-ui` |
-| Clave de Google Maps (variable de EAS `GOOGLE_MAPS_ANDROID_API_KEY`, leída por el plugin de `react-native-maps` en `app.config.ts`) | Mapa en Android. Después de instalar, poner `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true` en `.env` | La vista de mapa muestra un aviso; la lista funciona completa |
+| **Mapa: `@maplibre/maplibre-react-native` 11.5.0** (aprobado el 2026-10-27; MIT, organización MapLibre, sin scripts de instalación) con teselas de **OpenFreeMap** (OpenStreetMap: sin clave, sin registro, sin límite, uso comercial permitido; crédito visible en el mapa). Reemplaza a `react-native-maps` y a la clave de Google | Mapa de Explorar con pines de la marca y "Buscar en esta zona"; pin del local en el alta | `mapAvailable()` es false: aviso con "Ver la lista" y espacio reservado en el alta |
 | `environment` por perfil en `eas.json` (`development`, `preview`, `production`) | EAS entrega a cada compilación las variables de su entorno (la clave de Maps) | Sin efecto |
 | **Firebase (FCM) para push en Android** (aprobado para la compilación final): proyecto de Firebase del usuario, `google-services.json` como archivo de EAS (no en el repositorio) y `android.googleServicesFile` en `app.config.ts`; clave de FCM V1 subida a EAS | El teléfono obtiene su token de Expo y recibe push | `getPushToken` devuelve null: no se registra el dispositivo; la bandeja y la campana funcionan |
 | **Fotos** (M10): `expo-image-picker` (plugin con permisos de fotos y cámara), `expo-image-manipulator` (2000 px y JPEG; convierte HEIC) | Subir portada, logo, foto del barbero y galería | `photosAvailable()` es false: las pantallas explican que llega con la próxima versión |
@@ -420,11 +420,10 @@ Cambios nativos aprobados que todavía **no están** en esa compilación. Se apl
 
 1. **Firebase:** crear un proyecto en console.firebase.google.com → agregar app Android con paquete `pe.charlesapp.mobile.dev` → descargar `google-services.json` (no al repositorio). En "Configuración del proyecto → Cuentas de servicio" generar una clave privada (JSON) para FCM V1.
 2. **Variables de EAS** (expo.dev → proyecto charles → Environment variables, entorno `development`):
-   - `GOOGLE_MAPS_ANDROID_API_KEY` (texto secreto);
    - `GOOGLE_SERVICES_JSON` como **archivo** (`google-services.json`).
 3. **Credenciales de push:** `eas credentials -p android` → perfil development → Google Service Account → subir la clave FCM V1.
 4. Compilar: `eas build --profile development --platform android` e instalar el APK.
-5. En `.env`: `EXPO_PUBLIC_MAPS_ANDROID_ENABLED=true`. Luego `pnpm start`.
+5. `pnpm start`.
 
 ## Cuándo hace falta una compilación nueva (EAS)
 

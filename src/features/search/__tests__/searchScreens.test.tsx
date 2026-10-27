@@ -1,3 +1,4 @@
+import { TurboModuleRegistry } from 'react-native';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import * as Location from 'expo-location';
 import { apiError, categories, mockApi, searchPage, searchResult } from '@test/mockApi';
@@ -217,12 +218,16 @@ describe('Cerca de mí', () => {
 });
 
 describe('map view', () => {
-  it('shows the results on the map when the build supports it (Apple Maps or Android with key)', async () => {
+  it('shows the results on the map when the build includes MapLibre', async () => {
+    jest
+      .spyOn(TurboModuleRegistry, 'get')
+      .mockImplementation((name: string) => (name === 'MLRNMapViewModule' ? {} : null) as never);
     mockApi({ 'GET /api/v1/search/barbershops': { body: searchPage([searchResult()]) } });
     useSearchStore.setState({ view: 'map' });
     await renderWithProviders(<ExploreScreen {...props()} />);
     expect(await screen.findByTestId('results-map')).toBeTruthy();
     expect(screen.queryByText(texts.map.unavailableTitle)).toBeNull();
+    jest.restoreAllMocks();
   });
 });
 

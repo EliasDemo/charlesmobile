@@ -1,9 +1,7 @@
 import { StyleSheet, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { sizes, spacing, useTheme } from '@/shared/theme';
-import { Icon, Text } from '@/shared/ui';
+import { BrandMap, Icon, Text, mapAvailable } from '@/shared/ui';
 
 interface Coordinates {
   latitude: number;
@@ -12,12 +10,11 @@ interface Coordinates {
 
 /** Lima: where the pin starts when there is no position yet. */
 const LIMA: Coordinates = { latitude: -12.0464, longitude: -77.0428 };
-const DELTA = 0.01;
+const STREET_ZOOM = 16;
 
 /**
- * Map with a draggable pin for the shop's exact spot (no address geocoding: it is a paid service).
- * Long-press also moves the pin. Without the Maps key in the build, nothing is shown and the
- * "use my location" button stays the way to set it.
+ * Map with a pin for the shop's exact spot: tap where the shop is (no address geocoding). Until the
+ * installed build includes the map, a placeholder keeps its room and "use my location" sets it.
  */
 export function LocationPicker({
   value,
@@ -28,7 +25,7 @@ export function LocationPicker({
 }) {
   const theme = useTheme();
   const { t } = useTranslation('shop');
-  if (!env.mapsEnabled) {
+  if (!mapAvailable()) {
     // Room kept for the map: it appears when the build has the Maps key.
     return (
       <View
@@ -54,20 +51,13 @@ export function LocationPicker({
   return (
     <View style={styles.root}>
       <View style={[styles.map, { borderRadius: theme.radius.lg, borderColor: theme.colors.border }]}>
-        <MapView
-          style={StyleSheet.absoluteFill}
-          region={{ ...pin, latitudeDelta: DELTA, longitudeDelta: DELTA }}
-          userInterfaceStyle={theme.scheme}
-          onLongPress={(event) => onChange(event.nativeEvent.coordinate)}
+        <BrandMap
+          center={pin}
+          zoom={STREET_ZOOM}
+          pins={[{ id: 'shop', ...pin, selected: true }]}
+          onPick={onChange}
           testID="location-picker"
-        >
-          <Marker
-            coordinate={pin}
-            draggable
-            pinColor={theme.colors.primary}
-            onDragEnd={(event) => onChange(event.nativeEvent.coordinate)}
-          />
-        </MapView>
+        />
       </View>
       <Text variant="caption" color="textSecondary">
         {t('form.pinHint')}

@@ -5,10 +5,7 @@ import texts from '@/shared/i18n/locales/es/search.json';
 import { ExploreScreen } from '..';
 import { EMPTY_FILTERS, useSearchStore } from '../hooks/searchStore';
 
-// An Android build without the Google Maps key (EXPO_PUBLIC_MAPS_ANDROID_ENABLED not "true").
-jest.mock('@/shared/config', () => ({
-  env: { ...jest.requireActual('@/shared/config').env, mapsEnabled: false },
-}));
+// An installed build without the map's native module (MapLibre): the tests have none either.
 
 beforeEach(() => {
   resetAppState();

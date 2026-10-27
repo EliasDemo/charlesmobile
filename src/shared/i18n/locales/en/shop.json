@@ -123,7 +123,7 @@
     "invalidUrl": "Enter an address that starts with https://",
     "min2": "Enter at least 2 characters.",
     "min5": "Enter at least 5 characters.",
-    "pinHint": "Long-press or drag the pin to your barbershop's door.",
+    "pinHint": "Tap the map at your barbershop's door to move the pin.",
     "mapSoon": "The map to mark the exact door will appear here. Meanwhile, use \"Use my location\" while at the shop."
   },
   "statusForm": {

@@ -1,22 +1,16 @@
 import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import MapView, { Marker, type Region } from 'react-native-maps';
-import { env } from '@/shared/config';
 import { useTranslation } from '@/shared/i18n';
 import { spacing, useTheme } from '@/shared/theme';
-import { Button, EmptyState, Notice } from '@/shared/ui';
+import { BrandMap, Button, EmptyState, Notice, mapAvailable } from '@/shared/ui';
 import type { SearchResult } from '../api/searchApi';
 import type { SearchCenter } from '../hooks/searchStore';
 import { ResultCard } from './ResultCard';
 
 /** Lima: where the map starts when there is no search center yet. */
-const DEFAULT_REGION: Region = {
-  latitude: -12.0464,
-  longitude: -77.0428,
-  latitudeDelta: 0.12,
-  longitudeDelta: 0.12,
-};
-const CENTER_DELTA = 0.05;
+const DEFAULT_CENTER = { latitude: -12.0464, longitude: -77.0428 };
+const CITY_ZOOM = 11;
+const AREA_ZOOM = 13;
 
 export interface SearchMapProps {
   items: SearchResult[];
@@ -27,12 +21,12 @@ export interface SearchMapProps {
 }
 
 /**
- * Map of the loaded results. On Android it needs a Google Maps key inside the native build: until
- * that build exists (env.mapsEnabled), a clear notice replaces the map instead of a gray area.
+ * Map of the loaded results (MapLibre + OpenStreetMap, free). Until the installed build includes
+ * the map, a clear notice replaces it instead of a gray area.
  */
 export function SearchMap(props: SearchMapProps) {
   const { t } = useTranslation('search');
-  if (!env.mapsEnabled) {
+  if (!mapAvailable()) {
     return (
       <View style={styles.notice} testID="map-unavailable">
         <Notice tone="info" title={t('map.unavailableTitle')} message={t('map.unavailableMessage')}>
@@ -47,52 +41,40 @@ export function SearchMap(props: SearchMapProps) {
 function ResultsMap({ items, center, onSearchHere, onOpenBarbershop }: SearchMapProps) {
   const theme = useTheme();
   const { t } = useTranslation('search');
-  const [region, setRegion] = useState<Region | null>(null);
+  const [moved, setMoved] = useState<{ latitude: number; longitude: number } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const initialRegion = useMemo<Region>(
+  // Only where the map opens; later moves are the user's.
+  const [start] = useState(() =>
+    center
+      ? { center: { latitude: center.latitude, longitude: center.longitude }, zoom: AREA_ZOOM }
+      : { center: DEFAULT_CENTER, zoom: CITY_ZOOM },
+  );
+  const pins = useMemo(
     () =>
-      center
-        ? {
-            latitude: center.latitude,
-            longitude: center.longitude,
-            latitudeDelta: CENTER_DELTA,
-            longitudeDelta: CENTER_DELTA,
-          }
-        : DEFAULT_REGION,
-    // Only where the map opens; later moves are the user's.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+      items.map((item) => ({
+        id: item.id,
+        latitude: item.latitude,
+        longitude: item.longitude,
+        selected: item.id === selectedId,
+      })),
+    [items, selectedId],
   );
   const selected = items.find((item) => item.id === selectedId) ?? null;
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={StyleSheet.absoluteFill}
-        initialRegion={initialRegion}
-        onRegionChangeComplete={setRegion}
-        showsUserLocation={center?.source === 'device'}
-        userInterfaceStyle={theme.scheme}
+      <BrandMap
+        center={start.center}
+        zoom={start.zoom}
+        pins={pins}
+        onPinPress={setSelectedId}
+        onMoved={setMoved}
+        showUser={center?.source === 'device'}
         testID="results-map"
-      >
-        {items.map((item) => (
-          <Marker
-            key={item.id}
-            coordinate={{ latitude: item.latitude, longitude: item.longitude }}
-            title={item.name}
-            pinColor={theme.colors.primary}
-            onPress={() => setSelectedId(item.id)}
-          />
-        ))}
-      </MapView>
-      {region ? (
+      />
+      {moved ? (
         <View style={styles.top}>
-          <Button
-            label={t('map.searchHere')}
-            onPress={() =>
-              onSearchHere({ latitude: region.latitude, longitude: region.longitude, source: 'map' })
-            }
-          />
+          <Button label={t('map.searchHere')} onPress={() => onSearchHere({ ...moved, source: 'map' })} />
         </View>
       ) : null}
       <View style={styles.bottom}>

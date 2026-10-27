@@ -43,11 +43,6 @@ export const env = {
   isDevelopment: appVariant === 'development',
   apiUrl: apiUrlResult.ok ? apiUrlResult.apiUrl : '',
   configError: apiUrlResult.ok ? null : apiUrlResult.reason,
-  /**
-   * Android needs a Google Maps key inside the native build. This public flag (never the key) says
-   * the installed build has it; until then the map shows a notice. iOS uses Apple Maps (no key).
-   */
-  mapsEnabled: Platform.OS !== 'android' || process.env.EXPO_PUBLIC_MAPS_ANDROID_ENABLED === 'true',
   /** Zone for calendar days before a barbershop is known (search by date). Every shop has its own. */
   defaultTimeZone: 'America/Lima',
   appVersion: Constants.expoConfig?.version ?? '0.0.0',

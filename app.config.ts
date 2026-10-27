@@ -7,8 +7,6 @@ const isDevelopment = variant === 'development';
 const BASE_ID = 'pe.charlesapp.mobile';
 // EAS project of the charlesapp-pe organization. Filled after `eas init` (the ID is not a secret).
 const EAS_PROJECT_ID: string = '1d025d83-2f2c-43d5-9790-a672d8b63389';
-// Google Maps key for Android, injected at build time from an EAS environment variable (never committed).
-const GOOGLE_MAPS_ANDROID_API_KEY = process.env.GOOGLE_MAPS_ANDROID_API_KEY;
 // Firebase config for Android push (FCM), uploaded as an EAS file variable (never committed).
 const GOOGLE_SERVICES_JSON = process.env.GOOGLE_SERVICES_JSON;
 
@@ -81,10 +79,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     // Transparent edge-to-edge navigation bar whose button color follows the app theme.
     ['expo-navigation-bar', { enforceContrast: false }],
-    [
-      'react-native-maps',
-      GOOGLE_MAPS_ANDROID_API_KEY ? { androidGoogleMapsApiKey: GOOGLE_MAPS_ANDROID_API_KEY } : {},
-    ],
+    // Map: MapLibre with OpenStreetMap tiles (OpenFreeMap): free, no key.
+    '@maplibre/maplibre-react-native',
     './plugins/withLyraPaymentSDK',
     [
       'expo-image-picker',

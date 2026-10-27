@@ -23,11 +23,14 @@ jest.mock('expo-secure-store', () => {
 // TanStack Query notifies observers on a timer; run it synchronously so updates stay inside act().
 require('@tanstack/react-query').notifyManager.setScheduler((callback: () => void) => callback());
 
-// react-native-maps needs its native module at import time; tests render a plain view instead.
-jest.mock('react-native-maps', () => {
+// MapLibre loads only when its native module exists; tests that simulate it get plain views.
+jest.mock('@maplibre/maplibre-react-native', () => {
   const { View } = jest.requireActual('react-native');
-  const MapView = (props: object) => <View testID="results-map" {...props} />;
-  return { __esModule: true, default: MapView, Marker: () => null };
+  const Map = ({ children, testID }: { children?: React.ReactNode; testID?: string }) => (
+    <View testID={testID}>{children}</View>
+  );
+  const Plain = ({ children }: { children?: React.ReactNode }) => <View>{children}</View>;
+  return { Map, Camera: () => null, UserLocation: () => null, Marker: Plain };
 });
 
 // expo-crypto's native randomUUID is not available in Jest: use Node's.
