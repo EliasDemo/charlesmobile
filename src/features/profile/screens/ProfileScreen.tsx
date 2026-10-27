@@ -30,6 +30,7 @@ export interface ProfileScreenProps {
   onMemberships: () => void;
   onPreferences: () => void;
   onFavorites: () => void;
+  onWaitlist: () => void;
   onNotifications: () => void;
   onHelp: () => void;
   onMyReviews: () => void;
@@ -133,6 +134,11 @@ export function ProfileScreen(props: ProfileScreenProps) {
                   icon="notifications"
                   label={t('title', { ns: 'notifications' })}
                   onPress={props.onNotifications}
+                />
+                <ActionTile
+                  icon="hourglass"
+                  label={t('title', { ns: 'waitlist' })}
+                  onPress={props.onWaitlist}
                 />
               </TileGrid>
             </Section>

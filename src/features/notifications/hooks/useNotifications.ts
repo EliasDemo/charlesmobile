@@ -185,6 +185,7 @@ export type NotificationTarget =
   | { kind: 'shopOffers' }
   | { kind: 'myPlan' }
   | { kind: 'myMemberships' }
+  | { kind: 'bookShop'; barbershopId: string }
   | { kind: 'inbox' };
 
 /**
@@ -199,6 +200,10 @@ export function notificationTarget(resource: NotificationResource, type?: string
   // Direct job offers (resource job_offer): received by the barber, answered for the barbershop.
   if (type === 'JOB_OFFER_RECEIVED') return { kind: 'myOffers' };
   if (type === 'JOB_OFFER_ANSWERED') return { kind: 'shopOffers' };
+  // A freed slot from the waitlist: the client goes to the barbershop to book it (LISTA-ESPERA.md).
+  if (type === 'WAITLIST_SLOT_FREED' && resource.type === 'barbershop' && resource.id) {
+    return { kind: 'bookShop', barbershopId: resource.id };
+  }
   if (resource.type === 'booking' && resource.id) return { kind: 'booking', id: resource.id };
   if (resource.type === 'review' && resource.id) return { kind: 'shopReviews', shopId: resource.id };
   if (resource.type === 'barbershop' || resource.type === 'review') return { kind: 'shop' };

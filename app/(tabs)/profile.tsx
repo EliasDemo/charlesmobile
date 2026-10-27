@@ -19,6 +19,7 @@ export default function ProfileRoute() {
       onPreferences={() => router.push('/profile/preferences')}
       onFavorites={() => router.push('/profile/favorites')}
       onNotifications={() => router.push('/notifications')}
+      onWaitlist={() => router.push('/profile/waitlist')}
       onHelp={() => router.push('/support')}
       onMyReviews={() => router.push('/profile/reviews')}
       onWelcome={() => router.push('/welcome')}

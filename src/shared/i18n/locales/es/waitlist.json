@@ -1,0 +1,41 @@
+{
+  "title": "Mis listas de espera",
+  "notify": "Avisarme si se libera un turno",
+  "notifyHint": "Te avisamos al instante si alguien cancela ese día.",
+  "sheet": {
+    "title": "Avisarme si se libera un turno",
+    "message": "Elige qué horario te sirve. Si se libera un turno en esa franja, te llega un aviso para reservarlo antes que otros.",
+    "window": "¿A qué hora te sirve?",
+    "barber": "Barbero",
+    "anyBarber": "Cualquier barbero",
+    "onlyBarber": "Solo {{name}}",
+    "confirm": "Avisarme"
+  },
+  "windows": {
+    "any": "Todo el día",
+    "morning": "Mañana",
+    "afternoon": "Tarde",
+    "evening": "Noche"
+  },
+  "joined": "Listo. Te avisaremos si se libera un turno.",
+  "errors": {
+    "limit": "Ya tienes 5 listas de espera activas. Sal de alguna para anotarte en otra."
+  },
+  "status": {
+    "ACTIVE": "Esperando",
+    "NOTIFIED": "¡Se liberó un turno!"
+  },
+  "entry": {
+    "window": "{{from}}–{{to}}",
+    "anyTime": "Cualquier hora",
+    "anyBarber": "Cualquier barbero",
+    "book": "Reservar ahora",
+    "leave": "Salir de la lista"
+  },
+  "leaveTitle": "¿Salir de la lista de espera?",
+  "leaveMessage": "Ya no te avisaremos si se libera un turno ese día.",
+  "empty": {
+    "title": "No estás en ninguna lista de espera",
+    "message": "Cuando un día no tenga turnos, toca «Avisarme si se libera un turno»."
+  }
+}

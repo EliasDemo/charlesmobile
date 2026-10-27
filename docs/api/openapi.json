@@ -10819,6 +10819,402 @@
         "tags": ["admin"]
       }
     },
+    "/api/v1/admin/search": {
+      "get": {
+        "operationId": "AdminInsightsController_search_v1",
+        "parameters": [
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "description": "Nombre, usuario, correo exacto, barbería o código de reserva.",
+            "schema": {
+              "minLength": 2,
+              "maxLength": 100,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSearchDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "ADMIN o SUPPORT: búsqueda global (cuentas, barberías y reserva por código)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/metrics": {
+      "get": {
+        "operationId": "AdminInsightsController_metrics_v1",
+        "parameters": [
+          {
+            "name": "days",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 7,
+              "maximum": 180,
+              "default": 30,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricsDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: reservas, ingresos, comisiones y cuentas por día",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/system/health": {
+      "get": {
+        "operationId": "AdminInsightsController_health_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemHealthDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: salud del sistema (base, Redis, fotos, colas, pagos y avisos)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/audit": {
+      "get": {
+        "operationId": "AdminInsightsController_audit_v1",
+        "parameters": [
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "description": "Acción (contiene), p. ej. \"refund\" o \"subscription.canceled\".",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 80,
+              "type": "string"
+            }
+          },
+          {
+            "name": "actor",
+            "required": false,
+            "in": "query",
+            "description": "Usuario (nombre de usuario) de quien actuó.",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityType",
+            "required": false,
+            "in": "query",
+            "description": "Tipo de entidad: user, barbershop, booking, subscription…",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 80,
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditPageDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: auditoría (quién hizo qué y cuándo), más recientes primero",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/audit.csv": {
+      "get": {
+        "operationId": "AdminInsightsController_auditCsv_v1",
+        "parameters": [
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "description": "Acción (contiene), p. ej. \"refund\" o \"subscription.canceled\".",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 80,
+              "type": "string"
+            }
+          },
+          {
+            "name": "actor",
+            "required": false,
+            "in": "query",
+            "description": "Usuario (nombre de usuario) de quien actuó.",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityType",
+            "required": false,
+            "in": "query",
+            "description": "Tipo de entidad: user, barbershop, booking, subscription…",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minLength": 1,
+              "maxLength": 80,
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "nextCursor de la página anterior.",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Archivo CSV"
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: auditoría en CSV (mismos filtros, hasta 5 000 filas)",
+        "tags": ["admin"]
+      }
+    },
+    "/api/v1/admin/staff": {
+      "get": {
+        "operationId": "AdminInsightsController_staff_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StaffMemberDto"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: personal (ADMIN y SUPPORT), segundo factor, último acceso y actividad",
+        "tags": ["admin"]
+      }
+    },
     "/api/v1/me/devices": {
       "put": {
         "description": "El token de Expo va en el cuerpo (nunca en la URL). Idempotente por token. Queda ligado a la sesión: al cerrarla se borra. Máximo 10 por cuenta (se borran los menos usados).",
@@ -22339,6 +22735,146 @@
         "tags": ["admin"]
       }
     },
+    "/api/v1/barbershops/{id}/waitlist": {
+      "post": {
+        "description": "Si una reserva de ese día se cancela o vence, te avisamos (push y en la app). El aviso no aparta el turno: resérvalo apenas lo recibas. Idempotente por servicio y día.",
+        "operationId": "WaitlistController_join_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinWaitlistDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitlistEntryDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Límite de 5 listas activas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Anotarme en la lista de espera de un día",
+        "tags": ["waitlist"]
+      }
+    },
+    "/api/v1/me/waitlist": {
+      "get": {
+        "operationId": "WaitlistController_mine_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WaitlistEntryDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mis listas de espera (activas y avisadas)",
+        "tags": ["waitlist"]
+      }
+    },
+    "/api/v1/me/waitlist/{entryId}": {
+      "delete": {
+        "operationId": "WaitlistController_leave_v1",
+        "parameters": [
+          {
+            "name": "entryId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Salir de una lista de espera",
+        "tags": ["waitlist"]
+      }
+    },
     "/api/v1/locations/departments": {
       "get": {
         "operationId": "LocationsController_departments_v1",
@@ -30095,6 +30631,395 @@
           "generatedAt"
         ]
       },
+      "SearchUserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "fullName", "username", "email", "status"]
+      },
+      "SearchBarbershopDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name", "address", "status"]
+      },
+      "SearchBookingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "serviceName": {
+            "type": "string"
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "startAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": ["id", "serviceName", "barbershopName", "status", "startAt"]
+      },
+      "AdminSearchDto": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchUserDto"
+            }
+          },
+          "barbershops": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchBarbershopDto"
+            }
+          },
+          "bookings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchBookingDto"
+            }
+          }
+        },
+        "required": ["users", "barbershops", "bookings"]
+      },
+      "MetricsDayDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2026-10-20",
+            "description": "Día en hora de Lima."
+          },
+          "bookings": {
+            "type": "number",
+            "description": "Reservas creadas."
+          },
+          "attended": {
+            "type": "number",
+            "description": "Reservas atendidas."
+          },
+          "revenue": {
+            "type": "number",
+            "description": "Cobrado en la app (céntimos)."
+          },
+          "commission": {
+            "type": "number",
+            "description": "Comisión de Charles (céntimos)."
+          },
+          "newUsers": {
+            "type": "number",
+            "description": "Cuentas nuevas."
+          }
+        },
+        "required": ["date", "bookings", "attended", "revenue", "commission", "newUsers"]
+      },
+      "MetricsPlanDto": {
+        "type": "object",
+        "properties": {
+          "plan": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          }
+        },
+        "required": ["plan", "count"]
+      },
+      "MetricsDto": {
+        "type": "object",
+        "properties": {
+          "days": {
+            "type": "number"
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetricsDayDto"
+            }
+          },
+          "totalBookings": {
+            "type": "number"
+          },
+          "totalRevenue": {
+            "type": "number"
+          },
+          "totalCommission": {
+            "type": "number"
+          },
+          "newUsers": {
+            "type": "number"
+          },
+          "newBarbershops": {
+            "type": "number"
+          },
+          "openBarbershops": {
+            "type": "number",
+            "description": "Barberías publicadas hoy."
+          },
+          "lossRate": {
+            "type": "number",
+            "description": "% de reservas canceladas o no atendidas en el periodo."
+          },
+          "plans": {
+            "description": "Suscripciones vivas por plan.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetricsPlanDto"
+            }
+          }
+        },
+        "required": [
+          "days",
+          "series",
+          "totalBookings",
+          "totalRevenue",
+          "totalCommission",
+          "newUsers",
+          "newBarbershops",
+          "openBarbershops",
+          "lossRate",
+          "plans"
+        ]
+      },
+      "HealthCheckDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["OK", "WARN", "DOWN"]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "latencyMs": {
+            "type": "number",
+            "nullable": true,
+            "description": "Tiempo de respuesta (ms)."
+          }
+        },
+        "required": ["name", "status", "detail", "latencyMs"]
+      },
+      "QueueStatDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "waiting": {
+            "type": "number"
+          },
+          "active": {
+            "type": "number"
+          },
+          "delayed": {
+            "type": "number"
+          },
+          "failed": {
+            "type": "number"
+          }
+        },
+        "required": ["name", "waiting", "active", "delayed", "failed"]
+      },
+      "SystemHealthDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["OK", "WARN", "DOWN"]
+          },
+          "checkedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "uptimeSeconds": {
+            "type": "number",
+            "description": "Segundos desde que arrancó este proceso."
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HealthCheckDto"
+            }
+          },
+          "queues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QueueStatDto"
+            }
+          }
+        },
+        "required": [
+          "status",
+          "checkedAt",
+          "version",
+          "environment",
+          "uptimeSeconds",
+          "checks",
+          "queues"
+        ]
+      },
+      "AuditEntryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "entityType": {
+            "type": "string"
+          },
+          "entityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "actor": {
+            "type": "string",
+            "nullable": true,
+            "description": "Usuario de quien actuó (null: el sistema)."
+          },
+          "changes": {
+            "type": "object",
+            "additionalProperties": true,
+            "nullable": true,
+            "description": "Qué cambió (campos y valores no sensibles)."
+          },
+          "ip": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "action",
+          "entityType",
+          "entityId",
+          "actor",
+          "changes",
+          "ip"
+        ]
+      },
+      "AuditPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AuditEntryDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["items", "nextCursor"]
+      },
+      "StaffMemberDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string"
+          },
+          "mfaEnabled": {
+            "type": "boolean",
+            "description": "Tiene activado el segundo factor."
+          },
+          "lastLoginAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time",
+            "description": "Último inicio de sesión."
+          },
+          "actionsLast30d": {
+            "type": "number",
+            "description": "Acciones registradas en la auditoría en los últimos 30 días."
+          }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "username",
+          "email",
+          "roles",
+          "status",
+          "mfaEnabled",
+          "lastLoginAt",
+          "actionsLast30d"
+        ]
+      },
       "RegisterDeviceDto": {
         "type": "object",
         "properties": {
@@ -36743,6 +37668,111 @@
           }
         },
         "required": ["action", "reason"]
+      },
+      "JoinWaitlistDto": {
+        "type": "object",
+        "properties": {
+          "serviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "example": "2026-11-05",
+            "description": "Día local de la barbería (hasta 30 días)."
+          },
+          "barberId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Solo con este barbero. Sin él: cualquiera."
+          },
+          "fromMinute": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1439,
+            "description": "Desde (minutos desde la medianoche, hora local)."
+          },
+          "toMinute": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 1440,
+            "description": "Hasta (minutos desde la medianoche, hora local)."
+          }
+        },
+        "required": ["serviceId", "date"]
+      },
+      "WaitlistEntryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "serviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "serviceName": {
+            "type": "string"
+          },
+          "barberId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "barberName": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "example": "2026-11-05"
+          },
+          "fromMinute": {
+            "type": "number",
+            "nullable": true
+          },
+          "toMinute": {
+            "type": "number",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ACTIVE", "NOTIFIED", "CANCELLED", "EXPIRED"],
+            "description": "NOTIFIED: ya se le avisó de un turno libre (reserva normalmente desde la app)."
+          },
+          "notifiedAt": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "barbershopId",
+          "barbershopName",
+          "serviceId",
+          "serviceName",
+          "barberId",
+          "barberName",
+          "date",
+          "fromMinute",
+          "toMinute",
+          "status",
+          "notifiedAt",
+          "createdAt"
+        ]
       },
       "ProvinceDto": {
         "type": "object",

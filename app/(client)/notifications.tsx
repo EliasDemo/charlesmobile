@@ -8,6 +8,10 @@ export default function NotificationsRoute() {
       onOpen={(resource, type) => {
         const target = notificationTarget(resource, type);
         if (target.kind === 'booking') router.push({ pathname: '/bookings/[id]', params: { id: target.id } });
+        if (target.kind === 'bookShop') {
+          useAppMode.getState().setMode('client');
+          router.push({ pathname: '/barbershop/[id]', params: { id: target.barbershopId } });
+        }
         if (target.kind === 'ticket') router.push({ pathname: '/support/[id]', params: { id: target.id } });
         if (target.kind === 'support') router.push('/support');
         if (target.kind === 'shopReviews') {

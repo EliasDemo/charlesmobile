@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { ResultCard } from '@/features/search';
+import { WaitlistButton } from '@/features/waitlist';
 import { useTranslation } from '@/shared/i18n';
 import { formatShortDate, formatTime } from '@/shared/lib';
 import { spacing } from '@/shared/theme';
@@ -18,6 +19,8 @@ export interface BookScreenProps {
   onOpenBarbershop: (id: string) => void;
   /** The barber's professional profile (reviews, work), to check before choosing. */
   onOpenBarberProfile?: (profileId: string) => void;
+  /** Joining the waitlist without a session: ask for an account and come back. */
+  onRequireLogin?: () => void;
 }
 
 /** "Reservar" in four numbered steps (service, barber, day, time), with the choice fixed below. */
@@ -29,6 +32,7 @@ export function BookScreen({
   onBack,
   onOpenBarbershop,
   onOpenBarberProfile,
+  onRequireLogin,
 }: BookScreenProps) {
   const { t } = useTranslation('booking');
   const setup = useBookingSetup(barbershopId, serviceId, barberId);
@@ -136,6 +140,18 @@ export function BookScreen({
                                 />
                               ) : null}
                             </Notice>
+                            {draft.serviceId && draft.date && onRequireLogin ? (
+                              <WaitlistButton
+                                barbershopId={barbershopId}
+                                serviceId={draft.serviceId}
+                                date={draft.date}
+                                barber={(() => {
+                                  const chosen = setup.eligibleBarbers.find((b) => b.id === draft.barberId);
+                                  return chosen ? { id: chosen.id, name: chosen.displayName } : null;
+                                })()}
+                                onRequireLogin={onRequireLogin}
+                              />
+                            ) : null}
                             <Text variant="subtitle">{t('book.alternativesTitle')}</Text>
                             <QueryView
                               query={setup.alternatives}

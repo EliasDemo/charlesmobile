@@ -52,6 +52,7 @@ Para quien construye la app. Estado al cierre de la Fase 10. Referencia del back
 | `SUPPORT_REPLY`                                   | Quien abrió el ticket                                                                      | push y bandeja                   |
 | `ACCOUNT_DISABLED`                                | La cuenta                                                                                  | correo (siempre)                 |
 | `BARBERSHOP_SUSPENDED`                            | OWNER y MANAGER                                                                            | bandeja y correo (siempre)       |
+| `WAITLIST_SLOT_FREED`                             | Cliente en la lista de espera de esa franja (`resource.type` = `barbershop`)               | push y bandeja (urgente)         |
 
 "Siempre" = avisos de seguridad y de pagos: se envían aunque la persona haya apagado ese canal.
 

@@ -1,0 +1,41 @@
+{
+  "title": "My waitlists",
+  "notify": "Notify me if a slot opens",
+  "notifyHint": "We'll let you know right away if someone cancels that day.",
+  "sheet": {
+    "title": "Notify me if a slot opens",
+    "message": "Choose the time that works for you. If a slot opens in that range, you'll get a notice to book it before others.",
+    "window": "What time works for you?",
+    "barber": "Barber",
+    "anyBarber": "Any barber",
+    "onlyBarber": "Only {{name}}",
+    "confirm": "Notify me"
+  },
+  "windows": {
+    "any": "All day",
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening"
+  },
+  "joined": "Done. We'll let you know if a slot opens.",
+  "errors": {
+    "limit": "You already have 5 active waitlists. Leave one to join another."
+  },
+  "status": {
+    "ACTIVE": "Waiting",
+    "NOTIFIED": "A slot opened!"
+  },
+  "entry": {
+    "window": "{{from}}–{{to}}",
+    "anyTime": "Any time",
+    "anyBarber": "Any barber",
+    "book": "Book now",
+    "leave": "Leave the list"
+  },
+  "leaveTitle": "Leave the waitlist?",
+  "leaveMessage": "We won't notify you anymore if a slot opens that day.",
+  "empty": {
+    "title": "You're not on any waitlist",
+    "message": "When a day has no slots, tap “Notify me if a slot opens”."
+  }
+}

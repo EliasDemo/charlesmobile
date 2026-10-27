@@ -62,7 +62,11 @@ function AppStack() {
   usePushTaps((resource, type) => {
     const target = notificationTarget(resource, type);
     if (target.kind === 'booking') router.push({ pathname: '/bookings/[id]', params: { id: target.id } });
-    else if (target.kind === 'ticket') router.push({ pathname: '/support/[id]', params: { id: target.id } });
+    else if (target.kind === 'bookShop') {
+      useAppMode.getState().setMode('client');
+      router.push({ pathname: '/barbershop/[id]', params: { id: target.barbershopId } });
+    } else if (target.kind === 'ticket')
+      router.push({ pathname: '/support/[id]', params: { id: target.id } });
     else if (target.kind === 'support') router.push('/support');
     else if (target.kind === 'shopReviews') {
       useAppMode.getState().setMode('shop');
