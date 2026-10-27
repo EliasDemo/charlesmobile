@@ -23,6 +23,7 @@ const entry = (over: Record<string, unknown> = {}) => ({
   status: 'ACTIVE',
   notifiedAt: null,
   createdAt: '2030-01-01T10:00:00.000Z',
+  timezone: 'America/Lima',
   ...over,
 });
 

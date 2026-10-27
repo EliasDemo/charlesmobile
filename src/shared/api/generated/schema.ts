@@ -1425,6 +1425,23 @@ export type paths = {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/waitlist": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Solo ADMIN: demanda en lista de espera por barbería (esperando y avisos enviados) */
+        get: operations["AdminInsightsController_waitlist_v1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/email-verification/confirm": {
         parameters: {
             query?: never;
@@ -10971,6 +10988,23 @@ export type components = {
         VoidSaleDto: {
             reason: string;
         };
+        WaitlistDemandDto: {
+            /** @description Las 50 barberías con más espera. */
+            shops: components["schemas"]["WaitlistDemandShopDto"][];
+            totalNotifiedLast30d: number;
+            totalWaiting: number;
+        };
+        WaitlistDemandShopDto: {
+            /** Format: uuid */
+            barbershopId: string;
+            barbershopName: string;
+            /** @description Avisos de turno libre enviados en los últimos 30 días. */
+            notifiedLast30d: number;
+            /** @description Servicio más pedido en espera. */
+            topService: string | null;
+            /** @description Clientes esperando un turno (hoy o después). */
+            waiting: number;
+        };
         WaitlistEntryDto: {
             /** Format: uuid */
             barberId: string | null;
@@ -10995,6 +11029,11 @@ export type components = {
              * @enum {string}
              */
             status: "ACTIVE" | "NOTIFIED" | "CANCELLED" | "EXPIRED";
+            /**
+             * @description Zona horaria IANA de la barbería: `date` y los minutos se leen en esta hora.
+             * @example America/Lima
+             */
+            timezone: string;
             toMinute: number | null;
         };
         WebhookReceiptDto: {
@@ -14871,6 +14910,33 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReportedVideoDto"][];
+                };
+            };
+        };
+    };
+    AdminInsightsController_waitlist_v1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WaitlistDemandDto"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponseDto"];
                 };
             };
         };

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTranslation } from '@/shared/i18n';
 import { zonedTimeToIso, formatLongDate } from '@/shared/lib';
-import { env } from '@/shared/config';
 import { spacing } from '@/shared/theme';
 import {
   Button,
@@ -74,8 +73,8 @@ function Entry({
   onLeave: () => void;
 }) {
   const { t } = useTranslation('waitlist');
-  // The day is the barbershop's local day; noon keeps it on the same date in any zone.
-  const zone = env.defaultTimeZone;
+  // The day is the barbershop's local day, in its own zone; noon keeps it on the same date.
+  const zone = entry.timezone;
   const details: InfoItem[] = [
     { icon: 'calendar', text: formatLongDate(zonedTimeToIso(entry.date, '12:00', zone), zone) },
     {

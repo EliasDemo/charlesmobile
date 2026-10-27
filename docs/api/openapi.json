@@ -11215,6 +11215,41 @@
         "tags": ["admin"]
       }
     },
+    "/api/v1/admin/waitlist": {
+      "get": {
+        "operationId": "AdminInsightsController_waitlist_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WaitlistDemandDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Solo ADMIN: demanda en lista de espera por barbería (esperando y avisos enviados)",
+        "tags": ["admin"]
+      }
+    },
     "/api/v1/me/devices": {
       "put": {
         "description": "El token de Expo va en el cuerpo (nunca en la URL). Idempotente por token. Queda ligado a la sesión: al cerrarla se borra. Máximo 10 por cuenta (se borran los menos usados).",
@@ -31020,6 +31055,51 @@
           "actionsLast30d"
         ]
       },
+      "WaitlistDemandShopDto": {
+        "type": "object",
+        "properties": {
+          "barbershopId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "barbershopName": {
+            "type": "string"
+          },
+          "waiting": {
+            "type": "number",
+            "description": "Clientes esperando un turno (hoy o después)."
+          },
+          "notifiedLast30d": {
+            "type": "number",
+            "description": "Avisos de turno libre enviados en los últimos 30 días."
+          },
+          "topService": {
+            "type": "string",
+            "nullable": true,
+            "description": "Servicio más pedido en espera."
+          }
+        },
+        "required": ["barbershopId", "barbershopName", "waiting", "notifiedLast30d", "topService"]
+      },
+      "WaitlistDemandDto": {
+        "type": "object",
+        "properties": {
+          "totalWaiting": {
+            "type": "number"
+          },
+          "totalNotifiedLast30d": {
+            "type": "number"
+          },
+          "shops": {
+            "description": "Las 50 barberías con más espera.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WaitlistDemandShopDto"
+            }
+          }
+        },
+        "required": ["totalWaiting", "totalNotifiedLast30d", "shops"]
+      },
       "RegisterDeviceDto": {
         "type": "object",
         "properties": {
@@ -37715,6 +37795,11 @@
           "barbershopName": {
             "type": "string"
           },
+          "timezone": {
+            "type": "string",
+            "example": "America/Lima",
+            "description": "Zona horaria IANA de la barbería: `date` y los minutos se leen en esta hora."
+          },
           "serviceId": {
             "type": "string",
             "format": "uuid"
@@ -37762,6 +37847,7 @@
           "id",
           "barbershopId",
           "barbershopName",
+          "timezone",
           "serviceId",
           "serviceName",
           "barberId",
