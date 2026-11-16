@@ -296,5 +296,14 @@
     "removePhotoTitle": "¿Quitar la foto?",
     "removePhotoMessage": "Se quitará de inmediato. Puedes subir otra cuando quieras.",
     "removePhoto": "Quitar foto"
+  },
+  "guide": {
+    "open": "Ver la guía: {{title}}",
+    "how": "¿Cómo funciona?",
+    "step": "Paso {{n}} de {{total}}",
+    "skip": "Cerrar la guía",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Entendido"
   }
 }

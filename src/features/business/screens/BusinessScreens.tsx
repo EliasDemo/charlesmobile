@@ -8,13 +8,14 @@ import { useTranslation } from '@/shared/i18n';
 import { formatShortDate, formatTime, useDebouncedValue } from '@/shared/lib';
 import { sizes, spacing, useTheme } from '@/shared/theme';
 import {
-  ConfirmButton,
   Badge,
   Button,
   Card,
   Chip,
+  ConfirmButton,
   ConfirmDialog,
   EmptyState,
+  GuideBanner,
   Icon,
   InfoCard,
   ListRow,
@@ -26,6 +27,8 @@ import {
   SwitchRow,
   Text,
   TextField,
+  type GuideStep,
+  type IconName,
 } from '@/shared/ui';
 import type { ClientTier, CustomerDoc, Sale } from '../api/businessApi';
 import {
@@ -55,6 +58,11 @@ import {
   useSalesReport,
 } from '../hooks/useBusiness';
 
+type GuideText = { title: string; text: string; tip?: string };
+/** The guide's steps (texts from the translations, one icon per step). */
+const guideSteps = (texts: unknown, icons: IconName[]): GuideStep[] =>
+  (texts as GuideText[]).map((s, i) => ({ ...s, icon: icons[i] ?? 'help-circle' }));
+
 const zone = env.defaultTimeZone;
 
 // --------------------------------------------------------------------------- Cash register
@@ -73,6 +81,19 @@ export function CashScreen({ shopId, onNewSale }: { shopId: string; onNewSale: (
   const [confirming, setConfirming] = useState(false);
   return (
     <Screen refreshing={c.query.isRefetching} onRefresh={() => void c.query.refetch()}>
+      <GuideBanner
+        id="cash"
+        icon="wallet"
+        title={t('cash.guide.title')}
+        summary={t('cash.guide.summary')}
+        steps={guideSteps(t('cash.guide.steps', { returnObjects: true }), [
+          'lock-open',
+          'receipt',
+          'calculator',
+          'cash',
+          'stats-chart',
+        ])}
+      />
       {c.error ? <Notice tone="danger" message={c.error} /> : null}
       <QueryView query={c.query}>
         {(session) =>

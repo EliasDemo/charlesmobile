@@ -6,10 +6,11 @@ import { useTranslation } from '@/shared/i18n';
 import { formatMoney, formatShortDate } from '@/shared/lib';
 import { spacing, type StatusTone } from '@/shared/theme';
 import {
-  ConfirmDialog,
   Button,
   Card,
   Chip,
+  ConfirmDialog,
+  GuideBanner,
   IconTile,
   InfoCard,
   ListRow,
@@ -22,6 +23,7 @@ import {
   Text,
   TextField,
   useFieldErrorText,
+  type GuideStep,
   type IconName,
   type InfoItem,
   type TextFieldProps,
@@ -34,6 +36,11 @@ import {
   useShopPromotions,
   useShopTimeZone,
 } from '../hooks/usePromotionManagement';
+
+type GuideText = { title: string; text: string; tip?: string };
+/** The guide's steps (texts from the translations, one icon per step). */
+const guideSteps = (texts: unknown, icons: IconName[]): GuideStep[] =>
+  (texts as GuideText[]).map((s, i) => ({ ...s, icon: icons[i] ?? 'help-circle' }));
 
 const STATUS: Record<PromotionStatus, { tone: StatusTone; icon: IconName }> = {
   ACTIVE: { tone: 'success', icon: 'checkmark-circle' },
@@ -63,8 +70,22 @@ export function PromotionsScreen({
   const timeZone = useShopTimeZone(shopId);
   return (
     <Screen>
+      <GuideBanner
+        id="promotions"
+        icon="pricetags"
+        title={t('guide.title')}
+        summary={t('guide.summary')}
+        steps={guideSteps(t('guide.steps', { returnObjects: true }), [
+          'pricetag',
+          'calendar',
+          'cut',
+          'ticket',
+          'people',
+          'stats-chart',
+        ])}
+      />
+      <Button label={t('new')} icon="add-circle" onPress={onNew} fullWidth />
       <Notice tone="info" message={t('assumedByShop')} />
-      <Button label={t('new')} icon="add-circle" onPress={onNew} />
       <QueryView
         query={query}
         isEmpty={(items) => items.length === 0}

@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Chip,
+  GuideBanner,
   InfoCard,
   Monogram,
   Notice,
@@ -18,11 +19,18 @@ import {
   Text,
   TextField,
   useFieldErrorText,
+  type GuideStep,
+  type IconName,
 } from '@/shared/ui';
 import { SPECIALTIES_MAX, YEARS_MAX, useBarberForm, useBarbersList } from '../hooks/useBarbers';
 import { PhotoField } from '../components/PhotoField';
 import { useManagedShop } from '../hooks/useManagedShop';
 import { LIMITS } from '../schemas/limits';
+
+type GuideText = { title: string; text: string; tip?: string };
+/** The guide's steps (texts from the translations, one icon per step). */
+const guideSteps = (texts: unknown, icons: IconName[]): GuideStep[] =>
+  (texts as GuideText[]).map((s, i) => ({ ...s, icon: icons[i] ?? 'help-circle' }));
 
 export function BarbersScreen({
   shopId,
@@ -40,8 +48,33 @@ export function BarbersScreen({
   const shop = useManagedShop(shopId);
   return (
     <Screen>
-      <Button label={t('barbers.new')} onPress={onNew} fullWidth />
-      <Button label={t('barbers.registerMe')} variant="secondary" onPress={onRegisterMe} />
+      <GuideBanner
+        id="barbers"
+        icon="people"
+        title={t('guides.barbers.title')}
+        summary={t('guides.barbers.summary')}
+        steps={guideSteps(t('guides.barbers.steps', { returnObjects: true }), [
+          'person-add',
+          'mail',
+          'cut',
+          'time',
+          'pause-circle',
+        ])}
+      />
+      <View style={styles.actionsRow}>
+        <View style={styles.grow}>
+          <Button label={t('barbers.new')} icon="person-add" onPress={onNew} fullWidth />
+        </View>
+        <View style={styles.grow}>
+          <Button
+            label={t('barbers.registerMe')}
+            icon="cut"
+            variant="secondary"
+            onPress={onRegisterMe}
+            fullWidth
+          />
+        </View>
+      </View>
       {shop.data?.type === 'INDEPENDENT' ? (
         <Notice tone="info" message={t('barbers.independentLimit')} />
       ) : null}
@@ -304,6 +337,8 @@ export function BarberFormScreen({
 }
 
 const styles = StyleSheet.create({
+  actionsRow: { flexDirection: 'row', gap: spacing.sm, flexWrap: 'wrap' },
+  grow: { flexGrow: 1, flexBasis: '45%' },
   content: { gap: spacing.lg },
   list: { gap: spacing.md },
   section: { gap: spacing.sm },

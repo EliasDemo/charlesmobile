@@ -7,6 +7,7 @@ import {
   Chip,
   ConfirmDialog,
   DateSelector,
+  GuideBanner,
   IconTile,
   InfoCard,
   Notice,
@@ -15,12 +16,18 @@ import {
   Text,
   TextField,
   TimeStepper,
+  type GuideStep,
   type IconName,
 } from '@/shared/ui';
 import type { TimeBlockType } from '../api/shopApi';
 import { useManagedShop } from '../hooks/useManagedShop';
 import { useTimeBlockForm, useTimeBlocks } from '../hooks/useTimeBlocks';
 import { LIMITS } from '../schemas/limits';
+
+type GuideText = { title: string; text: string; tip?: string };
+/** The guide's steps (texts from the translations, one icon per step). */
+const guideSteps = (texts: unknown, icons: IconName[]): GuideStep[] =>
+  (texts as GuideText[]).map((s, i) => ({ ...s, icon: icons[i] ?? 'help-circle' }));
 
 const TYPES: TimeBlockType[] = ['BREAK', 'ABSENCE', 'HOLIDAY', 'MANUAL'];
 const TYPE_ICON: Record<TimeBlockType, IconName> = {
@@ -50,7 +57,19 @@ export function TimeBlocksScreen({
     id ? (b.barbers.find((x) => x.id === id)?.displayName ?? '') : t('blocks.allShop');
   return (
     <Screen>
-      <Button label={t('blocks.new')} onPress={onNew} fullWidth />
+      <GuideBanner
+        id="blocks"
+        icon="calendar-clear"
+        title={t('guides.blocks.title')}
+        summary={t('guides.blocks.summary')}
+        steps={guideSteps(t('guides.blocks.steps', { returnObjects: true }), [
+          'cafe',
+          'people',
+          'warning',
+          'trash',
+        ])}
+      />
+      <Button label={t('blocks.new')} icon="add-circle" onPress={onNew} fullWidth />
       {b.deleteError ? <Notice tone="danger" message={b.deleteError} /> : null}
       <QueryView
         query={b.blocks}

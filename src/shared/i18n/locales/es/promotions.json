@@ -71,5 +71,38 @@
     "removeTitle": "¿Eliminar el cupón {{code}}?",
     "removeMessage": "Quienes lo tengan ya no podrán usarlo.",
     "remove": "Eliminar cupón"
+  },
+  "guide": {
+    "title": "Promociones",
+    "summary": "Descuentos que atraen clientes en tus días flojos",
+    "steps": [
+      {
+        "title": "Crea un descuento",
+        "text": "Toca «Nueva promoción», ponle un nombre claro y elige porcentaje (de 1 a 100 %) o monto fijo (de S/ 1 a S/ 500).",
+        "tip": "Ejemplo: «20 % los martes»."
+      },
+      {
+        "title": "Elige cuándo vale",
+        "text": "Marca los días de la semana y, si quieres, desde y hasta qué fecha. Si no marcas días, vale todos los días."
+      },
+      {
+        "title": "Para un servicio o para todos",
+        "text": "Puedes limitarla a un servicio, como el corte clásico, o dejarla para todos."
+      },
+      {
+        "title": "Con cupón, si quieres",
+        "text": "Activa «Solo con cupón» y crea códigos: el cliente lo escribe al reservar para obtener el descuento.",
+        "tip": "Comparte el código en tus redes o en la Comunidad."
+      },
+      {
+        "title": "Pon límites",
+        "text": "Los usos totales y los usos por cliente evitan que la promoción se agote antes de tiempo."
+      },
+      {
+        "title": "Revísala y pausa cuando quieras",
+        "text": "En cada promoción ves cuántos canjes lleva y cuánto se descontó. Puedes pausarla y reanudarla.",
+        "tip": "El descuento lo asume tu barbería. El tipo, el valor y el alcance no se cambian después: para otros, crea otra promoción."
+      }
+    ]
   }
 }

@@ -4,6 +4,9 @@ import type { ReactElement, ReactNode } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { queryClient, useSession } from '@/shared/api';
 import * as SecureStore from 'expo-secure-store';
+// Direct files: the barrels load native modules some suites mock later.
+import { useAppSettings } from '@/shared/lib/appSettings';
+import { GUIDE_IDS, guideKey } from '@/shared/ui/guideIds';
 
 const metrics = {
   frame: { x: 0, y: 0, width: 390, height: 844 },
@@ -32,6 +35,8 @@ export function resetAppState() {
   });
   useSession.setState({ status: 'anonymous', accessToken: null, user: null });
   (SecureStore as unknown as { __store: Map<string, string> }).__store.clear();
+  // Step-by-step guides open by themselves the first time; screen tests start with them seen.
+  useAppSettings.setState({ toursSeen: GUIDE_IDS.map(guideKey) });
 }
 
 export function signIn(user: Partial<NonNullable<ReturnType<typeof useSession.getState>['user']>> = {}) {

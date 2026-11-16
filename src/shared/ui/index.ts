@@ -108,3 +108,4 @@ export { useNearMe } from './useNearMe';
 export { ReviewLikeButton } from './LikeButton';
 export { BrandHero } from './BrandHero';
 export { SectionHeading } from './SectionHeading';
+export { GUIDE_IDS, GuideBanner, GuideSheet, guideKey, type GuideId, type GuideStep } from './Guide';

@@ -71,5 +71,38 @@
     "removeTitle": "Delete coupon {{code}}?",
     "removeMessage": "People who have it won't be able to use it.",
     "remove": "Delete coupon"
+  },
+  "guide": {
+    "title": "Promotions",
+    "summary": "Discounts that bring clients on slow days",
+    "steps": [
+      {
+        "title": "Create a discount",
+        "text": "Tap \"New promotion\", give it a clear name and choose a percentage (1 to 100 %) or a fixed amount (S/ 1 to S/ 500).",
+        "tip": "Example: \"20 % on Tuesdays\"."
+      },
+      {
+        "title": "Choose when it applies",
+        "text": "Mark the days of the week and, if you want, from and until which date. With no days marked, it's valid every day."
+      },
+      {
+        "title": "For one service or all",
+        "text": "You can limit it to one service, like the classic cut, or leave it for all."
+      },
+      {
+        "title": "With a coupon, if you want",
+        "text": "Turn on \"Coupon only\" and create codes: the client types one when booking to get the discount.",
+        "tip": "Share the code on your social media or in the Community."
+      },
+      {
+        "title": "Set limits",
+        "text": "Total uses and uses per client keep the promotion from running out too soon."
+      },
+      {
+        "title": "Check it and pause anytime",
+        "text": "Each promotion shows how many redemptions it has and how much was discounted. You can pause and resume it.",
+        "tip": "Your barbershop covers the discount. The type, value and scope can't be changed later: for others, create another promotion."
+      }
+    ]
   }
 }

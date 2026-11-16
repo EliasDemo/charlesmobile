@@ -62,7 +62,36 @@
     "closedExact": "Register closed: it balances",
     "closedWithDifference": "Register closed with a difference",
     "exact": "Balanced",
-    "differenceShort": "Diff. {{amount}}"
+    "differenceShort": "Diff. {{amount}}",
+    "guide": {
+      "title": "Cash register",
+      "summary": "Open, record sales and close with the cash adding up",
+      "steps": [
+        {
+          "title": "Open the register to start",
+          "text": "Enter the cash you start the day with (change for clients) and tap \"Open register\".",
+          "tip": "If you start with no cash, leave the amount empty."
+        },
+        {
+          "title": "Record each sale",
+          "text": "Use \"New sale\": choose the service, the barber and how the client paid. Cash sales add to the register.",
+          "tip": "If the register is closed, the app asks you to open it before recording a cash sale."
+        },
+        {
+          "title": "See how much there should be",
+          "text": "\"Should have\" at the top is the opening plus the cash sales of the shift. The system works it out."
+        },
+        {
+          "title": "Count and close",
+          "text": "When you finish, count the cash, enter it in \"Counted cash\" and tap \"Close register\". We ask you to confirm because it can't be undone."
+        },
+        {
+          "title": "Check the difference",
+          "text": "If everything matches you'll see \"Adds up\"; if not, the difference is kept in \"Past closings\".",
+          "tip": "Write the reason for a difference in the closing note: wrong change, an expense."
+        }
+      ]
+    }
   },
   "sale": {
     "new": "New sale",

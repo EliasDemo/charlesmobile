@@ -6,6 +6,7 @@ import { sizes, spacing, touchTarget, useTheme } from '@/shared/theme';
 import {
   Button,
   Chip,
+  GuideBanner,
   Icon,
   Notice,
   QueryView,
@@ -14,6 +15,8 @@ import {
   Text,
   toMinutes,
   useSurfaceStyle,
+  type GuideStep,
+  type IconName,
 } from '@/shared/ui';
 import {
   TIME_OPTIONS,
@@ -23,6 +26,11 @@ import {
   type Week,
   type Window,
 } from '../hooks/useWeekSchedule';
+
+type GuideText = { title: string; text: string; tip?: string };
+/** The guide's steps (texts from the translations, one icon per step). */
+const guideSteps = (texts: unknown, icons: IconName[]): GuideStep[] =>
+  (texts as GuideText[]).map((s, i) => ({ ...s, icon: icons[i] ?? 'help-circle' }));
 
 export interface ScheduleScreenProps {
   shopId: string;
@@ -55,6 +63,21 @@ export function ScheduleScreen({ shopId, barberId, readOnly = false }: ScheduleS
       <QueryView query={s.query}>
         {() => (
           <View style={styles.content}>
+            {readOnly ? null : (
+              <GuideBanner
+                id="schedule"
+                icon="time"
+                title={t('guides.schedule.title')}
+                summary={t('guides.schedule.summary')}
+                steps={guideSteps(t('guides.schedule.steps', { returnObjects: true }), [
+                  'storefront',
+                  'cafe',
+                  'copy',
+                  'person',
+                  'save',
+                ])}
+              />
+            )}
             {readOnly ? <Notice tone="info" message={t('hours.readOnly')} /> : null}
             {s.isBarber ? (
               <SwitchRow

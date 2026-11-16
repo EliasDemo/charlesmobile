@@ -62,7 +62,36 @@
     "closedExact": "Caja cerrada: todo cuadra",
     "closedWithDifference": "Caja cerrada con diferencia",
     "exact": "Cuadra",
-    "differenceShort": "Dif. {{amount}}"
+    "differenceShort": "Dif. {{amount}}",
+    "guide": {
+      "title": "Caja",
+      "summary": "Abre, registra ventas y cierra cuadrando el efectivo",
+      "steps": [
+        {
+          "title": "Abre la caja al empezar",
+          "text": "Escribe el efectivo con el que empiezas el día (el sencillo para dar vuelto) y toca «Abrir caja».",
+          "tip": "Si empiezas sin efectivo, deja el monto vacío."
+        },
+        {
+          "title": "Registra cada venta",
+          "text": "Usa «Nueva venta»: elige el servicio, el barbero y cómo pagó el cliente. Las ventas en efectivo suman a la caja.",
+          "tip": "Si la caja está cerrada, la app te pedirá abrirla antes de registrar una venta en efectivo."
+        },
+        {
+          "title": "Mira cuánto debería haber",
+          "text": "Arriba ves «Debería haber»: la apertura más las ventas en efectivo del turno. Lo calcula el sistema."
+        },
+        {
+          "title": "Cuenta y cierra",
+          "text": "Al terminar, cuenta el efectivo, escríbelo en «Dinero contado» y toca «Cerrar caja». Te pedimos confirmar porque no se puede deshacer."
+        },
+        {
+          "title": "Revisa la diferencia",
+          "text": "Si todo coincide verás «Cuadra»; si no, la diferencia queda guardada en «Cierres anteriores».",
+          "tip": "Anota en la nota del cierre el motivo de una diferencia: un vuelto mal dado, un gasto."
+        }
+      ]
+    }
   },
   "sale": {
     "new": "Nueva venta",

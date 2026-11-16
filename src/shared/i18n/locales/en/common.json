@@ -296,5 +296,14 @@
     "removePhotoTitle": "Remove the photo?",
     "removePhotoMessage": "It's removed right away. You can upload another one anytime.",
     "removePhoto": "Remove photo"
+  },
+  "guide": {
+    "open": "See the guide: {{title}}",
+    "how": "How it works",
+    "step": "Step {{n}} of {{total}}",
+    "skip": "Close the guide",
+    "back": "Back",
+    "next": "Next",
+    "done": "Got it"
   }
 }

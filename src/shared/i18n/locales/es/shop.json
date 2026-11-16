@@ -386,5 +386,86 @@
       "barbers": "Ver barberos",
       "plan": "Ver mi plan"
     }
+  },
+  "guides": {
+    "schedule": {
+      "title": "Horarios",
+      "summary": "Cómo se arman los turnos que ven tus clientes",
+      "steps": [
+        {
+          "title": "El horario de tu barbería",
+          "text": "Marca qué días abres y de qué hora a qué hora. Con esto, la app calcula los turnos libres que ven tus clientes.",
+          "tip": "Empieza con una plantilla rápida y luego ajusta el día que sea distinto."
+        },
+        {
+          "title": "Descansos",
+          "text": "¿Cierras para almorzar? Agrega un descanso: el día queda en dos tramos y nadie puede reservar en medio.",
+          "tip": "Ejemplo: de 9:00 a 13:00 y de 15:00 a 20:00."
+        },
+        {
+          "title": "Copia un día",
+          "text": "Arma un día y cópialo a toda la semana o solo de lunes a viernes."
+        },
+        {
+          "title": "El horario de cada barbero",
+          "text": "Cada barbero usa el horario de la barbería. Si alguno trabaja otras horas, en su ficha desactiva «Usar el horario de la barbería» y ponle el suyo."
+        },
+        {
+          "title": "Guarda los cambios",
+          "text": "Los turnos se actualizan al guardar. Las horas son las de la zona de tu barbería.",
+          "tip": "Para un día puntual (un feriado, un trámite) usa un bloqueo en vez de cambiar el horario."
+        }
+      ]
+    },
+    "barbers": {
+      "title": "Tu equipo",
+      "summary": "Agrega barberos, invítalos y asígnales servicios",
+      "steps": [
+        {
+          "title": "Agrega a cada barbero",
+          "text": "Crea a cada barbero con su nombre y foto, aunque todavía no tenga la app.",
+          "tip": "¿También cortas tú? Usa «Registrarme como barbero»."
+        },
+        {
+          "title": "Invítalo con su cuenta",
+          "text": "Desde su ficha envía una invitación: le llega un código al correo y la acepta en Perfil → Invitaciones. Así ve su agenda y marca asistencia.",
+          "tip": "Una cuenta puede ser barbero activo en una sola barbería a la vez."
+        },
+        {
+          "title": "Asigna sus servicios",
+          "text": "Al reservar, solo aparece en los servicios que sabe hacer."
+        },
+        {
+          "title": "Su horario",
+          "text": "Usa el horario de la barbería o uno propio, si trabaja otras horas."
+        },
+        {
+          "title": "Desactívalo cuando no esté",
+          "text": "Si deja de trabajar contigo, desactívalo: deja de recibir reservas."
+        }
+      ]
+    },
+    "blocks": {
+      "title": "Bloqueos",
+      "summary": "Cierra ratos sin cambiar tu horario",
+      "steps": [
+        {
+          "title": "Para ratos sin atender",
+          "text": "Almuerzo, un trámite, vacaciones: un bloqueo cierra ese rato y nadie puede reservarlo."
+        },
+        {
+          "title": "Toda la barbería o un barbero",
+          "text": "Elige si se cierra todo el local o solo la agenda de un barbero. Cada barbero también puede bloquear sus propios ratos."
+        },
+        {
+          "title": "Si ya hay reservas",
+          "text": "No se puede bloquear un rato que ya tiene reservas: la app te dice cuántas son para que las resuelvas primero."
+        },
+        {
+          "title": "Quitar un bloqueo",
+          "text": "Al eliminarlo, ese rato vuelve a estar disponible para reservar."
+        }
+      ]
+    }
   }
 }

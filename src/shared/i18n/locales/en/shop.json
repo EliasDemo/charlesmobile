@@ -386,5 +386,86 @@
       "barbers": "See barbers",
       "plan": "See my plan"
     }
+  },
+  "guides": {
+    "schedule": {
+      "title": "Hours",
+      "summary": "How the slots your clients see are built",
+      "steps": [
+        {
+          "title": "Your barbershop hours",
+          "text": "Mark which days you open and from what time to what time. With this, the app works out the free slots your clients see.",
+          "tip": "Start with a quick template, then adjust the day that is different."
+        },
+        {
+          "title": "Breaks",
+          "text": "Closing for lunch? Add a break: the day splits in two and nobody can book in between.",
+          "tip": "Example: 9:00 to 13:00 and 15:00 to 20:00."
+        },
+        {
+          "title": "Copy a day",
+          "text": "Set up one day and copy it to the whole week or just Monday to Friday."
+        },
+        {
+          "title": "Each barber's hours",
+          "text": "Every barber uses the barbershop's hours. If one works other hours, turn off \"Use the barbershop's hours\" in their profile and set theirs."
+        },
+        {
+          "title": "Save your changes",
+          "text": "Slots update when you save. Times are in your barbershop's time zone.",
+          "tip": "For a one-off day (a holiday, an errand) use a block instead of changing the hours."
+        }
+      ]
+    },
+    "barbers": {
+      "title": "Your team",
+      "summary": "Add barbers, invite them and assign services",
+      "steps": [
+        {
+          "title": "Add each barber",
+          "text": "Create each barber with their name and photo, even if they don't have the app yet.",
+          "tip": "Do you cut too? Use \"Register me as a barber\"."
+        },
+        {
+          "title": "Invite them with their account",
+          "text": "From their profile, send an invitation: they get a code by email and accept it in Profile → Invitations. Then they see their schedule and mark attendance.",
+          "tip": "An account can be an active barber in only one barbershop at a time."
+        },
+        {
+          "title": "Assign their services",
+          "text": "When booking, they only show up for the services they do."
+        },
+        {
+          "title": "Their hours",
+          "text": "They use the barbershop's hours, or their own if they work other hours."
+        },
+        {
+          "title": "Deactivate them when they're gone",
+          "text": "If they stop working with you, deactivate them: they stop getting bookings."
+        }
+      ]
+    },
+    "blocks": {
+      "title": "Blocks",
+      "summary": "Close time without changing your hours",
+      "steps": [
+        {
+          "title": "For time off",
+          "text": "Lunch, an errand, holidays: a block closes that time and nobody can book it."
+        },
+        {
+          "title": "The whole barbershop or one barber",
+          "text": "Choose whether the whole shop closes or just one barber's schedule. Each barber can also block their own time."
+        },
+        {
+          "title": "If there are bookings already",
+          "text": "You can't block time that already has bookings: the app tells you how many so you can sort them out first."
+        },
+        {
+          "title": "Remove a block",
+          "text": "Once removed, that time can be booked again."
+        }
+      ]
+    }
   }
 }
